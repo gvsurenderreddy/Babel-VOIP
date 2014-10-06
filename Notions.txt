@@ -10,6 +10,7 @@ Librarie PortAudio (http://www.portaudio.com/) (LibC donc necessite une abstract
 
 == Compression codec ==
 Speex (http://www.speex.org/) (LibC donc necessite une abstraction C++)
+Speex est déprécié: Opus est une alternative tolérée: http://www.opus-codec.org/downloads/
 
 == ACCOUNTS ==
 (md5 / sha1) + salt
