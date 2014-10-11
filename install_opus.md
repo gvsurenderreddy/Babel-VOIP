@@ -15,7 +15,18 @@
 * Clic droit sur le projet
 * Propriétés
 * Editeur de liens
-* Sorties
+* Entrée
 * Dépendances supplémentaires
 * modifier
 * ajouter chaque lib
+
+
+## Rajouter les includes
+
+* Les includes sont dans opus-1.1/opus-1.1/include
+* clic droit sur le projet
+* propriétés
+* répertoire VC++
+* répertoires d'includes
+* modifier
+* ajouter le dossier d'include opus
