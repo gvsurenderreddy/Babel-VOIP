@@ -1,0 +1,17 @@
+﻿La génération a démarré 12/10/2014 01:18:59.
+     1>Projet "C:\cygwin64\home\ninon_s\babel_tests\portaudio_tests\portaudio_tests.vcxproj" sur le nœud 2 (Build cible(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt SoundOutputDevice.cpp
+         SoundOutputDevice.cpp
+     1>c:\cygwin64\home\ninon_s\babel_tests\portaudio_tests\soundoutputdevice.cpp(53): warning C4138: '*/' trouvé à l'extérieur du commentaire
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\cygwin64\home\ninon_s\babel_tests\Debug\portaudio_tests.exe" /INCREMENTAL /NOLOGO "C:\Users\ninon_s\Documents\Babel-VOIP-Epitech\portaudio_x86.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\cygwin64\home\ninon_s\babel_tests\Debug\portaudio_tests.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\cygwin64\home\ninon_s\babel_tests\Debug\portaudio_tests.lib" /MACHINE:X86 Debug\main.obj
+         Debug\SoundDeviceException.obj
+         Debug\SoundInputDevice.obj
+         Debug\SoundOutputDevice.obj
+         portaudio_tests.vcxproj -> C:\cygwin64\home\ninon_s\babel_tests\Debug\portaudio_tests.exe
+     1>Génération du projet "C:\cygwin64\home\ninon_s\babel_tests\portaudio_tests\portaudio_tests.vcxproj" terminée (Build cible(s)).
+
+La génération a réussi.
+
+Temps écoulé 00:00:00.46
