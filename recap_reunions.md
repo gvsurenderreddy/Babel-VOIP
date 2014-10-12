@@ -65,3 +65,38 @@ Une structure contenant les infos de communication a été définie dans le goog
 ### Infos Annexes
 
 Les 2 protocoles pourront évoluer en fonction de comment fonction portaudio/speex.
+
+
+## Réunion 3
+
+
+### Installations et découvertes de libs
+
+* portaudio
+* boost
+* opus
+
+Des tutoriaux pour les installations windows serons postés sur github.
+
+Une fois qu'ils seront dispos, tout le monde DEVRA avoir une config windows complète et fonctionnelle!
+
+
+## Réunion 4
+
+
+### Abstraction Network
+
+L'abstraction network sera postée sur le github et navid se chargera de l'UML.
+
+Ca devrait être une version finale puisqu'elle est assez bien pensée pour qu'asio et QtNetwork puissent l'implémenter sans soucis.
+
+Elle est principalement basée sur un pattern listener qui a été validé par un koala qui était là (victor) et qui nous a bien confirmé que c'était l'une des meilleures conception possible pour ce projet :)
+
+
+### Abstraction Audio
+
+On en a vraiment chier, mais on a réussit à faire fonctionner portaudio et à amorcer une conception sympa.
+
+La conception actuelle est assez simple, mais efficace, à base d'overloads d'opérateurs.
+
+L'encodage n'est pas encore utilisé, ni intégré à la conception. C'est la prochaine étape.
