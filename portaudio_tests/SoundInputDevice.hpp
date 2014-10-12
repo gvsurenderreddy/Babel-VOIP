@@ -1,16 +1,10 @@
 #pragma once
 
+#include <list>
 #include "portaudio.h"
+#include "ISoundDevice.hpp"
 
-class SoundInputDevice {
-
-	// input data struct
-	private:
-		struct InputData {
-			int		frameIndex;
-			int		maxFrameIndex;
-			float	*recordedSamples;
-		};
+class SoundInputDevice : public ISoundDevice {
 
 	// ctor - dtor
 	public:
@@ -28,16 +22,21 @@ class SoundInputDevice {
 
 	// handle sound
 	public:
-		float		*recordSound(int seconds);
-		static int	recordCallback(const void *inputBuffer, void */*outputBuffer*/, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo */*timeInfo*/, PaStreamCallbackFlags /*statusFlags*/, void *userData);
+		void	startStream(void);
+		void	stopStream(void);
+
+		ISoundDevice	&operator<<(SoundBuffer *soundBuffer);
+		ISoundDevice	&operator>>(SoundBuffer *&soundBuffer);
+		static int		callback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
 
 	// attributes
 	private:
+		std::list<ISoundDevice::SoundBuffer *> mBuffers;
 		PaStreamParameters	mInputParameters;
+		PaStream *mStream;
 
 		static const int	SAMPLE_RATE;
 		static const int	NB_CHANNELS;
 		static const int	FRAMES_PER_BUFFER;
-		static const float	SAMPLE_SILENCE;
 
 };

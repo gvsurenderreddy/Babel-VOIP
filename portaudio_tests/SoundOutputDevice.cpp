@@ -1,9 +1,13 @@
+#include <iostream>
 #include "SoundOutputDevice.hpp"
 #include "SoundDeviceException.hpp"
+#include <boost/thread/mutex.hpp>
 
-const int SoundOutputDevice::SAMPLE_RATE = 44100;
+boost::mutex io_mutex;
+
+const int SoundOutputDevice::SAMPLE_RATE = 48000;
 const int SoundOutputDevice::NB_CHANNELS = 2;
-const int SoundOutputDevice::FRAMES_PER_BUFFER = 512;
+const int SoundOutputDevice::FRAMES_PER_BUFFER = 480;
 
 SoundOutputDevice::SoundOutputDevice(void) {
 	if (Pa_Initialize() != paNoError)
@@ -27,61 +31,74 @@ void	SoundOutputDevice::initOutputDevice(void) {
 	mOutputParameters.hostApiSpecificStreamInfo = NULL;
 }
 
-void	SoundOutputDevice::playSound(float *sound, int seconds) {
-	SoundOutputDevice::OutputData	data;
-
-	data.frameIndex = 0;
-	data.maxFrameIndex = seconds * SoundOutputDevice::SAMPLE_RATE;
-
-	int nbSamples = data.maxFrameIndex * SoundOutputDevice::NB_CHANNELS;
-	data.recordedSamples = sound;
-
-	PaStream *stream;
-	if (Pa_OpenStream(&stream, NULL, &mOutputParameters, SAMPLE_RATE, FRAMES_PER_BUFFER, paClipOff, SoundOutputDevice::playCallback, &data) != paNoError)
+void	SoundOutputDevice::startStream(void) {
+	if (Pa_OpenStream(&mStream, NULL, &mOutputParameters, SoundOutputDevice::SAMPLE_RATE, SoundOutputDevice::FRAMES_PER_BUFFER, paClipOff, SoundOutputDevice::callback, this) != paNoError)
 		throw new SoundDeviceException("fail Pa_OpenStream");
 
-	if (Pa_StartStream(stream) != paNoError)
+	if (Pa_StartStream(mStream) != paNoError)
 		throw new SoundDeviceException("fail Pa_StartStream");
+}
 
-	while (Pa_IsStreamActive(stream) == 1)
-		Pa_Sleep(1000);
-
-	if (Pa_CloseStream(stream) != paNoError)
+void	SoundOutputDevice::stopStream(void) {
+	if (Pa_CloseStream(mStream) != paNoError)
 		throw new SoundDeviceException("fail Pa_StopStream");
 }
 
-int	SoundOutputDevice::playCallback(const void */*inputBuffer*/, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo */*timeInfo*/, PaStreamCallbackFlags /*statusFlags*/, void *userData) {
-	SoundOutputDevice::OutputData *data = (SoundOutputDevice::OutputData *)userData;
-	float *rptr = &data->recordedSamples[data->frameIndex * SoundOutputDevice::NB_CHANNELS];
-	float *wptr = (float *)outputBuffer;
+ISoundDevice	&SoundOutputDevice::operator<<(SoundBuffer *soundBuffer) {
+	boost::mutex::scoped_lock lock(io_mutex);
+
+	if (soundBuffer)
+		mBuffers.push_back(soundBuffer);
+
+	return *this;
+}
+
+ISoundDevice	&SoundOutputDevice::operator>>(SoundBuffer *&soundBuffer) {
+	if (mBuffers.size()) {
+		soundBuffer = mBuffers.front();
+		mBuffers.pop_front();
+	}
+	else
+		soundBuffer = NULL;
+
+	return *this;
+}
+
+int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
+	SoundOutputDevice *obj = reinterpret_cast<SoundOutputDevice *>(data);
+
+	boost::mutex::scoped_lock lock(io_mutex);
+
+	if (obj->mBuffers.size() == 0)
+		return paContinue;
+
 	unsigned int i;
-	unsigned int framesLeft = data->maxFrameIndex - data->frameIndex;
+	float *wptr = (float *)outputBuffer;
+	ISoundDevice::SoundBuffer *buffer = obj->mBuffers.front();
+	unsigned int framesLeft = buffer->nbFrames - buffer->currentFrame;
 
 	if (framesLeft < framesPerBuffer) {
-		for (i = 0; i<framesLeft; i++) {
-			*wptr++ = *rptr++;
+		for (i = 0; i < framesLeft; i++) {
+			*wptr++ = buffer->sound[buffer->currentFrame++];
 			if (SoundOutputDevice::NB_CHANNELS == 2)
-				*wptr++ = *rptr++;
+				*wptr++ = buffer->sound[buffer->currentFrame++];
 		}
 		for (; i < framesPerBuffer; i++) {
 			*wptr++ = 0;
 			if (SoundOutputDevice::NB_CHANNELS == 2)
 				*wptr++ = 0;
 		}
-
-		data->frameIndex += framesLeft;
-
-		return paComplete;
 	}
 	else {
 		for (i = 0; i < framesPerBuffer; i++) {
-			*wptr++ = *rptr++;
+			*wptr++ = buffer->sound[buffer->currentFrame++];
 			if (SoundOutputDevice::NB_CHANNELS == 2)
-				*wptr++ = *rptr++;
+				*wptr++ = buffer->sound[buffer->currentFrame++];
 		}
-
-		data->frameIndex += framesPerBuffer;
-
-		return paContinue;
 	}
+
+	if (buffer->currentFrame >= buffer->nbFrames)
+		obj->mBuffers.pop_front();
+
+	return paContinue;
 }

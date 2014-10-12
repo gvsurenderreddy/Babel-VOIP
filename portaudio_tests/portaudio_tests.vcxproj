@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\ninon_s\Documents\pa_stable_v19_20140130\portaudio\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\ninon_s\Documents\pa_stable_v19_20140130\portaudio\include;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\include;C:\Users\ninon_s\Documents\boost_1_55_0\boost_1_55_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -49,7 +49,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>C:\Users\ninon_s\Documents\Babel-VOIP-Epitech\portaudio_x86.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>C:\Users\ninon_s\Documents\Babel-VOIP-Epitech\portaudio_x86.lib;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\win32\VS2010\Win32\Debug\celt.lib;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\win32\VS2010\Win32\Debug\opus.lib;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\win32\VS2010\Win32\Debug\silk_common.lib;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\win32\VS2010\Win32\Debug\silk_float.lib;C:\Users\ninon_s\Documents\opus-1.1\opus-1.1\win32\VS2010\Win32\Debug\silk_fixed.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -73,6 +73,7 @@
     <ClCompile Include="SoundOutputDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ISoundDevice.hpp" />
     <ClInclude Include="SoundDeviceException.hpp" />
     <ClInclude Include="SoundInputDevice.hpp" />
     <ClInclude Include="SoundOutputDevice.hpp" />

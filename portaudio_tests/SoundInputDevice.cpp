@@ -1,12 +1,18 @@
 #include "SoundInputDevice.hpp"
 #include "SoundDeviceException.hpp"
+#include "SoundOutputDevice.hpp"
+#include "opus.h"
+#include <iostream>
 
-const int SoundInputDevice::SAMPLE_RATE = 44100;
+const int SoundInputDevice::SAMPLE_RATE = 48000;
 const int SoundInputDevice::NB_CHANNELS = 2;
-const int SoundInputDevice::FRAMES_PER_BUFFER = 512;
-const float SoundInputDevice::SAMPLE_SILENCE = 0.0f;
+const int SoundInputDevice::FRAMES_PER_BUFFER = 480;
 
-SoundInputDevice::SoundInputDevice(void) {
+std::list<float *> buffers;
+
+SoundInputDevice::SoundInputDevice(void)
+	: mStream(NULL)
+{
 	if (Pa_Initialize() != paNoError)
 		throw new SoundDeviceException("fail Pa_Initialize");
 
@@ -29,58 +35,48 @@ void	SoundInputDevice::initInputDevice(void) {
 	mInputParameters.hostApiSpecificStreamInfo = NULL;
 }
 
-float	*SoundInputDevice::recordSound(int seconds) {
-	SoundInputDevice::InputData	data;
-
-	data.frameIndex = 0;
-	data.maxFrameIndex = seconds * SoundInputDevice::SAMPLE_RATE;
-
-	int nbSamples = data.maxFrameIndex * SoundInputDevice::NB_CHANNELS;
-	data.recordedSamples = new float[nbSamples];
-
-	int nbBytes = nbSamples * sizeof(float);
-	std::memset(data.recordedSamples, 0, nbBytes);
-
-	PaStream *stream;
-	if (Pa_OpenStream(&stream, &mInputParameters, NULL, SoundInputDevice::SAMPLE_RATE, SoundInputDevice::FRAMES_PER_BUFFER, paClipOff, SoundInputDevice::recordCallback, &data) != paNoError)
+void	SoundInputDevice::startStream(void) {
+	if (Pa_OpenStream(&mStream, &mInputParameters, NULL, SoundInputDevice::SAMPLE_RATE, SoundInputDevice::FRAMES_PER_BUFFER, paClipOff, SoundInputDevice::callback, this) != paNoError)
 		throw new SoundDeviceException("fail Pa_OpenStream");
 
-	if (Pa_StartStream(stream) != paNoError)
+	if (Pa_StartStream(mStream) != paNoError)
 		throw new SoundDeviceException("fail Pa_StartStream");
-
-	while (Pa_IsStreamActive(stream) == 1)
-		Pa_Sleep(1000);
-
-	if (Pa_CloseStream(stream) != paNoError)
-		throw new SoundDeviceException("fail Pa_StopStream");
-
-	return data.recordedSamples;
 }
 
-int	SoundInputDevice::recordCallback(const void *inputBuffer, void */*outputBuffer*/, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo */*timeInfo*/, PaStreamCallbackFlags /*statusFlags*/, void *userData) {
-	SoundInputDevice::InputData *data = (SoundInputDevice::InputData *)userData;
-	float *readBuffer = (float*)inputBuffer;
-	float *writeBuffer = &data->recordedSamples[data->frameIndex * SoundInputDevice::NB_CHANNELS];
-	long framesToCalc;
-	int finished;
-	unsigned long framesLeft = data->maxFrameIndex - data->frameIndex;
+void	SoundInputDevice::stopStream(void) {
+	if (Pa_CloseStream(mStream) != paNoError)
+		throw new SoundDeviceException("fail Pa_StopStream");
+}
 
-	if (framesLeft < framesPerBuffer) {
-		framesToCalc = framesLeft;
-		finished = paComplete;
-	}
-	else {
-		framesToCalc = framesPerBuffer;
-		finished = paContinue;
-	}
+ISoundDevice	&SoundInputDevice::operator<<(SoundBuffer *soundBuffer) {
+	if (soundBuffer)
+		mBuffers.push_back(soundBuffer);
 
-	for (long i = 0; i < framesToCalc; i++) {
-		*writeBuffer++ = (readBuffer ? *readBuffer++ : SoundInputDevice::SAMPLE_SILENCE);
-		if (SoundInputDevice::NB_CHANNELS == 2)
-			*writeBuffer++ = (readBuffer ? *readBuffer++ : SoundInputDevice::SAMPLE_SILENCE);
-	}
+	return *this;
+}
 
-	data->frameIndex += framesToCalc;
-	
-	return finished;
+ISoundDevice	&SoundInputDevice::operator>>(SoundBuffer *&soundBuffer) {
+	if (mBuffers.size()) {
+		soundBuffer = mBuffers.front();
+		mBuffers.pop_front();
+	}
+	else
+		soundBuffer = NULL;
+
+	return *this;
+}
+
+int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
+	SoundInputDevice *obj = reinterpret_cast<SoundInputDevice *>(data);
+
+	float	*cpyBuffer = new float[framesPerBuffer * SoundInputDevice::NB_CHANNELS];
+	std::memcpy(cpyBuffer, inputBuffer, framesPerBuffer * SoundInputDevice::NB_CHANNELS * sizeof(float));
+
+	ISoundDevice::SoundBuffer *buffer = new ISoundDevice::SoundBuffer;
+	buffer->sound = cpyBuffer;
+	buffer->nbFrames = framesPerBuffer;
+	buffer->currentFrame = 0;
+	obj->mBuffers.push_back(buffer);
+
+	return paContinue;
 }
