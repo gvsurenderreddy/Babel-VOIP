@@ -3,19 +3,19 @@
 #include "IServerSocket.hpp"
 #include <QtNetwork/QTcpServer>
 
-class WindowsTcpServer : public QObject, public IServerSocket {
+class TcpServer : public QObject, public IServerSocket {
 
 	Q_OBJECT
 
 	// default ctor-dtor
 	public:
-		WindowsTcpServer(void);
-		~WindowsTcpServer(void) {}
+		TcpServer(void);
+		~TcpServer(void) {}
 
 	// private coplien form
 	private:
-		WindowsTcpServer(const WindowsTcpServer &) {}
-		const WindowsTcpServer &operator=(const WindowsTcpServer &) { return *this; }
+		TcpServer(const TcpServer &) {}
+		const TcpServer &operator=(const TcpServer &) { return *this; }
 
 	// init
 	public:
@@ -32,13 +32,12 @@ class WindowsTcpServer : public QObject, public IServerSocket {
 
 	// handle clients
 	public:
-		IClientSocket	*acceptFirstClientInQueue(void);
+		IClientSocket	*getNewClient(void);
 		bool			hasClientInQueue(void) const;
 
 	// attributes
 	private:
-		QTcpServer	mQTcpServer;
-
+		QTcpServer mQTcpServer;
 		IServerSocket::OnSocketEvent *mListener;
 
 };

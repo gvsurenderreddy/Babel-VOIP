@@ -3,6 +3,7 @@
 #include <list>
 #include "portaudio.h"
 #include "ISoundDevice.hpp"
+#include "Mutex.hpp"
 
 class SoundOutputDevice : public ISoundDevice {
 
@@ -34,6 +35,7 @@ class SoundOutputDevice : public ISoundDevice {
 		std::list<ISoundDevice::SoundBuffer *> mBuffers;
 		PaStreamParameters	mOutputParameters;
 		PaStream *mStream;
+		Mutex mMutex;
 
 		static const int	SAMPLE_RATE;
 		static const int	NB_CHANNELS;

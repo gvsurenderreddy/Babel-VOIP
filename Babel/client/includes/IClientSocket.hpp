@@ -9,7 +9,8 @@ class IClientSocket {
 		class OnSocketEvent {
 			public:
 				virtual	~OnSocketEvent() {}
-				virtual void	onSocketReadyRead(IClientSocket *socket) = 0;
+				virtual	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes) = 0;
+				virtual void	onSocketReadable(IClientSocket *socket) = 0;
 				virtual void	onSocketClosed(IClientSocket *socket) = 0;
 		};
 
@@ -25,11 +26,12 @@ class IClientSocket {
 
 	// recv / send
 	public:
-		virtual unsigned int	send(const std::string &data) = 0;
-		virtual unsigned int	receive(std::string &data, unsigned int sizeToRead) = 0;
+		virtual void	send(const std::string &data) = 0;
+		virtual void	receive(std::string &data, unsigned int sizeToRead) = 0;
 
 	// handle state
 	public:
+		virtual bool	isWritable(void) const = 0;
 		virtual bool	isReadable(void) const = 0;
 
 	// set listener

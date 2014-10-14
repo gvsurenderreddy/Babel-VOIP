@@ -9,7 +9,7 @@ class IServerSocket {
 	public:
 		class OnSocketEvent {
 			public:
-				virtual ~OnSocketEvent() {}
+				virtual	~OnSocketEvent() {}
 				virtual void	onNewConnection(IServerSocket *socket) = 0;
 		};
 
@@ -28,7 +28,7 @@ class IServerSocket {
 
 	// handle clients
 	public:
-		virtual IClientSocket	*acceptFirstClientInQueue(void) = 0;
+		virtual IClientSocket	*getNewClient(void) = 0;
 		virtual bool			hasClientInQueue(void) const = 0;
 
 };

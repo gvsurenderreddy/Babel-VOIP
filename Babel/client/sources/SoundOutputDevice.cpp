@@ -1,4 +1,5 @@
 #include <iostream>
+#include "ScopedLock.hpp"
 #include "SoundOutputDevice.hpp"
 #include "SoundDeviceException.hpp"
 
@@ -42,6 +43,8 @@ void	SoundOutputDevice::stopStream(void) {
 }
 
 ISoundDevice	&SoundOutputDevice::operator<<(SoundBuffer *soundBuffer) {
+	ScopedLock	scopedLock(&mMutex);
+
 	if (soundBuffer)
 		mBuffers.push_back(soundBuffer);
 
@@ -49,6 +52,8 @@ ISoundDevice	&SoundOutputDevice::operator<<(SoundBuffer *soundBuffer) {
 }
 
 ISoundDevice	&SoundOutputDevice::operator>>(SoundBuffer *&soundBuffer) {
+	ScopedLock	scopedLock(&mMutex);
+
 	if (mBuffers.size()) {
 		soundBuffer = mBuffers.front();
 		mBuffers.pop_front();
@@ -61,6 +66,8 @@ ISoundDevice	&SoundOutputDevice::operator>>(SoundBuffer *&soundBuffer) {
 
 int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
 	SoundOutputDevice *obj = reinterpret_cast<SoundOutputDevice *>(data);
+
+	ScopedLock	scopedLock(&obj->mMutex);
 
 	if (obj->mBuffers.size() == 0)
 		return paContinue;

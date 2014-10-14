@@ -18,8 +18,12 @@ HEADERS         +=      includes/IClientSocket.hpp              \
                         includes/SoundDeviceException.hpp       \
                         includes/SoundInputDevice.hpp           \
                         includes/SoundOutputDevice.hpp          \
-                        includes/WindowsTcpClient.hpp           \
-                        includes/WindowsTcpServer.hpp           \
+                        includes/TcpClient.hpp                  \
+                        includes/TcpServer.hpp                  \
+			includes/UdpClient.hpp			\
+			includes/IMutex.hpp			\
+			includes/Mutex.hpp			\
+			includes/ScopedLock.hpp			\
                         dependencies/includes/portaudio.h
 
 SOURCES         +=      sources/main.cpp                        \
@@ -27,8 +31,10 @@ SOURCES         +=      sources/main.cpp                        \
                         sources/SoundDeviceException.cpp        \
                         sources/SoundInputDevice.cpp            \
                         sources/SoundOutputDevice.cpp           \
-                        sources/WindowsTcpClient.cpp            \
-                        sources/WindowsTcpServer.cpp
+                        sources/TcpClient.cpp                   \
+			sources/UdpClient.cpp			\
+                        sources/TcpServer.cpp			\
+			sources/ScopedLock.cpp			\
+			sources/Mutex.cpp
 
 win32:LIBS      +=      dependencies/libs/portaudio_x86.lib
-                        

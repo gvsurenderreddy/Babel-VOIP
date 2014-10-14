@@ -28,6 +28,7 @@
 # Visual Studio
 *.vcx*
 *.sdf
+*sdf
 *.suo
 *.ilk
 *.pdb

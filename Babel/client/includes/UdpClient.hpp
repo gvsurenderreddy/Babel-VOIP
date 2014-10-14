@@ -1,21 +1,21 @@
 #pragma once
 
 #include "IClientSocket.hpp"
-#include <QtNetwork\qtcpsocket.h>
+#include <QtNetwork\qudpsocket.h>
 
-class WindowsTcpClient : public QObject, public IClientSocket {
+class UdpClient : public QObject, public IClientSocket {
 
 	Q_OBJECT
 
 	// default ctor-dtor
 	public:
-		WindowsTcpClient(void);
-		~WindowsTcpClient(void);
+		UdpClient(void);
+		~UdpClient(void);
 
 	// private coplien form
 	private:
-		WindowsTcpClient(const WindowsTcpClient &) {}
-		const WindowsTcpClient &operator=(const WindowsTcpClient &) { return *this; }
+		UdpClient(const UdpClient &) {}
+		const UdpClient &operator=(const UdpClient &) { return *this; }
 
 	// start-stop
 	public:
@@ -29,21 +29,23 @@ class WindowsTcpClient : public QObject, public IClientSocket {
 
 	// recv / send
 	public:
-		unsigned int	send(const std::string &data);
-		unsigned int	receive(std::string &data, unsigned int sizeToRead);
+		void	send(const std::string &data);
+		void	receive(std::string &data, unsigned int sizeToRead);
 
 	// handle state
 	public:
 		bool	isReadable(void) const;
+		bool	isWritable(void) const;
 
 	// slots
 	private slots:
+		void	bytesWritten(qint64 nbBytes);
 		void	markAsReadable(void);
 		void	close(void);
 
 	// attributes
 	private:
-		QTcpSocket	*mQTcpSocket;
+		QUdpSocket	*mQUdpSocket;
 		bool		mIsReadable;
 
 		IClientSocket::OnSocketEvent	*mListener;

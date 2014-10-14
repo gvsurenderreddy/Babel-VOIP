@@ -1,11 +1,11 @@
-#include "WindowsTcpServer.hpp"
-#include "WindowsTcpClient.hpp"
+#include "TcpServer.hpp"
+#include "TcpClient.hpp"
 #include "SocketException.hpp"
 
-WindowsTcpServer::WindowsTcpServer(void)
+TcpServer::TcpServer(void)
 	: mListener(NULL) {}
 
-void	WindowsTcpServer::createServer(int port, int queueSize) {
+void	TcpServer::createServer(int port, int queueSize) {
 	if (mQTcpServer.listen(QHostAddress::Any, port) == false)
 		throw new SocketException("fail QTcpServer::listen");
 
@@ -14,32 +14,32 @@ void	WindowsTcpServer::createServer(int port, int queueSize) {
 	QObject::connect(&mQTcpServer, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
-void	WindowsTcpServer::closeServer(void) {
+void	TcpServer::closeServer(void) {
 	if (mQTcpServer.isListening())
 		mQTcpServer.close();
 }
 
-IClientSocket	*WindowsTcpServer::acceptFirstClientInQueue(void) {
+IClientSocket	*TcpServer::getNewClient(void) {
 	QTcpSocket *qTcpSocket = mQTcpServer.nextPendingConnection();
 
 	if (qTcpSocket == NULL)
-		throw new SocketException("fail QTcpSocket::nextPendingConnection()");
+		throw new SocketException("fail QTcpSocket::nextPendingConnection");
 
-	IClientSocket *clientSocket = new WindowsTcpClient;
+	IClientSocket *clientSocket = new TcpClient;
 	clientSocket->initFromSocket(qTcpSocket);
 
 	return clientSocket;
 }
 
-bool	WindowsTcpServer::hasClientInQueue(void) const {
+bool	TcpServer::hasClientInQueue(void) const {
 	return mQTcpServer.hasPendingConnections();
 }
 
-void	WindowsTcpServer::setOnSocketEventListener(IServerSocket::OnSocketEvent *listener) {
+void	TcpServer::setOnSocketEventListener(IServerSocket::OnSocketEvent *listener) {
 	mListener = listener;
 }
 
-void	WindowsTcpServer::onNewConnection(void) {
+void	TcpServer::onNewConnection(void) {
 	if (mListener)
 		mListener->onNewConnection(this);
 }

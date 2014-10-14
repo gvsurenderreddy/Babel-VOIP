@@ -1,6 +1,7 @@
 #include "SoundInputDevice.hpp"
 #include "SoundDeviceException.hpp"
 #include "SoundOutputDevice.hpp"
+#include "ScopedLock.hpp"
 #include <iostream>
 
 const int SoundInputDevice::SAMPLE_RATE = 48000;
@@ -48,6 +49,8 @@ void	SoundInputDevice::stopStream(void) {
 }
 
 ISoundDevice	&SoundInputDevice::operator<<(SoundBuffer *soundBuffer) {
+	ScopedLock	scopedLock(&mMutex);
+
 	if (soundBuffer)
 		mBuffers.push_back(soundBuffer);
 
@@ -55,6 +58,8 @@ ISoundDevice	&SoundInputDevice::operator<<(SoundBuffer *soundBuffer) {
 }
 
 ISoundDevice	&SoundInputDevice::operator>>(SoundBuffer *&soundBuffer) {
+	ScopedLock	scopedLock(&mMutex);
+
 	if (mBuffers.size()) {
 		soundBuffer = mBuffers.front();
 		mBuffers.pop_front();
@@ -67,6 +72,8 @@ ISoundDevice	&SoundInputDevice::operator>>(SoundBuffer *&soundBuffer) {
 
 int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
 	SoundInputDevice *obj = reinterpret_cast<SoundInputDevice *>(data);
+
+	ScopedLock	scopedLock(&obj->mMutex);
 
 	float	*cpyBuffer = new float[framesPerBuffer * SoundInputDevice::NB_CHANNELS];
 	std::memcpy(cpyBuffer, inputBuffer, framesPerBuffer * SoundInputDevice::NB_CHANNELS * sizeof(float));

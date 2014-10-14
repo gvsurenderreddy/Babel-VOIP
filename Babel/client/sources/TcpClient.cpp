@@ -1,15 +1,15 @@
-#include "WindowsTcpClient.hpp"
+#include "TcpClient.hpp"
 #include "SocketException.hpp"
 
-WindowsTcpClient::WindowsTcpClient(void)
+TcpClient::TcpClient(void)
 	: mQTcpSocket(NULL), mListener(NULL), mIsReadable(false) {}
 
-WindowsTcpClient::~WindowsTcpClient(void) {
+TcpClient::~TcpClient(void) {
 	if (mQTcpSocket)
 		delete mQTcpSocket;
 }
 
-void	WindowsTcpClient::connectToServer(const std::string &addr, int port) {
+void	TcpClient::connectToServer(const std::string &addr, int port) {
 	mQTcpSocket = new QTcpSocket(this);
 	mQTcpSocket->connectToHost(QString(addr.c_str()), port);
 
@@ -18,20 +18,21 @@ void	WindowsTcpClient::connectToServer(const std::string &addr, int port) {
 
 	QObject::connect(mQTcpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
 	QObject::connect(mQTcpSocket, SIGNAL(disconnected()), this, SLOT(close()));
+	QObject::connect(mQTcpSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 }
 
-void	WindowsTcpClient::initFromSocket(void *socket) {
+void	TcpClient::initFromSocket(void *socket) {
 	mQTcpSocket = reinterpret_cast<QTcpSocket *>(socket);
 
 	QObject::connect(mQTcpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
 	QObject::connect(mQTcpSocket, SIGNAL(disconnected()), this, SLOT(close()));
 }
 
-void	WindowsTcpClient::closeClient(void) {
+void	TcpClient::closeClient(void) {
 	close();
 }
 
-void	WindowsTcpClient::close(void) {
+void	TcpClient::close(void) {
 	if (mQTcpSocket)
 		mQTcpSocket->disconnectFromHost();
 
@@ -40,16 +41,14 @@ void	WindowsTcpClient::close(void) {
 }
 
 
-unsigned int	WindowsTcpClient::send(const std::string &data) {
+void	TcpClient::send(const std::string &data) {
 	int ret = mQTcpSocket->write(data.c_str());
 
 	if (ret == -1)
 		throw new SocketException("fail QTcpSocket::write");
-
-	return ret;
 }
 
-unsigned int	WindowsTcpClient::receive(std::string &data, unsigned int sizeToRead) {
+void	TcpClient::receive(std::string &data, unsigned int sizeToRead) {
 	if (!isReadable())
 		throw new SocketException("Socket not readable");
 
@@ -62,21 +61,28 @@ unsigned int	WindowsTcpClient::receive(std::string &data, unsigned int sizeToRea
 
 	readBuffer[ret] = '\0';
 	data = readBuffer;
-
-	return ret;
 }
 
-bool	WindowsTcpClient::isReadable(void) const {
+bool	TcpClient::isReadable(void) const {
 	return mIsReadable;
 }
 
-void	WindowsTcpClient::markAsReadable(void) {
+bool	TcpClient::isWritable(void) const {
+	return true;
+}
+
+void	TcpClient::markAsReadable(void) {
 	mIsReadable = true;
 
 	if (mListener)
-		mListener->onSocketReadyRead(this);
+		mListener->onSocketReadable(this);
 }
 
-void	WindowsTcpClient::setOnSocketEventListener(OnSocketEvent *listener) {
+void	TcpClient::bytesWritten(qint64 nbBytes) {
+	if (mListener)
+		mListener->onBytesWritten(this, nbBytes);
+}
+
+void	TcpClient::setOnSocketEventListener(OnSocketEvent *listener) {
 	mListener = listener;
 }
