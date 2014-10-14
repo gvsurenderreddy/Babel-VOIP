@@ -1,7 +1,6 @@
 #include "SoundInputDevice.hpp"
 #include "SoundDeviceException.hpp"
 #include "SoundOutputDevice.hpp"
-#include "opus.h"
 #include <iostream>
 
 const int SoundInputDevice::SAMPLE_RATE = 48000;

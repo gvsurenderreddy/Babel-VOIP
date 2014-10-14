@@ -1,9 +1,6 @@
 #include <iostream>
 #include "SoundOutputDevice.hpp"
 #include "SoundDeviceException.hpp"
-#include <boost/thread/mutex.hpp>
-
-boost::mutex io_mutex;
 
 const int SoundOutputDevice::SAMPLE_RATE = 48000;
 const int SoundOutputDevice::NB_CHANNELS = 2;
@@ -45,8 +42,6 @@ void	SoundOutputDevice::stopStream(void) {
 }
 
 ISoundDevice	&SoundOutputDevice::operator<<(SoundBuffer *soundBuffer) {
-	boost::mutex::scoped_lock lock(io_mutex);
-
 	if (soundBuffer)
 		mBuffers.push_back(soundBuffer);
 
@@ -66,8 +61,6 @@ ISoundDevice	&SoundOutputDevice::operator>>(SoundBuffer *&soundBuffer) {
 
 int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
 	SoundOutputDevice *obj = reinterpret_cast<SoundOutputDevice *>(data);
-
-	boost::mutex::scoped_lock lock(io_mutex);
 
 	if (obj->mBuffers.size() == 0)
 		return paContinue;
