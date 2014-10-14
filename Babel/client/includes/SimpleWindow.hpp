@@ -5,7 +5,7 @@
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
 
-class SimpleWindow : public QMainWindow, public IServerSocket::OnSocketEvent, public IClientSocket::OnSocketEvent {
+class SimpleWindow : public QMainWindow, /*public IServerSocket::OnSocketEvent,*/ public IClientSocket::OnSocketEvent {
 
 	Q_OBJECT
 
@@ -16,11 +16,18 @@ class SimpleWindow : public QMainWindow, public IServerSocket::OnSocketEvent, pu
 		void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
 		void	onSocketReadable(IClientSocket *socket);
 		void	onSocketClosed(IClientSocket *socket);
-		void	onNewConnection(IServerSocket *socket);
+		//void	onNewConnection(IServerSocket *socket);
 
 	private:
 		Ui::SimpleWindowClass ui;
+
+		/* UDP */
+		IClientSocket *client;
+
+		/* TCP */
+		/*
 		IClientSocket *client;
 		IServerSocket *server;
+		*/
 
 };
