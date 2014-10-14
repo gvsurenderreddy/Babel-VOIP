@@ -1,5 +1,6 @@
 #include "TcpClient.hpp"
 #include "SocketException.hpp"
+#include <qhostaddress.h>
 
 TcpClient::TcpClient(void)
 	: mQTcpSocket(NULL), mListener(NULL), mIsReadable(false) {}
@@ -9,7 +10,7 @@ TcpClient::~TcpClient(void) {
 		delete mQTcpSocket;
 }
 
-void	TcpClient::connectToServer(const std::string &addr, int port) {
+void	TcpClient::connect(const std::string &addr, int port) {
 	mQTcpSocket = new QTcpSocket(this);
 	mQTcpSocket->connectToHost(QString(addr.c_str()), port);
 
@@ -26,6 +27,7 @@ void	TcpClient::initFromSocket(void *socket) {
 
 	QObject::connect(mQTcpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
 	QObject::connect(mQTcpSocket, SIGNAL(disconnected()), this, SLOT(close()));
+	QObject::connect(mQTcpSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 }
 
 void	TcpClient::closeClient(void) {
@@ -40,27 +42,29 @@ void	TcpClient::close(void) {
 		mListener->onSocketClosed(this);
 }
 
-
-void	TcpClient::send(const std::string &data) {
-	int ret = mQTcpSocket->write(data.c_str());
+void	TcpClient::send(const IClientSocket::Message &message) {
+	int ret = mQTcpSocket->write(message.msg, message.msgSize);
 
 	if (ret == -1)
 		throw new SocketException("fail QTcpSocket::write");
 }
 
-void	TcpClient::receive(std::string &data, unsigned int sizeToRead) {
+IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
+	IClientSocket::Message message;
+
 	if (!isReadable())
 		throw new SocketException("Socket not readable");
 
-	char *readBuffer = new char[sizeToRead + 1];
-	int ret = mQTcpSocket->read(readBuffer, sizeToRead);
+	message.msg = new char[sizeToRead + 1];
+	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
+	message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
+	message.port = mQTcpSocket->peerPort();
 	mIsReadable = false;
 
-	if (ret == -1)
+	if (message.msgSize == -1)
 		throw new SocketException("fail QTcpSocket::read");
 
-	readBuffer[ret] = '\0';
-	data = readBuffer;
+	return message;
 }
 
 bool	TcpClient::isReadable(void) const {

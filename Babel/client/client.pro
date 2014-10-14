@@ -1,6 +1,6 @@
 TEMPLATE        =       app
 TARGET          =       client
-QT              +=      core gui network
+QT              +=      core widgets gui network
 
 DESTDIR         =       build
 OBJECTS_DIR     =       build/obj
@@ -9,7 +9,10 @@ UI_DIR          =       build/ui
 
 INCLUDEPATH     +=      .                                       \
                         includes                                \
-                        dependencies/includes
+                        dependencies/includes			\
+			build					\
+			build/ui				\
+			build/moc
 
 HEADERS         +=      includes/IClientSocket.hpp              \
                         includes/IServerSocket.hpp              \
@@ -24,7 +27,9 @@ HEADERS         +=      includes/IClientSocket.hpp              \
 			includes/IMutex.hpp			\
 			includes/Mutex.hpp			\
 			includes/ScopedLock.hpp			\
-                        dependencies/includes/portaudio.h
+			includes/SimpleWindow.hpp
+
+HEADERS		+=	dependencies/includes/portaudio.h
 
 SOURCES         +=      sources/main.cpp                        \
                         sources/SocketException.cpp             \
@@ -35,6 +40,9 @@ SOURCES         +=      sources/main.cpp                        \
 			sources/UdpClient.cpp			\
                         sources/TcpServer.cpp			\
 			sources/ScopedLock.cpp			\
-			sources/Mutex.cpp
+			sources/Mutex.cpp			\
+			sources/SimpleWindow.cpp
 
-win32:LIBS      +=      dependencies/libs/portaudio_x86.lib
+FORMS		+=	forms/SimpleWindow.ui
+
+win32:LIBS      +=      -ldependencies/libs/portaudio_x86

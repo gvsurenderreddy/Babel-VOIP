@@ -19,7 +19,7 @@ class TcpClient : public QObject, public IClientSocket {
 
 	// start-stop
 	public:
-		void	connectToServer(const std::string &addr, int port);
+		void	connect(const std::string &addr, int port);
 		void	initFromSocket(void *socket);
 		void	closeClient(void);
 
@@ -29,8 +29,8 @@ class TcpClient : public QObject, public IClientSocket {
 
 	// recv / send
 	public:
-		void	send(const std::string &data);
-		void	receive(std::string &data, unsigned int sizeToRead);
+		void	send(const Message &message);
+		Message	receive(unsigned int sizeToRead);
 
 	// handle state
 	public:
