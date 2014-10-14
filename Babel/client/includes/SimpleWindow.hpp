@@ -2,8 +2,10 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_SimpleWindow.h"
+#include "IClientSocket.hpp"
+#include "IServerSocket.hpp"
 
-class SimpleWindow : public QMainWindow {
+class SimpleWindow : public QMainWindow, public IServerSocket::OnSocketEvent, public IClientSocket::OnSocketEvent {
 
 	Q_OBJECT
 
@@ -11,7 +13,14 @@ class SimpleWindow : public QMainWindow {
 		SimpleWindow(QWidget *parent = 0);
 		~SimpleWindow() {}
 
+		void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
+		void	onSocketReadable(IClientSocket *socket);
+		void	onSocketClosed(IClientSocket *socket);
+		void	onNewConnection(IServerSocket *socket);
+
 	private:
 		Ui::SimpleWindowClass ui;
+		IClientSocket *client;
+		IServerSocket *server;
 
 };
