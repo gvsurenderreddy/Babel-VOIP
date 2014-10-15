@@ -38,8 +38,8 @@ class IServerSocket {
 
 	// handle clients
 	public:
-		virtual IClientSocket *acceptFirstClientInQueue(void) = 0;
-		virtual bool			    hasClientInQueue(void) const = 0;
+		virtual IClientSocket	getNewClient(void) = 0;
+		virtual bool		hasClientInQueue(void) const = 0;
 
 };
 ```
@@ -51,8 +51,6 @@ La classe qui souhaite utiliser un IClientSocket devra implémenter l'interface 
 
 Elle sera automatiquement notifiée lorsqu'un client est disponible en écriture et est déconnectée.
 
-On pourrait à la limite prévoir de rajouter un listener `onBytesWriten` qui avertirait lorsque des bytes ont pu être envoyés.
-
 ```cpp
 class IClientSocket {
 
@@ -61,7 +59,8 @@ class IClientSocket {
 		class OnSocketEvent {
 			public:
 				virtual	~OnSocketEvent() {}
-				virtual void	onSocketReadyRead(IClientSocket *socket) = 0;
+				virtual void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes) = 0;
+				virtual void	onSocketReadable(IClientSocket *socket) = 0;
 				virtual void	onSocketClosed(IClientSocket *socket) = 0;
 		};
 
@@ -71,19 +70,18 @@ class IClientSocket {
 
 	// start - stop
 	public:
-		virtual void	connectToServer(const std::string &addr, int port) = 0;
+		virtual void	connect(const std::string &addr, int port) = 0;
 		virtual void	initFromSocket(void *socket) = 0;
 		virtual	void	closeClient(void) = 0;
 
 	// recv / send
 	public:
-		virtual void      send(const IMessage &msg) = 0;
+		virtual void      	send(const IMessage &msg) = 0;
 		virtual IMessage	*receive(void) = 0;
-    // overload possible de << et >>
 
 	// handle state
 	public:
-	  virtual bool  isWritable(void) const = 0;
+	  	virtual bool 	isWritable(void) const = 0;
 		virtual bool	isReadable(void) const = 0;
 
 	// set listener
@@ -116,8 +114,35 @@ C'est différent de ce qui sera fait dans l'implémentation via QtNetwork.
 
 ### IMessage
 
-IMessage sera une interface qui sera utilisée pour définir différent type de messages.
+```cpp
+class IClientSocket {
 
-Typiquement, une string ne peut pas être traitée de la même manière qu'un champs de byte issu de portaudio+opus.
+	struct IMessage {
+	  char		*msg;
+	  int		msgSize;
+	  std::string	host;
+	  int		port;
+	}
 
-L'interface reste encore à définir: template ou héritage, telle est la question :D
+}
+```
+
+La structure IClientSocket::IMessage est utilisée pour l'envoie et la réception de data.
+
+Elle est essentielle et au coeur de la conception pour 2 principales raisons:
+
+* Permettre l'envoie de n'importe quel type de data, notamment du son.
+* Permettre d'abstraire les socket TCP et UDP sous la même interface IClientSocket malgré les différences de fonctionnement énormes
+
+Lorsque l'on souhaite lire sur une socket, le fonctionnement sera le même en TCP et en UDP: le structure sera entièrement remplie avec les infos suivantes:
+
+* msg => message
+* msgSize => taille du message lu
+* host => host du sender
+* port => port du sender
+
+En revanche, au niveau de l'envoi, la méthode de fonctionnement va légèrement différer entre UDP et TCP
+
+* TCP n'utilisera que les champs msg et msg size
+* UDP utilisera tous les champs: il enverra le msg de taille msgSize à @host:port
+
