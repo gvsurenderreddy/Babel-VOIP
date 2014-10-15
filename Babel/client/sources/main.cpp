@@ -1,41 +1,28 @@
-#include <iostream>
-
-/* PORTAUDIO TEST */
-/*
 #include "SoundInputDevice.hpp"
 #include "SoundOutputDevice.hpp"
+#include "EncodeManager.hpp"
 
 int main(void) {
 	SoundInputDevice input;
 	SoundOutputDevice output;
+	EncodeManager encodeManager;
 
 	input.startStream();
 	output.startStream();
 
 	while (true) {
-		ISoundDevice::SoundBuffer *buffer;
+		Sound::Decoded *sound;
 
-		input >> buffer;
-		if (buffer)
-			output << buffer;
+		input >> sound;
+		if (sound) {
+			Sound::Encoded encodedSound = encodeManager.encode(*sound);
+			Sound::Decoded decodedSound = encodeManager.decode(encodedSound);
+			output << &decodedSound;
+		}
 	}
 
 	input.stopStream();
 	output.stopStream();
 
 	return 0;
-}
-*/
-
-/* QT NETWORK TEST */
-#include <qapplication.h>
-#include "SimpleWindow.hpp"
-
-int	main(int ac, char **av) {
-	QApplication app(ac, av);
-
-	SimpleWindow simpleWindow;
-	simpleWindow.show();
-
-	return app.exec();
 }

@@ -56,7 +56,7 @@ SimpleWindow::SimpleWindow(QWidget *parent) : QMainWindow(parent) {
 	client->setOnSocketEventListener(this);
 }
 
-void	SimpleWindow::onSocketReadable(IClientSocket *socket) {
+void	SimpleWindow::onSocketReadable(IClientSocket * /*socket*/) {
 	IClientSocket::Message msg;
 
 	std::cout << "OnSocketadyRead" << std::endl;
@@ -68,10 +68,10 @@ void	SimpleWindow::onSocketReadable(IClientSocket *socket) {
 	client->send(msg);
 }
 
-void	SimpleWindow::onSocketClosed(IClientSocket *socket) {
+void	SimpleWindow::onSocketClosed(IClientSocket * /*socket*/) {
 	std::cout << "socket closed" << std::endl;
 }
 
-void	SimpleWindow::onBytesWritten(IClientSocket *socket, unsigned int nbBytes) {
+void	SimpleWindow::onBytesWritten(IClientSocket * /*socket*/, unsigned int nbBytes) {
 	std::cout << nbBytes << " bytes written" << std::endl;
 }

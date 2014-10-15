@@ -1,19 +1,8 @@
 #pragma once
 
+#include "Sound.hpp"
+
 class ISoundDevice {
-
-	// SoundBuffer
-	public:
-		struct SoundBuffer {
-			float	*sound;
-			int		nbFrames;
-			int		currentFrame;
-
-			~SoundBuffer(void) {
-				if (sound)
-					delete sound;
-			}
-		};
 
 	// virtual destructor
 	public:
@@ -24,7 +13,7 @@ class ISoundDevice {
 		virtual void	startStream(void) = 0;
 		virtual void	stopStream(void) = 0;
 
-		virtual ISoundDevice	&operator<<(SoundBuffer *soundBuffer) = 0;
-		virtual ISoundDevice	&operator>>(SoundBuffer *&soundBuffer) = 0;
+		virtual ISoundDevice	&operator<<(Sound::Decoded *soundBuffer) = 0;
+		virtual ISoundDevice	&operator>>(Sound::Decoded *&soundBuffer) = 0;
 
 };
