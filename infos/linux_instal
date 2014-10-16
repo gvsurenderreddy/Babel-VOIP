@@ -1,0 +1,7 @@
+Installer boost
+sudo apt-get install libboost-all-dev
+
+Installer qt
+sudo apt-get install qt-sdk
+
+Non il n'y a pas besoin de compiler comme sur windaube !!
