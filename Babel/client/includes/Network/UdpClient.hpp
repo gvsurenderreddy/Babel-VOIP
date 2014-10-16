@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IClientSocket.hpp"
-#include <QtNetwork\qudpsocket.h>
+#include <QtNetwork/qudpsocket.h>
 
 class UdpClient : public QObject, public IClientSocket {
 

@@ -7,7 +7,7 @@ class SoundException : public std::runtime_error {
 	// default ctor dtor
 	public:
 		SoundException(const std::string &error);
-		~SoundException(void) {}
+		~SoundException(void) throw() {}
 
 	// private coplien form
 	private:

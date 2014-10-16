@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IClientSocket.hpp"
-#include <QtNetwork\qtcpsocket.h>
+#include <QtNetwork/qtcpsocket.h>
 
 class TcpClient : public QObject, public IClientSocket {
 

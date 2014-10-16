@@ -36,5 +36,7 @@ moc_*.cpp
 *.tlog
 *.sln
 *.log
+*.exp
+client.lib
 ui
 debug

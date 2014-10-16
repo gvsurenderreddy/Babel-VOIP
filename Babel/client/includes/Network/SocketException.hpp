@@ -8,7 +8,7 @@ class SocketException : public std::runtime_error {
 	// default ctor dtor
 	public:
 		SocketException(const std::string &error);
-		~SocketException(void) {}
+		~SocketException(void) throw() {}
 	
 	// private coplien form
 	private:
