@@ -1,40 +1,62 @@
 TEMPLATE        =       app
 TARGET          =       client
-QT              +=      core gui network
+QT              +=      core widgets gui network
 
 DESTDIR         =       build
 OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
+QMAKE_CXXFLAGS	+=	-Wall
+
 INCLUDEPATH     +=      .                                       \
                         includes                                \
-                        dependencies/includes
+			includes/Network			\
+			includes/Audio				\
+			includes/Mutex				\
+			../shared/includes			\
+                        dependencies/includes			\
+			build					\
+			build/ui				\
+			build/moc
 
-HEADERS         +=      includes/IClientSocket.hpp              \
-                        includes/IServerSocket.hpp              \
-                        includes/ISoundDevice.hpp               \
-                        includes/SocketException.hpp            \
-                        includes/SoundDeviceException.hpp       \
-                        includes/SoundInputDevice.hpp           \
-                        includes/SoundOutputDevice.hpp          \
-                        includes/TcpClient.hpp                  \
-                        includes/TcpServer.hpp                  \
-			includes/UdpClient.hpp			\
-			includes/IMutex.hpp			\
-			includes/Mutex.hpp			\
-			includes/ScopedLock.hpp			\
-                        dependencies/includes/portaudio.h
+HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
+                        ../shared/includes/IServerSocket.hpp    \
+			../shared/includes/IMutex.hpp		\
+                        includes/Network/SocketException.hpp    \
+                        includes/Network/TcpClient.hpp          \
+                        includes/Network/TcpServer.hpp          \
+			includes/Network/UdpClient.hpp		\
+			includes/Mutex/Mutex.hpp		\
+			includes/Mutex/ScopedLock.hpp		\
+			includes/SimpleWindow.hpp		\
+                        includes/Audio/ISoundDevice.hpp         \
+			includes/Audio/Sound.hpp		\
+                        includes/Audio/SoundException.hpp       \
+                        includes/Audio/SoundInputDevice.hpp     \
+                        includes/Audio/SoundOutputDevice.hpp    \
+			includes/Audio/EncodeManager.hpp
+
+HEADERS		+=	dependencies/includes/portaudio.h
 
 SOURCES         +=      sources/main.cpp                        \
-                        sources/SocketException.cpp             \
-                        sources/SoundDeviceException.cpp        \
-                        sources/SoundInputDevice.cpp            \
-                        sources/SoundOutputDevice.cpp           \
-                        sources/TcpClient.cpp                   \
-			sources/UdpClient.cpp			\
-                        sources/TcpServer.cpp			\
-			sources/ScopedLock.cpp			\
-			sources/Mutex.cpp
+			sources/SimpleWindow.cpp		\
+                        sources/Network/SocketException.cpp     \
+                        sources/Network/TcpClient.cpp           \
+			sources/Network/UdpClient.cpp		\
+                        sources/Network/TcpServer.cpp		\
+			sources/Mutex/ScopedLock.cpp		\
+			sources/Mutex/Mutex.cpp			\
+                        sources/Audio/SoundException.cpp        \
+                        sources/Audio/SoundInputDevice.cpp      \
+                        sources/Audio/SoundOutputDevice.cpp     \
+			sources/Audio/EncodeManager.cpp
 
-win32:LIBS      +=      dependencies/libs/portaudio_x86.lib
+FORMS		+=	forms/SimpleWindow.ui
+
+win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
+			-ldependencies/libs/celt 		\
+			-ldependencies/libs/opus 		\
+			-ldependencies/libs/silk_common 	\
+			-ldependencies/libs/silk_fixed		\
+			-ldependencies/libs/silk_float

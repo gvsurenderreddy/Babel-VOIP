@@ -1,25 +1,25 @@
 #pragma once
 
 #include "IClientSocket.hpp"
-#include <QtNetwork\qudpsocket.h>
+#include <QtNetwork/qtcpsocket.h>
 
-class UdpClient : public QObject, public IClientSocket {
+class TcpClient : public QObject, public IClientSocket {
 
 	Q_OBJECT
 
 	// default ctor-dtor
 	public:
-		UdpClient(void);
-		~UdpClient(void);
+		TcpClient(void);
+		~TcpClient(void);
 
 	// private coplien form
 	private:
-		UdpClient(const UdpClient &) {}
-		const UdpClient &operator=(const UdpClient &) { return *this; }
+		TcpClient(const TcpClient &) {}
+		const TcpClient &operator=(const TcpClient &) { return *this; }
 
 	// start-stop
 	public:
-		void	connectToServer(const std::string &addr, int port);
+		void	connect(const std::string &addr, int port);
 		void	initFromSocket(void *socket);
 		void	closeClient(void);
 
@@ -29,8 +29,8 @@ class UdpClient : public QObject, public IClientSocket {
 
 	// recv / send
 	public:
-		void	send(const std::string &data);
-		void	receive(std::string &data, unsigned int sizeToRead);
+		void	send(const Message &message);
+		Message	receive(unsigned int sizeToRead);
 
 	// handle state
 	public:
@@ -45,7 +45,7 @@ class UdpClient : public QObject, public IClientSocket {
 
 	// attributes
 	private:
-		QUdpSocket	*mQUdpSocket;
+		QTcpSocket	*mQTcpSocket;
 		bool		mIsReadable;
 
 		IClientSocket::OnSocketEvent	*mListener;

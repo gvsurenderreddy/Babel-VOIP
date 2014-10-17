@@ -9,15 +9,13 @@ UdpClient::~UdpClient(void) {
 		delete mQUdpSocket;
 }
 
-void	UdpClient::connectToServer(const std::string &addr, int port) {
+void	UdpClient::connect(const std::string &/*addr*/, int port) {
 	mQUdpSocket = new QUdpSocket(this);
-	mQUdpSocket->connectToHost(QString(addr.c_str()), port);
 
-	if (mQUdpSocket->waitForConnected(-1) == false)
-		throw new SocketException("fail QTcpSocket::connectToHost & QTcpSocket::waitForConnected");
+	if (mQUdpSocket->bind(QHostAddress::LocalHost, port) == false)
+		throw new SocketException("fail QUdpSocket::bind");
 
 	QObject::connect(mQUdpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
-	QObject::connect(mQUdpSocket, SIGNAL(disconnected()), this, SLOT(close()));
 	QObject::connect(mQUdpSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 }
 
@@ -25,7 +23,7 @@ void	UdpClient::initFromSocket(void *socket) {
 	mQUdpSocket = reinterpret_cast<QUdpSocket *>(socket);
 
 	QObject::connect(mQUdpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
-	QObject::connect(mQUdpSocket, SIGNAL(disconnected()), this, SLOT(close()));
+	QObject::connect(mQUdpSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
 }
 
 void	UdpClient::closeClient(void) {
@@ -34,33 +32,38 @@ void	UdpClient::closeClient(void) {
 
 void	UdpClient::close(void) {
 	if (mQUdpSocket)
-		mQUdpSocket->disconnectFromHost();
+		mQUdpSocket->close();
 
 	if (mListener)
 		mListener->onSocketClosed(this);
 }
 
 
-void	UdpClient::send(const std::string &data) {
-	int ret = mQUdpSocket->write(data.c_str());
+void	UdpClient::send(const IClientSocket::Message &message) {
+	int ret = mQUdpSocket->writeDatagram(message.msg, message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
 
 	if (ret == -1)
 		throw new SocketException("fail QTcpSocket::write");
 }
 
-void	UdpClient::receive(std::string &data, unsigned int sizeToRead) {
+IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
+	IClientSocket::Message message;
+	QHostAddress host;
+	quint16 port;
+
 	if (!isReadable())
 		throw new SocketException("Socket not readable");
 
-	char *readBuffer = new char[sizeToRead + 1];
-	int ret = mQUdpSocket->read(readBuffer, sizeToRead);
+	message.msg = new char[sizeToRead + 1];
+	message.msgSize = mQUdpSocket->readDatagram(message.msg, sizeToRead, &host, &port);
+	message.host = host.toString().toStdString();
+	message.port = port;
 	mIsReadable = false;
 
-	if (ret == -1)
+	if (message.msgSize == -1)
 		throw new SocketException("fail QTcpSocket::read");
 
-	readBuffer[ret] = '\0';
-	data = readBuffer;
+	return message;
 }
 
 bool	UdpClient::isReadable(void) const {

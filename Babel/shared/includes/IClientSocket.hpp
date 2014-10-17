@@ -4,6 +4,15 @@
 
 class IClientSocket {
 
+	// Message Data
+	public:
+		struct Message {
+			char		*msg;
+			int			msgSize;
+			std::string	host;
+			int			port;
+		};
+
 	// CallBack Interface
 	public:
 		class OnSocketEvent {
@@ -20,14 +29,14 @@ class IClientSocket {
 
 	// start - stop
 	public:
-		virtual void	connectToServer(const std::string &addr, int port) = 0;
+		virtual void	connect(const std::string &addr, int port) = 0;
 		virtual void	initFromSocket(void *socket) = 0;
 		virtual	void	closeClient(void) = 0;
 
 	// recv / send
 	public:
-		virtual void	send(const std::string &data) = 0;
-		virtual void	receive(std::string &data, unsigned int sizeToRead) = 0;
+		virtual void	send(const Message &message) = 0;
+		virtual Message	receive(unsigned int sizeToRead) = 0;
 
 	// handle state
 	public:
