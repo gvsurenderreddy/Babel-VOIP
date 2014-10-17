@@ -25,7 +25,7 @@
 *.out
 *.app
 
-# Visual Studio
+# QMake & Visual Studio
 *.vcx*
 *.sdf
 *sdf
@@ -40,3 +40,4 @@ moc_*.cpp
 client.lib
 ui
 debug
+Makefile*

@@ -24,8 +24,8 @@ EncodeManager::~EncodeManager(void) {
 Sound::Encoded	EncodeManager::encode(const Sound::Decoded &sound) {
 	Sound::Encoded encoded;
 
-	encoded.buffer = new unsigned char[sound.size];
-	encoded.size = opus_encode_float(mEncoder, sound.buffer, Sound::FRAMES_PER_BUFFER, encoded.buffer, sound.size);
+	encoded.buffer = new unsigned char[sound.size * sizeof(float)];
+	encoded.size = opus_encode_float(mEncoder, sound.buffer, Sound::FRAMES_PER_BUFFER, encoded.buffer, sound.size * sizeof(float));
 
 	if (encoded.size < 0)
 		throw new SoundException("fail opus_encode_float");
