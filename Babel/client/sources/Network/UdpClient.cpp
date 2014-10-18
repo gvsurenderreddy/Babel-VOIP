@@ -2,7 +2,7 @@
 #include "SocketException.hpp"
 
 UdpClient::UdpClient(void)
-	: mQUdpSocket(NULL), mListener(NULL), mIsReadable(false) {}
+	: mQUdpSocket(NULL), mIsReadable(false), mListener(NULL) {}
 
 UdpClient::~UdpClient(void) {
 	if (mQUdpSocket)

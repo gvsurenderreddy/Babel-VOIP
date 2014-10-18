@@ -60,3 +60,6 @@ win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
 			-ldependencies/libs/silk_common 	\
 			-ldependencies/libs/silk_fixed		\
 			-ldependencies/libs/silk_float
+
+unix:LIBS       +=      -Ldependencies -lopus                     \
+                        -Ldependencies -lportaudio

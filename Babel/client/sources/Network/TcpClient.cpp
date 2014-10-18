@@ -3,7 +3,7 @@
 #include <qhostaddress.h>
 
 TcpClient::TcpClient(void)
-	: mQTcpSocket(NULL), mListener(NULL), mIsReadable(false) {}
+	: mQTcpSocket(NULL), mIsReadable(false), mListener(NULL) {}
 
 TcpClient::~TcpClient(void) {
 	if (mQTcpSocket)

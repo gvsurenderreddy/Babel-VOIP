@@ -14,7 +14,7 @@ class TcpClient : public QObject, public IClientSocket {
 
 	// private coplien form
 	private:
-		TcpClient(const TcpClient &) {}
+		TcpClient(const TcpClient &) : QObject() {}
 		const TcpClient &operator=(const TcpClient &) { return *this; }
 
 	// start-stop

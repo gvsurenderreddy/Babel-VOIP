@@ -14,7 +14,7 @@ class UdpClient : public QObject, public IClientSocket {
 
 	// private coplien form
 	private:
-		UdpClient(const UdpClient &) {}
+		UdpClient(const UdpClient &) : QObject() {}
 		const UdpClient &operator=(const UdpClient &) { return *this; }
 
 	// start-stop

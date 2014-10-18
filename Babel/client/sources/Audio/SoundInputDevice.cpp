@@ -3,6 +3,7 @@
 #include "SoundOutputDevice.hpp"
 #include "ScopedLock.hpp"
 #include <iostream>
+#include <cstring>
 
 SoundInputDevice::SoundInputDevice(void) : mStream(NULL) {
 	if (Pa_Initialize() != paNoError)
@@ -71,7 +72,7 @@ int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long fr
 
 	sound->size = framesPerBuffer * Sound::NB_CHANNELS;
 	sound->buffer = new float[sound->size];
-	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));
+	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float)); // MEMCPY
 
 	obj->mBuffers.push_back(sound);
 

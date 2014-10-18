@@ -14,7 +14,7 @@ class TcpServer : public QObject, public IServerSocket {
 
 	// private coplien form
 	private:
-		TcpServer(const TcpServer &) {}
+		TcpServer(const TcpServer &) : QObject() {}
 		const TcpServer &operator=(const TcpServer &) { return *this; }
 
 	// init

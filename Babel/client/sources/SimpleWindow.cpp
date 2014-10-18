@@ -4,6 +4,7 @@
 #include "UdpClient.hpp"
 #include <qbytearray.h>
 #include <iostream>
+#include <string.h>
 
 /* TCP */
 /*
@@ -63,7 +64,7 @@ void	SimpleWindow::onSocketReadable(IClientSocket * /*socket*/) {
 	msg = client->receive(1024);
 	std::cout << "READ: " << QString(QByteArray(msg.msg, msg.msgSize)).toStdString() << std::endl;
 
-	msg.msg = "hello world :)\n";
+	msg.msg = strdup("hello world :)\n");
 	msg.msgSize = std::string("hello world :)\n").size();
 	client->send(msg);
 }
