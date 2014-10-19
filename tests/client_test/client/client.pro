@@ -28,6 +28,8 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 			includes/Network/UdpClient.hpp		\
 			includes/Mutex/Mutex.hpp		\
 			includes/Mutex/ScopedLock.hpp		\
+			includes/Sender.hpp			\
+			includes/Receiver.hpp			\
                         includes/Audio/ISoundDevice.hpp         \
 			includes/Audio/Sound.hpp		\
                         includes/Audio/SoundException.hpp       \
@@ -38,6 +40,8 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 HEADERS		+=	dependencies/includes/portaudio.h
 
 SOURCES         +=      sources/main.cpp                        \
+			sources/Sender.cpp			\
+			sources/Receiver.cpp			\
                         sources/Network/SocketException.cpp     \
                         sources/Network/TcpClient.cpp           \
 			sources/Network/UdpClient.cpp		\
