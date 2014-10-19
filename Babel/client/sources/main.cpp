@@ -11,14 +11,11 @@ int main(void) {
 	output.startStream();
 
 	while (true) {
-		Sound::Decoded *sound;
+		Sound::Decoded sound;
 
 		input >> sound;
-		if (sound) {
-			Sound::Encoded encodedSound = encodeManager.encode(*sound);
-			Sound::Decoded decodedSound = encodeManager.decode(encodedSound);
-			output << &decodedSound;
-		}
+		if (sound.buffer)
+			output << encodeManager.decode(encodeManager.encode(sound));
 	}
 
 	input.stopStream();

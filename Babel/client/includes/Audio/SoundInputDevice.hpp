@@ -26,8 +26,8 @@ class SoundInputDevice : public ISoundDevice {
 		void	startStream(void);
 		void	stopStream(void);
 
-		ISoundDevice	&operator<<(Sound::Decoded *soundBuffer);
-		ISoundDevice	&operator>>(Sound::Decoded *&soundBuffer);
+		ISoundDevice	&operator<<(const Sound::Decoded &soundBuffer);
+		ISoundDevice	&operator>>(Sound::Decoded &soundBuffer);
 		static int		callback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
 
 	// attributes

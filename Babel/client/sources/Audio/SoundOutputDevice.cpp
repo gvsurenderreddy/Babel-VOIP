@@ -1,4 +1,3 @@
-#include <iostream>
 #include "ScopedLock.hpp"
 #include "SoundOutputDevice.hpp"
 #include "SoundException.hpp"
@@ -38,24 +37,36 @@ void	SoundOutputDevice::stopStream(void) {
 		throw new SoundException("fail Pa_StopStream");
 }
 
-ISoundDevice	&SoundOutputDevice::operator<<(Sound::Decoded *soundBuffer) {
+ISoundDevice	&SoundOutputDevice::operator<<(const Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
-	if (soundBuffer)
-		mBuffers.push_back(soundBuffer);
+	if (sound.buffer) {
+		Sound::Decoded *soundCpy = new Sound::Decoded;
+
+		soundCpy->buffer = sound.buffer;
+		soundCpy->size = sound.size;
+		mBuffers.push_back(soundCpy);
+	}
 
 	return *this;
 }
 
-ISoundDevice	&SoundOutputDevice::operator>>(Sound::Decoded *&soundBuffer) {
+ISoundDevice	&SoundOutputDevice::operator>>(Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
 	if (mBuffers.size()) {
-		soundBuffer = mBuffers.front();
+		Sound::Decoded *soundCpy = mBuffers.front();
+
+		sound.buffer = soundCpy->buffer;
+		sound.size = soundCpy->size;
+
+		delete soundCpy;
 		mBuffers.pop_front();
 	}
-	else
-		soundBuffer = NULL;
+	else {
+		sound.size = 0;
+		sound.buffer = NULL;
+	}
 
 	return *this;
 }
@@ -73,6 +84,8 @@ int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long,
 	for (int i = 0; i < sound->size; i++)
 		*wptr++ = sound->buffer[i];
 
+	delete sound->buffer;
+	delete sound;
 	obj->mBuffers.pop_front();
 
 	return paContinue;

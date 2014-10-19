@@ -2,7 +2,6 @@
 #include "SoundException.hpp"
 #include "SoundOutputDevice.hpp"
 #include "ScopedLock.hpp"
-#include <iostream>
 #include <cstring>
 
 SoundInputDevice::SoundInputDevice(void) : mStream(NULL) {
@@ -41,24 +40,36 @@ void	SoundInputDevice::stopStream(void) {
 		throw new SoundException("fail Pa_StopStream");
 }
 
-ISoundDevice	&SoundInputDevice::operator<<(Sound::Decoded *soundBuffer) {
+ISoundDevice	&SoundInputDevice::operator<<(const Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
-	if (soundBuffer)
-		mBuffers.push_back(soundBuffer);
+	if (sound.buffer) {
+		Sound::Decoded *soundCpy = new Sound::Decoded;
+
+		soundCpy->buffer = sound.buffer;
+		soundCpy->size = sound.size;
+		mBuffers.push_back(soundCpy);
+	}
 
 	return *this;
 }
 
-ISoundDevice	&SoundInputDevice::operator>>(Sound::Decoded *&soundBuffer) {
+ISoundDevice	&SoundInputDevice::operator>>(Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
 	if (mBuffers.size()) {
-		soundBuffer = mBuffers.front();
+		Sound::Decoded *soundCpy = mBuffers.front();
+
+		sound.buffer = soundCpy->buffer;
+		sound.size = soundCpy->size;
+
+		delete soundCpy;
 		mBuffers.pop_front();
 	}
-	else
-		soundBuffer = NULL;
+	else {
+		sound.size = 0;
+		sound.buffer = NULL;
+	}
 
 	return *this;
 }
@@ -67,12 +78,11 @@ int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long fr
 	SoundInputDevice *obj = reinterpret_cast<SoundInputDevice *>(data);
 	ScopedLock scopedLock(&obj->mMutex);
 
-
 	Sound::Decoded *sound = new Sound::Decoded;
 
 	sound->size = framesPerBuffer * Sound::NB_CHANNELS;
 	sound->buffer = new float[sound->size];
-	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float)); // MEMCPY
+	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));
 
 	obj->mBuffers.push_back(sound);
 
