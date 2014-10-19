@@ -52,7 +52,7 @@ void	TcpClient::send(const IClientSocket::Message &message) {
 IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	IClientSocket::Message message;
 
-	if (!isReadable())
+	if (nbBytesToRead() == 0)
 		throw new SocketException("Socket not readable");
 
 	message.msg = new char[sizeToRead + 1];
@@ -67,19 +67,15 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	return message;
 }
 
-bool	TcpClient::isReadable(void) const {
-	return mIsReadable;
-}
-
-bool	TcpClient::isWritable(void) const {
-	return true;
+unsigned int	TcpClient::nbBytesToRead(void) const {
+	return mQTcpSocket->bytesAvailable();
 }
 
 void	TcpClient::markAsReadable(void) {
 	mIsReadable = true;
 
 	if (mListener)
-		mListener->onSocketReadable(this);
+		mListener->onSocketReadable(this, mQTcpSocket->bytesAvailable());
 }
 
 void	TcpClient::bytesWritten(qint64 nbBytes) {

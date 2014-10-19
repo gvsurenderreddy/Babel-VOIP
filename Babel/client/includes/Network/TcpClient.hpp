@@ -29,13 +29,9 @@ class TcpClient : public QObject, public IClientSocket {
 
 	// recv / send
 	public:
-		void	send(const Message &message);
-		Message	receive(unsigned int sizeToRead);
-
-	// handle state
-	public:
-		bool	isReadable(void) const;
-		bool	isWritable(void) const;
+		void			send(const Message &message);
+		Message			receive(unsigned int sizeToRead);
+		unsigned int	nbBytesToRead(void) const;
 
 	// slots
 	private slots:

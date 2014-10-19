@@ -51,7 +51,7 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	QHostAddress host;
 	quint16 port;
 
-	if (!isReadable())
+	if (nbBytesToRead() == 0)
 		throw new SocketException("Socket not readable");
 
 	message.msg = new char[sizeToRead + 1];
@@ -66,19 +66,15 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	return message;
 }
 
-bool	UdpClient::isReadable(void) const {
-	return mIsReadable;
-}
-
-bool	UdpClient::isWritable(void) const {
-	return true;
+unsigned int	UdpClient::nbBytesToRead(void) const {
+	return mQUdpSocket->bytesAvailable();
 }
 
 void	UdpClient::markAsReadable(void) {
 	mIsReadable = true;
 
 	if (mListener)
-		mListener->onSocketReadable(this);
+		mListener->onSocketReadable(this, mQUdpSocket->bytesAvailable());
 }
 
 void	UdpClient::bytesWritten(qint64 nbBytes) {

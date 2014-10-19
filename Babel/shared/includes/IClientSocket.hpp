@@ -19,7 +19,7 @@ class IClientSocket {
 			public:
 				virtual	~OnSocketEvent() {}
 				virtual	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes) = 0;
-				virtual void	onSocketReadable(IClientSocket *socket) = 0;
+				virtual void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead) = 0;
 				virtual void	onSocketClosed(IClientSocket *socket) = 0;
 		};
 
@@ -35,13 +35,9 @@ class IClientSocket {
 
 	// recv / send
 	public:
-		virtual void	send(const Message &message) = 0;
-		virtual Message	receive(unsigned int sizeToRead) = 0;
-
-	// handle state
-	public:
-		virtual bool	isWritable(void) const = 0;
-		virtual bool	isReadable(void) const = 0;
+		virtual void			send(const Message &message) = 0;
+		virtual Message			receive(unsigned int sizeToRead) = 0;
+		virtual unsigned int	nbBytesToRead(void) const = 0;
 
 	// set listener
 	public:
