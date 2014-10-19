@@ -1,25 +1,25 @@
-#include "SoundInputDevice.hpp"
-#include "SoundOutputDevice.hpp"
-#include "EncodeManager.hpp"
+#include <qapplication.h>
+#include "Sender.hpp"
+#include "Receiver.hpp"
 
-int main(void) {
-	SoundInputDevice input;
-	SoundOutputDevice output;
-	EncodeManager encodeManager;
+int main(int ac, char **av) {
+	/* SENDER */
+	/*
+	QApplication app(ac, av);
+	Sender sender;
 
-	input.startStream();
-	output.startStream();
+	sender.start();
+	return app.exec();
+	*/
 
-	while (true) {
-		Sound::Decoded sound;
+	/* RECEIVER */
+	/*
+	QApplication app(ac, av);
+	Receiver receiver;
 
-		input >> sound;
-		if (sound.buffer)
-			output << encodeManager.decode(encodeManager.encode(sound));
-	}
-
-	input.stopStream();
-	output.stopStream();
+	receiver.start();
+	return app.exec();
+	*/
 
 	return 0;
 }

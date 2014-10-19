@@ -25,11 +25,11 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 			../shared/includes/IMutex.hpp		\
                         includes/Network/SocketException.hpp    \
                         includes/Network/TcpClient.hpp          \
-                        includes/Network/TcpServer.hpp          \
 			includes/Network/UdpClient.hpp		\
 			includes/Mutex/Mutex.hpp		\
 			includes/Mutex/ScopedLock.hpp		\
-			includes/SimpleWindow.hpp		\
+			includes/Sender.hpp			\
+			includes/Receiver.hpp			\
                         includes/Audio/ISoundDevice.hpp         \
 			includes/Audio/Sound.hpp		\
                         includes/Audio/SoundException.hpp       \
@@ -40,19 +40,19 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 HEADERS		+=	dependencies/includes/portaudio.h
 
 SOURCES         +=      sources/main.cpp                        \
-			sources/SimpleWindow.cpp		\
+			sources/Sender.cpp			\
+			sources/Receiver.cpp			\
                         sources/Network/SocketException.cpp     \
                         sources/Network/TcpClient.cpp           \
 			sources/Network/UdpClient.cpp		\
-                        sources/Network/TcpServer.cpp		\
-			sources/Mutex/ScopedLock.cpp		\
+                        sources/Mutex/ScopedLock.cpp		\
 			sources/Mutex/Mutex.cpp			\
                         sources/Audio/SoundException.cpp        \
                         sources/Audio/SoundInputDevice.cpp      \
                         sources/Audio/SoundOutputDevice.cpp     \
 			sources/Audio/EncodeManager.cpp
 
-FORMS		+=	forms/SimpleWindow.ui
+FORMS		+=	
 
 win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
 			-ldependencies/libs/celt 		\
