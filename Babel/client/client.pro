@@ -33,7 +33,12 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
                         includes/Audio/SoundException.hpp       \
                         includes/Audio/SoundInputDevice.hpp     \
                         includes/Audio/SoundOutputDevice.hpp    \
-			includes/Audio/EncodeManager.hpp
+			includes/Audio/EncodeManager.hpp	\
+			includes/Babel.hpp			\
+			includes/BabelMainWindow.hpp		\
+			includes/Contact.hpp			\
+			includes/CallManager.hpp		\
+			includes/ServerCommunication.hpp
 
 HEADERS		+=	dependencies/includes/portaudio.h
 
@@ -46,9 +51,16 @@ SOURCES         +=      sources/main.cpp                        \
                         sources/Audio/SoundException.cpp        \
                         sources/Audio/SoundInputDevice.cpp      \
                         sources/Audio/SoundOutputDevice.cpp     \
-			sources/Audio/EncodeManager.cpp
+			sources/Audio/EncodeManager.cpp		\
+			sources/Babel.cpp			\
+			sources/BabelMainWindow.cpp		\
+			sources/Contact.cpp			\
+			sources/CallManager.cpp			\
+			sources/ServerCommunication.cpp
 
-FORMS		+=	
+FORMS		+=	forms/BabelMainWindow.ui
+
+RESOURCES	+=	resources/BabelMainWindow.qrc
 
 win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
 			-ldependencies/libs/celt 		\
@@ -57,5 +69,5 @@ win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
 			-ldependencies/libs/silk_fixed		\
 			-ldependencies/libs/silk_float
 
-unix:LIBS       +=      -Ldependencies -lopus                     \
+unix:LIBS       +=      -Ldependencies -lopus                   \
                         -Ldependencies -lportaudio
