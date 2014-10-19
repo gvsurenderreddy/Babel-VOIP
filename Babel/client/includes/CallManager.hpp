@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Contact.hpp"
+#include "AudioManager.hpp"
+#include "SoundPacketBuilder.hpp"
 
 class CallManager {
 
@@ -24,7 +26,9 @@ class CallManager {
 
 	// attributes
 	private:
-		bool	mInCommunication;
-		Contact	mCurrentCalledContact;
+		bool				mInCommunication;
+		Contact				mCurrentCalledContact;
+		AudioManager		mAudioManager;
+		SoundPacketBuilder	mSoundPacketBuilder;
 
 };

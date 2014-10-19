@@ -38,7 +38,10 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 			includes/BabelMainWindow.hpp		\
 			includes/Contact.hpp			\
 			includes/CallManager.hpp		\
-			includes/ServerCommunication.hpp
+			includes/ServerCommunication.hpp	\
+			includes/CommandPacketBuilder.hpp	\
+			includes/AudioManager.hpp		\
+			includes/SoundPacketBuilder.hpp
 
 HEADERS		+=	dependencies/includes/portaudio.h
 
@@ -56,7 +59,10 @@ SOURCES         +=      sources/main.cpp                        \
 			sources/BabelMainWindow.cpp		\
 			sources/Contact.cpp			\
 			sources/CallManager.cpp			\
-			sources/ServerCommunication.cpp
+			sources/ServerCommunication.cpp		\
+			sources/CommandPacketBuilder.cpp	\
+			sources/AudioManager.cpp		\
+			sources/SoundPacketBuilder.cpp
 
 FORMS		+=	forms/BabelMainWindow.ui
 
