@@ -2,6 +2,20 @@
 
 #include <string>
 
+/**
+* class IClientSocket
+*
+* La classe qui souhaite utiliser un IClientSocket
+* devra implémenter l'interface IClientSocket::OnSocketEvent.
+*
+* Elle sera automatiquement notifiée lorsqu'un 
+* client est disponible en écriture et est déconnectée.
+*
+* NB: On pourrait à la limite prévoir de rajouter un listener 
+* onBytesWriten qui avertirait lorsque des bytes ont pu être envoyés.
+*
+*/
+
 class IClientSocket {
 
 	// Message Data

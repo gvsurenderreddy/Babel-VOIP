@@ -1,7 +1,17 @@
 #pragma once
 
-#include <string>
 #include "IClientSocket.hpp"
+
+/**
+* class IServerSocket
+*
+* La classe qui souhaite utiliser un IServerSocket 
+* devra implémenter l'interface IServerSocket::OnSocketEvent.
+*
+* Elle sera automatiquement notifiée lorsqu'un 
+* client souhaite se connecter au serveur.
+*
+*/
 
 class IServerSocket {
 
@@ -20,7 +30,7 @@ class IServerSocket {
 	// init
 	public:
 		virtual void	createServer(int port, int queueSize) = 0;
-		virtual void	closeServer(void) = 0;
+		virtual void	closeServer() = 0;
 
 	// listeners
 	public:
@@ -28,7 +38,11 @@ class IServerSocket {
 
 	// handle clients
 	public:
-		virtual IClientSocket	*getNewClient(void) = 0;
-		virtual bool			hasClientInQueue(void) const = 0;
+		virtual IClientSocket	*getNewClient() = 0;
+		virtual bool			hasClientInQueue() const = 0;
 
+    // run
+    public:
+        virtual void run() = 0;
+		
 };
