@@ -150,3 +150,5 @@ Vu comme ça, ça peut paraître simple. En réalité, c'est bcp plus complexe q
 La lib portaudio est très relou à installer et encore plus à prendre en main et à comprendre.
 
 Je vous conseille d'aller voir le code d'exemple que j'ai poster sur github (allez-y à tête reposée). Et encore, le code a été super simplifié par rapport à ce qu'on avait au début.
+
+#### Commentaire d'alain qui suce des ours
