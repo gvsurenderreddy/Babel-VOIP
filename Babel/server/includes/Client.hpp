@@ -1,5 +1,8 @@
 #include "IClientSocket.hpp"
 #include <vector>
+#include <boost/serialization/vector.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 class Client : public IClientSocket::OnSocketEvent{
 

@@ -41,12 +41,14 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
                         ../shared/includes/IServerSocket.hpp    \
 						includes/BoostTcpClient.hpp             \
 						includes/BoostTcpServer.hpp             \
-						includes/ServerManager.hpp
+						includes/ServerManager.hpp				\
+						includes/Client.hpp
 
 SOURCES         +=      sources/main.cpp                        \
                         sources/BoostTcpClient.cpp              \
                         sources/BoostTcpServer.cpp              \
-                        sources/ServerManager.cpp
+                        sources/ServerManager.cpp				\
+						sources/Client.cpp
 
 DEFINES			+=		_AFXDLL _MBCS
 
