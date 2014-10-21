@@ -39,7 +39,7 @@ public:
 	//use client's data
 	//setter
 	void	setState(const std::string state);
-	void	setName(const std::string account);
+	void	setName(const std::string name);
 	void	setAccount(const std::string account);
 	void	addContact(const std::string name);
 	void	dellContact(const std::string name);
@@ -56,7 +56,11 @@ private:
 	//boost serialize
 	friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int version);
+	void	serialize(Archive & ar, const unsigned int version){
+		ar & this->state;
+		ar & this->name;
+		ar & this->contact;
+	}
 
 	//data of client
 	std::string					state;
