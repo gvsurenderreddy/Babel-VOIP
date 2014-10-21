@@ -7,7 +7,7 @@
 #include <boost/array.hpp>
 
 /**
-* class BoostTcpClient
+* class TcpClient
 *
 * Client with TCP Socket sending
 *
@@ -15,18 +15,18 @@
 
 using namespace boost::asio::ip;
 
-class BoostTcpClient : public IClientSocket
+class TcpClient : public IClientSocket
 {
 
     // default ctor-dtor
     public:
-        BoostTcpClient();
-        ~BoostTcpClient();
+        TcpClient();
+        ~TcpClient();
 
     // private coplien form
     private:
-        BoostTcpClient(const BoostTcpClient &) {}
-        const BoostTcpClient & operator = (const BoostTcpClient &) { return *this; }
+        TcpClient(const TcpClient &) {}
+        const TcpClient & operator = (const TcpClient &) { return *this; }
 
     // start - stop
     public:
@@ -38,16 +38,13 @@ class BoostTcpClient : public IClientSocket
     public:
         void            send(const Message &msg);
         Message         receive(unsigned int nbBytes);
+        unsigned int    nbBytesToRead() const;
+
 
     // handlers
     private:
         void            readHandler(const boost::system::error_code &errorCode, std::size_t bytesTransfered);
         void            sendHandler(const boost::system::error_code &ec, std::size_t bytesTransfered);
-
-    // handle state
-    public:
-        bool            isWritable() const;
-        bool            isReadable() const;
 
     // listeners
     public:
@@ -55,13 +52,10 @@ class BoostTcpClient : public IClientSocket
 
     // attributes
     private:
-        boost::asio::io_service   mIOservice;
-        tcp::socket*              mSocket;
-
-        boost::array<char, 1024>   mBuffer;
-
-        IClientSocket::OnSocketEvent*               mListener;
-        std::list<Message>                          mMsgReceived;
-        std::list<Message>                          mMsgHaveToSend;
+        boost::asio::io_service         mIOservice;
+        tcp::socket*                    mSocket;
+        Message                         mMessage;
+        unsigned int                    mNbBytesToRead;
+        IClientSocket::OnSocketEvent*   mListener;
 
 };

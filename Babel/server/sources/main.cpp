@@ -1,14 +1,14 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "BoostTcpServer.hpp"
-#include "ServerManager.hpp"
+#include "BabelServer.hpp"
 
 int main(void)
 {
     try
     {
-        ServerManager server(new BoostTcpServer());
+        BabelServer babel;
+        babel.run();
     }
     catch (std::exception& e)
     {
