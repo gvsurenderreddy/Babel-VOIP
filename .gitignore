@@ -38,6 +38,7 @@ moc_*.cpp
 *.log
 *.exp
 client.lib
+server.lib
 ui
 debug
 Makefile*

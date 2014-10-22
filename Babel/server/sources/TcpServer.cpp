@@ -77,7 +77,6 @@ IClientSocket* TcpServer::getNewClient()
     IClientSocket* client = new TcpClient;
     tcp::socket *socket = mSockets.front();
     mSockets.pop_front();
-    //client->setOnSocketEventListener(this);
     client->initFromSocket(socket);
     return (client);
 }

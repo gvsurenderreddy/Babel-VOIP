@@ -2,16 +2,29 @@
 #include <fstream>
 #include <algorithm>
 
+#include <iostream>
+
 /*
 ** Copelien
 */
-Client::Client(IClientSocket &_socket, Client::OnClientEvent &_listener)
-:socket(_socket), listener(_listener){
+Client::Client(IServerSocket* serverSocket) : mListener(NULL)
+{
+    mSocket = serverSocket->getNewClient();
+    mSocket->setOnSocketEventListener(this);
     std::cout << __FUNCTION__ << std::endl;
 }
 
-Client::~Client(){
+Client::~Client()
+{
     std::cout << __FUNCTION__ << std::endl;
+}
+
+/*
+** Set listener
+*/
+void Client::setOnClientEventListener(Client::OnClientEvent *listener)
+{
+    mListener = listener;
 }
 
 /*
@@ -25,7 +38,9 @@ void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
 
 void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
     std::cout << __FUNCTION__ << std::endl;
-	socket->send(socket->receive(nbBytesToRead));
+    const IClientSocket::Message message = socket->receive(nbBytesToRead);
+    std::cout << "Read from client | msg=[" << message.msg << "] | msgSize='" << message.msgSize << "'" << std::endl;
+	socket->send(message);
 }
 
 void	Client::onSocketClosed(IClientSocket *socket){

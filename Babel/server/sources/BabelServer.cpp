@@ -28,11 +28,15 @@ void BabelServer::run()
     mServerSocket->run();
 }
 
-void BabelServer::onNewConnection(IServerSocket *socket)
+void BabelServer::onNewConnection(IServerSocket *serverSocket)
 {
     std::cout << __FUNCTION__ << std::endl;
-    if (socket->hasClientInQueue())
-        mClientsSocket.push_back(socket->getNewClient());
+    if (serverSocket->hasClientInQueue())
+    {
+        Client* newClient = new Client(serverSocket);
+        newClient->setOnClientEventListener(this);
+        mClients.push_back(newClient);
+    }
 }
 
 /*
@@ -56,7 +60,8 @@ void BabelServer::onDisconnect(const std::string &account){
 
 const std::string &BabelServer::onGetContact(const std::list<std::string> &contacts){
 	contacts;
-	return ("");
+    std::string test = "";
+	return (test);
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password){

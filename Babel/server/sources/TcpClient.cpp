@@ -5,15 +5,18 @@
 #include <cstdlib>
 #include <string>
 
+#include <cstring>
+#include <cstdio>
+
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
-const int TcpClient::BUFFER_SIZE = 4096;
+const int TcpClient::BUFFER_SIZE = 1024;
 
-TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
+TcpClient::TcpClient() : mListener(NULL), mSocket(NULL), mNbBytesToRead(0), mBuffer(NULL)
 {
     std::cout << __FUNCTION__ << std::endl;
-    mMessage.msg = new char[TcpClient::BUFFER_SIZE];
+    mBufferTmp = new char[TcpClient::BUFFER_SIZE];
 }
 
 TcpClient::~TcpClient()
@@ -31,7 +34,6 @@ void TcpClient::initFromSocket(void *socket)
 {
     std::cout << __FUNCTION__ << std::endl;
     mSocket = reinterpret_cast<tcp::socket*>(socket);
-    mNbBytesToRead = 0;
     startRead();
 }
 
@@ -51,9 +53,8 @@ void TcpClient::closeClient()
 void TcpClient::startRead()
 {
     std::cout << __FUNCTION__ << std::endl;
-    memset(mMessage.msg, 0x00, sizeof(char) * TcpClient::BUFFER_SIZE);
-    mMessage.msgSize = 0;
-    mSocket->async_receive(boost::asio::buffer(mMessage.msg, TcpClient::BUFFER_SIZE),
+    std::memset(mBufferTmp, 0x00, TcpClient::BUFFER_SIZE);
+    mSocket->async_receive(boost::asio::buffer(mBufferTmp, TcpClient::BUFFER_SIZE),
         boost::bind(&TcpClient::readHandler, this, boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 }
@@ -65,33 +66,41 @@ void TcpClient::startRead()
 void TcpClient::send(const IClientSocket::Message &msg)
 {
     std::cout << __FUNCTION__ << std::endl;
-    bool write_in_progress = !mWriteMessageQueue.empty();
-    mWriteMessageQueue.push_back(msg);
-    if (!write_in_progress)
-    {
-        boost::asio::async_write(*mSocket,
-            boost::asio::buffer(mWriteMessageQueue.front().msg, mWriteMessageQueue.front().msgSize),
-            boost::bind(&TcpClient::sendHandler, this,
-            boost::asio::placeholders::error,
-            boost::asio::placeholders::bytes_transferred));
-    }
-}
 
-void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
-{
-    std::cout << __FUNCTION__ << std::endl;
-    if (!error)
+    boost::mutex::scoped_lock lock(mMutex);
     {
-        if (mListener)
-            mListener->onBytesWritten(this, bytesTransfered);
-        mWriteMessageQueue.pop_front();
-        if (!mWriteMessageQueue.empty())
+        bool write_in_progress = !mWriteMessageQueue.empty();
+        mWriteMessageQueue.push_back(msg);
+        if (!write_in_progress)
         {
             boost::asio::async_write(*mSocket,
                 boost::asio::buffer(mWriteMessageQueue.front().msg, mWriteMessageQueue.front().msgSize),
                 boost::bind(&TcpClient::sendHandler, this,
                 boost::asio::placeholders::error,
                 boost::asio::placeholders::bytes_transferred));
+        }
+    }
+}
+
+void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
+{
+    std::cout << __FUNCTION__ << std::endl;
+
+    if (!error)
+    {
+        if (mListener)
+            mListener->onBytesWritten(this, bytesTransfered);
+        boost::mutex::scoped_lock lock(mMutex);
+        {
+            mWriteMessageQueue.pop_front();
+            if (!mWriteMessageQueue.empty())
+            {
+                boost::asio::async_write(*mSocket,
+                    boost::asio::buffer(mWriteMessageQueue.front().msg, mWriteMessageQueue.front().msgSize),
+                    boost::bind(&TcpClient::sendHandler, this,
+                    boost::asio::placeholders::error,
+                    boost::asio::placeholders::bytes_transferred));
+            }
         }
     }
     else
@@ -101,30 +110,42 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
 }
 
+
 /*----------------------------------------------*/
 
 
-IClientSocket::Message TcpClient::receive(unsigned int /*sizeToRead*/)
+IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
 {
     std::cout << __FUNCTION__ << std::endl;
-    return mMessage;
+
+    if (sizeToRead > mNbBytesToRead)
+        exit(42);
+    else
+        mNbBytesToRead -= sizeToRead;
+
+    IClientSocket::Message message;
+
+    message.msg = new char[sizeToRead];
+    message.msgSize = sizeToRead;
+
+    std::memcpy(message.msg, mBuffer, sizeToRead);
+    std::memmove(mBuffer, &mBuffer[sizeToRead], mNbBytesToRead);
+    mBuffer = (char*)std::realloc(mBuffer, mNbBytesToRead);
+
+    return message;
 }
 
 void TcpClient::readHandler(const boost::system::error_code & error, std::size_t bytesTransfered)
 {
     std::cout << __FUNCTION__ << std::endl;
+
     if (!error)
     {
+        mNbBytesToRead += bytesTransfered;
+        mBuffer = (char *)std::realloc(mBuffer, mNbBytesToRead);
+        memcpy(&mBuffer[mNbBytesToRead - bytesTransfered], mBufferTmp, bytesTransfered);
         if (mListener)
-        {
             mListener->onSocketReadable(this, bytesTransfered);
-            std::cout << "SET" << std::endl;
-        }
-        else
-        {
-            std::cout << "PAS SET" << std::endl;
-        }
-        mNbBytesToRead = bytesTransfered;
         startRead();
     }
     else

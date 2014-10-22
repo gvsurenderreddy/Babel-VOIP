@@ -39,8 +39,8 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // attributes
     private:
-        std::list<IClientSocket*>   mClientsSocket;
-        IServerSocket*              mServerSocket;
+        std::list<Client*>   mClients;
+        IServerSocket*       mServerSocket;
 
 	//OnSocketEvent
 	public:

@@ -1,4 +1,5 @@
 #include "IClientSocket.hpp"
+#include "IServerSocket.hpp"
 #include <vector>
 #include <boost/serialization/list.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -24,13 +25,17 @@ public:
 	};
 
 	//copelien
-	Client(IClientSocket &_socket, Client::OnClientEvent &_listener);
+    Client(IServerSocket *serverSocket);
 	~Client();
 
 	//callback from IClientSocket
 	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
 	void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	void	onSocketClosed(IClientSocket *socket);
+
+    // listeners
+    public:
+        void setOnClientEventListener(Client::OnClientEvent *listener);
 
 	//function for serialization
 	void	savData(void);
@@ -50,13 +55,13 @@ public:
 	const std::list<std::string>	&getContact(void);
 
 	//instance of socket for send data
-	IClientSocket	&socket;
+	IClientSocket*	mSocket;
 
 private:
 	//boost serialize
 	friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int version){
+	void	serialize(Archive & ar, const unsigned int /*version*/){
 		ar & this->state;
 		ar & this->name;
 		ar & this->contact;
@@ -91,5 +96,5 @@ private:
 	int							cmdState;*/
 
 	//client's listener
-	Client::OnClientEvent		&listener;
+    Client::OnClientEvent*      mListener;
 };
