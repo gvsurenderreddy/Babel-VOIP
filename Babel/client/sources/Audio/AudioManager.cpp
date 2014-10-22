@@ -18,9 +18,7 @@ AudioManager::~AudioManager(void) {
 }
 
 void	AudioManager::playSound(const Sound::Encoded &sound) {
-	Sound::Decoded input;
-	input = mEncodeManager.decode(sound);
-	*mOutputDevice << input;
+	*mOutputDevice << mEncodeManager.decode(sound);
 }
 
 void	AudioManager::startRecording(void) {
@@ -30,14 +28,12 @@ void	AudioManager::startRecording(void) {
 
 void	AudioManager::run(void){
 	Sound::Decoded sound;
-	Sound::Encoded input;
 
-	while (true){
+	while (true) {
 		*mInputDevice >> sound;
-		if (sound.buffer){
-			input = mEncodeManager.encode(sound);
-			emit AudioManager::soundAvailable(input);
-		}
+
+		if (sound.buffer)
+			emit AudioManager::soundAvailable(mEncodeManager.encode(sound));
 	}
 }
 

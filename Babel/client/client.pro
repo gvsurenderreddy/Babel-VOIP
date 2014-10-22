@@ -1,6 +1,7 @@
 TEMPLATE        =       app
 TARGET          =       client
 QT              +=      core widgets gui network
+CONFIG		+=	console
 
 DESTDIR         =       build
 OBJECTS_DIR     =       build/obj

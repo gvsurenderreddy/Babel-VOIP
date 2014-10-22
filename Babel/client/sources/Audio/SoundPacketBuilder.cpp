@@ -37,9 +37,11 @@ void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
 	IClientSocket::Message msg;
 
 	msg = mClient->receive(4096);
-	sound.buffer = reinterpret_cast<unsigned char *>(msg.msg);
-	sound.size = msg.msgSize;
-	emit SoundPacketBuilder::receiveSound(sound);
+	if (msg.host == mAcceptedHost.toStdString() && msg.port == mAcceptedPort) {
+		sound.buffer = reinterpret_cast<unsigned char *>(msg.msg);
+		sound.size = msg.msgSize;
+		emit SoundPacketBuilder::receiveSound(sound);
+	}
 }
 
 void	SoundPacketBuilder::onSocketClosed(IClientSocket *) {

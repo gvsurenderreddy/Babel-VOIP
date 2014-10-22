@@ -11,17 +11,19 @@ CallManager::~CallManager(void) {
 }
 
 void	CallManager::startCall(const Contact &contact) {
+	mCurrentCalledContact = contact;
+
+	mSoundPacketBuilder.acceptPacketsFrom(contact.getHost(), contact.getPort());
 	mAudioManager.startRecording();
 	mAudioManager.startPlaying();
-	mSoundPacketBuilder.acceptPacketsFrom("127.0.0.1", 4243);
-	mCurrentCalledContact.setAccountName(contact.getAccountName());
 }
 
 void	CallManager::stopCall(void) {
 	mAudioManager.stopRecording();
 	mAudioManager.stopPlaying();
-	mCurrentCalledContact.setAccountName("");
 	mSoundPacketBuilder.acceptPacketsFrom("", 0);
+
+	mCurrentCalledContact.setAccountName("");
 }
 
 bool	CallManager::isInCommunication(void) const {
