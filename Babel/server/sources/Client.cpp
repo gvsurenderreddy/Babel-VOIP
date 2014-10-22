@@ -25,8 +25,7 @@ void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
 
 void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
     std::cout << __FUNCTION__ << std::endl;
-	socket;
-	nbBytesToRead;
+	socket->send(socket->receive(nbBytesToRead));
 }
 
 void	Client::onSocketClosed(IClientSocket *socket){
