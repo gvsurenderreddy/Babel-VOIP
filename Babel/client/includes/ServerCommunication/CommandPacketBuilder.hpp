@@ -22,8 +22,8 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 		static const int	HEADER_SIZE;
 
 		struct Header {
-			int		magicCode;
-			char	instructionCode;
+			int	magicCode;
+			int	instructionCode;
 		};
 
 	// ctor - dtor

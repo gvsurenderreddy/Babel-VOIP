@@ -7,8 +7,8 @@ class CommandErr : public ICommand {
 	// packet
 	private:
 		struct PacketFromServer {
-			char	instructionCode;
-			short	errorCode;
+			int	instructionCode;
+			int	errorCode;
 		};
 
 	// error codes
