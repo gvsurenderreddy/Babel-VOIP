@@ -60,14 +60,14 @@ void	Client::setState(const std::string state){this->state = state;}
 void	Client::setName(const std::string name){this->account = name;}
 void	Client::setAccount(const std::string account){this->account = account;}
 void	Client::addContact(const std::string name){this->contact.push_back(name);}
-void	Client::dellContact(const std::string name){std::remove(this->contact.begin(), this->contact.end(), name);}
+void	Client::dellContact(const std::string name){this->contact.remove(name);}
 /*
 ** Getter
 */
 const std::string				&Client::getState(void){return this->state;}
 const std::string				&Client::getName(void){return this->name;}
 const std::string				&Client::getAccount(void){return this->account;}
-const std::vector<std::string>	&Client::getContact(void){return this->contact;}
+const std::list<std::string>	&Client::getContact(void){return this->contact;}
 
 /*
 ** Function cmd

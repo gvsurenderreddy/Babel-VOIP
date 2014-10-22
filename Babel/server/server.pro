@@ -41,13 +41,13 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
                         ../shared/includes/IServerSocket.hpp    \
 						includes/TcpClient.hpp             		\
 						includes/TcpServer.hpp             		\
-#						includes/Client.hpp						\
+						includes/Client.hpp						\
 						includes/BabelServer.hpp
 
 SOURCES         +=      sources/main.cpp                        \
                         sources/TcpClient.cpp              		\
                         sources/TcpServer.cpp              		\
-#						sources/Client.cpp						\
+						sources/Client.cpp						\
                         sources/BabelServer.cpp
 
 
