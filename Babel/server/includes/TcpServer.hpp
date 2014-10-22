@@ -33,7 +33,7 @@ class TcpServer : public IServerSocket
 
     // private coplien form
     private:
-        TcpServer(const TcpServer &) {}
+        TcpServer(const TcpServer &) { }
         const TcpServer & operator = (const TcpServer &) { return *this; }
 
     // init
@@ -49,6 +49,10 @@ class TcpServer : public IServerSocket
     public:
         IClientSocket*  getNewClient();
         bool            hasClientInQueue() const;
+
+    // handle signals
+    private:
+        void startSignals(void);
 
     // run
     public:

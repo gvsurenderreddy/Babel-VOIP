@@ -3,6 +3,7 @@
 #include "IClientSocket.hpp"
 
 #include <list>
+#include <deque>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
@@ -43,6 +44,7 @@ class TcpClient : public IClientSocket
 
     // handlers
     private:
+        void            startRead();
         void            readHandler(const boost::system::error_code &errorCode, std::size_t bytesTransfered);
         void            sendHandler(const boost::system::error_code &ec, std::size_t bytesTransfered);
 
@@ -50,11 +52,15 @@ class TcpClient : public IClientSocket
     public:
         void            setOnSocketEventListener(IClientSocket::OnSocketEvent *listener);
 
+    // const
+    public:
+        static const int    BUFFER_SIZE;
     // attributes
     private:
         boost::asio::io_service         mIOservice;
         tcp::socket*                    mSocket;
         Message                         mMessage;
+        std::deque<Message>             mWriteMessageQueue;
         unsigned int                    mNbBytesToRead;
         IClientSocket::OnSocketEvent*   mListener;
 
