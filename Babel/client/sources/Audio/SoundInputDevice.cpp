@@ -40,12 +40,12 @@ void	SoundInputDevice::stopStream(void) {
 		throw new SoundException("fail Pa_StopStream");
 }
 
+#include <iostream>
 ISoundDevice	&SoundInputDevice::operator<<(const Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
 	if (sound.buffer) {
 		Sound::Decoded *soundCpy = new Sound::Decoded;
-
 		soundCpy->buffer = sound.buffer;
 		soundCpy->size = sound.size;
 		mBuffers.push_back(soundCpy);
@@ -79,7 +79,6 @@ int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long fr
 	ScopedLock scopedLock(&obj->mMutex);
 
 	Sound::Decoded *sound = new Sound::Decoded;
-
 	sound->size = framesPerBuffer * Sound::NB_CHANNELS;
 	sound->buffer = new float[sound->size];
 	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));

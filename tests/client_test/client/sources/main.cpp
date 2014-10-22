@@ -12,14 +12,13 @@ int main(int ac, char **av) {
 	return app.exec();
 	*/
 
-	/* RECEIVER */
-	/*
+
 	QApplication app(ac, av);
 	Receiver receiver;
 
 	receiver.start();
 	return app.exec();
-	*/
+
 
 	return 0;
 }

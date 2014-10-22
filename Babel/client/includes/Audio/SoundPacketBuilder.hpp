@@ -17,11 +17,12 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 	private:
 		SoundPacketBuilder(const SoundPacketBuilder &) {}
 		const SoundPacketBuilder &operator=(const SoundPacketBuilder &) { return *this; }
-
 	// send sound
+	public slots:
+		void	sendSound(const Sound::Encoded &command);
+
 	public:
 		void	acceptPacketsFrom(const QString &addr, int port);
-		void	sendSound(const Sound::Encoded &command);
 
 	// receive sound
 	signals:

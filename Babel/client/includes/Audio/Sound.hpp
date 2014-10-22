@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QMetaType>
 #include "opus.h"
 
 namespace Sound {
@@ -19,3 +20,5 @@ namespace Sound {
 	};
 
 };
+
+Q_DECLARE_METATYPE(Sound::Encoded);

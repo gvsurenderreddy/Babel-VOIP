@@ -15,15 +15,31 @@ SoundPacketBuilder::~SoundPacketBuilder(void) {
 }
 
 void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr, int port) {
+	mAcceptedHost = addr;
+	mAcceptedPort = port;
 }
 
-void	SoundPacketBuilder::sendSound(const Sound::Encoded &command) {
+void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
+	IClientSocket::Message msg;
+
+	msg.msg = reinterpret_cast<char *>(sound.buffer);
+	msg.msgSize = sound.size;
+	msg.host = mAcceptedHost.toStdString();
+	msg.port = mAcceptedPort;
+	mClient->send(msg);
 }
 
 void	SoundPacketBuilder::onBytesWritten(IClientSocket *socket, unsigned int nbBytes) {
 }
 
 void	SoundPacketBuilder::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead) {
+	Sound::Encoded sound;
+	IClientSocket::Message msg;
+
+	msg = mClient->receive(4096);
+	sound.buffer = reinterpret_cast<unsigned char *>(msg.msg);
+	sound.size = msg.msgSize;
+	emit SoundPacketBuilder::receiveSound(sound);
 }
 
 void	SoundPacketBuilder::onSocketClosed(IClientSocket *socket) {
