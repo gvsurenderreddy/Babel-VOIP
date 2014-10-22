@@ -8,29 +8,36 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
+const int TcpClient::BUFFER_SIZE = 4096;
+
 TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
 {
-
+    std::cout << __FUNCTION__ << std::endl;
+    mMessage.msg = new char[TcpClient::BUFFER_SIZE];
 }
 
 TcpClient::~TcpClient()
 {
+    std::cout << __FUNCTION__ << std::endl;
     closeClient();
 }
 
 void TcpClient::connect(const std::string &/* addr */, int /* port */)
 {
-
+    std::cout << __FUNCTION__ << std::endl;
 }
 
 void TcpClient::initFromSocket(void *socket)
 {
+    std::cout << __FUNCTION__ << std::endl;
     mSocket = reinterpret_cast<tcp::socket*>(socket);
     mNbBytesToRead = 0;
+    startRead();
 }
 
 void TcpClient::closeClient()
 {
+    std::cout << __FUNCTION__ << std::endl;
     if (mSocket)
         mSocket->close();
     if (mListener)
@@ -41,8 +48,23 @@ void TcpClient::closeClient()
 /*----------------------------------------------*/
 
 
+void TcpClient::startRead()
+{
+    std::cout << __FUNCTION__ << std::endl;
+    memset(mMessage.msg, 0x00, sizeof(char) * TcpClient::BUFFER_SIZE);
+    mMessage.msgSize = 0;
+    mSocket->async_receive(boost::asio::buffer(mMessage.msg, TcpClient::BUFFER_SIZE),
+        boost::bind(&TcpClient::readHandler, this, boost::asio::placeholders::error,
+        boost::asio::placeholders::bytes_transferred));
+}
+
+
+/*----------------------------------------------*/
+
+
 void TcpClient::send(const IClientSocket::Message &msg)
 {
+    std::cout << __FUNCTION__ << std::endl;
     std::cout << "Trying to send '" << msg.msg << "' (" << msg.msgSize << ")" << std::endl;
     boost::asio::async_write(
         *mSocket,
@@ -54,6 +76,7 @@ void TcpClient::send(const IClientSocket::Message &msg)
 
 void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
 {
+    std::cout << __FUNCTION__ << std::endl;
     if (!error)
     {
         if (mListener)
@@ -70,33 +93,28 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
 /*----------------------------------------------*/
 
 
-IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
+IClientSocket::Message TcpClient::receive(unsigned int /*sizeToRead*/)
 {
-    std::cout << "Trying to receive send '" << sizeToRead << "' caracters" << std::endl;
-    mMessage.msg = new char[sizeToRead];
-    boost::asio::async_read(
-        *mSocket,
-        boost::asio::buffer(mMessage.msg, sizeToRead),
-        boost::bind(&TcpClient::readHandler, this,
-        boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred));
+    std::cout << __FUNCTION__ << std::endl;
     return mMessage;
 }
 
 void TcpClient::readHandler(const boost::system::error_code & error, std::size_t bytesTransfered)
 {
+    std::cout << __FUNCTION__ << std::endl;
     if (!error)
     {
         if (mListener)
             mListener->onSocketReadable(this, bytesTransfered);
         mNbBytesToRead = bytesTransfered;
         std::cout << "bytesTransfered: '" << bytesTransfered << "'" << std::endl;
+        startRead();
     }
     else
     {
         std::cout << error.message() << std::endl;
         closeClient();
-    }   
+    }
 }
 
 
@@ -105,11 +123,13 @@ void TcpClient::readHandler(const boost::system::error_code & error, std::size_t
 
 unsigned int TcpClient::nbBytesToRead() const
 {
+    std::cout << __FUNCTION__ << std::endl;
     return mNbBytesToRead;
 }
 
 void TcpClient::setOnSocketEventListener(IClientSocket::OnSocketEvent *listener)
 {
+    std::cout << __FUNCTION__ << std::endl;
     mListener = listener;
 }
 
