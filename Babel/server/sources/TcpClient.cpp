@@ -53,11 +53,8 @@ void TcpClient::startRead()
     std::cout << __FUNCTION__ << std::endl;
     memset(mMessage.msg, 0x00, sizeof(char) * TcpClient::BUFFER_SIZE);
     mMessage.msgSize = 0;
-    boost::asio::async_read(
-        *mSocket,
-        boost::asio::buffer(mMessage.msg, TcpClient::BUFFER_SIZE),
-        boost::bind(&TcpClient::readHandler, this,
-        boost::asio::placeholders::error,
+    mSocket->async_receive(boost::asio::buffer(mMessage.msg, TcpClient::BUFFER_SIZE),
+        boost::bind(&TcpClient::readHandler, this, boost::asio::placeholders::error,
         boost::asio::placeholders::bytes_transferred));
 }
 
