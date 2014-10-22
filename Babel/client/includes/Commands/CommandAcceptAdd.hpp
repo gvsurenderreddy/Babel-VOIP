@@ -8,8 +8,9 @@ class CommandAcceptAdd : public ICommand {
 	// packet
 	private:
 		struct PacketFromClient {
-			char	accountName[256];
-			char	hasAccepted;
+			ICommand::Header	header;
+			char				accountName[256];
+			char				hasAccepted;
 		};
 
 	// ctor - dtor

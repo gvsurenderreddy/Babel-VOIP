@@ -1,4 +1,5 @@
 #include "CommandReg.hpp"
+#include "CommandException.hpp"
 
 CommandReg::CommandReg(void)
 	: mAccountName(""), mPseudo(""), mPassword("") {}
@@ -12,17 +13,27 @@ ICommand::Instruction	CommandReg::getInstruction(void) const {
 
 IClientSocket::Message	CommandReg::getMessage(void) const {
 	IClientSocket::Message message;
-	// MESSAGE
+	CommandReg::PacketFromClient *packet = new CommandReg::PacketFromClient;
+
+	std::memset(packet, 0, sizeof CommandReg::PacketFromClient);
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof packet->password));
+	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof packet->pseudo));
+	packet->header.magicCode = ICommand::MAGIC_CODE;
+	packet->header.instructionCode = ICommand::LOG;
+
+	message.msg = reinterpret_cast<char *>(packet);
+	message.msgSize = sizeof CommandReg::PacketFromClient;
+
 	return message;
 }
 
 unsigned int	CommandReg::getSizeToRead(void) const {
-	// THROW
-	return 0;
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
-void	CommandReg::initFromMessage(const IClientSocket::Message &message) {
-	// INIT
+void	CommandReg::initFromMessage(const IClientSocket::Message &) {
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
 const QString	&CommandReg::getAccountName(void) const {

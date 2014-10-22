@@ -8,9 +8,10 @@ class CommandReg : public ICommand {
 	// packet
 	private:
 		struct PacketFromClient {
-			char	accountName[256];
-			char	pseudo[256];
-			char	password[256];
+			ICommand::Header	header;
+			char				accountName[256];
+			char				pseudo[256];
+			char				password[256];
 		};
 
 	// ctor - dtor

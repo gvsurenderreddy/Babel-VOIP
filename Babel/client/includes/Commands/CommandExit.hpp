@@ -4,6 +4,12 @@
 
 class CommandExit : public ICommand {
 
+	// packet
+	private:
+		struct PacketFromClient {
+			ICommand::Header	header;
+		};
+
 	// ctor - dtor
 	public:
 		CommandExit(void);

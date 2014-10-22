@@ -57,6 +57,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandSend.hpp			\
 			includes/Commands/CommandShow.hpp			\
 			includes/Commands/CommandUpdate.hpp			\
+			includes/Commands/CommandException.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
 			includes/Contact.hpp					\
 			includes/Babel.hpp
@@ -93,6 +94,8 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Commands/CommandSend.cpp			\
 			sources/Commands/CommandShow.cpp			\
 			sources/Commands/CommandUpdate.cpp			\
+			sources/Commands/ICommand.cpp				\
+			sources/Commands/CommandException.cpp			\
 			sources/Babel.cpp					\
 			sources/Contact.cpp
 

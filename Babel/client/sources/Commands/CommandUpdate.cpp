@@ -1,4 +1,5 @@
 #include "CommandUpdate.hpp"
+#include "CommandException.hpp"
 
 CommandUpdate::CommandUpdate(void)
 : mAccountName(""), mPseudo(""), mPassword(""), mStatus(Contact::DISCONNECTED) {}
@@ -12,17 +13,28 @@ ICommand::Instruction	CommandUpdate::getInstruction(void) const {
 
 IClientSocket::Message	CommandUpdate::getMessage(void) const {
 	IClientSocket::Message message;
-	// MESSAGE
+	CommandUpdate::PacketFromClient *packet = new CommandUpdate::PacketFromClient;
+
+	std::memset(packet, 0, sizeof CommandUpdate::PacketFromClient);
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof packet->password));
+	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof packet->pseudo));
+	packet->status = mStatus;
+	packet->header.magicCode = ICommand::MAGIC_CODE;
+	packet->header.instructionCode = ICommand::LOG;
+
+	message.msg = reinterpret_cast<char *>(packet);
+	message.msgSize = sizeof CommandUpdate::PacketFromClient;
+
 	return message;
 }
 
 unsigned int	CommandUpdate::getSizeToRead(void) const {
-	// THROW
-	return 0;
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
-void	CommandUpdate::initFromMessage(const IClientSocket::Message &message) {
-	// INIT
+void	CommandUpdate::initFromMessage(const IClientSocket::Message &) {
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
 const QString	&CommandUpdate::getAccountName(void) const {

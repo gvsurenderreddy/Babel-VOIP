@@ -2,6 +2,8 @@
 
 #include "iClientSocket.hpp"
 
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+
 class ICommand {
 
 	// Instructions
@@ -21,6 +23,16 @@ class ICommand {
 			ACCEPT_CALL,
 			CLOSE_CALL,
 			ERR
+		};
+
+	// header
+	public:
+		static const unsigned int	MAGIC_CODE;
+		static const unsigned int	HEADER_SIZE;
+
+		struct Header {
+			int	magicCode;
+			int	instructionCode;
 		};
 
 	// virtual destructor

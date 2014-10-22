@@ -7,7 +7,12 @@ class CommandCloseCall : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClientAndServer {
+		struct PacketFromClient {
+			ICommand::Header	header;
+			char				accountName[256];
+		};
+
+		struct PacketFromServer {
 			char	accountName[256];
 		};
 

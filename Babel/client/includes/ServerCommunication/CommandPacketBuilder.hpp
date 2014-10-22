@@ -16,16 +16,6 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 			CONTENT
 		};
 
-	// header
-	private:
-		static const int	MAGIC_CODE;
-		static const int	HEADER_SIZE;
-
-		struct Header {
-			int	magicCode;
-			int	instructionCode;
-		};
-
 	// ctor - dtor
 	public:
 		CommandPacketBuilder(void);
@@ -52,7 +42,7 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 
 	// socket events
 	public:
-		void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes) {}
+		void	onBytesWritten(IClientSocket *, unsigned int) {}
 		void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 		void	onSocketClosed(IClientSocket *socket);
 

@@ -1,4 +1,5 @@
 #include "CommandList.hpp"
+#include "CommandException.hpp"
 
 CommandList::CommandList(void) {
 }
@@ -12,15 +13,21 @@ ICommand::Instruction	CommandList::getInstruction(void) const {
 
 IClientSocket::Message	CommandList::getMessage(void) const {
 	IClientSocket::Message message;
-	// MESSAGE
+	CommandList::PacketFromClient *packet = new CommandList::PacketFromClient;
+
+	packet->header.magicCode = ICommand::MAGIC_CODE;
+	packet->header.instructionCode = ICommand::EXIT;
+
+	message.msg = reinterpret_cast<char *>(packet);
+	message.msgSize = sizeof CommandList::PacketFromClient;
+
 	return message;
 }
 
 unsigned int	CommandList::getSizeToRead(void) const {
-	// THROW EXCEPTION
-	return 0;
+	throw new CommandException("No packet are sent from the server for this command");
 }
 
-void	CommandList::initFromMessage(const IClientSocket::Message &message) {
-	// INIT
+void	CommandList::initFromMessage(const IClientSocket::Message &) {
+	throw new CommandException("No packet are sent from the server for this command");
 }

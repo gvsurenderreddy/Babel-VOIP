@@ -1,9 +1,6 @@
 #include "CommandPacketBuilder.hpp"
 #include "TcpClient.hpp"
 
-const int	CommandPacketBuilder::MAGIC_CODE	= 0x150407CA;
-const int	CommandPacketBuilder::HEADER_SIZE	= sizeof CommandPacketBuilder::Header;
-
 CommandPacketBuilder::CommandPacketBuilder(void)
 	: mClient(NULL), mCurrentCommand(NULL), mCurrentState(CommandPacketBuilder::HEADER)
 {
@@ -28,7 +25,7 @@ void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
 }
 
 void	CommandPacketBuilder::fetchCommandHeader(void) {
-	IClientSocket::Message message = mClient->receive(CommandPacketBuilder::HEADER_SIZE);
+	IClientSocket::Message message = mClient->receive(ICommand::HEADER_SIZE);
 
 	// check magiccode
 	// init mCurrentCommand
@@ -52,14 +49,14 @@ void	CommandPacketBuilder::fetchCommandContent(void) {
 	onSocketReadable(mClient, mClient->nbBytesToRead());
 }
 
-void	CommandPacketBuilder::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead) {
-	if (mCurrentState == CommandPacketBuilder::HEADER && nbBytesToRead >= CommandPacketBuilder::HEADER_SIZE)
+void	CommandPacketBuilder::onSocketReadable(IClientSocket *, unsigned int nbBytesToRead) {
+	if (mCurrentState == CommandPacketBuilder::HEADER && nbBytesToRead >= ICommand::HEADER_SIZE)
 		fetchCommandHeader();
 	else if (mCurrentState == CommandPacketBuilder::CONTENT && nbBytesToRead >= mCurrentCommand->getSizeToRead())
 		fetchCommandContent();
 }
 
-void	CommandPacketBuilder::onSocketClosed(IClientSocket *socket) {
+void	CommandPacketBuilder::onSocketClosed(IClientSocket *) {
 	if (mCurrentCommand) {
 		delete mCurrentCommand;
 		mCurrentCommand = NULL;

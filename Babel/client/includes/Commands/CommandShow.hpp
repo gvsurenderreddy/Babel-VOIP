@@ -9,7 +9,8 @@ class CommandShow : public ICommand {
 	// packet
 	private:
 		struct PacketFromClient {
-			char	accoutName[256];
+			ICommand::Header	header;
+			char				accountName[256];
 		};
 
 		struct PacketFromServer {

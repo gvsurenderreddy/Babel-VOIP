@@ -29,10 +29,10 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	mClient->send(msg);
 }
 
-void	SoundPacketBuilder::onBytesWritten(IClientSocket *socket, unsigned int nbBytes) {
+void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int) {
 }
 
-void	SoundPacketBuilder::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead) {
+void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
 	Sound::Encoded sound;
 	IClientSocket::Message msg;
 
@@ -42,5 +42,5 @@ void	SoundPacketBuilder::onSocketReadable(IClientSocket *socket, unsigned int nb
 	emit SoundPacketBuilder::receiveSound(sound);
 }
 
-void	SoundPacketBuilder::onSocketClosed(IClientSocket *socket) {
+void	SoundPacketBuilder::onSocketClosed(IClientSocket *) {
 }

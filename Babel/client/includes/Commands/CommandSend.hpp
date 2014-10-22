@@ -7,7 +7,13 @@ class CommandSend : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClientAndServer {
+		struct PacketFromClient {
+			ICommand::Header	header;
+			char				accountName[256];
+			char				textMessage[4096];
+		};
+
+		struct PacketFromServer {
 			char	accountName[256];
 			char	textMessage[4096];
 		};

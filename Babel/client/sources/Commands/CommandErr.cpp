@@ -1,4 +1,5 @@
 #include "CommandErr.hpp"
+#include "CommandException.hpp"
 
 CommandErr::CommandErr(void)
 	: mInstructionCode(ICommand::EXIT), mErrorCode(CommandErr::OK) {}
@@ -11,9 +12,7 @@ ICommand::Instruction	CommandErr::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandErr::getMessage(void) const {
-	IClientSocket::Message message;
-	// MESSAGE
-	return message;
+	throw new CommandException("No packet can be sent from the client for this command");
 }
 
 unsigned int	CommandErr::getSizeToRead(void) const {
@@ -21,7 +20,12 @@ unsigned int	CommandErr::getSizeToRead(void) const {
 }
 
 void	CommandErr::initFromMessage(const IClientSocket::Message &message) {
-	// INIT
+	if (message.msgSize != sizeof CommandErr::PacketFromServer)
+		throw new CommandException("Message has an invalid size");
+
+	CommandErr::PacketFromServer *packet = reinterpret_cast<CommandErr::PacketFromServer *>(message.msg);
+	mInstructionCode = static_cast<ICommand::Instruction>(packet->instructionCode);
+	mErrorCode = static_cast<CommandErr::ErrorCode>(packet->errorCode);
 }
 
 ICommand::Instruction	CommandErr::getInstructionCode(void) const {

@@ -4,6 +4,12 @@
 
 class CommandList : public ICommand {
 
+	// packet
+	private:
+		struct PacketFromClient {
+			ICommand::Header	header;
+		};
+
 	// ctor - dtor
 	public:
 		CommandList(void);

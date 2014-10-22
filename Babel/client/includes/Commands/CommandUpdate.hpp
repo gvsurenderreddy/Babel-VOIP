@@ -9,10 +9,11 @@ class CommandUpdate : public ICommand {
 	// packet
 	private:
 		struct PacketFromClient {
-			char	accountName[256];
-			char	pseudo[256];
-			char	password[256];
-			char	status;
+			ICommand::Header	header;
+			char				accountName[256];
+			char				pseudo[256];
+			char				password[256];
+			char				status;
 		};
 
 	// ctor - dtor
@@ -31,7 +32,6 @@ class CommandUpdate : public ICommand {
 		IClientSocket::Message	getMessage(void) const;
 		unsigned int			getSizeToRead(void) const;
 		void					initFromMessage(const IClientSocket::Message &message);
-
 
 	// getters - setters
 	public:

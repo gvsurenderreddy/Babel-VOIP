@@ -1,4 +1,5 @@
 #include "CommandLog.hpp"
+#include "CommandException.hpp"
 
 CommandLog::CommandLog(void)
 	: mAccountName(""), mPassword("") {}
@@ -12,17 +13,26 @@ ICommand::Instruction	CommandLog::getInstruction(void) const {
 
 IClientSocket::Message	CommandLog::getMessage(void) const {
 	IClientSocket::Message message;
-	// MESSAGE
+	CommandLog::PacketFromClient *packet = new CommandLog::PacketFromClient;
+
+	std::memset(packet, 0, sizeof CommandLog::PacketFromClient);
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof packet->password));
+	packet->header.magicCode = ICommand::MAGIC_CODE;
+	packet->header.instructionCode = ICommand::LOG;
+
+	message.msg = reinterpret_cast<char *>(packet);
+	message.msgSize = sizeof CommandLog::PacketFromClient;
+
 	return message;
 }
 
 unsigned int	CommandLog::getSizeToRead(void) const {
-	// THROW
-	return 0;
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
-void	CommandLog::initFromMessage(const IClientSocket::Message &message) {
-	// INIT
+void	CommandLog::initFromMessage(const IClientSocket::Message &) {
+	throw new CommandException("No packet are sent from the server for this command.");
 }
 
 const QString	&CommandLog::getAccountName(void) const {
