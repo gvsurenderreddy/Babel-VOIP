@@ -66,8 +66,6 @@ class TcpServer : public IServerSocket
     public:
         void startAccept(void);
         void handle_accept(const boost::system::error_code& error);
-        void handle_read_header(const boost::system::error_code& error, std::size_t bytes_transferred);
-        void handle_read_data(const boost::system::error_code& error, std::size_t bytes_transferred);
 
     // attributes
     private:

@@ -1,6 +1,7 @@
 #include "IClientSocket.hpp"
+#include "IServerSocket.hpp"
 #include <vector>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/list.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
@@ -14,7 +15,7 @@ public:
 		virtual bool onSubscribe(const std::string &acount, const std::string &password) = 0;
 		virtual bool onConnect(const std::string &account, const std::string &password) = 0;
 		virtual void onDisconnect(const std::string &account) = 0;
-		virtual const std::string &onGetContact(const std::vector<std::string> &contacts) = 0;
+		virtual const std::string &onGetContact(const std::list<std::string> &contacts) = 0;
 		virtual bool onUpdate(const std::string &account, const std::string &password) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
 		virtual void DellContact(const std::string &args) = 0;
@@ -24,13 +25,17 @@ public:
 	};
 
 	//copelien
-	Client(IClientSocket &_socket, Client::OnClientEvent &_listener);
+    Client(IServerSocket *serverSocket);
 	~Client();
 
 	//callback from IClientSocket
 	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
 	void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	void	onSocketClosed(IClientSocket *socket);
+
+    // listeners
+    public:
+        void setOnClientEventListener(Client::OnClientEvent *listener);
 
 	//function for serialization
 	void	savData(void);
@@ -47,16 +52,16 @@ public:
 	const std::string				&getState(void);
 	const std::string				&getName(void);
 	const std::string				&getAccount(void);
-	const std::vector<std::string>	&getContact(void);
+	const std::list<std::string>	&getContact(void);
 
 	//instance of socket for send data
-	IClientSocket	&socket;
+	IClientSocket*	mSocket;
 
 private:
 	//boost serialize
 	friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int version){
+	void	serialize(Archive & ar, const unsigned int /*version*/){
 		ar & this->state;
 		ar & this->name;
 		ar & this->contact;
@@ -65,7 +70,7 @@ private:
 	//data of client
 	std::string					state;
 	std::string					name;
-	std::vector<std::string>	contact;
+	std::list<std::string>		contact;
 	std::string					account;
 
 	//function cmd
@@ -91,5 +96,5 @@ private:
 	int							cmdState;*/
 
 	//client's listener
-	Client::OnClientEvent		&listener;
+    Client::OnClientEvent*      mListener;
 };

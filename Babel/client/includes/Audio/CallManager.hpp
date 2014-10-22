@@ -4,8 +4,8 @@
 #include "AudioManager.hpp"
 #include "SoundPacketBuilder.hpp"
 
-class CallManager {
-
+class CallManager : public QObject {
+	Q_OBJECT
 	// ctor - dtor
 	public:
 		CallManager(void);
@@ -13,7 +13,7 @@ class CallManager {
 
 	// coplien form
 	private:
-		CallManager(const CallManager &) {}
+		CallManager(const CallManager &) : QObject() {}
 		const CallManager &operator=(const CallManager &) { return *this; }
 
 	// handle call

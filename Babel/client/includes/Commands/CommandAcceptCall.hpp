@@ -38,12 +38,15 @@ class CommandAcceptCall : public ICommand {
 	public:
 		const QString	&getAccountName(void) const;
 		const QString	&getHost(void) const;
+		bool			hasAccepted(void) const;
 		void			setAccountName(const QString &accountName);
 		void			setHost(const QString &host);
+		void			setHasAccepted(bool hasAccepted);
 
 	// attributes
 	private:
 		QString	mAccountName;
 		QString	mHost;
+		bool	mHasAccepted;
 
 };

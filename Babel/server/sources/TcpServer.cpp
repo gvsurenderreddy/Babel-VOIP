@@ -7,7 +7,7 @@
 TcpServer::TcpServer() : mAcceptor(NULL), mListener(NULL)
 {
     std::cout << __FUNCTION__ << std::endl;
-    //startSignals();  # HAVE TO BE PATCH BY NAVID
+    startSignals();
 }
 
 TcpServer::~TcpServer()
@@ -26,8 +26,8 @@ void TcpServer::createServer(int port, int /*queueSize*/)
 void TcpServer::startSignals(void)
 {
     std::cout << __FUNCTION__ << std::endl;
-    boost::asio::signal_set signals(mService, SIGINT, SIGTERM);
-    signals.async_wait(boost::bind(&boost::asio::io_service::stop, &mService));
+    //boost::asio::signal_set signals(mService, SIGINT);
+    //signals.async_wait(boost::bind(&boost::asio::io_service::stop, &mService));
 }
 
 void TcpServer::startAccept(void)
