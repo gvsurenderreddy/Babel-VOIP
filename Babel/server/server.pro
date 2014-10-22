@@ -16,6 +16,8 @@ isEmpty(_BOOST_ROOT) {
     message(\"Boost Library\" detected in BOOST_ROOT = \"$$_BOOST_ROOT\")
     INCLUDEPATH += $$_BOOST_ROOT
 	LIBS += -L$$_BOOST_ROOT/stage/lib
+	LIBPATH += $$_BOOST_ROOT/stage/lib
+	
 }
 
 CONFIG			+=		console

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ICommand.hpp"
 #include "CommandPacketBuilder.hpp"
 
 class ServerCommunication {
@@ -20,7 +21,7 @@ class ServerCommunication {
 
 	// receive command
 	private slots :
-		void	treatCommand(const CommandPacketBuilder::Command &command);
+		void	treatCommand(const ICommand &command);
 
 	// attributes
 	private:
