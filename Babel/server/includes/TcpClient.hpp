@@ -3,6 +3,7 @@
 #include "IClientSocket.hpp"
 
 #include <list>
+#include <deque>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
@@ -59,6 +60,7 @@ class TcpClient : public IClientSocket
         boost::asio::io_service         mIOservice;
         tcp::socket*                    mSocket;
         Message                         mMessage;
+        std::deque<Message>             mWriteMessageQueue;
         unsigned int                    mNbBytesToRead;
         IClientSocket::OnSocketEvent*   mListener;
 
