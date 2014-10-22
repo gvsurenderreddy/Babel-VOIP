@@ -7,27 +7,30 @@
 */
 Client::Client(IClientSocket &_socket, Client::OnClientEvent &_listener)
 :socket(_socket), listener(_listener){
-
+    std::cout << __FUNCTION__ << std::endl;
 }
 
 Client::~Client(){
-
+    std::cout << __FUNCTION__ << std::endl;
 }
 
 /*
 ** Callback from IClientSocket
 */
 void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
+    std::cout << __FUNCTION__ << std::endl;
 	nbBytes;
 	socket;
 }
 
 void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
+    std::cout << __FUNCTION__ << std::endl;
 	socket;
 	nbBytesToRead;
 }
 
 void	Client::onSocketClosed(IClientSocket *socket){
+    std::cout << __FUNCTION__ << std::endl;
 	socket;
 }
 
