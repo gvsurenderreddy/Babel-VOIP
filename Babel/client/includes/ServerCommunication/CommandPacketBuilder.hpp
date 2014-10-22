@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ICommand.hpp"
 #include "IClientSocket.hpp"
 #include <qlist.h>
 #include <qobject.h>
@@ -8,24 +9,21 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 
 	Q_OBJECT
 
-	// Command
-	public:
-		enum Instruction {
-		};
-
-		struct Command {
-			CommandPacketBuilder::Instruction	instruction;
-			int									nbArgs;
-			QList<int>							argsSizes;
-			QList<char *>						args;
-		};
-
 	// handle build state
 	private:
 		enum State {
-			INSTRUCTION,
-			ARGS_SIZE,
-			ARGS
+			HEADER,
+			CONTENT
+		};
+
+	// header
+	private:
+		static const int	MAGIC_CODE;
+		static const int	HEADER_SIZE;
+
+		struct Header {
+			int	magicCode;
+			int	instructionCode;
 		};
 
 	// ctor - dtor
@@ -41,22 +39,27 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 	// send command
 	public:
 		void	connectToServer(const QString &addr, int port);
-		void	sendCommand(const CommandPacketBuilder::Command &command);
+		void	sendCommand(const ICommand *command);
 
 	// receive command
 	signals:
-		void	receiveCommand(const CommandPacketBuilder::Command &command);
+		void	receiveCommand(const ICommand *command);
+
+	// build commands
+	private:
+		void	fetchCommandHeader(void);
+		void	fetchCommandContent(void);
 
 	// socket events
 	public:
-		void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
+		void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes) {}
 		void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 		void	onSocketClosed(IClientSocket *socket);
 
 	// attributes
 	private:
 		IClientSocket				*mClient;
-		Command						mCurrentCommand;
+		ICommand					*mCurrentCommand;
 		CommandPacketBuilder::State	mCurrentState;
 
 };

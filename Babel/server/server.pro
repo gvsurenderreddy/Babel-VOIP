@@ -16,6 +16,8 @@ isEmpty(_BOOST_ROOT) {
     message(\"Boost Library\" detected in BOOST_ROOT = \"$$_BOOST_ROOT\")
     INCLUDEPATH += $$_BOOST_ROOT
 	LIBS += -L$$_BOOST_ROOT/stage/lib
+	LIBPATH += $$_BOOST_ROOT/stage/lib
+	
 }
 
 CONFIG			+=		console
@@ -39,14 +41,17 @@ INCLUDEPATH     +=      .                                       \
 						
 HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
                         ../shared/includes/IServerSocket.hpp    \
-						includes/BoostTcpClient.hpp             \
-						includes/BoostTcpServer.hpp             \
-						includes/ServerManager.hpp
+						includes/TcpClient.hpp             		\
+						includes/TcpServer.hpp             		\
+						includes/Client.hpp						\
+						includes/BabelServer.hpp
 
 SOURCES         +=      sources/main.cpp                        \
-                        sources/BoostTcpClient.cpp              \
-                        sources/BoostTcpServer.cpp              \
-                        sources/ServerManager.cpp
+                        sources/TcpClient.cpp              		\
+                        sources/TcpServer.cpp              		\
+						sources/Client.cpp						\
+                        sources/BabelServer.cpp
+
 
 DEFINES			+=		_AFXDLL _MBCS
 

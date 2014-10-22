@@ -1,5 +1,8 @@
 #include "IClientSocket.hpp"
 #include <vector>
+#include <boost/serialization/list.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
 
 class Client : public IClientSocket::OnSocketEvent{
 
@@ -11,7 +14,7 @@ public:
 		virtual bool onSubscribe(const std::string &acount, const std::string &password) = 0;
 		virtual bool onConnect(const std::string &account, const std::string &password) = 0;
 		virtual void onDisconnect(const std::string &account) = 0;
-		virtual const std::string &onGetContact(const std::vector<std::string> &contacts) = 0;
+		virtual const std::string &onGetContact(const std::list<std::string> &contacts) = 0;
 		virtual bool onUpdate(const std::string &account, const std::string &password) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
 		virtual void DellContact(const std::string &args) = 0;
@@ -36,7 +39,7 @@ public:
 	//use client's data
 	//setter
 	void	setState(const std::string state);
-	void	setName(const std::string account);
+	void	setName(const std::string name);
 	void	setAccount(const std::string account);
 	void	addContact(const std::string name);
 	void	dellContact(const std::string name);
@@ -44,7 +47,7 @@ public:
 	const std::string				&getState(void);
 	const std::string				&getName(void);
 	const std::string				&getAccount(void);
-	const std::vector<std::string>	&getContact(void);
+	const std::list<std::string>	&getContact(void);
 
 	//instance of socket for send data
 	IClientSocket	&socket;
@@ -53,12 +56,16 @@ private:
 	//boost serialize
 	friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int version);
+	void	serialize(Archive & ar, const unsigned int version){
+		ar & this->state;
+		ar & this->name;
+		ar & this->contact;
+	}
 
 	//data of client
 	std::string					state;
 	std::string					name;
-	std::vector<std::string>	contact;
+	std::list<std::string>		contact;
 	std::string					account;
 
 	//function cmd

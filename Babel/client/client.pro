@@ -16,6 +16,7 @@ INCLUDEPATH     +=      .                                       		\
 			includes/Mutex						\
 			includes/GUI						\
 			includes/ServerCommunication				\
+			includes/Commands					\
 			../shared/includes					\
                         dependencies/includes					\
 			build							\
@@ -41,6 +42,21 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Audio/CallManager.hpp				\
 			includes/ServerCommunication/ServerCommunication.hpp	\
 			includes/ServerCommunication/CommandPacketBuilder.hpp	\
+			includes/Commands/ICommand.hpp				\
+			includes/Commands/CommandAcceptAdd.hpp			\
+			includes/Commands/CommandAcceptCall.hpp			\
+			includes/Commands/CommandAdd.hpp			\
+			includes/Commands/CommandCall.hpp			\
+			includes/Commands/CommandCloseCall.hpp			\
+			includes/Commands/CommandDel.hpp			\
+			includes/Commands/CommandErr.hpp			\
+			includes/Commands/CommandExit.hpp			\
+			includes/Commands/CommandList.hpp			\
+			includes/Commands/CommandLog.hpp			\
+			includes/Commands/CommandReg.hpp			\
+			includes/Commands/CommandSend.hpp			\
+			includes/Commands/CommandShow.hpp			\
+			includes/Commands/CommandUpdate.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
 			includes/Contact.hpp					\
 			includes/Babel.hpp
@@ -63,6 +79,20 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/GUI/BabelMainWindow.cpp				\
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
+			sources/Commands/CommandAcceptAdd.cpp			\
+			sources/Commands/CommandAcceptCall.cpp			\
+			sources/Commands/CommandAdd.cpp				\
+			sources/Commands/CommandCall.cpp			\
+			sources/Commands/CommandCloseCall.cpp			\
+			sources/Commands/CommandDel.cpp				\
+			sources/Commands/CommandErr.cpp				\
+			sources/Commands/CommandExit.cpp			\
+			sources/Commands/CommandList.cpp			\
+			sources/Commands/CommandLog.cpp				\
+			sources/Commands/CommandReg.cpp				\
+			sources/Commands/CommandSend.cpp			\
+			sources/Commands/CommandShow.cpp			\
+			sources/Commands/CommandUpdate.cpp			\
 			sources/Babel.cpp					\
 			sources/Contact.cpp
 
