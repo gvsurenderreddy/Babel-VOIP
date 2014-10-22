@@ -31,7 +31,8 @@ void TcpClient::initFromSocket(void *socket)
 
 void TcpClient::closeClient()
 {
-    mSocket->close();
+    if (mSocket)
+        mSocket->close();
     if (mListener)
         mListener->onSocketClosed(this);
 }
@@ -60,7 +61,10 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
         std::cout << "bytesTransfered: '" << bytesTransfered << "'" << std::endl;
     }
     else
+    {
         std::cerr << error.message() << std::endl;
+        closeClient();
+    }
 }
 
 /*----------------------------------------------*/
@@ -89,7 +93,10 @@ void TcpClient::readHandler(const boost::system::error_code & error, std::size_t
         std::cout << "bytesTransfered: '" << bytesTransfered << "'" << std::endl;
     }
     else
+    {
         std::cout << error.message() << std::endl;
+        closeClient();
+    }   
 }
 
 

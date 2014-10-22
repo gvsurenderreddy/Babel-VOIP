@@ -6,7 +6,7 @@
 
 TcpServer::TcpServer() : mAcceptor(NULL), mListener(NULL)
 {
-
+    startSignals();
 }
 
 TcpServer::~TcpServer()
@@ -20,7 +20,14 @@ void TcpServer::createServer(int port, int /*queueSize*/)
     startAccept();
 }
 
-void TcpServer::startAccept(void) {
+void TcpServer::startSignals(void)
+{
+    boost::asio::signal_set signals(mService, SIGINT, SIGTERM);
+    signals.async_wait(boost::bind(&boost::asio::io_service::stop, &mService));
+}
+
+void TcpServer::startAccept(void)
+{
     tcp::socket *socket = new tcp::socket(mService);
 
     mSockets.push_back(socket);
