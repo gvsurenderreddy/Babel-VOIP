@@ -26,7 +26,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // run
     public:
-        void run();
+        void                    run();
 
     // constants
     public:
@@ -35,23 +35,23 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // CallBack
     public:
-        void    onNewConnection(IServerSocket *socket);
+        void                    onNewConnection(IServerSocket *socket);
 
     // attributes
     private:
-        std::list<Client*>   mClients;
-        IServerSocket*       mServerSocket;
+        std::list<Client*>      mClients;
+        IServerSocket*          mServerSocket;
 
 	//OnSocketEvent
 	public:
-		bool onSubscribe(const std::string &acount, const std::string &password);
-		bool onConnect(const std::string &account, const std::string &password);
-		void onDisconnect(const std::string &account);
-		const std::string &onGetContact(const std::list<std::string> &contacts);
-		bool onUpdate(const std::string &account, const std::string &password);
-		bool onAddContact(const std::string &account);
-		void DellContact(const std::string &args);
-		void onAcceptContact(const bool &accept, const std::string &account);
-		void onCallSomeone(const std::string &account);
-		void onHangCall(const bool &hang, const std::string &account);
+		bool                    onSubscribe     (const std::string &acount, const std::string &password);
+		bool                    onConnect       (const std::string &account, const std::string &password);
+		void                    onDisconnect    (const std::string &account);
+		const std::string &     onGetContact    (const std::list<std::string> &contacts);
+		bool                    onUpdate        (const std::string &account, const std::string &password);
+		bool                    onAddContact    (const std::string &account);
+		void                    DellContact     (const std::string &args);
+		void                    onAcceptContact (const bool &accept, const std::string &account);
+		void                    onCallSomeone   (const std::string &account);
+		void                    onHangCall      (const bool &hang, const std::string &account);
 };

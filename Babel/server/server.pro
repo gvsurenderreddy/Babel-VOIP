@@ -29,7 +29,7 @@ OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
-QMAKE_CXXFLAGS  +=      -Wall
+QMAKE_CXXFLAGS  +=      -Wall -D_SCL_SECURE_NO_WARNINGS
 
 INCLUDEPATH     +=      .                                       \
 						../shared/includes						\
@@ -44,13 +44,19 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 						includes/TcpClient.hpp             		\
 						includes/TcpServer.hpp             		\
 						includes/Client.hpp						\
-						includes/BabelServer.hpp
+						includes/BabelServer.hpp				\
+						includes/Command/ICommand.hpp			\
+						includes/Command/CommandUpdate.hpp		\
+						includes/Command/CommandAdd.hpp
 
 SOURCES         +=      sources/main.cpp                        \
                         sources/TcpClient.cpp              		\
                         sources/TcpServer.cpp              		\
 						sources/Client.cpp						\
-                        sources/BabelServer.cpp
+                        sources/BabelServer.cpp					\
+						sources/Command/ICommand.cpp			\
+						sources/Command/CommandUpdate.cpp		\
+						sources/Command/CommandAdd.cpp
 
 
 DEFINES			+=		_AFXDLL _MBCS

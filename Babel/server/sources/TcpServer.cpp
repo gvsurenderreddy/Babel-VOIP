@@ -6,33 +6,28 @@
 
 TcpServer::TcpServer() : mAcceptor(NULL), mListener(NULL)
 {
-    std::cout << __FUNCTION__ << std::endl;
     startSignals();
 }
 
 TcpServer::~TcpServer()
 {
-    std::cout << __FUNCTION__ << std::endl;
     closeServer();
 }
 
 void TcpServer::createServer(int port, int /*queueSize*/)
 {
-    std::cout << __FUNCTION__ << std::endl;
     mAcceptor = new tcp::acceptor(mService, tcp::endpoint(tcp::v4(), port));
     startAccept();
 }
 
 void TcpServer::startSignals(void)
 {
-    std::cout << __FUNCTION__ << std::endl;
     //boost::asio::signal_set signals(mService, SIGINT);
     //signals.async_wait(boost::bind(&boost::asio::io_service::stop, &mService));
 }
 
 void TcpServer::startAccept(void)
 {
-    std::cout << __FUNCTION__ << std::endl;
     tcp::socket *socket = new tcp::socket(mService);
 
     mSockets.push_back(socket);
@@ -41,7 +36,6 @@ void TcpServer::startAccept(void)
 
 void TcpServer::handle_accept(const boost::system::error_code& error)
 {
-    std::cout << __FUNCTION__ << std::endl;
     if (error)
         std::cout << error.message() << std::endl;
     else if (mListener)
@@ -51,7 +45,6 @@ void TcpServer::handle_accept(const boost::system::error_code& error)
 
 void TcpServer::closeServer()
 {
-    std::cout << __FUNCTION__ << std::endl;
     std::for_each(mSockets.begin(), mSockets.end(), [](tcp::socket* socket)
     {
         if (socket && socket->is_open())
@@ -67,7 +60,6 @@ void TcpServer::closeServer()
 
 void TcpServer::setOnSocketEventListener(TcpServer::OnSocketEvent *listener)
 {
-    std::cout << __FUNCTION__ << std::endl;
     mListener = listener;
 }
 
@@ -83,12 +75,10 @@ IClientSocket* TcpServer::getNewClient()
 
 bool TcpServer::hasClientInQueue() const
 {
-    std::cout << __FUNCTION__ << std::endl;
     return true;
 }
 
 void TcpServer::run()
 {
-    std::cout << __FUNCTION__ << std::endl;
     mService.run();
 }
