@@ -30,10 +30,9 @@ void BabelServer::run()
 
 void BabelServer::onNewConnection(IServerSocket *serverSocket)
 {
-    std::cout << __FUNCTION__ << std::endl;
     if (serverSocket->hasClientInQueue())
     {
-        Client* newClient = new Client(serverSocket);
+        Client* newClient = new Client(serverSocket->getNewClient());
         newClient->setOnClientEventListener(this);
         mClients.push_back(newClient);
     }

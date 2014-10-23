@@ -46,4 +46,8 @@ class ICommand {
 		virtual unsigned int			getSizeToRead(void) const = 0;
 		virtual void					initFromMessage(const IClientSocket::Message &message) = 0;
 
+	// getCommand
+	public:
+		static ICommand	*getCommand(ICommand::Instruction instructionCode);
+
 };

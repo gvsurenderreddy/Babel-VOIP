@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ICommand.hpp"
 
 class CommandUpdate : public ICommand{

@@ -1,7 +1,11 @@
+#pragma once
+
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
+
 #include <vector>
 #include <list>
+
 /*#include <boost/serialization/list.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>*/
@@ -26,7 +30,7 @@ public:
 	};
 
 	//copelien
-    Client(IServerSocket *serverSocket);
+    Client(IClientSocket* clientSocket);
 	~Client();
 
 	//callback from IClientSocket
