@@ -7,9 +7,8 @@
 /*
 ** Copelien
 */
-Client::Client(IServerSocket* serverSocket) : mListener(NULL)
+Client::Client(IClientSocket* clientSocket) : mSocket(clientSocket), mListener(NULL)
 {
-    mSocket = serverSocket->getNewClient();
     mSocket->setOnSocketEventListener(this);
  }
 

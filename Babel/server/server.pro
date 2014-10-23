@@ -29,7 +29,7 @@ OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
-QMAKE_CXXFLAGS  +=      -Wall
+QMAKE_CXXFLAGS  +=      -Wall -D_SCL_SECURE_NO_WARNINGS
 
 INCLUDEPATH     +=      .                                       \
 						../shared/includes						\

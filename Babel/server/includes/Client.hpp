@@ -30,7 +30,7 @@ public:
 	};
 
 	//copelien
-    Client(IServerSocket *serverSocket);
+    Client(IClientSocket* clientSocket);
 	~Client();
 
 	//callback from IClientSocket
