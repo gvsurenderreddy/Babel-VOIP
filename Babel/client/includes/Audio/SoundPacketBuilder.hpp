@@ -8,6 +8,13 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 
 	Q_OBJECT
 
+	// SoundPacket
+	struct SoundPacket {
+		int   magic_code;
+		long  timestamp;
+		int   soundSize;
+		char  sound[500];
+	};
 	// ctor - dtor
 	public:
 		SoundPacketBuilder(void);
@@ -39,6 +46,7 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 		IClientSocket	*mClient;
 		QString			mAcceptedHost;
 		int				mAcceptedPort;
+		long			mTimestamp;
 
 		static const int DEFAULT_BABEL_CALL_PORT;
 
