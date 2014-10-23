@@ -11,12 +11,11 @@ Client::Client(IServerSocket* serverSocket) : mListener(NULL)
 {
     mSocket = serverSocket->getNewClient();
     mSocket->setOnSocketEventListener(this);
-    std::cout << __FUNCTION__ << std::endl;
-}
+ }
 
 Client::~Client()
 {
-    std::cout << __FUNCTION__ << std::endl;
+
 }
 
 /*
@@ -31,20 +30,16 @@ void Client::setOnClientEventListener(Client::OnClientEvent *listener)
 ** Callback from IClientSocket
 */
 void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
-    std::cout << __FUNCTION__ << std::endl;
 	nbBytes;
 	socket;
 }
 
 void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
-    std::cout << __FUNCTION__ << std::endl;
     const IClientSocket::Message message = socket->receive(nbBytesToRead);
-    std::cout << "Read from client | msg=[" << message.msg << "] | msgSize='" << message.msgSize << "'" << std::endl;
 	socket->send(message);
 }
 
 void	Client::onSocketClosed(IClientSocket *socket){
-    std::cout << __FUNCTION__ << std::endl;
 	socket;
 }
 

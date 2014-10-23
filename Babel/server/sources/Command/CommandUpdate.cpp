@@ -1,4 +1,4 @@
-#include "../../includes/Command/CommandUpdate.hpp"
+#include "Command/CommandUpdate.hpp"
 
 /*
 ** Heritage from ICommand
