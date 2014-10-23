@@ -3,5 +3,5 @@
 #include "ICommand.hpp"
 
 namespace Factory{
-	ICommand *getCommand(ICommand::Instruction instruction);
+	ICommand	*getCommand(ICommand::Instruction instruction);
 }
