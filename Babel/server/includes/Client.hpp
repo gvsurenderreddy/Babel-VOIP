@@ -1,9 +1,10 @@
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
 #include <vector>
-#include <boost/serialization/list.hpp>
+#include <list>
+/*#include <boost/serialization/list.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>*/
 
 class Client : public IClientSocket::OnSocketEvent{
 
@@ -38,8 +39,8 @@ public:
         void setOnClientEventListener(Client::OnClientEvent *listener);
 
 	//function for serialization
-	void	savData(void);
-	void	loadData(void);
+	/*void	savData(void);
+	void	loadData(void);*/
 
 	//use client's data
 	//setter
@@ -59,13 +60,13 @@ public:
 
 private:
 	//boost serialize
-	friend class boost::serialization::access;
+	/*friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int /*version*/){
+	void	serialize(Archive & ar, const unsigned int version){
 		ar & this->state;
 		ar & this->name;
 		ar & this->contact;
-	}
+	}*/
 
 	//data of client
 	std::string					state;
