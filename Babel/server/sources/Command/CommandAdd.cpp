@@ -3,8 +3,15 @@
 /*
 ** Heritage from ICommand
 */
-std::vector<std::string>	CommandAdd::getParam(void){
-	std::vector<std::string>	t;
+std::vector<std::string>	*CommandAdd::getParam(TcpClient &socket){
+	std::vector<std::string>	*t = new std::vector<std::string>;
+	CommandAdd::Body			*body;
+	IClientSocket::Message		data;
+
+	data = socket.receive(this->getSizeBody());
+	//body = reinterpret_cast<CommandAdd::Body *>(data.msg);
+	body = (CommandAdd::Body *)data.msg;
+	t->push_back(body->accountName);
 	return t;
 }
 

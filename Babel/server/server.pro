@@ -37,7 +37,8 @@ INCLUDEPATH     +=      .                                       \
                         dependencies/includes					\
 						build									\
 						build/ui								\
-						build/moc
+						build/moc								\
+						includes/Command
 						
 HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
                         ../shared/includes/IServerSocket.hpp    \
@@ -47,7 +48,9 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 						includes/BabelServer.hpp				\
 						includes/Command/ICommand.hpp			\
 						includes/Command/CommandUpdate.hpp		\
-						includes/Command/CommandAdd.hpp
+						includes/Command/CommandAdd.hpp			\
+						includes/Command/HandleCmd.hpp			\
+						includes/Factory.hpp
 
 SOURCES         +=      sources/main.cpp                        \
                         sources/TcpClient.cpp              		\
@@ -56,7 +59,9 @@ SOURCES         +=      sources/main.cpp                        \
                         sources/BabelServer.cpp					\
 						sources/Command/ICommand.cpp			\
 						sources/Command/CommandUpdate.cpp		\
-						sources/Command/CommandAdd.cpp
+						sources/Command/CommandAdd.cpp			\
+						sources/Command/HandleCmd.cpp			\
+						sources/Factory.cpp
 
 
 DEFINES			+=		_AFXDLL _MBCS

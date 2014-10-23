@@ -1,24 +1,27 @@
+#pragma once
+
 #include <vector>
 #include <string>
+#include "TcpClient.hpp"
 
 class ICommand{
 public:
 	//instruction
 	enum Instruction {
-		REG,
-		LOG,
-		LIST,
-		SHOW,
-		ADD,
-		ACCEPT_ADD,
-		DEL,
-		EXIT,
-		UPDATE,
-		SEND,
-		CALL,
-		ACCEPT_CALL,
-		CLOSE_CALL,
-		ERR
+		REG				= 1,
+		LOG				= 2,
+		LIST			= 3,
+		SHOW			= 4,
+		ADD				= 5,
+		ACCEPT_ADD		= 6,
+		DEL				= 7,
+		EXIT			= 8,
+		UPDATE			= 9,
+		SEND			= 10, 
+		CALL			= 11,
+		ACCEPT_CALL		= 12,
+		CLOSE_CALL		= 13,
+		ERR				= 14
 	};
 
 	//header
@@ -34,7 +37,7 @@ public:
 	virtual ~ICommand() {}
 
 	//handle ICommand
-	virtual std::vector<std::string>	getParam(void) = 0;
+	virtual std::vector<std::string>	*getParam(TcpClient &socket) = 0;
 	virtual ICommand::Instruction		getInstruction(void) = 0;
 	virtual int							getSizeHeader(void) = 0;
 	virtual int							getSizeBody(void) = 0;

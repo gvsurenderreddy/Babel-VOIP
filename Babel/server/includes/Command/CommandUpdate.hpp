@@ -11,7 +11,7 @@ public:
 	};
 
 	//heritage from ICommand
-	std::vector<std::string>	getParam(void);
+	std::vector<std::string>	*getParam(TcpClient &socket);
 	ICommand::Instruction		getInstruction(void);
 	int							getSizeHeader(void);
 	int							getSizeBody(void);
