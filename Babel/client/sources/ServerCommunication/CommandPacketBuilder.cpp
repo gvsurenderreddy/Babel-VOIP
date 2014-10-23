@@ -1,5 +1,6 @@
 #include "CommandPacketBuilder.hpp"
 #include "TcpClient.hpp"
+#include "CommandException.hpp"
 
 CommandPacketBuilder::CommandPacketBuilder(void)
 	: mClient(NULL), mCurrentCommand(NULL), mCurrentState(CommandPacketBuilder::HEADER)
@@ -26,10 +27,12 @@ void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
 
 void	CommandPacketBuilder::fetchCommandHeader(void) {
 	IClientSocket::Message message = mClient->receive(ICommand::HEADER_SIZE);
+	ICommand::Header *header = reinterpret_cast<ICommand::Header *>(message.msg);
 
-	// check magiccode
-	// init mCurrentCommand
+	if (header->magicCode != ICommand::MAGIC_CODE)
+		throw new CommandException("Wrong magic code");
 
+	mCurrentCommand = ICommand::getCommand(static_cast<ICommand::Instruction>(header->instructionCode));
 	mCurrentState = CommandPacketBuilder::CONTENT;
 
 	onSocketReadable(mClient, mClient->nbBytesToRead());
