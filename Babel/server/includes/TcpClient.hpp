@@ -4,6 +4,7 @@
 
 #include <list>
 #include <deque>
+#include <vector>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/thread/mutex.hpp>
@@ -55,18 +56,18 @@ class TcpClient : public IClientSocket
 
     // const
     public:
-        static const int    BUFFER_SIZE;
+        static const int    BUFFER_SIZE = 1024;
 
     // attributes
     private:
-        boost::asio::io_service         mIOservice;
-        tcp::socket*                    mSocket;
-        Message                         mMessage;
-        char*                           mBufferTmp;
-        char*                           mBuffer;
-        std::deque<Message>             mWriteMessageQueue;
-        unsigned int                    mNbBytesToRead;
-        IClientSocket::OnSocketEvent*   mListener;
-        boost::mutex                    mMutex;
+        boost::asio::io_service                 mIOservice;
+        tcp::socket*                            mSocket;
+        Message                                 mMessage;
+        char                                    mReadBuffer[BUFFER_SIZE];
+        std::vector<char>                       mBuffer;
+        std::deque<Message>                     mWriteMessageQueue;
+        unsigned int                            mNbBytesToRead;
+        IClientSocket::OnSocketEvent*           mListener;
+        boost::mutex                            mMutex;
 
 };

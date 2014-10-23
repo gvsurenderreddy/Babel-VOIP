@@ -1,9 +1,12 @@
 #pragma once
 
+#include <qobject.h>
 #include "ICommand.hpp"
 #include "CommandPacketBuilder.hpp"
 
-class ServerCommunication {
+class ServerCommunication : public QObject {
+
+	Q_OBJECT
 
 	// ctor - dtor
 	public:
@@ -21,7 +24,7 @@ class ServerCommunication {
 
 	// receive command
 	private slots :
-		void	treatCommand(const ICommand &command);
+		void	treatCommand(const ICommand *command);
 
 	// attributes
 	private:
