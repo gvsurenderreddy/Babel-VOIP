@@ -11,6 +11,11 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
+//a enlever
+#include "CommandUpdate.hpp"
+#include <stdlib.h>
+#include <string.h>
+
 TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
 {
 
@@ -94,8 +99,31 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
 
 IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
 {
-    IClientSocket::Message message;
+	IClientSocket::Message message;
+	CommandUpdate::Body *body;
+	ICommand::Header *header;
 
+	this->mNbBytesToRead = sizeToRead;
+
+	header = (ICommand::Header *)malloc(100);
+	header->magicCode = ICommand::MAGIC_CODE;
+	header->instructionCode = ICommand::UPDATE;
+
+	body = (CommandUpdate::Body *)malloc(2000);
+	body->accountName[0] = 0;
+	strcat(body->accountName, "myAccountNameIsZer");
+	body->password[0] = 0;
+	strcat(body->password, "trollzer");
+	body->pseudo[0] = 0;
+	strcat(body->pseudo, "sheytane");
+	body->status = '9';
+
+	if (sizeToRead == ICommand::HEADER_SIZE)
+		this->mMessage.msg = (char *)header;
+	else
+		this->mMessage.msg = (char *)body;
+	return this->mMessage;
+	//-----------------------------------------------------------------------------------------------
     if (sizeToRead > mBuffer.size())
     {
         message.msg = NULL;
@@ -133,7 +161,9 @@ void TcpClient::readHandler(const boost::system::error_code & error, std::size_t
 
 unsigned int TcpClient::nbBytesToRead() const
 {
-    return mBuffer.size();
+
+    //return mBuffer.size();
+	return (2000);
 }
 
 void TcpClient::setOnSocketEventListener(IClientSocket::OnSocketEvent *listener)

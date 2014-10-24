@@ -4,6 +4,9 @@
 
 class CommandUpdate : public ICommand{
 public:
+	CommandUpdate();
+	~CommandUpdate();
+
 	//body
 	struct Body{
 		char	accountName[256];

@@ -10,7 +10,8 @@ public:
 	ICommand::Instruction		getInstruction(void);
 
 private:
-	ICommand	*body;
-	ICommand::Header *header;
-	TcpClient	&socket;
+	ICommand				*body;
+	ICommand::Header		*header;
+	TcpClient				&socket;
+	ICommand::Instruction	instruction;
 };

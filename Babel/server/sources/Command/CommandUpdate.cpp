@@ -1,5 +1,12 @@
 #include "Command/CommandUpdate.hpp"
 
+CommandUpdate::CommandUpdate(){
+
+}
+CommandUpdate::~CommandUpdate(){
+
+}
+
 /*
 ** Heritage from ICommand
 */
