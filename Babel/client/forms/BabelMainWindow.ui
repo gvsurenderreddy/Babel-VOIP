@@ -6,17 +6,51 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>551</width>
-    <height>788</height>
+    <width>560</width>
+    <height>815</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>560</width>
+    <height>815</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>560</width>
+    <height>815</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Kunstler Script</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #ffffff</string>
+   <string notr="true">/*background-color: rgb(223, 95, 35);*/
+background-color: rgb(255, 239, 116);
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="minimumSize">
+    <size>
+     <width>560</width>
+     <height>790</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <widget class="QLineEdit" name="title">
     <property name="enabled">
      <bool>false</bool>
@@ -24,21 +58,24 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>40</y>
-      <width>551</width>
-      <height>131</height>
+      <y>0</y>
+      <width>561</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Microsoft YaHei</family>
       <pointsize>90</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: #eb6e30;
-border-style: outset;</string>
+     <string notr="true">color: #ffffff;
+border-style: outset;
+/*background-color:rgb(0, 0, 0);*/
+</string>
     </property>
     <property name="text">
      <string>Babel</string>
@@ -58,8 +95,8 @@ border-style: outset;</string>
      <rect>
       <x>0</x>
       <y>190</y>
-      <width>551</width>
-      <height>41</height>
+      <width>561</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="palette">
@@ -68,9 +105,9 @@ border-style: outset;</string>
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -78,26 +115,26 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -105,8 +142,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -114,8 +151,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -124,9 +161,9 @@ border-style: outset;</string>
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -134,26 +171,26 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -161,8 +198,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -170,8 +207,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -180,9 +217,9 @@ border-style: outset;</string>
        <colorrole role="WindowText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -190,26 +227,26 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="Text">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
        <colorrole role="ButtonText">
         <brush brushstyle="SolidPattern">
          <color alpha="255">
-          <red>235</red>
-          <green>110</green>
-          <blue>48</blue>
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
          </color>
         </brush>
        </colorrole>
@@ -217,8 +254,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -226,8 +263,8 @@ border-style: outset;</string>
         <brush brushstyle="SolidPattern">
          <color alpha="255">
           <red>255</red>
-          <green>255</green>
-          <blue>255</blue>
+          <green>239</green>
+          <blue>116</blue>
          </color>
         </brush>
        </colorrole>
@@ -236,9 +273,10 @@ border-style: outset;</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>14</pointsize>
+      <family>MS Shell Dlg 2</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
-      <italic>true</italic>
+      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
@@ -246,12 +284,13 @@ border-style: outset;</string>
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">color: #eb6e30;
+     <string notr="true">color: #ffffff;
 border-style: outset;
+/*background-color: rgb(252, 84, 33);*/
 </string>
     </property>
     <property name="text">
-     <string>Welcome</string>
+     <string>Welcome...</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -262,7 +301,7 @@ border-style: outset;
      <rect>
       <x>0</x>
       <y>240</y>
-      <width>551</width>
+      <width>561</width>
       <height>541</height>
      </rect>
     </property>

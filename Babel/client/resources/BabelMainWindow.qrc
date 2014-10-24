@@ -2,5 +2,6 @@
 <qresource>
     <file>telephone.jpg</file>
     <file>telephone.png</file>
+    <file>unknown_profile.jpg</file>
 </qresource>
 </RCC>

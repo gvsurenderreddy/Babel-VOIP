@@ -1,13 +1,15 @@
 #pragma once
 
+#include <QTimer>
+#include "BabelContactWidget.hpp"
 #include "qmainwindow.h"
 #include "ui_BabelMainWindow.h"
 
-class BabelMainWindow : public QMainWindow {
-
+class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow
+{
 	// ctor - dtor
 	public:
-		BabelMainWindow(void);
+		BabelMainWindow(QMainWindow *parent = nullptr);
 		~BabelMainWindow(void);
 
 	// coplien form
@@ -17,6 +19,11 @@ class BabelMainWindow : public QMainWindow {
 
 	// attributes
 	private:
-		Ui::BabelMainWindow	ui;
+		Ui::BabelMainWindow	mUi;
+		BabelContactWidget	mContact;
+		QTimer				*mTimer;
 
+	// slots
+	public slots:
+		void	timeoutOpenContact();
 };

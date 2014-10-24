@@ -100,7 +100,8 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Babel.cpp					\
 			sources/Contact.cpp
 
-FORMS		+=	forms/BabelMainWindow.ui
+FORMS		+=	forms/BabelMainWindow.ui \
+				forms/BabelContactWidget.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc
 
