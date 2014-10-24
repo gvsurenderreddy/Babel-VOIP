@@ -16,7 +16,7 @@ class AudioManager : public QThread {
 
 	// coplien form
 	private:
-		AudioManager(const AudioManager &) {}
+		AudioManager(const AudioManager &) : QThread() {}
 		const AudioManager &operator=(const AudioManager &) { return *this; }
 
 	// play sound

@@ -1,5 +1,6 @@
 #include "CommandReg.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandReg::CommandReg(void)
 	: mAccountName(""), mPseudo(""), mPassword("") {}
@@ -15,15 +16,15 @@ IClientSocket::Message	CommandReg::getMessage(void) const {
 	IClientSocket::Message message;
 	CommandReg::PacketFromClient *packet = new CommandReg::PacketFromClient;
 
-	std::memset(packet, 0, sizeof CommandReg::PacketFromClient);
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof packet->password));
-	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof packet->pseudo));
+	std::memset(packet, 0, sizeof(CommandReg::PacketFromClient));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password)));
+	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo)));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::LOG;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandReg::PacketFromClient;
+	message.msgSize = sizeof(CommandReg::PacketFromClient);
 
 	return message;
 }

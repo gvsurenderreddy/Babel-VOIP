@@ -1,5 +1,6 @@
 #include "CommandAcceptAdd.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandAcceptAdd::CommandAcceptAdd(void)
 	: mAccountName(""), mHasAccepted(false) {}
@@ -15,14 +16,14 @@ IClientSocket::Message	CommandAcceptAdd::getMessage(void) const {
 	IClientSocket::Message message;
 	CommandAcceptAdd::PacketFromClient *packet = new CommandAcceptAdd::PacketFromClient;
 
-	std::memset(packet, 0, sizeof CommandAcceptAdd::PacketFromClient);
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
+	std::memset(packet, 0, sizeof(CommandAcceptAdd::PacketFromClient));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
 	packet->hasAccepted = mHasAccepted;
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::ACCEPT_ADD;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandAcceptAdd::PacketFromClient;
+	message.msgSize = sizeof(CommandAcceptAdd::PacketFromClient);
 
 	return message;
 }

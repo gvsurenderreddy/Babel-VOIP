@@ -14,7 +14,7 @@ class CallManager : public QObject {
 	// coplien form
 	private:
 		CallManager(const CallManager &) : QObject() {}
-		const CallManager &operator=(const CallManager &) { return *this; }
+		const CallManager &operator=(const CallManager &){ return *this; }
 
 	// handle call
 	public:

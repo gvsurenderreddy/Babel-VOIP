@@ -10,7 +10,7 @@
 Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient)
 {
     mSocket->setOnSocketEventListener(this);
- }
+}
 
 Client::~Client()
 {

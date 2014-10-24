@@ -1,5 +1,6 @@
 #include "CommandShow.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandShow::CommandShow(void)
 : mAccountName(""), mPseudo(""), mStatus(Contact::DISCONNECTED), mIsConnected(false) {}
@@ -15,23 +16,23 @@ IClientSocket::Message	CommandShow::getMessage(void) const {
 	IClientSocket::Message message;
 	CommandShow::PacketFromClient *packet = new CommandShow::PacketFromClient;
 
-	std::memset(packet, 0, sizeof CommandShow::PacketFromClient);
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
+	std::memset(packet, 0, sizeof(CommandShow::PacketFromClient));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::LOG;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandShow::PacketFromClient;
+	message.msgSize = sizeof(CommandShow::PacketFromClient);
 
 	return message;
 }
 
 unsigned int	CommandShow::getSizeToRead(void) const {
-	return sizeof PacketFromServer;
+  return sizeof(PacketFromServer);
 }
 
 void	CommandShow::initFromMessage(const IClientSocket::Message &message) {
-	if (message.msgSize != sizeof CommandShow::PacketFromServer)
+  if (message.msgSize != sizeof(CommandShow::PacketFromServer))
 		throw new CommandException("Message has an invalid size");
 
 	CommandShow::PacketFromServer *packet = new CommandShow::PacketFromServer;

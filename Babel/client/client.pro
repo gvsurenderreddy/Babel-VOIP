@@ -7,6 +7,7 @@ DESTDIR         =       build
 OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
+RCC_DIR         =       build/rcc
 
 QMAKE_CXXFLAGS	+=	-Wall
 
