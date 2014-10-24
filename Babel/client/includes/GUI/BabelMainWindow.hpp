@@ -9,7 +9,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow
 {
 	// ctor - dtor
 	public:
-		BabelMainWindow(QMainWindow *parent = nullptr);
+		BabelMainWindow(void);
 		~BabelMainWindow(void);
 
 	// coplien form

@@ -3,8 +3,7 @@
 
 using namespace std;
 
-BabelMainWindow::BabelMainWindow(QMainWindow *parent)
-	: QMainWindow(parent)
+BabelMainWindow::BabelMainWindow(void)
 {
 	mTimer = new QTimer(this);
 	mUi.setupUi(this);
