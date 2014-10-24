@@ -14,7 +14,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow
 
 	// coplien form
 	private:
-		BabelMainWindow(const BabelMainWindow &) {}
+		BabelMainWindow(const BabelMainWindow &) : QMainWindow() {}
 		const BabelMainWindow &operator=(const BabelMainWindow &) { return *this; }
 
 	// attributes

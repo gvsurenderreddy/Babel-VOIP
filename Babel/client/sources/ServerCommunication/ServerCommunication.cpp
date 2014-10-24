@@ -7,7 +7,7 @@ ServerCommunication::ServerCommunication(void) {
 ServerCommunication::~ServerCommunication(void) {
 }
 
-void	ServerCommunication::treatCommand(const ICommand *command) {
+void	ServerCommunication::treatCommand(const ICommand *) {
 }
 
 void	ServerCommunication::connectToServer(const QString &addr, int port) {

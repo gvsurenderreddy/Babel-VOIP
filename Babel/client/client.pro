@@ -7,6 +7,7 @@ DESTDIR         =       build
 OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
+RCC_DIR         =       build/rcc
 
 QMAKE_CXXFLAGS	+=	-Wall
 
@@ -60,6 +61,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandUpdate.hpp			\
 			includes/Commands/CommandException.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
+                        includes/GUI/BabelContactWidget.hpp                     \
 			includes/Contact.hpp					\
 			includes/Babel.hpp
 
@@ -79,6 +81,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Audio/SoundPacketBuilder.cpp			\
 			sources/Audio/CallManager.cpp				\
 			sources/GUI/BabelMainWindow.cpp				\
+                        sources/GUI/BabelContactWidget.cpp                      \
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
 			sources/Commands/CommandAcceptAdd.cpp			\

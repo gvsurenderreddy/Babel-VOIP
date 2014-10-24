@@ -6,16 +6,16 @@
 class BabelContactWidget : public QWidget, public Ui_BabelContactWidget
 {
 	// ctor - dtor
-public:
+	public:
 	BabelContactWidget(void);
 	~BabelContactWidget(void);
 
 	// coplien form
-private:
-	BabelContactWidget(const BabelContactWidget &) {}
+	private:
+	BabelContactWidget(const BabelContactWidget &) : QWidget() {}
 	const BabelContactWidget &operator=(const BabelContactWidget &) { return *this; }
 
 	// attributes
-private:
+	private:
 	Ui::BabelContactWidget	mUi;
 };

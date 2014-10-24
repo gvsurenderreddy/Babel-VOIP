@@ -1,5 +1,6 @@
 #include "CommandDel.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandDel::CommandDel(void)
 	: mAccountName("") {}
@@ -15,23 +16,23 @@ IClientSocket::Message	CommandDel::getMessage(void) const {
 	IClientSocket::Message message;
 	CommandDel::PacketFromClient *packet = new CommandDel::PacketFromClient;
 
-	std::memset(packet, 0, sizeof CommandDel::PacketFromClient);
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof packet->accountName, mAccountName.length()));
+	std::memset(packet, 0, sizeof(CommandDel::PacketFromClient));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName), mAccountName.length()));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::DEL;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandDel::PacketFromClient;
+	message.msgSize = sizeof(CommandDel::PacketFromClient);
 
 	return message;
 }
 
 unsigned int	CommandDel::getSizeToRead(void) const {
-	return sizeof PacketFromServer;
+  return sizeof(PacketFromServer);
 }
 
 void	CommandDel::initFromMessage(const IClientSocket::Message &message) {
-	if (message.msgSize != sizeof CommandDel::PacketFromServer)
+  if (message.msgSize != sizeof(CommandDel::PacketFromServer))
 		throw new CommandException("Message has an invalid size");
 
 	CommandDel::PacketFromServer *packet = reinterpret_cast<CommandDel::PacketFromServer *>(message.msg);

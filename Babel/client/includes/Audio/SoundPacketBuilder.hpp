@@ -22,7 +22,7 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 
 	// coplien form
 	private:
-		SoundPacketBuilder(const SoundPacketBuilder &) {}
+		SoundPacketBuilder(const SoundPacketBuilder &) : QObject() {}
 		const SoundPacketBuilder &operator=(const SoundPacketBuilder &) { return *this; }
 	// send sound
 	public slots:

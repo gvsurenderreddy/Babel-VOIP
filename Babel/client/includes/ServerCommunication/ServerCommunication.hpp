@@ -15,7 +15,7 @@ class ServerCommunication : public QObject {
 
 	// coplien form
 	private:
-		ServerCommunication(const ServerCommunication &) {}
+		ServerCommunication(const ServerCommunication &) : QObject() {}
 		const ServerCommunication &operator=(const ServerCommunication &) { return *this; }
 
 	// connect to server

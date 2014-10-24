@@ -1,5 +1,6 @@
 #include "CommandErr.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandErr::CommandErr(void)
 	: mInstructionCode(ICommand::EXIT), mErrorCode(CommandErr::OK) {}
@@ -16,11 +17,11 @@ IClientSocket::Message	CommandErr::getMessage(void) const {
 }
 
 unsigned int	CommandErr::getSizeToRead(void) const {
-	return sizeof PacketFromServer;
+  return sizeof(PacketFromServer);
 }
 
 void	CommandErr::initFromMessage(const IClientSocket::Message &message) {
-	if (message.msgSize != sizeof CommandErr::PacketFromServer)
+  if (message.msgSize != sizeof(CommandErr::PacketFromServer))
 		throw new CommandException("Message has an invalid size");
 
 	CommandErr::PacketFromServer *packet = reinterpret_cast<CommandErr::PacketFromServer *>(message.msg);

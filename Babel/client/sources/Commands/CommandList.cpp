@@ -1,5 +1,6 @@
 #include "CommandList.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandList::CommandList(void) {
 }
@@ -19,7 +20,7 @@ IClientSocket::Message	CommandList::getMessage(void) const {
 	packet->header.instructionCode = ICommand::EXIT;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandList::PacketFromClient;
+	message.msgSize = sizeof(CommandList::PacketFromClient);
 
 	return message;
 }
