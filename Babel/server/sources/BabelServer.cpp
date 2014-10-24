@@ -31,11 +31,7 @@ void BabelServer::run()
 void BabelServer::onNewConnection(IServerSocket *serverSocket)
 {
     if (serverSocket->hasClientInQueue())
-    {
-        Client* newClient = new Client(serverSocket->getNewClient());
-        newClient->setOnClientEventListener(this);
-        mClients.push_back(newClient);
-    }
+        mClients.push_back(new Client(serverSocket->getNewClient(), *this));
 }
 
 /*

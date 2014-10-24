@@ -7,7 +7,7 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket) : mSocket(clientSocket), mListener(NULL)
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient)
 {
     mSocket->setOnSocketEventListener(this);
  }
@@ -15,14 +15,6 @@ Client::Client(IClientSocket* clientSocket) : mSocket(clientSocket), mListener(N
 Client::~Client()
 {
 
-}
-
-/*
-** Set listener
-*/
-void Client::setOnClientEventListener(Client::OnClientEvent *listener)
-{
-    mListener = listener;
 }
 
 /*

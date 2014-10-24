@@ -30,17 +30,13 @@ public:
 	};
 
 	//copelien
-    Client(IClientSocket* clientSocket);
+    Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient);
 	~Client();
 
 	//callback from IClientSocket
 	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
 	void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	void	onSocketClosed(IClientSocket *socket);
-
-    // listeners
-    public:
-        void setOnClientEventListener(Client::OnClientEvent *listener);
 
 	//function for serialization
 	/*void	savData(void);
@@ -101,5 +97,5 @@ private:
 	int							cmdState;*/
 
 	//client's listener
-    Client::OnClientEvent*      mListener;
+    Client::OnClientEvent&      mListener;
 };
