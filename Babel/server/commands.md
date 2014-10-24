@@ -1,117 +1,123 @@
-# update
+# Commandes
 
-## Client.cpp
+Ci-dessous se trouve un récapitulatif de quoi doit se trouver où.
 
-* Lorem ipsum
+#### [1] Client::update
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [1] BabelServer::update
 
----------------
+```
+actions
+```
 
-# subscribe
+#### [2] Client::subscribe
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [2] BabelServer::subscribe
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [3] Client::connect
 
----------------
+```
+actions
+```
 
-# connect
+#### [3] BabelServer::connect
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [4] Client::disconnect
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [4] BabelServer::disconnect
 
----------------
+```
+actions
+```
 
-# disconnect
+#### [5] Client::getContact
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [5] BabelServer::getContact
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [6] Client::addContact
 
----------------
+```
+actions
+```
 
-# getContact
+#### [6] BabelServer::addContact
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [7] Client::delContact
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [7] BabelServer::delContact
 
----------------
+```
+actions
+```
 
-# addContact
+#### [8] Client::acceptContact
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [8] BabelServer::acceptContact
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [9] Client::callSomeone
 
----------------
+```
+actions
+```
 
-# delContact
+#### [9] BabelServer::callSomeone
 
-## Client.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [8] Client::hangCall
 
-## BabelServer.cpp
+```
+actions
+```
 
-* Lorem ipsum
+#### [8] BabelServer::hangCall
 
----------------
-
-# acceptContact
-
-## Client.cpp
-
-* Lorem ipsum
-
-## BabelServer.cpp
-
-* Lorem ipsum
-
----------------
-
-# callSomeone
-
-## Client.cpp
-
-* Lorem ipsum
-
-## BabelServer.cpp
-
-* Lorem ipsum
-
----------------
-
-# hangCall
-
-## Client.cpp
-
-* Lorem ipsum
-
-## BabelServer.cpp
-
-* Lorem ipsum
+```
+actions
+```
