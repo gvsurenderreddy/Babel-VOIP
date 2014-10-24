@@ -10,6 +10,6 @@ int						main(int ac, char **av) {
 
 	qRegisterMetaType<Sound::Encoded>();
 	babel.run();*/
-	//window.show();
+	window.show();
 	return app.exec();
 }

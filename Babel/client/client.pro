@@ -60,8 +60,10 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandUpdate.hpp			\
 			includes/Commands/CommandException.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
+			includes/GUI/BabelContactWidget.hpp			\
+			includes/GUI/BabelFlyer.hpp			\
 			includes/Contact.hpp					\
-			includes/Babel.hpp
+			includes/Babel.hpp					\
 
 HEADERS		+=	dependencies/includes/portaudio.h
 
@@ -79,6 +81,8 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Audio/SoundPacketBuilder.cpp			\
 			sources/Audio/CallManager.cpp				\
 			sources/GUI/BabelMainWindow.cpp				\
+			sources/GUI/BabelContactWidget.cpp				\
+			sources/GUI/BabelFlyer.cpp				\
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
 			sources/Commands/CommandAcceptAdd.cpp			\
@@ -101,7 +105,8 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Contact.cpp
 
 FORMS		+=	forms/BabelMainWindow.ui \
-				forms/BabelContactWidget.ui
+			forms/BabelFlyer.ui \
+			forms/BabelContactWidget.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc
 

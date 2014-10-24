@@ -8,13 +8,18 @@ BabelMainWindow::BabelMainWindow(void)
 	mTimer = new QTimer(this);
 	mUi.setupUi(this);
 	QObject::connect(mTimer, SIGNAL(timeout()), this, SLOT(close()));
-	show();
-	mContact.show();
 }
 
 BabelMainWindow::~BabelMainWindow(void)
 {
-	cout << __FUNCTION__ << ": " << __TIMESTAMP__ << endl;
+	cout << __FUNCTION__ << endl;
+}
+
+void		BabelMainWindow::show()
+{
+	cout << __FUNCTION__ << endl;
+	mTimer->start(1024);
+	mContact.show();
 }
 
 void		BabelMainWindow::timeoutOpenContact()

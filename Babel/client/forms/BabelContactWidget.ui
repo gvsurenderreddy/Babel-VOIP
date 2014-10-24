@@ -29,9 +29,9 @@
    <property name="geometry">
     <rect>
      <x>-10</x>
-     <y>60</y>
+     <y>100</y>
      <width>491</width>
-     <height>661</height>
+     <height>621</height>
     </rect>
    </property>
    <property name="acceptDrops">
@@ -57,7 +57,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>0</y>
+     <y>40</y>
      <width>321</width>
      <height>31</height>
     </rect>
@@ -83,7 +83,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>30</y>
+     <y>70</y>
      <width>321</width>
      <height>21</height>
     </rect>
@@ -102,7 +102,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
+     <y>50</y>
      <width>41</width>
      <height>41</height>
     </rect>

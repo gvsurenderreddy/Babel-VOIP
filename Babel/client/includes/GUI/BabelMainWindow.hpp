@@ -26,4 +26,8 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow
 	// slots
 	public slots:
 		void	timeoutOpenContact();
+
+	// member function
+	public:
+		virtual void	show();
 };
