@@ -36,5 +36,6 @@ class SoundInputDevice : public ISoundDevice {
 		PaStreamParameters			mInputParameters;
 		PaStream					*mStream;
 		Mutex						mMutex;
+		bool						mIsRunning;
 
 };

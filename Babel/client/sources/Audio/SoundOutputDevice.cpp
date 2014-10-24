@@ -2,7 +2,7 @@
 #include "SoundOutputDevice.hpp"
 #include "SoundException.hpp"
 
-SoundOutputDevice::SoundOutputDevice(void) {
+SoundOutputDevice::SoundOutputDevice(void) : mStream(NULL), mIsRunning(false) {
 	if (Pa_Initialize() != paNoError)
 		throw new SoundException("fail Pa_Initialize");
 
@@ -10,6 +10,7 @@ SoundOutputDevice::SoundOutputDevice(void) {
 }
 
 SoundOutputDevice::~SoundOutputDevice(void) {
+	stopStream();
 	Pa_Terminate();
 }
 
@@ -25,16 +26,24 @@ void	SoundOutputDevice::initOutputDevice(void) {
 }
 
 void	SoundOutputDevice::startStream(void) {
-	if (Pa_OpenStream(&mStream, NULL, &mOutputParameters, Sound::SAMPLE_RATE, Sound::FRAMES_PER_BUFFER, paClipOff, SoundOutputDevice::callback, this) != paNoError)
-		throw new SoundException("fail Pa_OpenStream");
+	if (mIsRunning == false) {
+		if (Pa_OpenStream(&mStream, NULL, &mOutputParameters, Sound::SAMPLE_RATE, Sound::FRAMES_PER_BUFFER, paClipOff, SoundOutputDevice::callback, this) != paNoError)
+			throw new SoundException("fail Pa_OpenStream");
 
-	if (Pa_StartStream(mStream) != paNoError)
-		throw new SoundException("fail Pa_StartStream");
+		if (Pa_StartStream(mStream) != paNoError)
+			throw new SoundException("fail Pa_StartStream");
+
+		mIsRunning = true;
+	}
 }
 
 void	SoundOutputDevice::stopStream(void) {
-	if (Pa_CloseStream(mStream) != paNoError)
-		throw new SoundException("fail Pa_StopStream");
+	if (mIsRunning == true) {
+		if (Pa_CloseStream(mStream) != paNoError)
+			throw new SoundException("fail Pa_StopStream");
+
+		mIsRunning = false;
+	}
 }
 
 ISoundDevice	&SoundOutputDevice::operator<<(const Sound::Decoded &sound) {

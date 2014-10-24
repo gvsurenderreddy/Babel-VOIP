@@ -4,7 +4,7 @@
 #include "ScopedLock.hpp"
 #include <cstring>
 
-SoundInputDevice::SoundInputDevice(void) : mStream(NULL) {
+SoundInputDevice::SoundInputDevice(void) : mStream(NULL), mIsRunning(false) {
 	if (Pa_Initialize() != paNoError)
 		throw new SoundException("fail Pa_Initialize");
 
@@ -12,6 +12,7 @@ SoundInputDevice::SoundInputDevice(void) : mStream(NULL) {
 }
 
 SoundInputDevice::~SoundInputDevice(void) {
+	stopStream();
 	Pa_Terminate();
 }
 
@@ -28,19 +29,26 @@ void	SoundInputDevice::initInputDevice(void) {
 }
 
 void	SoundInputDevice::startStream(void) {
-	if (Pa_OpenStream(&mStream, &mInputParameters, NULL, Sound::SAMPLE_RATE, Sound::FRAMES_PER_BUFFER, paClipOff, SoundInputDevice::callback, this) != paNoError)
-		throw new SoundException("fail Pa_OpenStream");
+	if (mIsRunning == false) {
+		if (Pa_OpenStream(&mStream, &mInputParameters, NULL, Sound::SAMPLE_RATE, Sound::FRAMES_PER_BUFFER, paClipOff, SoundInputDevice::callback, this) != paNoError)
+			throw new SoundException("fail Pa_OpenStream");
 
-	if (Pa_StartStream(mStream) != paNoError)
-		throw new SoundException("fail Pa_StartStream");
+		if (Pa_StartStream(mStream) != paNoError)
+			throw new SoundException("fail Pa_StartStream");
+		
+		mIsRunning = true;
+	}
 }
 
 void	SoundInputDevice::stopStream(void) {
-	if (Pa_CloseStream(mStream) != paNoError)
-		throw new SoundException("fail Pa_StopStream");
+	if (mIsRunning == true) {
+		if (Pa_CloseStream(mStream) != paNoError)
+			throw new SoundException("fail Pa_StopStream");
+
+		mIsRunning = false;
+	}
 }
 
-#include <iostream>
 ISoundDevice	&SoundInputDevice::operator<<(const Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
