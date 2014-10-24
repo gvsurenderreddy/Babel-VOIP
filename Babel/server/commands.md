@@ -1,59 +1,117 @@
-# Commands
+# update
 
-## update
-### void Client::update(const std::vector<std::string> &args)
-### bool BabelServer::onUpdate(const std::string &account, const std::string &password)
+## Client.cpp
 
-## subscribe
-###	void Client::Subscribe(const std::vector<std::string> &args)
-* 
-### bool BabelServer::onSubscribe(const std::string &acount, const std::string &password)
-* 
+* Lorem ipsum
 
-## connect
-### void Client::Connect(const std::vector<std::string> &args)
-* 
-### bool BabelServer::onConnect(const std::string &account, const std::string &password)	
-* 
+## BabelServer.cpp
 
-## disconnect
-### void BabelServer::onDisconnect(const std::string &account)
-* 
-### void Client::Disconnect(const std::vector<std::string> &args)
-* 
+* Lorem ipsum
 
-## getContact	
-### const std::string& BabelServer::onGetContact(const std::list<std::string> &contacts)
-* 
-### void Client::GetContact(const std::vector<std::string> &args)
-* 
+---------------
 
-## addContact
-### bool BabelServer::onAddContact(const std::string &account)
-* 
-### void Client::AddContact(const std::vector<std::string> &args)
-* 
+# subscribe
 
-## delContact
-### void BabelServer::DellContact(const std::string &args)
-* 
-###	void Client::DellContact(const std::vector<std::string> &args)
-* 
+## Client.cpp
 
-## acceptContact
-### void BabelServer::onAcceptContact(const bool &accept, const std::string &account)
-* 
-### void Client::AcceptContact(const std::vector<std::string> &args)
-* 
+* Lorem ipsum
 
-## callSomeone
-### void BabelServer::onCallSomeone(const std::string &account)
-* 
-### void Client::CallSomeone(const std::vector<std::string> &args)
-* 
+## BabelServer.cpp
 
-## hangCall
-### void BabelServer::onHangCall(const bool &hang, const std::string &account)
-* 
-### void Client::HangCall(const std::vector<std::string> &args)
-* 
+* Lorem ipsum
+
+---------------
+
+# connect
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# disconnect
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# getContact
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# addContact
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# delContact
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# acceptContact
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# callSomeone
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
+
+---------------
+
+# hangCall
+
+## Client.cpp
+
+* Lorem ipsum
+
+## BabelServer.cpp
+
+* Lorem ipsum
