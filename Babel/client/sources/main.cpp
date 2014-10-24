@@ -3,8 +3,9 @@
 
 int						main(int ac, char **av) {
 	QApplication		app(ac, av);
-	Babel			babel;
+	Babel				babel;
 
+	qRegisterMetaType<Sound::Encoded>();
 	babel.run();
 	return app.exec();
 }
