@@ -155,26 +155,8 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
     return message;
 }
 
-void TcpClient::readHandler(const boost::system::error_code & error, std::size_t bytesTransfered)
-{
-    if (!error)
-    {
-        std::string str(mReadBuffer, bytesTransfered);
-        mBuffer.insert(mBuffer.end(), str.begin(), str.end());
-        if (mListener)
-            mListener->onSocketReadable(this, bytesTransfered);
-        startRecv();
-    }
-    else
-    {
-        std::cout << error.message() << std::endl;
-        closeClient();
-    }
-}
-
 unsigned int TcpClient::nbBytesToRead() const
 {
-
     //return mBuffer.size();
 	return (2000);
 }
