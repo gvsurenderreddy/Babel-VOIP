@@ -2,7 +2,7 @@
 
 BabelFlyer::BabelFlyer(void)
 {
-	//mUi.setupUi(this);
+	mUi.setupUi(this);
 }
 
 BabelFlyer::~BabelFlyer(void)

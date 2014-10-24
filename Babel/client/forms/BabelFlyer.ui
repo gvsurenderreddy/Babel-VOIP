@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Flyer</class>
- <widget class="QWidget" name="Flyer">
+ <class>BabelFlyer</class>
+ <widget class="QWidget" name="BabelFlyer">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,23 +11,120 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Babel</string>
   </property>
   <property name="styleSheet">
    <string notr="true">/*background-color: rgb(22, 120, 166);*/
-background-color: qlineargradient(x1:1, y1:-1, x2:-1, y2:1, stop:0 white, stop: 0.4 rgb(24, 112, 255), stop:1 rgb(53, 201, 255))</string>
+/*background-color: qlineargradient(x1:1, y1:-1, x2:-1, y2:1, stop:0 white, stop: 0.4 rgb(24, 112, 255), stop:1 rgb(53, 201, 255));*/
+background-image: url(:/background_image.png);
+</string>
   </property>
+  <widget class="QPushButton" name="login">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>700</y>
+     <width>471</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Small Fonts</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+     <stylestrategy>PreferDefault</stylestrategy>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+   </property>
+   <property name="text">
+    <string>se connectez</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="inscription">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>750</y>
+     <width>471</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <family>Small Fonts</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+     <underline>false</underline>
+     <strikeout>false</strikeout>
+     <stylestrategy>PreferDefault</stylestrategy>
+     <kerning>true</kerning>
+    </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgb(0, 170, 255);
+color: rgb(255, 255, 255);
+</string>
+   </property>
+   <property name="text">
+    <string>s'inscrire</string>
+   </property>
+  </widget>
   <widget class="QLabel" name="logo">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>40</y>
+     <y>150</y>
      <width>512</width>
      <height>491</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+    <string notr="true">background-color: rgba(255, 255, 255, 0);
+background: none;</string>
    </property>
    <property name="text">
     <string/>
@@ -49,21 +146,22 @@ background-color: qlineargradient(x1:1, y1:-1, x2:-1, y2:1, stop:0 white, stop: 
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>240</y>
+     <y>370</y>
      <width>511</width>
-     <height>111</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>MS Sans Serif</family>
-     <pointsize>42</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
+     <family>Small Fonts</family>
+     <pointsize>32</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 192);
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 224);
 </string>
    </property>
    <property name="text">

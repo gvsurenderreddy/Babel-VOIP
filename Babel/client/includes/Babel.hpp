@@ -4,6 +4,7 @@
 #include "Contact.hpp"
 #include "BabelMainWindow.hpp"
 #include "BabelContactWidget.hpp"
+#include "BabelFlyer.hpp"
 #include "CallManager.hpp"
 #include "ServerCommunication.hpp"
 
