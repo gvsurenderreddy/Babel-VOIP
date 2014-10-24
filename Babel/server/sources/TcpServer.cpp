@@ -22,25 +22,24 @@ void TcpServer::createServer(int port, int /*queueSize*/)
 
 void TcpServer::startSignals(void)
 {
-    //boost::asio::signal_set signals(mService, SIGINT);
-    //signals.async_wait(boost::bind(&boost::asio::io_service::stop, &mService));
+    boost::asio::signal_set signals(mService, SIGINT, SIGTERM);
+    signals.async_wait([this](const boost::system::error_code& error, int signum) {
+        if (!error && (signum == SIGINT || signum == SIGTERM))
+            mService.stop();
+    });
 }
 
 void TcpServer::startAccept(void)
 {
     tcp::socket *socket = new tcp::socket(mService);
-
     mSockets.push_back(socket);
-    mAcceptor->async_accept(*socket, boost::bind(&TcpServer::handle_accept, this, boost::asio::placeholders::error));
-}
-
-void TcpServer::handle_accept(const boost::system::error_code& error)
-{
-    if (error)
-        std::cout << error.message() << std::endl;
-    else if (mListener)
-        mListener->onNewConnection(this);
-    startAccept();
+    mAcceptor->async_accept(*socket, [this](const boost::system::error_code& error) {
+        if (error)
+            std::cout << error.message() << std::endl;
+        else if (mListener)
+            mListener->onNewConnection(this);
+        startAccept();
+    });
 }
 
 void TcpServer::closeServer()
@@ -65,7 +64,6 @@ void TcpServer::setOnSocketEventListener(TcpServer::OnSocketEvent *listener)
 
 IClientSocket* TcpServer::getNewClient()
 {
-    std::cout << __FUNCTION__ << std::endl;
     IClientSocket* client = new TcpClient;
     tcp::socket *socket = mSockets.front();
     mSockets.pop_front();

@@ -46,8 +46,7 @@ class TcpClient : public IClientSocket
 
     // handlers
     private:
-        void            startRead();
-        void            readHandler(const boost::system::error_code &errorCode, std::size_t bytesTransfered);
+        void            startRecv();
         void            sendHandler(const boost::system::error_code &ec, std::size_t bytesTransfered);
 
     // listeners
