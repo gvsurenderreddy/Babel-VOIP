@@ -3,12 +3,8 @@
 
 int						main(int ac, char **av) {
 	QApplication		app(ac, av);
-	BabelMainWindow		gui;
+	Babel				babel;
 
-	gui.show();
-	/*Babel				babel;
-
-	qRegisterMetaType<Sound::Encoded>();
-	babel.run();*/
+	babel.run();
 	return app.exec();
 }

@@ -37,8 +37,7 @@ public:
 	virtual ~ICommand() {}
 
 	//handle ICommand
-	virtual std::vector<std::string>	*getParam(TcpClient &socket) = 0;
-	virtual ICommand::Instruction		getInstruction(void) = 0;
-	virtual int							getSizeHeader(void) = 0;
+	virtual std::vector<std::string>	*getParam(IClientSocket *socket) = 0;
+	virtual IClientSocket::Message		*setParam(std::vector<std::string> *param) = 0;
 	virtual int							getSizeBody(void) = 0;
 };

@@ -4,7 +4,7 @@
 #include "ScopedLock.hpp"
 #include <cstring>
 
-SoundInputDevice::SoundInputDevice(void) : mStream(NULL), mIsRunning(false) {
+SoundInputDevice::SoundInputDevice(void) : mStream(NULL), mIsRunning(false), mListener(NULL) {
 	if (Pa_Initialize() != paNoError)
 		throw new SoundException("fail Pa_Initialize");
 
@@ -84,14 +84,24 @@ ISoundDevice	&SoundInputDevice::operator>>(Sound::Decoded &sound) {
 
 int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *data) {
 	SoundInputDevice *obj = reinterpret_cast<SoundInputDevice *>(data);
-	ScopedLock scopedLock(&obj->mMutex);
 
-	Sound::Decoded *sound = new Sound::Decoded;
-	sound->size = framesPerBuffer * Sound::NB_CHANNELS;
-	sound->buffer = new float[sound->size];
-	std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));
+	{
+		ScopedLock scopedLock(&obj->mMutex);
 
-	obj->mBuffers.push_back(sound);
+		Sound::Decoded *sound = new Sound::Decoded;
+		sound->size = framesPerBuffer * Sound::NB_CHANNELS;
+		sound->buffer = new float[sound->size];
+		std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));
+
+		obj->mBuffers.push_back(sound);
+	}
+	
+	if (obj->mListener)
+	  obj->mListener->onSoundAvailable(obj);
 
 	return paContinue;
+}
+
+void	SoundInputDevice::setOnSoundDeviceEventListener(ISoundDevice::OnSoundDeviceEvent *listener) {
+  mListener = listener;
 }

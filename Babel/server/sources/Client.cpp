@@ -10,6 +10,7 @@
 Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient)
 {
     mSocket->setOnSocketEventListener(this);
+	handleCmd = new HandleCmd(clientSocket);
 }
 
 Client::~Client()
@@ -26,8 +27,14 @@ void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
 }
 
 void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
-    const IClientSocket::Message message = socket->receive(nbBytesToRead);
-	socket->send(message);
+	std::vector<std::string> *param;
+
+	socket;
+	nbBytesToRead;
+	while ((param = this->handleCmd->unPackCmd()) != NULL){
+		this->exeCmd(this->handleCmd->getInstruction(), param);
+		delete param;
+	}
 }
 
 void	Client::onSocketClosed(IClientSocket *socket){
@@ -75,51 +82,92 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 /*
 ** Function cmd
 */
-void	Client::update(const std::vector<std::string> &args){
-	args;
+void	Client::Subscribe(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Subscribe(const std::vector<std::string> &args){
-	args;
+void	Client::Connect(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Connect(const std::vector<std::string> &args){
-	args;
+void	Client::Disconnect(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Disconnect(const std::vector<std::string> &args){
-	args;
+void	Client::GetContact(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::GetContact(const std::vector<std::string> &args){
-	args;
+void	Client::Update(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Update(const std::vector<std::string> &args){
-	args;
+void	Client::AddContact(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::AddContact(const std::vector<std::string> &args){
-	args;
+void	Client::DellContact(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::DellContact(const std::vector<std::string> &args){
-	args;
+void	Client::AcceptContact(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::AcceptContact(const std::vector<std::string> &args){
-	args;
+void	Client::CallSomeone(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::CallSomeone(const std::vector<std::string> &args){
-	args;
+void	Client::HangCall(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::HangCall(const std::vector<std::string> &args){
-	args;
+void	Client::List(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
-void	Client::exeCmd(const int token, const std::vector<std::string> &args){
-	args;
-	token;
+void	Client::Show(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::SHOW, args);
+}
+
+void	Client::SendMsg(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
+}
+
+void	Client::CloseCall(std::vector<std::string> *args){
+	this->handleCmd->packCmd(ICommand::ERR, args);
+}
+
+void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> *param){
+	switch (instruction)
+	{
+	case ICommand::ADD:
+		this->AddContact(param);
+	case ICommand::UPDATE:
+		this->Update(param);
+	case ICommand::REG:
+		this->Subscribe(param);
+	case ICommand::LOG:
+		this->Connect(param);
+	case ICommand::LIST:
+		this->List(param);
+	case ICommand::SHOW:
+		this->Show(param);
+	case ICommand::CALL:
+		this->CallSomeone(param);
+	case ICommand::ACCEPT_ADD:
+		this->AcceptContact(param);
+	case ICommand::DEL:
+		this->DellContact(param);
+	case ICommand::EXIT:
+		this->Disconnect(param);
+	case ICommand::SEND:
+		this->SendMsg(param);
+	case ICommand::ACCEPT_CALL:
+		this->HangCall(param);
+	case ICommand::CLOSE_CALL:
+		this->CloseCall(param);
+	default:
+		return ;
+	}
 }

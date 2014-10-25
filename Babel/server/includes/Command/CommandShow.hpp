@@ -2,17 +2,22 @@
 
 #include "ICommand.hpp"
 
-class CommandUpdate : public ICommand{
+class CommandShow : public ICommand{
 public:
-	CommandUpdate();
-	~CommandUpdate();
+	CommandShow();
+	~CommandShow();
 
 	//body
 	struct Body{
-		char	accountName[256];
-		char	pseudo[256];
-		char	password[256];
-		char	status;
+		char				accountName[256];
+	};
+
+	struct BodySend{
+		ICommand::Header	header;
+		char				accountName[256];
+		char				pseudo[256];
+		char				status;
+		char				isConnected;
 	};
 
 	//heritage from ICommand

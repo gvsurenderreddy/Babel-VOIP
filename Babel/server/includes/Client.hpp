@@ -2,6 +2,7 @@
 
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
+#include "HandleCmd.hpp"
 
 #include <vector>
 #include <list>
@@ -74,20 +75,25 @@ private:
 	std::list<std::string>		contact;
 	std::string					account;
 
-	//function cmd
-	void	update(const std::vector<std::string> &args);
-	void	Subscribe(const std::vector<std::string> &args);
-	void	Connect(const std::vector<std::string> &args);
-	void	Disconnect(const std::vector<std::string> &args);
-	void	GetContact(const std::vector<std::string> &args);
-	void	Update(const std::vector<std::string> &args);
-	void	AddContact(const std::vector<std::string> &args);
-	void	DellContact(const std::vector<std::string> &args);
-	void	AcceptContact(const std::vector<std::string> &args);
-	void	CallSomeone(const std::vector<std::string> &args);
-	void	HangCall(const std::vector<std::string> &args);
+	//cmd
+	HandleCmd	*handleCmd;
 
-	void	exeCmd(const int token, const std::vector<std::string> &args);
+	void		Subscribe(std::vector<std::string> *args);
+	void		Connect(std::vector<std::string> *args);
+	void		Disconnect(std::vector<std::string> *args);
+	void		GetContact(std::vector<std::string> *args);
+	void		Update(std::vector<std::string> *args);
+	void		AddContact(std::vector<std::string> *args);
+	void		DellContact(std::vector<std::string> *args);
+	void		AcceptContact(std::vector<std::string> *args);
+	void		CallSomeone(std::vector<std::string> *args);
+	void		HangCall(std::vector<std::string> *args);
+	void		List(std::vector<std::string> *args);
+	void		Show(std::vector<std::string> *args);
+	void		SendMsg(std::vector<std::string> *args);
+	void		CloseCall(std::vector<std::string> *args);
+
+	void		exeCmd(ICommand::Instruction instruction, std::vector<std::string> *args);
 
 	//recup cmd
 	/*

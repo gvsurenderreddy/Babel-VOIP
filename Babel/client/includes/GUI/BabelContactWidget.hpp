@@ -7,15 +7,15 @@ class BabelContactWidget : public QWidget, public Ui_BabelContactWidget
 {
 	// ctor - dtor
 	public:
-	BabelContactWidget(void);
-	~BabelContactWidget(void);
+		BabelContactWidget(void);
+		~BabelContactWidget(void);
 
 	// coplien form
 	private:
-	BabelContactWidget(const BabelContactWidget &) : QWidget() {}
-	const BabelContactWidget &operator=(const BabelContactWidget &) { return *this; }
+		BabelContactWidget(const BabelContactWidget &) : QWidget() {}
+		const BabelContactWidget &operator=(const BabelContactWidget &) { return *this; }
 
 	// attributes
 	private:
-	Ui::BabelContactWidget	mUi;
+		Ui::BabelContactWidget	mUi;
 };

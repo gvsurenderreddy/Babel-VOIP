@@ -49,6 +49,18 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 						includes/Command/ICommand.hpp			\
 						includes/Command/CommandUpdate.hpp		\
 						includes/Command/CommandAdd.hpp			\
+						includes/Command/CommandReg.hpp			\
+						includes/Command/CommandLog.hpp			\
+						includes/Command/CommandList.hpp		\
+						includes/Command/CommandShow.hpp		\
+						includes/Command/CommandAcceptAdd.hpp	\
+						includes/Command/CommandDel.hpp			\
+						includes/Command/CommandExit.hpp		\
+						includes/Command/CommandSend.hpp		\
+						includes/Command/CommandCall.hpp		\
+						includes/Command/CommandAcceptCall.hpp	\
+						includes/Command/CommandCloseCall.hpp	\
+						includes/Command/CommandErr.hpp			\
 						includes/Command/HandleCmd.hpp			\
 						includes/Factory.hpp
 
@@ -60,6 +72,18 @@ SOURCES         +=      sources/main.cpp                        \
 						sources/Command/ICommand.cpp			\
 						sources/Command/CommandUpdate.cpp		\
 						sources/Command/CommandAdd.cpp			\
+						sources/Command/CommandReg.cpp			\
+						sources/Command/CommandLog.cpp			\
+						sources/Command/CommandList.cpp			\
+						sources/Command/CommandShow.cpp			\
+						sources/Command/CommandAcceptAdd.cpp	\
+						sources/Command/CommandDel.cpp			\
+						sources/Command/CommandExit.cpp			\
+						sources/Command/CommandSend.cpp			\
+						sources/Command/CommandCall.cpp			\
+						sources/Command/CommandAcceptCall.cpp	\
+						sources/Command/CommandCloseCall.cpp	\
+						sources/Command/CommandErr.cpp			\
 						sources/Command/HandleCmd.cpp			\
 						sources/Factory.cpp
 
