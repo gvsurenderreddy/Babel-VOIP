@@ -15,6 +15,7 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// action when click on back
 	QObject::connect(mLogin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
+	QObject::connect(mSignin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)

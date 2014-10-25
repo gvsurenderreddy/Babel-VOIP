@@ -17,42 +17,6 @@
    <string notr="true">background-image: url(:/background_image.png);
 </string>
   </property>
-  <widget class="QLabel" name="mail">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>192</y>
-     <width>512</width>
-     <height>64</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>MS Shell Dlg 2</family>
-     <pointsize>12</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(0, 0, 0, 0);
-font: 12pt &quot;MS Shell Dlg 2&quot;;
-color: #ffffff;
-padding: 20px;
-</string>
-   </property>
-   <property name="text">
-    <string>Entrez votre email</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-   </property>
-  </widget>
   <widget class="QPushButton" name="close">
    <property name="geometry">
     <rect>
@@ -130,100 +94,118 @@ color: rgb(255, 255, 255);
     <string>&lt;</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="emailEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>256</y>
-     <width>470</width>
-     <height>42</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(0, 0, 0, 64);
-color: rgb(255, 255, 255);
-font: 12pt &quot;MS Sans Serif&quot;;
-padding: 8px;
-</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="pwd">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>320</y>
-     <width>512</width>
-     <height>64</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>MS Shell Dlg 2</family>
-     <pointsize>12</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(0, 0, 0, 0);
-font: 12pt &quot;MS Shell Dlg 2&quot;;
-color: #ffffff;
-padding: 20px;
-</string>
-   </property>
-   <property name="text">
-    <string>Tapez votre mot de passe</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pwdEdit">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>384</y>
-     <width>470</width>
-     <height>42</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(0, 0, 0, 64);
-color: rgb(255, 255, 255);
-font: 12pt &quot;MS Sans Serif&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>450</y>
-     <width>128</width>
-     <height>42</height>
+     <x>60</x>
+     <y>550</y>
+     <width>391</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(170, 44, 44);
+background-color: rgb(22, 87, 127);
 color: rgb(255, 255, 255);
-font: 12pt &quot;MS Sans Serif&quot;;
+font: 12pt &quot;Verdana&quot;;
+border-style: outset;
+      </string>
+   </property>
+   <property name="text">
+    <string>validez</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="emailEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>340</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Nom de compte</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pwdEdit1">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>410</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: #000;
+font: 10pt &quot;Verdana&quot;;
+lineedit-password-character: 9679;
+padding: 8px;
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Nouveau mot de passe</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pwdEdit2">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>480</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: #000;
+font: 10pt &quot;Verdana&quot;;
+lineedit-password-character: 9679;
+padding: 8px;
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Confirmation du mot de passe</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>77</y>
+     <width>511</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 192);
+font: 28pt &quot;MS Sans Sherif&quot;;
+color: rgba(15, 87, 154, 192);
 
 </string>
    </property>
    <property name="text">
-    <string>validez</string>
+    <string>Inscription</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>
