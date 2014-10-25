@@ -11,7 +11,7 @@ public:
 
 	// coplien form
 private:
-	BabelInscription(const BabelInscription &) {}
+	BabelInscription(const BabelInscription &) : QWidget() {}
 	const BabelInscription &operator=(const BabelInscription &) { return *this; }
 
 	// attributes
