@@ -5,9 +5,14 @@ using namespace std;
 
 BabelMainWindow::BabelMainWindow(void)
 {
-	mTimer = new QTimer(this);
 	mUi.setupUi(this);
-	QObject::connect(mTimer, SIGNAL(timeout()), this, SLOT(close()));
+
+	// action when click on login
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mConnexion, SLOT(show()));
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mFlyer, SLOT(hide()));
+
+	// action when click on back
+	QObject::connect(mConnexion.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -15,16 +20,7 @@ BabelMainWindow::~BabelMainWindow(void)
 	cout << __FUNCTION__ << endl;
 }
 
-void		BabelMainWindow::show()
+void	BabelMainWindow::show()
 {
-	cout << __FUNCTION__ << endl;
-	mTimer->start(1024);
-	mContact.show();
-}
-
-void		BabelMainWindow::timeoutOpenContact()
-{
-	cout << __FUNCTION__ << ": " << __DATE__ << endl;
-	close();
-	mContact.show();
+	mFlyer.show();
 }

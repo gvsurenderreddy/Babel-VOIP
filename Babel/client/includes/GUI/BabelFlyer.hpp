@@ -17,4 +17,8 @@ private:
 	// attributes
 private:
 	Ui::BabelFlyer	mUi;
+
+	// methods
+public:
+	Ui::BabelFlyer const	&getUi() const { return mUi; }
 };

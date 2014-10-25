@@ -9,9 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
-    <height>872</height>
+    <width>512</width>
+    <height>870</height>
    </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string>Babel</string>
@@ -23,9 +26,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">/*background-color: rgb(22, 120, 166);*/
-/*background-color: qlineargradient(x1:1, y1:-1, x2:-1, y2:1, stop:0 white, stop: 0.4 rgb(24, 112, 255), stop:1 rgb(53, 201, 255));*/
-background-image: url(:/background_image.png);
+   <string notr="true">background-image: url(:/background_image.png);
 </string>
   </property>
   <property name="windowFilePath">
@@ -36,8 +37,8 @@ background-image: url(:/background_image.png);
     <rect>
      <x>20</x>
      <y>700</y>
-     <width>471</width>
-     <height>41</height>
+     <width>470</width>
+     <height>42</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -48,7 +49,7 @@ background-image: url(:/background_image.png);
    </property>
    <property name="font">
     <font>
-     <family>Small Fonts</family>
+     <family>MS Sans Serif</family>
      <pointsize>12</pointsize>
      <weight>50</weight>
      <italic>false</italic>
@@ -70,9 +71,10 @@ background-image: url(:/background_image.png);
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
+border: none;
 background-color: rgb(0, 170, 255);
 color: rgb(255, 255, 255);
-</string>
+font: 12pt &quot;MS Sans Serif&quot;;</string>
    </property>
    <property name="text">
     <string>se connectez</string>
@@ -83,8 +85,8 @@ color: rgb(255, 255, 255);
     <rect>
      <x>20</x>
      <y>750</y>
-     <width>471</width>
-     <height>41</height>
+     <width>470</width>
+     <height>42</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -95,15 +97,11 @@ color: rgb(255, 255, 255);
    </property>
    <property name="font">
     <font>
-     <family>Small Fonts</family>
+     <family>MS Sans Serif</family>
      <pointsize>12</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
-     <underline>false</underline>
-     <strikeout>false</strikeout>
-     <stylestrategy>PreferDefault</stylestrategy>
-     <kerning>true</kerning>
     </font>
    </property>
    <property name="cursor">
@@ -117,8 +115,10 @@ color: rgb(255, 255, 255);
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
+border: none;
 background-color: rgb(0, 170, 255);
 color: rgb(255, 255, 255);
+font: 12pt &quot;MS Sans Serif&quot;;
 </string>
    </property>
    <property name="text">
@@ -159,7 +159,7 @@ background: none;</string>
     <rect>
      <x>0</x>
      <y>370</y>
-     <width>511</width>
+     <width>512</width>
      <height>71</height>
     </rect>
    </property>
@@ -200,6 +200,7 @@ background-color: rgba(255, 255, 255, 224);
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
+border: none;
 background-color: rgba(255, 255, 255, 32);
 color: rgb(255, 255, 255);</string>
    </property>
@@ -224,8 +225,10 @@ color: rgb(255, 255, 255);</string>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
+border: none;
 background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+</string>
    </property>
    <property name="text">
     <string>-</string>
