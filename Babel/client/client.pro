@@ -7,6 +7,7 @@ DESTDIR         =       build
 OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
+RCC_DIR         =       build/rcc
 
 QMAKE_CXXFLAGS	+=	-Wall
 
@@ -59,9 +60,13 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandShow.hpp			\
 			includes/Commands/CommandUpdate.hpp			\
 			includes/Commands/CommandException.hpp			\
+			includes/GUI/BabelFlyer.hpp				\
+			includes/GUI/BabelIdentification.hpp			\
+			includes/GUI/BabelContactWidget.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
 			includes/Contact.hpp					\
-			includes/Babel.hpp
+			includes/Babel.hpp					\
+			includes/ErrorStatus.hpp
 
 HEADERS		+=	dependencies/includes/portaudio.h
 
@@ -79,6 +84,9 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Audio/SoundPacketBuilder.cpp			\
 			sources/Audio/CallManager.cpp				\
 			sources/GUI/BabelMainWindow.cpp				\
+			sources/GUI/BabelContactWidget.cpp			\
+			sources/GUI/BabelFlyer.cpp				\
+			sources/GUI/BabelIdentification.cpp			\
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
 			sources/Commands/CommandAcceptAdd.cpp			\
@@ -98,9 +106,13 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Commands/ICommand.cpp				\
 			sources/Commands/CommandException.cpp			\
 			sources/Babel.cpp					\
-			sources/Contact.cpp
+			sources/Contact.cpp					\
+			sources/ErrorStatus.cpp
 
-FORMS		+=	forms/BabelMainWindow.ui
+FORMS		+=	forms/BabelMainWindow.ui				\
+			forms/BabelFlyer.ui					\
+			forms/BabelIdentification.ui				\
+			forms/BabelContactWidget.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc
 

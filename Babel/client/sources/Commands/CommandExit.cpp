@@ -1,5 +1,6 @@
 #include "CommandExit.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandExit::CommandExit(void) {
 }
@@ -19,7 +20,7 @@ IClientSocket::Message	CommandExit::getMessage(void) const {
 	packet->header.instructionCode = ICommand::EXIT;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandExit::PacketFromClient;
+	message.msgSize = sizeof(CommandExit::PacketFromClient);
 
 	return message;
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "iClientSocket.hpp"
+#include "IClientSocket.hpp"
 
-#define MIN(x, y) ((x) < (y) ? (x) : (y))
+#define MIN(x, y) (static_cast<int>(x) < static_cast<int>(y) ? (x) : (y))
 
 class ICommand {
 
@@ -22,12 +22,13 @@ class ICommand {
 			CALL,
 			ACCEPT_CALL,
 			CLOSE_CALL,
-			ERR
+			ERR,
+			UNKNOWN_INSTRUCTION
 		};
 
 	// header
 	public:
-		static const unsigned int	MAGIC_CODE;
+		static const int		MAGIC_CODE;
 		static const unsigned int	HEADER_SIZE;
 
 		struct Header {

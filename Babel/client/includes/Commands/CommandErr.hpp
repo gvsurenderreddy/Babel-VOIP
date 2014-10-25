@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ErrorStatus.hpp"
 #include "ICommand.hpp"
 
 class CommandErr : public ICommand {
@@ -9,13 +10,6 @@ class CommandErr : public ICommand {
 		struct PacketFromServer {
 			int	instructionCode;
 			int	errorCode;
-		};
-
-	// error codes
-	public:
-		enum ErrorCode {
-			OK = 0x01,
-			THE_IMPOSSIBLE_HAPPENED = 0x02
 		};
 
 	// ctor - dtor
@@ -38,13 +32,13 @@ class CommandErr : public ICommand {
 	// getters - setters
 	public:
 		ICommand::Instruction	getInstructionCode(void) const;
-		CommandErr::ErrorCode	getErrorCode(void) const;
+		ErrorStatus::ErrorCode	getErrorCode(void) const;
 		void					setInstructionCode(ICommand::Instruction instructionCode);
-		void					setErrorCode(CommandErr::ErrorCode errorCode);
+		void					setErrorCode(ErrorStatus::ErrorCode errorCode);
 
 	// attributes
 	private:
 		ICommand::Instruction	mInstructionCode;
-		CommandErr::ErrorCode	mErrorCode;
+		ErrorStatus::ErrorCode	mErrorCode;
 
 };

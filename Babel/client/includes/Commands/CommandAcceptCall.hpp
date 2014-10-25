@@ -16,6 +16,7 @@ class CommandAcceptCall : public ICommand {
 		struct PacketFromServer {
 			char	accountName[256];
 			char	host[15];
+			char	hasAccepted;
 		};
 
 	// ctor - dtor

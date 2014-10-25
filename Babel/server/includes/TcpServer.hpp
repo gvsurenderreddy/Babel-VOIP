@@ -2,6 +2,7 @@
 
 #include "IServerSocket.hpp"
 
+#include <list>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
@@ -16,16 +17,6 @@ using namespace boost::asio::ip;
 
 class TcpServer : public IServerSocket
 {
-    // enum
-    private:
-        enum
-        {
-            header_size = sizeof(int) + sizeof(char),
-            data_size = 10,
-            buffer_size = 1024,
-            max_stamp = 50
-        };
-
     // default ctor-dtor
     public:
         TcpServer();
@@ -58,23 +49,15 @@ class TcpServer : public IServerSocket
     public:
         void run();
 
-    // functions
-    public:
-        void read_header();
-
-    // functions handlers
+    // accept
     public:
         void startAccept(void);
-        void handle_accept(const boost::system::error_code& error);
 
     // attributes
     private:
         boost::asio::io_service                     mService;
         tcp::acceptor*                              mAcceptor;
         std::list<tcp::socket*>                     mSockets;
-        boost::array< char, buffer_size >           mBuffer;
-        unsigned int                                mIndex;
-
         IServerSocket::OnSocketEvent*               mListener;
 
 };

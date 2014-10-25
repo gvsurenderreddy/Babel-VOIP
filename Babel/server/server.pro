@@ -90,4 +90,4 @@ SOURCES         +=      sources/main.cpp                        \
 
 DEFINES			+=		_AFXDLL _MBCS
 
-win32:DEFINES	+=		_WIN32_WINNT=0x0501
+win32:DEFINES	+=		_WIN32_WINNT=0x0501 _CRT_SECURE_NO_WARNINGS

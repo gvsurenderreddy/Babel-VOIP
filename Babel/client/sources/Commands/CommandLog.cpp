@@ -1,5 +1,6 @@
 #include "CommandLog.hpp"
 #include "CommandException.hpp"
+#include <cstring>
 
 CommandLog::CommandLog(void)
 	: mAccountName(""), mPassword("") {}
@@ -15,14 +16,14 @@ IClientSocket::Message	CommandLog::getMessage(void) const {
 	IClientSocket::Message message;
 	CommandLog::PacketFromClient *packet = new CommandLog::PacketFromClient;
 
-	std::memset(packet, 0, sizeof CommandLog::PacketFromClient);
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof packet->accountName));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof packet->password));
+	std::memset(packet, 0, sizeof(CommandLog::PacketFromClient));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password)));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::LOG;
 
 	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof CommandLog::PacketFromClient;
+	message.msgSize = sizeof(CommandLog::PacketFromClient);
 
 	return message;
 }

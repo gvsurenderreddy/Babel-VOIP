@@ -23,12 +23,13 @@ TcpClient::~TcpClient()
 
 void TcpClient::connect(const std::string &/* addr */, int /* port */)
 {
+
 }
 
 void TcpClient::initFromSocket(void *socket)
 {
     mSocket = reinterpret_cast<tcp::socket*>(socket);
-    startRead();
+    startRecv();
 }
 
 void TcpClient::closeClient()
@@ -39,11 +40,23 @@ void TcpClient::closeClient()
         mListener->onSocketClosed(this);
 }
 
-void TcpClient::startRead()
+void TcpClient::startRecv()
 {
-    mSocket->async_receive(boost::asio::buffer(mReadBuffer, TcpClient::BUFFER_SIZE),
-        boost::bind(&TcpClient::readHandler, this, boost::asio::placeholders::error,
-        boost::asio::placeholders::bytes_transferred));
+    mSocket->async_receive(boost::asio::buffer(mReadBuffer, TcpClient::BUFFER_SIZE), [this](const boost::system::error_code& error, std::size_t bytesTransfered) {
+        if (!error)
+        {
+            std::string str(mReadBuffer, bytesTransfered);
+            mBuffer.insert(mBuffer.end(), str.begin(), str.end());
+            if (mListener)
+                mListener->onSocketReadable(this, bytesTransfered);
+            startRecv();
+        }
+        else
+        {
+            std::cout << error.message() << std::endl;
+            closeClient();
+        }
+    });
 }
 
 void TcpClient::send(const IClientSocket::Message &msg)
@@ -112,23 +125,6 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
     mBuffer.erase(mBuffer.begin(), mBuffer.begin() + sizeToRead);
 
     return message;
-}
-
-void TcpClient::readHandler(const boost::system::error_code & error, std::size_t bytesTransfered)
-{
-    if (!error)
-    {
-        std::string str(mReadBuffer, bytesTransfered);
-        mBuffer.insert(mBuffer.end(), str.begin(), str.end());
-        if (mListener)
-            mListener->onSocketReadable(this, bytesTransfered);
-        startRead();
-    }
-    else
-    {
-        std::cout << error.message() << std::endl;
-        closeClient();
-    }
 }
 
 unsigned int TcpClient::nbBytesToRead() const
