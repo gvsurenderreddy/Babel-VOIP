@@ -39,6 +39,7 @@ void	CommandAcceptCall::initFromMessage(const IClientSocket::Message &message) {
 	CommandAcceptCall::PacketFromServer *packet = reinterpret_cast<CommandAcceptCall::PacketFromServer *>(message.msg);
 	mAccountName = packet->accountName;
 	mHost = packet->host;
+	mHasAccepted = packet->hasAccepted;
 }
 
 const QString	&CommandAcceptCall::getAccountName(void) const {

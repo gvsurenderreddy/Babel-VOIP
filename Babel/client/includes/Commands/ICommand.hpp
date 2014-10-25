@@ -22,7 +22,8 @@ class ICommand {
 			CALL,
 			ACCEPT_CALL,
 			CLOSE_CALL,
-			ERR
+			ERR,
+			UNKNOWN_INSTRUCTION
 		};
 
 	// header
