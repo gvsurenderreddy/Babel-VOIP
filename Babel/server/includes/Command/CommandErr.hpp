@@ -2,17 +2,16 @@
 
 #include "ICommand.hpp"
 
-class CommandUpdate : public ICommand{
+class CommandErr : public ICommand{
 public:
-	CommandUpdate();
-	~CommandUpdate();
+	CommandErr();
+	~CommandErr();
 
 	//body
 	struct Body{
-		char	accountName[256];
-		char	pseudo[256];
-		char	password[256];
-		char	status;
+		ICommand::Header	header;
+		int					instructionCode;
+		int					errorCode;
 	};
 
 	//heritage from ICommand

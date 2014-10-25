@@ -10,15 +10,14 @@ CommandUpdate::~CommandUpdate(){
 /*
 ** Heritage from ICommand
 */
-std::vector<std::string>		*CommandUpdate::getParam(TcpClient &socket){
+std::vector<std::string>		*CommandUpdate::getParam(IClientSocket *socket){
 	std::vector<std::string>	*t = new std::vector<std::string>;
 	CommandUpdate::Body			*body;
 	IClientSocket::Message		data;
 	std::string					status = "";
 
-	data = socket.receive(this->getSizeBody());
-	//body = static_cast<CommandUpdate::Body *>(data.msg);
-	body = (CommandUpdate::Body *)data.msg;
+	data = socket->receive(this->getSizeBody());
+	body = reinterpret_cast<CommandUpdate::Body *>(data.msg);
 	t->push_back(body->accountName);
 	t->push_back(body->pseudo);
 	t->push_back(body->password);
@@ -27,13 +26,9 @@ std::vector<std::string>		*CommandUpdate::getParam(TcpClient &socket){
 	return t;
 }
 
-ICommand::Instruction		CommandUpdate::getInstruction(void){
-	ICommand::Instruction	t;
-	return t;
-}
-
-int							CommandUpdate::getSizeHeader(void){
-	return ICommand::HEADER_SIZE;
+IClientSocket::Message		*CommandUpdate::setParam(std::vector<std::string> *param){
+	param;
+	return NULL;
 }
 
 int							CommandUpdate::getSizeBody(void){
