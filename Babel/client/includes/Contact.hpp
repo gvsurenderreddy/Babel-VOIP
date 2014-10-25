@@ -37,6 +37,7 @@ class Contact {
 		Contact::Status	getStatus(void) const;
 		const QString	&getHost(void) const;
 		int				getPort(void) const;
+		const QString	&getPassword(void) const;
 		bool			isConnected(void) const;
 
 		void	setAccountName(const QString &accountName);
@@ -44,6 +45,7 @@ class Contact {
 		void	setStatus(Contact::Status status);
 		void	setHost(const QString &host);
 		void	setPort(int host);
+		void	setPassword(const QString &password);
 		void	setIsConnected(bool isConnected);
 
 	// attributes
@@ -53,6 +55,7 @@ class Contact {
 		Contact::Status	mStatus;
 		QString			mHost;
 		int				mPort;
+		QString			mPassword;
 		bool			mIsConnected;
 
 };

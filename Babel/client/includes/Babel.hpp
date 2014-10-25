@@ -34,6 +34,7 @@ class Babel {
 	// attributes
 	private:
 		Babel::State		mState;
+		Contact				mLoggedUser;
 		QList<Contact>		mContacts;
 		BabelMainWindow		mMainWindow;
 		CallManager			mCallManager;

@@ -3,7 +3,7 @@
 #include <cstring>
 
 CommandErr::CommandErr(void)
-	: mInstructionCode(ICommand::EXIT), mErrorCode(CommandErr::OK) {}
+	: mInstructionCode(ICommand::EXIT), mErrorCode(ErrorStatus::OK) {}
 
 CommandErr::~CommandErr(void) {
 }
@@ -26,14 +26,14 @@ void	CommandErr::initFromMessage(const IClientSocket::Message &message) {
 
 	CommandErr::PacketFromServer *packet = reinterpret_cast<CommandErr::PacketFromServer *>(message.msg);
 	mInstructionCode = static_cast<ICommand::Instruction>(packet->instructionCode);
-	mErrorCode = static_cast<CommandErr::ErrorCode>(packet->errorCode);
+	mErrorCode = static_cast<ErrorStatus::ErrorCode>(packet->errorCode);
 }
 
 ICommand::Instruction	CommandErr::getInstructionCode(void) const {
 	return mInstructionCode;
 }
 
-CommandErr::ErrorCode	CommandErr::getErrorCode(void) const {
+ErrorStatus::ErrorCode	CommandErr::getErrorCode(void) const {
 	return mErrorCode;
 }
 
@@ -41,6 +41,6 @@ void	CommandErr::setInstructionCode(ICommand::Instruction instructionCode) {
 	mInstructionCode = instructionCode;
 }
 
-void	CommandErr::setErrorCode(CommandErr::ErrorCode errorCode) {
+void	CommandErr::setErrorCode(ErrorStatus::ErrorCode errorCode) {
 	mErrorCode = errorCode;
 }

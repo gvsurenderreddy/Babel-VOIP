@@ -65,72 +65,98 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 void	ServerCommunication::handleShowCommand(const ICommand *command) {
 	const CommandShow *commandShow = dynamic_cast<const CommandShow *>(command);
 
-	emit receiveContactInfo(commandShow->getAccountName(), commandShow->getPseudo(), commandShow->getStatus(), commandShow->isConnected());
+	Contact contact;
+	contact.setAccountName(commandShow->getAccountName());
+	contact.setPseudo(commandShow->getPseudo());
+	contact.setStatus(commandShow->getStatus());
+	contact.setIsConnected(commandShow->isConnected());
+
+	emit receiveContactInfo(contact);
 }
 
 void	ServerCommunication::handleAddCommand(const ICommand *command) {
 	const CommandAdd *commandAdd = dynamic_cast<const CommandAdd *>(command);
 
-	emit receiveContactInvitation(commandAdd->getAccountName());
+	Contact contact;
+	contact.setAccountName(commandAdd->getAccountName());
+	emit receiveContactInvitation(contact);
 }
 
 void	ServerCommunication::handleDelCommand(const ICommand *command) {
 	const CommandDel *commandDel = dynamic_cast<const CommandDel *>(command);
 
-	emit receiveContactDeletion(commandDel->getAccountName());
+	Contact contact;
+	contact.setAccountName(commandDel->getAccountName());
+
+	emit receiveContactDeletion(contact);
 }
 
 void	ServerCommunication::handleSendCommand(const ICommand *command) {
 	const CommandSend *commandSend = dynamic_cast<const CommandSend *>(command);
 
-	emit receiveMessage(commandSend->getAccountName(), commandSend->getTextMessage());
+	Contact contact;
+	contact.setAccountName(commandSend->getAccountName());
+
+	emit receiveMessage(contact, commandSend->getTextMessage());
 }
 
 void	ServerCommunication::handleCallCommand(const ICommand *command) {
 	const CommandCall *commandCall = dynamic_cast<const CommandCall *>(command);
 
-	emit receiveCallInvitation(commandCall->getAccountName());
+	Contact contact;
+	contact.setAccountName(commandCall->getAccountName());
+
+	emit receiveCallInvitation(contact);
 }
 
 void	ServerCommunication::handleAcceptCallCommand(const ICommand *command) {
 	const CommandAcceptCall *commandAcceptCall = dynamic_cast<const CommandAcceptCall *>(command);
 
-	emit receiveCallAnswer(commandAcceptCall->getAccountName(), commandAcceptCall->getHost(), commandAcceptCall->hasAccepted());
+	Contact contact;
+	contact.setAccountName(commandAcceptCall->getAccountName());
+	contact.setHost(commandAcceptCall->getHost());
+
+	emit receiveCallAnswer(contact, commandAcceptCall->hasAccepted());
 }
 
 void	ServerCommunication::handleCloseCallCommand(const ICommand *command) {
 	const CommandCloseCall *commandCloseCall = dynamic_cast<const CommandCloseCall *>(command);
 
-	emit receiveCallClose(commandCloseCall->getAccountName());
+	Contact contact;
+	contact.setAccountName(commandCloseCall->getAccountName());
+
+	emit receiveCallClose(contact);
 }
 
 void	ServerCommunication::handleErrCommand(const ICommand *command) {
 	const CommandErr *commandErr = dynamic_cast<const CommandErr *>(command);
 	ICommand::Instruction instruction = commandErr->getInstructionCode();
-	CommandErr::ErrorCode error_code = commandErr->getErrorCode();
-	bool success = error_code != CommandErr::OK;
+
+	ErrorStatus errorStatus;
+	errorStatus.setErrorCode(commandErr->getErrorCode());
+	errorStatus.setErrorOccurred(commandErr->getErrorCode() != ErrorStatus::OK);
 
 	int i;
 	for (i = 0; handleErrorsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleErrorsTab[i].instruction != instruction; i++);
 	if (handleErrorsTab[i].instruction == instruction)
-		emit (this->*handleErrorsTab[i].signal)(success, error_code);
+		emit (this->*handleErrorsTab[i].signal)(errorStatus);
 }
 
-void	ServerCommunication::createAccount(const QString &accountName, const QString &pseudo, const QString &password) {
+void	ServerCommunication::createAccount(const Contact &contact) {
 	CommandReg *commandReg = new CommandReg;
 
-	commandReg->setAccountName(accountName);
-	commandReg->setPseudo(pseudo);
-	commandReg->setPassword(password);
+	commandReg->setAccountName(contact.getAccountName());
+	commandReg->setPseudo(contact.getPseudo());
+	commandReg->setPassword(contact.getPassword());
 
 	mCommandPacketBuilder.sendCommand(commandReg);
 }
 
-void	ServerCommunication::authenticate(const QString &accountName, const QString &password) {
+void	ServerCommunication::authenticate(const Contact &contact) {
 	CommandLog *commandLog = new CommandLog;
 
-	commandLog->setAccountName(accountName);
-	commandLog->setPassword(password);
+	commandLog->setAccountName(contact.getAccountName());
+	commandLog->setPassword(contact.getPassword());
 
 	mCommandPacketBuilder.sendCommand(commandLog);
 }
@@ -139,43 +165,43 @@ void	ServerCommunication::getContactsInfo(void) {
 	mCommandPacketBuilder.sendCommand(new CommandList);
 }
 
-void	ServerCommunication::getContactInfo(const QString &accountName) {
+void	ServerCommunication::getContactInfo(const Contact &contact) {
 	CommandShow *commandShow = new CommandShow;
 
-	commandShow->setAccountName(accountName);
+	commandShow->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandShow);
 }
 
-void	ServerCommunication::addContact(const QString &accountName) {
+void	ServerCommunication::addContact(const Contact &contact) {
 	CommandAdd *commandAdd = new CommandAdd;
 
-	commandAdd->setAccountName(accountName);
+	commandAdd->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandAdd);
 }
 
-void	ServerCommunication::acceptContactInvitation(const QString &accountName, bool hasAccepted) {
+void	ServerCommunication::acceptContactInvitation(const Contact &contact, bool hasAccepted) {
 	CommandAcceptAdd *commandAcceptAdd = new CommandAcceptAdd;
 
-	commandAcceptAdd->setAccountName(accountName);
+	commandAcceptAdd->setAccountName(contact.getAccountName());
 	commandAcceptAdd->setHasAccepted(hasAccepted);
 
 	mCommandPacketBuilder.sendCommand(commandAcceptAdd);
 }
 
-void	ServerCommunication::deleteContact(const QString &accountName) {
+void	ServerCommunication::deleteContact(const Contact &contact) {
 	CommandDel *commandDel = new CommandDel;
 
-	commandDel->setAccountName(accountName);
+	commandDel->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandDel);
 }
 
-void	ServerCommunication::sendMessage(const QString &accountName, const QString &message) {
+void	ServerCommunication::sendMessage(const Contact &contact, const QString &message) {
 	CommandSend *commandSend = new CommandSend;
 
-	commandSend->setAccountName(accountName);
+	commandSend->setAccountName(contact.getAccountName());
 	commandSend->setTextMessage(message);
 
 	mCommandPacketBuilder.sendCommand(commandSend);
@@ -185,38 +211,38 @@ void	ServerCommunication::disconnect(void) {
 	mCommandPacketBuilder.sendCommand(new CommandExit);
 }
 
-void	ServerCommunication::updateInfo(const QString &accountName, const QString &pseudo, const QString &password, Contact::Status status) {
+void	ServerCommunication::updateInfo(const Contact &contact) {
 	CommandUpdate *commandUpdate = new CommandUpdate;
 
-	commandUpdate->setAccountName(accountName);
-	commandUpdate->setPseudo(pseudo);
-	commandUpdate->setPassword(password);
-	commandUpdate->setStatus(status);
+	commandUpdate->setAccountName(contact.getAccountName());
+	commandUpdate->setPseudo(contact.getPseudo());
+	commandUpdate->setPassword(contact.getPassword());
+	commandUpdate->setStatus(contact.getStatus());
 
 	mCommandPacketBuilder.sendCommand(commandUpdate);
 }
 
-void	ServerCommunication::call(const QString &accountName) {
+void	ServerCommunication::call(const Contact &contact) {
 	CommandCall *commandCall = new CommandCall;
 
-	commandCall->setAccountName(accountName);
+	commandCall->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandCall);
 }
 
-void	ServerCommunication::acceptCallInvitation(const QString &accountName, bool hasAccepted) {
+void	ServerCommunication::acceptCallInvitation(const Contact &contact, bool hasAccepted) {
 	CommandAcceptCall *commandAcceptCall = new CommandAcceptCall;
 
-	commandAcceptCall->setAccountName(accountName);
+	commandAcceptCall->setAccountName(contact.getAccountName());
 	commandAcceptCall->setHasAccepted(hasAccepted);
 
 	mCommandPacketBuilder.sendCommand(commandAcceptCall);
 }
 
-void	ServerCommunication::terminateCall(const QString &accountName) {
+void	ServerCommunication::terminateCall(const Contact &contact) {
 	CommandCloseCall *commandCloseCall = new CommandCloseCall;
 
-	commandCloseCall->setAccountName(accountName);
+	commandCloseCall->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandCloseCall);
 }
