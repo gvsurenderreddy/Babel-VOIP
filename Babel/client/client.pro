@@ -63,6 +63,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/GUI/BabelFlyer.hpp				\
 			includes/GUI/BabelIdentification.hpp			\
 			includes/GUI/BabelContactWidget.hpp			\
+			includes/GUI/BabelInscription.hpp			\
 			includes/GUI/BabelMainWindow.hpp			\
 			includes/Contact.hpp					\
 			includes/Babel.hpp					\
@@ -86,6 +87,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/GUI/BabelMainWindow.cpp				\
 			sources/GUI/BabelContactWidget.cpp			\
 			sources/GUI/BabelFlyer.cpp				\
+			sources/GUI/BabelInscription.cpp			\
 			sources/GUI/BabelIdentification.cpp			\
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
@@ -112,6 +114,7 @@ SOURCES         +=      sources/main.cpp                        		\
 FORMS		+=	forms/BabelMainWindow.ui				\
 			forms/BabelFlyer.ui					\
 			forms/BabelIdentification.ui				\
+			forms/BabelInscription.ui				\
 			forms/BabelContactWidget.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BabelIdentification</class>
- <widget class="QWidget" name="BabelIdentification">
+ <class>BabelInscription</class>
+ <widget class="QWidget" name="BabelInscription">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Identification</string>
+   <string>Inscription</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background-image: url(:/background_image.png);
@@ -234,7 +234,7 @@ font: 12pt &quot;MS Sans Serif&quot;;
   <connection>
    <sender>close</sender>
    <signal>clicked()</signal>
-   <receiver>BabelIdentification</receiver>
+   <receiver>BabelInscription</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -250,7 +250,7 @@ font: 12pt &quot;MS Sans Serif&quot;;
   <connection>
    <sender>minimize</sender>
    <signal>clicked()</signal>
-   <receiver>BabelIdentification</receiver>
+   <receiver>BabelInscription</receiver>
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -266,7 +266,7 @@ font: 12pt &quot;MS Sans Serif&quot;;
   <connection>
    <sender>back</sender>
    <signal>clicked()</signal>
-   <receiver>BabelIdentification</receiver>
+   <receiver>BabelInscription</receiver>
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">

@@ -1,275 +1,275 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BabelFlyer</class>
- <widget class="QWidget" name="BabelFlyer">
-  <property name="enabled">
-   <bool>true</bool>
-  </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>512</width>
-    <height>870</height>
-   </rect>
-  </property>
-  <property name="mouseTracking">
-   <bool>true</bool>
-  </property>
-  <property name="windowTitle">
-   <string>Babel</string>
-  </property>
-  <property name="layoutDirection">
-   <enum>Qt::LeftToRight</enum>
-  </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_image.png);
-</string>
-  </property>
-  <property name="windowFilePath">
-   <string notr="true"/>
-  </property>
-  <widget class="QPushButton" name="login">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>700</y>
-     <width>470</width>
-     <height>42</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <family>MS Sans Serif</family>
-     <pointsize>12</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-     <underline>false</underline>
-     <strikeout>false</strikeout>
-     <stylestrategy>PreferDefault</stylestrategy>
-     <kerning>true</kerning>
-    </font>
-   </property>
-   <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgb(0, 170, 255);
-color: rgb(255, 255, 255);
-font: 12pt &quot;MS Sans Serif&quot;;</string>
-   </property>
-   <property name="text">
-    <string>se connectez</string>
-   </property>
+  <class>BabelFlyer</class>
+  <widget class="QWidget" name="BabelFlyer">
+    <property name="enabled">
+      <bool>true</bool>
+    </property>
+    <property name="geometry">
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>512</width>
+        <height>870</height>
+      </rect>
+    </property>
+    <property name="mouseTracking">
+      <bool>true</bool>
+    </property>
+    <property name="windowTitle">
+      <string>Babel</string>
+    </property>
+    <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="autoFillBackground">
+      <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+      <string notr="true">background-image: url(:/background_image.jpg);</string>
+    </property>
+    <property name="windowFilePath">
+      <string notr="true"/>
+    </property>
+    <widget class="QPushButton" name="minimize">
+      <property name="geometry">
+      <rect>
+      <x>410</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+      </rect>
+      </property>
+      <property name="font">
+      <font>
+      <family>Small Fonts</family>
+      <pointsize>16</pointsize>
+      </font>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 32);
+      color: rgb(255, 255, 255);
+      </string>
+      </property>
+      <property name="text">
+      <string>-</string>
+      </property>
+    </widget>
+    <widget class="QPushButton" name="close">
+      <property name="geometry">
+      <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+      </rect>
+      </property>
+      <property name="font">
+      <font>
+      <family>Small Fonts</family>
+      <pointsize>16</pointsize>
+      </font>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 32);
+      color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+      <string>x</string>
+      </property>
+    </widget>
+    <widget class="QLineEdit" name="emailEdit">
+      <property name="geometry">
+      <rect>
+      <x>60</x>
+      <y>560</y>
+      <width>391</width>
+      <height>41</height>
+      </rect>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 128);
+      color: rgb(0, 0, 0);
+      font: 10pt &quot;Verdana&quot;;
+      padding: 8px;
+
+      </string>
+      </property>
+      <property name="placeholderText">
+      <string>Nom de compte</string>
+      </property>
+    </widget>
+    <widget class="QLineEdit" name="pwdEdit">
+      <property name="geometry">
+      <rect>
+      <x>60</x>
+      <y>620</y>
+      <width>391</width>
+      <height>41</height>
+      </rect>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 128);
+      color: #000;
+      font: 10pt &quot;Verdana&quot;;
+      lineedit-password-character: 9679;
+      padding: 8px;
+      </string>
+      </property>
+      <property name="placeholderText">
+      <string>Mot de passe</string>
+      </property>
+    </widget>
+    <widget class="QPushButton" name="login">
+      <property name="geometry">
+      <rect>
+      <x>60</x>
+      <y>680</y>
+      <width>391</width>
+      <height>51</height>
+      </rect>
+      </property>
+      <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+      </sizepolicy>
+      </property>
+      <property name="font">
+      <font>
+      <family>Verdana</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      </font>
+      </property>
+      <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+      <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      background-color: rgb(22, 87, 127);
+      color: rgb(255, 255, 255);
+      font: 12pt &quot;Verdana&quot;;
+      border-style: outset;
+      </string>
+      </property>
+      <property name="text">
+      <string>Se connecter</string>
+      </property>
+    </widget>
+    <widget class="QPushButton" name="signin">
+      <property name="geometry">
+        <rect>
+          <x>60</x>
+          <y>750</y>
+          <width>391</width>
+          <height>51</height>
+        </rect>
+      </property>
+      <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+        </sizepolicy>
+      </property>
+      <property name="font">
+        <font>
+          <family>Verdana</family>
+          <pointsize>12</pointsize>
+          <weight>50</weight>
+          <italic>false</italic>
+          <bold>false</bold>
+        </font>
+      </property>
+      <property name="cursor">
+      <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+      <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+      <string notr="true">background: none;
+      background-color: rgb(80, 80, 80);
+      color: rgb(255, 255, 255);
+      font: 12pt &quot;Verdana&quot;;
+      border-style: outset;
+      </string>
+      </property>
+      <property name="text">
+      <string>Pas encore de compte ?</string>
+      </property>
+    </widget>
   </widget>
-  <widget class="QPushButton" name="inscription">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>750</y>
-     <width>470</width>
-     <height>42</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <family>MS Sans Serif</family>
-     <pointsize>12</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="autoFillBackground">
-    <bool>false</bool>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgb(0, 170, 255);
-color: rgb(255, 255, 255);
-font: 12pt &quot;MS Sans Serif&quot;;
-</string>
-   </property>
-   <property name="text">
-    <string>s'inscrire</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="logo">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>150</y>
-     <width>512</width>
-     <height>491</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgba(255, 255, 255, 0);
-background: none;</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="pixmap">
-    <pixmap resource="../resources/BabelMainWindow.qrc">:/telephone.png</pixmap>
-   </property>
-   <property name="scaledContents">
-    <bool>true</bool>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="textInteractionFlags">
-    <set>Qt::NoTextInteraction</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="title">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>370</y>
-     <width>512</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>32</pointsize>
-     <weight>50</weight>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(255, 255, 255, 224);
-</string>
-   </property>
-   <property name="text">
-    <string>Babel Project</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="close">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>x</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="minimize">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);
-</string>
-   </property>
-   <property name="text">
-    <string>-</string>
-   </property>
-  </widget>
- </widget>
- <resources>
-  <include location="../resources/BabelMainWindow.qrc"/>
- </resources>
- <connections>
-  <connection>
-   <sender>close</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelFlyer</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>480</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimize</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelFlyer</receiver>
-   <slot>showMinimized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>430</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+  <resources>
+    <include location="../resources/BabelMainWindow.qrc"/>
+  </resources>
+  <connections>
+    <connection>
+      <sender>close</sender>
+      <signal>clicked()</signal>
+      <receiver>BabelFlyer</receiver>
+      <slot>close()</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>480</x>
+          <y>25</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>255</x>
+          <y>435</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>minimize</sender>
+      <signal>clicked()</signal>
+      <receiver>BabelFlyer</receiver>
+      <slot>showMinimized()</slot>
+      <hints>
+        <hint type="sourcelabel">
+          <x>430</x>
+          <y>25</y>
+        </hint>
+        <hint type="destinationlabel">
+          <x>255</x>
+          <y>435</y>
+        </hint>
+      </hints>
+    </connection>
+    <connection>
+      <sender>login</sender>
+      <signal>clicked()</signal>
+      <receiver>BabelFlyer</receiver>
+      <slot>hide()</slot>
+      <hints>
+      <hint type="sourcelabel">
+      <x>255</x>
+      <y>695</y>
+      </hint>
+      <hint type="destinationlabel">
+      <x>255</x>
+      <y>434</y>
+      </hint>
+      </hints>
+    </connection>
+  </connections>
 </ui>

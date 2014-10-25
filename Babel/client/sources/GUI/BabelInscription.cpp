@@ -1,6 +1,6 @@
-#include "BabelFlyer.hpp"
+#include "BabelInscription.hpp"
 
-BabelFlyer::BabelFlyer(void)
+BabelInscription::BabelInscription(void)
 {
 	mUi.setupUi(this);
 
@@ -15,6 +15,6 @@ BabelFlyer::BabelFlyer(void)
 	mUi.pwdEdit->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
 }
 
-BabelFlyer::~BabelFlyer(void)
+BabelInscription::~BabelInscription(void)
 {
 }

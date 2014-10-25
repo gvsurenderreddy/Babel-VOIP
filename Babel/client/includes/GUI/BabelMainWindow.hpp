@@ -7,6 +7,7 @@
 #include "BabelContactWidget.hpp"
 #include "BabelFlyer.hpp"
 #include "BabelIdentification.hpp"
+#include "BabelInscription.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
@@ -27,7 +28,8 @@ private:
 private:
 	Ui::BabelMainWindow	mUi;
 	BabelFlyer			mFlyer;
-	BabelIdentification	mConnexion;
+	BabelIdentification	mLogin;
+	BabelInscription	mSignin;
 
 	// intern slots
 	private slots:

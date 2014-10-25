@@ -8,11 +8,13 @@ BabelMainWindow::BabelMainWindow(void)
 	mUi.setupUi(this);
 
 	// action when click on login
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mConnexion, SLOT(show()));
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mFlyer, SLOT(hide()));
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mLogin, SLOT(show()));
+
+	// action when click on signin
+	QObject::connect(mFlyer.getUi().signin, SIGNAL(clicked()), &mSignin, SLOT(show()));
 
 	// action when click on back
-	QObject::connect(mConnexion.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
+	QObject::connect(mLogin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
