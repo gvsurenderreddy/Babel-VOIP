@@ -1,4 +1,4 @@
-#include <iostream>
+#include <QFontDatabase>
 #include "BabelMainWindow.hpp"
 
 using namespace std;
@@ -6,6 +6,17 @@ using namespace std;
 BabelMainWindow::BabelMainWindow(void)
 {
 	mUi.setupUi(this);
+
+	// Load font
+	QFontDatabase	fontDb;
+	QString	openSansLightPath = "fonts/OpenSans-Light.ttf";
+	if (fontDb.addApplicationFont(openSansLightPath) != -1)
+	{
+		QFont	openSansLightFont = fontDb.font("Open Sans Light", "Normal", -1);
+		mLogin.setFont(openSansLightFont);
+		mSignin.setFont(openSansLightFont);
+		mSetting.setFont(openSansLightFont);
+	}
 
 	// action when click on login/signin
 	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mLogin, SLOT(show()));
@@ -20,7 +31,6 @@ BabelMainWindow::BabelMainWindow(void)
 
 BabelMainWindow::~BabelMainWindow(void)
 {
-	cout << __FUNCTION__ << endl;
 }
 
 void	BabelMainWindow::show()
