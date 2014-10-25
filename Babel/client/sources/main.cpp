@@ -3,9 +3,12 @@
 
 int						main(int ac, char **av) {
 	QApplication		app(ac, av);
-	Babel				babel;
+	BabelFlyer			flyer;
+
+	flyer.show();
+	/*Babel				babel;
 
 	qRegisterMetaType<Sound::Encoded>();
-	babel.run();
+	babel.run();*/
 	return app.exec();
 }

@@ -1,6 +1,8 @@
 #pragma once
 
-class BabelFlyer
+#include "Ui_BabelFlyer.h"
+
+class BabelFlyer : public QWidget, public Ui_BabelFlyer
 {
 	// ctor - dtor
 public:
@@ -14,5 +16,5 @@ private:
 
 	// attributes
 private:
-	//Ui::BabelContactWidget	mUi;
+	Ui::BabelFlyer	mUi;
 };
