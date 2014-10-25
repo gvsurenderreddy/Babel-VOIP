@@ -10,6 +10,8 @@ Différents composant des fenêtres:
 ### Page d'identification
  * Bouton input "Entrez votre email"
  * Bouton input "Tapez votre mot de passe"
+ * Bouton "Validez"
+ * Bouton "Mot de passe oublié ?" (optionnel)
 
 ### Page d'inscription
  * Bouton input "Entrez votre pseudo"

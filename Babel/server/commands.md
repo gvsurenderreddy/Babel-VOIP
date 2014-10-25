@@ -5,85 +5,98 @@ Ci-dessous se trouve un récapitulatif de quoi doit se trouver où.
 #### [1] Client::update
 
 ```
-actions
+client->setState
+client->setPseudo
+mListener.onUpdate(args[0], args[1], args[2])
 ```
 
 #### [1] BabelServer::update
 
 ```
-actions
+server->serializer(nom_de_compte)->updatePseudo
+server->serializer(nom_de_compte)->updatePassword
+server->serializer(nom_de_compte)->updateStatus
 ```
 
 #### [2] Client::subscribe
 
 ```
-actions
+if (mListener.onSubscribe(args[0], args[1]))
+  inscription faite
+else
+  nom de compte déjà utilisé
 ```
 
 #### [2] BabelServer::subscribe
 
 ```
-actions
+vérifier que le fichier n'existe pas déjà
+sinon server->serializer(nom_de_compte)->insert(password, status, pseudo, liste contact vide)
 ```
 
 #### [3] Client::connect
 
 ```
-actions
+if (mListener.onConnect(args[0], args[1]))
+  client->setConnected = true;
 ```
 
 #### [3] BabelServer::connect
 
 ```
-actions
+vérifier que le fichier existe déjà
+sinon server->serializer(nom_de_compte)->loadData
+server->serializer->account == nom_de_compte && server->serializer->password == password
 ```
 
 #### [4] Client::disconnect
 
 ```
-actions
+client->setConnected = false;
+mListener.onDisconnect(args[0])
 ```
 
 #### [4] BabelServer::disconnect
 
 ```
-actions
+for_each notifier sa std::list<std::string> contacts que ce client s'est deco
 ```
 
 #### [5] Client::getContact
 
 ```
-actions
+
 ```
 
 #### [5] BabelServer::getContact
 
 ```
-actions
+
 ```
 
 #### [6] Client::addContact
 
 ```
-actions
+
 ```
 
 #### [6] BabelServer::addContact
 
 ```
-actions
+
 ```
 
 #### [7] Client::delContact
 
 ```
-actions
+mContacts.erase(args[0]);
+mListener.delContact(args);
 ```
 
 #### [7] BabelServer::delContact
 
 ```
-actions
+server->serializer(nom_de_compte)->updateContacts
 ```
 
 #### [8] Client::acceptContact
@@ -110,13 +123,13 @@ actions
 actions
 ```
 
-#### [8] Client::hangCall
+#### [10] Client::hangCall
 
 ```
 actions
 ```
 
-#### [8] BabelServer::hangCall
+#### [10] BabelServer::hangCall
 
 ```
 actions

@@ -1,7 +1,7 @@
 #include "Contact.hpp"
 
 Contact::Contact(void)
-	: mAccountName(""), mPseudo(""), mStatus(Contact::DISCONNECTED), mHost(""), mPort(0), mIsConnected(false) {}
+	: mAccountName(""), mPseudo(""), mStatus(Contact::DISCONNECTED), mHost(""), mPort(0), mPassword(""), mIsConnected(false) {}
 
 const QString	&Contact::getAccountName(void) const {
 	return mAccountName;
@@ -21,6 +21,10 @@ const QString	&Contact::getHost(void) const {
 
 int	Contact::getPort(void) const {
 	return mPort;
+}
+
+const QString	&Contact::getPassword(void) const {
+	return mPassword;
 }
 
 bool	Contact::isConnected(void) const {
@@ -45,6 +49,10 @@ void	Contact::setHost(const QString &host) {
 
 void	Contact::setPort(int port) {
 	mPort = port;
+}
+
+void	Contact::setPassword(const QString &password) {
+	mPassword = password;
 }
 
 void	Contact::setIsConnected(bool isConnected) {

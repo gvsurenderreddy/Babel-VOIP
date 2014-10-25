@@ -3,7 +3,7 @@
 #include <qobject.h>
 #include "ICommand.hpp"
 #include "CommandPacketBuilder.hpp"
-#include "CommandErr.hpp"
+#include "ErrorStatus.hpp"
 #include "Contact.hpp"
 
 class ServerCommunication : public QObject {
@@ -32,31 +32,47 @@ class ServerCommunication : public QObject {
 	private:
 		struct HandleError {
 			ICommand::Instruction	instruction;
-			void					(ServerCommunication::*signal)(bool success, CommandErr::ErrorCode);
+			void					(ServerCommunication::*signal)(const ErrorStatus &errorStatus);
 		};
 
 		static const ServerCommunication::HandleError handleErrorsTab[];
 
 	// signals
 	signals:
-		void	receiveContactInfo(const QString &accountName, const QString &pseudo, Contact::Status status, bool isConnected);
-		void	receiveContactInvitation(const QString &accountName);
-		void	receiveContactDeletion(const QString &accountName);
-		void	receiveMessage(const QString &accountName, const QString &message);
-		void	receiveCallInvitation(const QString &accountName);
-		void	receiveCallAnswer(const QString &accountName, const QString &host, bool hasAccepted);
-		void	receiveCallClose(const QString &accountName);
-		void	receiveServerAnswerForReg(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForLog(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAdd(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAcceptAdd(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForDel(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForExit(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForUpdate(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForSend(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForCall(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAcceptCall(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForCloseCall(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveContactInfo(const Contact &contact);
+		void	receiveContactInvitation(const Contact &contact);
+		void	receiveContactDeletion(const Contact &contact);
+		void	receiveMessage(const Contact &contact, const QString &message);
+		void	receiveCallInvitation(const Contact &contact);
+		void	receiveCallAnswer(const Contact &contact, bool hasAccepted);
+		void	receiveCallClose(const Contact &contact);
+		void	receiveServerAnswerForRegistration(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForAuthentication(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForAddingContact(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForAcceptingContact(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForDeletingContact(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForUpdatingInfo(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForSendingMessage(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForCallingContact(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForAcceptingCallInvitation(const ErrorStatus &errorStatus);
+		void	receiveServerAnswerForTerminatingCall(const ErrorStatus &errorStatus);
+
+	// send commands slots
+	public:
+		void	createAccount(const Contact &contact);
+		void	authenticate(const Contact &contact);
+		void	getContactsInfo(void);
+		void	getContactInfo(const Contact &contact);
+		void	addContact(const Contact &contact);
+		void	acceptContactInvitation(const Contact &contact, bool hasAccepted);
+		void	deleteContact(const Contact &contact);
+		void	sendMessage(const Contact &contact, const QString &message);
+		void	disconnect(void);
+		void	updateInfo(const Contact &contact);
+		void	call(const Contact &contact);
+		void	acceptCallInvitation(const Contact &contact, bool hasAccepted);
+		void	terminateCall(const Contact &contact);
 
 	// ctor - dtor
 	public:
