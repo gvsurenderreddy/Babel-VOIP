@@ -145,6 +145,7 @@ border: none;
 background-color: rgba(0, 0, 0, 64);
 color: rgb(255, 255, 255);
 font: 12pt &quot;MS Sans Serif&quot;;
+padding: 8px;
 </string>
    </property>
   </widget>
@@ -200,10 +201,11 @@ background-color: rgba(0, 0, 0, 64);
 color: rgb(255, 255, 255);
 font: 12pt &quot;MS Sans Serif&quot;;
 lineedit-password-character: 9679;
+padding: 8px;
 </string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
      <x>180</x>
