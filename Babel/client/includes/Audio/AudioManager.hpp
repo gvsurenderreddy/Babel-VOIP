@@ -3,9 +3,8 @@
 #include "ISoundDevice.hpp"
 #include "EncodeManager.hpp"
 #include <qobject.h>
-#include <QThread>
 
-class AudioManager : public QThread {
+class AudioManager : public QObject, public ISoundDevice::OnSoundDeviceEvent {
 
 	Q_OBJECT
 
@@ -16,13 +15,13 @@ class AudioManager : public QThread {
 
 	// coplien form
 	private:
-		AudioManager(const AudioManager &) : QThread() {}
+		AudioManager(const AudioManager &) : QObject() {}
 		const AudioManager &operator=(const AudioManager &) { return *this; }
 
 	// play sound
 	public slots:
 		void	playSound(const Sound::Encoded &sound);
-		void	run();
+		void	onSoundAvailable(ISoundDevice *soundDevice);
 
 	// sound available
 	signals:

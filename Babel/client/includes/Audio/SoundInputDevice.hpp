@@ -30,12 +30,17 @@ class SoundInputDevice : public ISoundDevice {
 		ISoundDevice	&operator>>(Sound::Decoded &soundBuffer);
 		static int		callback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags statusFlags, void *userData);
 
+	// setters
+	public:
+		void	setOnSoundDeviceEventListener(ISoundDevice::OnSoundDeviceEvent *listener);
+
 	// attributes
 	private:
-		std::list<Sound::Decoded *>	mBuffers;
-		PaStreamParameters			mInputParameters;
+		std::list<Sound::Decoded *>			mBuffers;
+		PaStreamParameters				mInputParameters;
 		PaStream					*mStream;
 		Mutex						mMutex;
 		bool						mIsRunning;
+		ISoundDevice::OnSoundDeviceEvent		*mListener;
 
 };
