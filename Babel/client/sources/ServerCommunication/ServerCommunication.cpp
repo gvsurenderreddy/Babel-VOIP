@@ -6,6 +6,12 @@
 #include "CommandCall.hpp"
 #include "CommandAcceptCall.hpp"
 #include "CommandCloseCall.hpp"
+#include "CommandReg.hpp"
+#include "CommandLog.hpp"
+#include "CommandList.hpp"
+#include "CommandExit.hpp"
+#include "CommandAcceptAdd.hpp"
+#include "CommandUpdate.hpp"
 #include "CommandErr.hpp"
 
 const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[] = {
@@ -21,18 +27,18 @@ const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[
 };
 
 const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = {
-	{ ICommand::REG,					&ServerCommunication::receiveServerAnswerForReg			},
-	{ ICommand::LOG,					&ServerCommunication::receiveServerAnswerForLog			},
-	{ ICommand::ADD,					&ServerCommunication::receiveServerAnswerForAdd			},
-	{ ICommand::ACCEPT_ADD,				&ServerCommunication::receiveServerAnswerForAcceptAdd	},
-	{ ICommand::DEL,					&ServerCommunication::receiveServerAnswerForDel			},
-	{ ICommand::EXIT,					&ServerCommunication::receiveServerAnswerForExit		},
-	{ ICommand::UPDATE,					&ServerCommunication::receiveServerAnswerForUpdate		},
-	{ ICommand::SEND,					&ServerCommunication::receiveServerAnswerForSend		},
-	{ ICommand::CALL,					&ServerCommunication::receiveServerAnswerForCall		},
-	{ ICommand::ACCEPT_CALL,			&ServerCommunication::receiveServerAnswerForAcceptCall	},
-	{ ICommand::CLOSE_CALL,				&ServerCommunication::receiveServerAnswerForCloseCall	},
-	{ ICommand::UNKNOWN_INSTRUCTION,	NULL													}
+	{ ICommand::REG,					&ServerCommunication::receiveServerAnswerForRegistration			},
+	{ ICommand::LOG,					&ServerCommunication::receiveServerAnswerForAuthentication			},
+	{ ICommand::ADD,					&ServerCommunication::receiveServerAnswerForAddingContact			},
+	{ ICommand::ACCEPT_ADD,				&ServerCommunication::receiveServerAnswerForAcceptingContact		},
+	{ ICommand::DEL,					&ServerCommunication::receiveServerAnswerForDeletingContact			},
+	{ ICommand::EXIT,					&ServerCommunication::receiveServerAnswerForDisconnecting			},
+	{ ICommand::UPDATE,					&ServerCommunication::receiveServerAnswerForUpdatingInfo			},
+	{ ICommand::SEND,					&ServerCommunication::receiveServerAnswerForSendingMessage			},
+	{ ICommand::CALL,					&ServerCommunication::receiveServerAnswerForCallingContact			},
+	{ ICommand::ACCEPT_CALL,			&ServerCommunication::receiveServerAnswerForAcceptingCallInvitation	},
+	{ ICommand::CLOSE_CALL,				&ServerCommunication::receiveServerAnswerForTerminatingCall			},
+	{ ICommand::UNKNOWN_INSTRUCTION,	NULL																}
 };
 
 ServerCommunication::ServerCommunication(void) {
@@ -108,4 +114,109 @@ void	ServerCommunication::handleErrCommand(const ICommand *command) {
 	for (i = 0; handleErrorsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleErrorsTab[i].instruction != instruction; i++);
 	if (handleErrorsTab[i].instruction == instruction)
 		emit (this->*handleErrorsTab[i].signal)(success, error_code);
+}
+
+void	ServerCommunication::createAccount(const QString &accountName, const QString &pseudo, const QString &password) {
+	CommandReg *commandReg = new CommandReg;
+
+	commandReg->setAccountName(accountName);
+	commandReg->setPseudo(pseudo);
+	commandReg->setPassword(password);
+
+	mCommandPacketBuilder.sendCommand(commandReg);
+}
+
+void	ServerCommunication::authenticate(const QString &accountName, const QString &password) {
+	CommandLog *commandLog = new CommandLog;
+
+	commandLog->setAccountName(accountName);
+	commandLog->setPassword(password);
+
+	mCommandPacketBuilder.sendCommand(commandLog);
+}
+
+void	ServerCommunication::getContactsInfo(void) {
+	mCommandPacketBuilder.sendCommand(new CommandList);
+}
+
+void	ServerCommunication::getContactInfo(const QString &accountName) {
+	CommandShow *commandShow = new CommandShow;
+
+	commandShow->setAccountName(accountName);
+
+	mCommandPacketBuilder.sendCommand(commandShow);
+}
+
+void	ServerCommunication::addContact(const QString &accountName) {
+	CommandAdd *commandAdd = new CommandAdd;
+
+	commandAdd->setAccountName(accountName);
+
+	mCommandPacketBuilder.sendCommand(commandAdd);
+}
+
+void	ServerCommunication::acceptContactInvitation(const QString &accountName, bool hasAccepted) {
+	CommandAcceptAdd *commandAcceptAdd = new CommandAcceptAdd;
+
+	commandAcceptAdd->setAccountName(accountName);
+	commandAcceptAdd->setHasAccepted(hasAccepted);
+
+	mCommandPacketBuilder.sendCommand(commandAcceptAdd);
+}
+
+void	ServerCommunication::deleteContact(const QString &accountName) {
+	CommandDel *commandDel = new CommandDel;
+
+	commandDel->setAccountName(accountName);
+
+	mCommandPacketBuilder.sendCommand(commandDel);
+}
+
+void	ServerCommunication::sendMessage(const QString &accountName, const QString &message) {
+	CommandSend *commandSend = new CommandSend;
+
+	commandSend->setAccountName(accountName);
+	commandSend->setTextMessage(message);
+
+	mCommandPacketBuilder.sendCommand(commandSend);
+}
+
+void	ServerCommunication::disconnect(void) {
+	mCommandPacketBuilder.sendCommand(new CommandExit);
+}
+
+void	ServerCommunication::updateInfo(const QString &accountName, const QString &pseudo, const QString &password, Contact::Status status) {
+	CommandUpdate *commandUpdate = new CommandUpdate;
+
+	commandUpdate->setAccountName(accountName);
+	commandUpdate->setPseudo(pseudo);
+	commandUpdate->setPassword(password);
+	commandUpdate->setStatus(status);
+
+	mCommandPacketBuilder.sendCommand(commandUpdate);
+}
+
+void	ServerCommunication::call(const QString &accountName) {
+	CommandCall *commandCall = new CommandCall;
+
+	commandCall->setAccountName(accountName);
+
+	mCommandPacketBuilder.sendCommand(commandCall);
+}
+
+void	ServerCommunication::acceptCallInvitation(const QString &accountName, bool hasAccepted) {
+	CommandAcceptCall *commandAcceptCall = new CommandAcceptCall;
+
+	commandAcceptCall->setAccountName(accountName);
+	commandAcceptCall->setHasAccepted(hasAccepted);
+
+	mCommandPacketBuilder.sendCommand(commandAcceptCall);
+}
+
+void	ServerCommunication::terminateCall(const QString &accountName) {
+	CommandCloseCall *commandCloseCall = new CommandCloseCall;
+
+	commandCloseCall->setAccountName(accountName);
+
+	mCommandPacketBuilder.sendCommand(commandCloseCall);
 }

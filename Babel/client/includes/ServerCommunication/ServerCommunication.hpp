@@ -46,17 +46,33 @@ class ServerCommunication : public QObject {
 		void	receiveCallInvitation(const QString &accountName);
 		void	receiveCallAnswer(const QString &accountName, const QString &host, bool hasAccepted);
 		void	receiveCallClose(const QString &accountName);
-		void	receiveServerAnswerForReg(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForLog(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAdd(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAcceptAdd(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForDel(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForExit(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForUpdate(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForSend(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForCall(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForAcceptCall(bool success, CommandErr::ErrorCode errorCode);
-		void	receiveServerAnswerForCloseCall(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForRegistration(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForAuthentication(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForAddingContact(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForAcceptingContact(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForDeletingContact(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForDisconnecting(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForUpdatingInfo(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForSendingMessage(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForCallingContact(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForAcceptingCallInvitation(bool success, CommandErr::ErrorCode errorCode);
+		void	receiveServerAnswerForTerminatingCall(bool success, CommandErr::ErrorCode errorCode);
+
+	// send commands slots
+	public:
+		void	createAccount(const QString &accountName, const QString &pseudo, const QString &password);
+		void	authenticate(const QString &accountName, const QString &password);
+		void	getContactsInfo(void);
+		void	getContactInfo(const QString &accountName);
+		void	addContact(const QString &accountName);
+		void	acceptContactInvitation(const QString &accountName, bool hasAccepted);
+		void	deleteContact(const QString &accountName);
+		void	sendMessage(const QString &accountName, const QString &message);
+		void	disconnect(void);
+		void	updateInfo(const QString &accountName, const QString &pseudo, const QString &password, Contact::Status status);
+		void	call(const QString &accountName);
+		void	acceptCallInvitation(const QString &accountName, bool hasAccepted);
+		void	terminateCall(const QString &accountName);
 
 	// ctor - dtor
 	public:
