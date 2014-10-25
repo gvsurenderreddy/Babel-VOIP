@@ -102,7 +102,7 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Nom de compte</string>
+    <string>Entrer votre nom de compte</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="pwdEdit">
@@ -124,7 +124,7 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Mot de passe</string>
+    <string>Tapez votre mot de passe</string>
    </property>
   </widget>
   <widget class="QPushButton" name="login">
@@ -214,7 +214,7 @@ border-style: outset;
       </string>
    </property>
    <property name="text">
-    <string>Pas encore de compte ?</string>
+    <string>Inscrivez-vous</string>
    </property>
   </widget>
  </widget>

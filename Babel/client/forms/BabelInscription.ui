@@ -98,7 +98,7 @@ color: rgb(255, 255, 255);
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>550</y>
+     <y>600</y>
      <width>391</width>
      <height>51</height>
     </rect>
@@ -112,14 +112,14 @@ border-style: outset;
       </string>
    </property>
    <property name="text">
-    <string>validez</string>
+    <string>Valider</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="emailEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>340</y>
+     <y>320</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -135,14 +135,14 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Nom de compte</string>
+    <string>Entrer un nom de compte</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="pwdEdit1">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>410</y>
+     <y>460</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -158,14 +158,14 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Nouveau mot de passe</string>
+    <string>Entrer votre mot de passe</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="pwdEdit2">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>480</y>
+     <y>520</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -181,7 +181,7 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Confirmation du mot de passe</string>
+    <string>Confirmer votre mot de passe</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
@@ -206,6 +206,29 @@ color: rgba(15, 87, 154, 192);
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pseudoEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>380</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Entrer votre pseudo</string>
    </property>
   </widget>
  </widget>
