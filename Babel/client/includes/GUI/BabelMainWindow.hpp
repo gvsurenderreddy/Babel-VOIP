@@ -8,6 +8,7 @@
 #include "BabelFlyer.hpp"
 #include "BabelIdentification.hpp"
 #include "BabelInscription.hpp"
+#include "BabelSetting.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
@@ -30,6 +31,7 @@ private:
 	BabelFlyer			mFlyer;
 	BabelIdentification	mLogin;
 	BabelInscription	mSignin;
+	BabelSetting		mSetting;
 
 	// intern slots
 	private slots:

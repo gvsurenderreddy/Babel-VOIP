@@ -2,6 +2,7 @@
 <qresource>
     <file>background_image.jpg</file>
     <file>background_image.png</file>
+    <file>background_setting.jpg</file>
     <file>telephone.jpg</file>
     <file>telephone.png</file>
     <file>unknown_profile.jpg</file>
