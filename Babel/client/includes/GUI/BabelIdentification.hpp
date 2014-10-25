@@ -5,20 +5,20 @@
 class BabelIdentification : public QWidget, public Ui_BabelIdentification
 {
 	// ctor - dtor
-public:
-	BabelIdentification(void);
-	~BabelIdentification(void);
+	public:
+		BabelIdentification(void);
+		~BabelIdentification(void);
 
 	// coplien form
-private:
-	BabelIdentification(const BabelIdentification &) {}
-	const BabelIdentification &operator=(const BabelIdentification &) { return *this; }
+	private:
+		BabelIdentification(const BabelIdentification &) : QWidget() {}
+		const BabelIdentification &operator=(const BabelIdentification &) { return *this; }
 
 	// attributes
-private:
-	Ui::BabelIdentification	mUi;
+	private:
+		Ui::BabelIdentification	mUi;
 
 	// methods
-public:
-	Ui::BabelIdentification const	&getUi() const { return mUi; }
+	public:
+		Ui::BabelIdentification const	&getUi() const { return mUi; }
 };

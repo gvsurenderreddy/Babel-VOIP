@@ -1,24 +1,24 @@
 #pragma once
 
-#include "Ui_BabelFlyer.h"
+#include "ui_BabelFlyer.h"
 
 class BabelFlyer : public QWidget, public Ui_BabelFlyer
 {
 	// ctor - dtor
-public:
+	public:
 	BabelFlyer(void);
 	~BabelFlyer(void);
 
 	// coplien form
-private:
-	BabelFlyer(const BabelFlyer &) {}
+	private:
+	BabelFlyer(const BabelFlyer &) : QWidget() {}
 	const BabelFlyer &operator=(const BabelFlyer &) { return *this; }
 
 	// attributes
-private:
+	private:
 	Ui::BabelFlyer	mUi;
 
 	// methods
-public:
+	public:
 	Ui::BabelFlyer const	&getUi() const { return mUi; }
 };

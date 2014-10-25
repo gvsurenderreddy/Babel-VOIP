@@ -25,44 +25,44 @@ void	BabelMainWindow::show()
 	mFlyer.show();
 }
 
-void	BabelMainWindow::updateContactList(const QList<Contact> &contacts) {
+void	BabelMainWindow::updateContactList(const QList<Contact> &) {
 }
 
-void	BabelMainWindow::newContactInvitation(const Contact &contact) {
+void	BabelMainWindow::newContactInvitation(const Contact &) {
 }
 
-void	BabelMainWindow::newMessage(const Contact &contact, const QString &message) {
+void	BabelMainWindow::newMessage(const Contact &, const QString &) {
 }
 
-void	BabelMainWindow::newCallInvitation(const Contact &contact) {
+void	BabelMainWindow::newCallInvitation(const Contact &) {
 }
 
-void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
+void	BabelMainWindow::startingCommunication(const Contact &, bool) {
 }
 
-void	BabelMainWindow::terminatingCommunication(const Contact &contact) {
+void	BabelMainWindow::terminatingCommunication(const Contact &) {
 }
 
-void	BabelMainWindow::updateInfo(const Contact &contact) {
+void	BabelMainWindow::updateInfo(const Contact &) {
 }
 
-void	BabelMainWindow::createAccountSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::createAccountSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::authenticateSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::authenticateSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::callContactSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::callContactSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &errorStatus) {
+void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
 }
