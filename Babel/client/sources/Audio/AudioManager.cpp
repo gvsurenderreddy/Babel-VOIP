@@ -6,6 +6,8 @@ AudioManager::AudioManager(void)
 : mInputDevice(NULL), mOutputDevice(NULL), mRecordEnable(false), mPlayEnable(false)
 {
 	mInputDevice = new SoundInputDevice;
+	mInputDevice->setOnSoundDeviceEventListener(this);
+
 	mOutputDevice = new SoundOutputDevice;
 }
 
@@ -23,22 +25,17 @@ void	AudioManager::playSound(const Sound::Encoded &sound) {
 
 void	AudioManager::startRecording(void) {
 	mInputDevice->startStream();
-	this->start();
 }
 
-void	AudioManager::run(void){
+void	AudioManager::onSoundAvailable(ISoundDevice *) {
 	Sound::Decoded sound;
 
-	while (true) {
-		*mInputDevice >> sound;
-
-		if (sound.buffer)
-			emit AudioManager::soundAvailable(mEncodeManager.encode(sound));
-	}
+	*mInputDevice >> sound;
+	if (sound.buffer)
+		emit AudioManager::soundAvailable(mEncodeManager.encode(sound));
 }
 
 void	AudioManager::stopRecording(void) {
-	this->exit();
 	mInputDevice->stopStream();
 }
 
