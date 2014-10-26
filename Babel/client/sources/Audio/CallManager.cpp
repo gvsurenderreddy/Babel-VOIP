@@ -12,6 +12,7 @@ CallManager::~CallManager(void) {
 
 void	CallManager::startCall(const Contact &contact) {
 	mCurrentCalledContact = contact;
+	mInCommunication = true;
 
 	mSoundPacketBuilder.acceptPacketsFrom(contact.getHost(), contact.getPort());
 	mAudioManager.startRecording();
@@ -19,6 +20,8 @@ void	CallManager::startCall(const Contact &contact) {
 }
 
 void	CallManager::stopCall(void) {
+	mInCommunication = false;
+
 	mAudioManager.stopRecording();
 	mAudioManager.stopPlaying();
 	mSoundPacketBuilder.acceptPacketsFrom("", 0);

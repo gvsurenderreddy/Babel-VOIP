@@ -69,3 +69,15 @@ void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
 
 void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
 }
+
+void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &) {
+}
+
+void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
+}
+
+void	BabelMainWindow::disconnectSuccess(const ErrorStatus &) {
+}
+
+void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
+}

@@ -12,28 +12,26 @@
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
 
-class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow
-{
+class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
+
+	Q_OBJECT
+
 	// ctor - dtor
-public:
-	BabelMainWindow(void);
-	~BabelMainWindow(void);
+	public:
+		BabelMainWindow(void);
+		~BabelMainWindow(void);
 
 	// coplien form
-private:
-	BabelMainWindow(const BabelMainWindow &) : QMainWindow() {}
-	const BabelMainWindow &operator=(const BabelMainWindow &) { return *this; }
+	private:
+		BabelMainWindow(const BabelMainWindow &) : QMainWindow() {}
+		const BabelMainWindow &operator=(const BabelMainWindow &) { return *this; }
 
 	// attributes
-private:
-	Ui::BabelMainWindow	mUi;
-	BabelFlyer			mFlyer;
-	BabelIdentification	mLogin;
-	BabelInscription	mSignin;
-
-	// intern slots
-	private slots:
-		void	timeoutOpenContact();
+	private:
+		Ui::BabelMainWindow	mUi;
+		BabelFlyer			mFlyer;
+		BabelIdentification	mLogin;
+		BabelInscription	mSignin;
 
 	// public slots
 	public slots:
@@ -47,6 +45,10 @@ private:
 		void	createAccountSuccess(const ErrorStatus &errorStatus);
 		void	authenticateSuccess(const ErrorStatus &errorStatus);
 		void	sendInvitationSuccess(const ErrorStatus &errorStatus);
+		void	acceptContactSuccess(const ErrorStatus &errorStatus);
+		void	deleteContactSuccess(const ErrorStatus &errorStatus);
+		void	disconnectSuccess(const ErrorStatus &errorStatus);
+		void	sendMessageSuccess(const ErrorStatus &errorStatus);
 		void	updateInfoSuccess(const ErrorStatus &errorStatus);
 		void	callContactSuccess(const ErrorStatus &errorStatus);
 		void	acceptCallSuccess(const ErrorStatus &errorStatus);
@@ -68,5 +70,6 @@ private:
 
 	// member function
 	public:
-		virtual void	show();
+		void	show();
+
 };

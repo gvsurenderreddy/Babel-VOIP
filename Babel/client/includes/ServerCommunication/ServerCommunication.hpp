@@ -59,7 +59,7 @@ class ServerCommunication : public QObject {
 		void	receiveServerAnswerForTerminatingCall(const ErrorStatus &errorStatus);
 
 	// send commands slots
-	public:
+	public slots:
 		void	createAccount(const Contact &contact);
 		void	authenticate(const Contact &contact);
 		void	getContactsInfo(void);
