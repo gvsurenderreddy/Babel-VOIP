@@ -24,11 +24,6 @@ class Contact {
 	public:
 		Contact(void);
 		~Contact(void) {}
-		const Contact &operator=(const Contact &) { return *this; }
-
-	// coplien form
-	private:
-		Contact(const Contact &) {}
 
 	// getters - setters
 	public:

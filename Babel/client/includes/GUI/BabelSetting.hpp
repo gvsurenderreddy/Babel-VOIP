@@ -11,7 +11,7 @@ public:
 
 	// coplien form
 private:
-	BabelSetting(const BabelSetting &) {}
+	BabelSetting(const BabelSetting &) : QWidget() {}
 	const BabelSetting &operator=(const BabelSetting &) { return *this; }
 
 	// attributes
