@@ -35,7 +35,13 @@ BabelMainWindow::~BabelMainWindow(void)
 
 void	BabelMainWindow::show()
 {
-	// First widget
+	/*
+	Contact contact;
+
+	contact.setAccountName("someAccountName");
+	contact.setPassword("somePassword");
+	emit askForAuthentication(contact);
+	*/
 	mFlyer.show();
 }
 
