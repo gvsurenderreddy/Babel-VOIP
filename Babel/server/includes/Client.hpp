@@ -74,7 +74,7 @@ private:
 	std::string					name;
 	std::list<std::string>		contact;
 	std::string					account;
-
+    bool                        isConnected;
 	//cmd
 	HandleCmd	*handleCmd;
 
