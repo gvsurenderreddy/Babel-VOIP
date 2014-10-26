@@ -217,6 +217,32 @@ border-style: outset;
     <string>Inscrivez-vous</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="p">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Small Fonts</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 32);
+      color: rgb(255, 255, 255);
+      </string>
+   </property>
+   <property name="text">
+    <string>p</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="../resources/BabelMainWindow.qrc"/>
@@ -279,6 +305,22 @@ border-style: outset;
     <hint type="sourcelabel">
      <x>255</x>
      <y>775</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>434</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>p</sender>
+   <signal>clicked()</signal>
+   <receiver>BabelFlyer</receiver>
+   <slot>hide()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>25</y>
     </hint>
     <hint type="destinationlabel">
      <x>255</x>

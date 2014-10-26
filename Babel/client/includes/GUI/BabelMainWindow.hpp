@@ -8,6 +8,7 @@
 #include "BabelFlyer.hpp"
 #include "BabelIdentification.hpp"
 #include "BabelInscription.hpp"
+#include "BabelSetting.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
@@ -32,6 +33,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		BabelFlyer			mFlyer;
 		BabelIdentification	mLogin;
 		BabelInscription	mSignin;
+		BabelSetting		mSetting;
 
 	// public slots
 	public slots:

@@ -1,4 +1,4 @@
-#include <iostream>
+#include <QFontDatabase>
 #include "BabelMainWindow.hpp"
 
 using namespace std;
@@ -7,20 +7,30 @@ BabelMainWindow::BabelMainWindow(void)
 {
 	mUi.setupUi(this);
 
-	// action when click on login
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mLogin, SLOT(show()));
+	// Load font
+	QFontDatabase	fontDb;
+	QString	openSansLightPath = "fonts/OpenSans-Light.ttf";
+	if (fontDb.addApplicationFont(openSansLightPath) != -1)
+	{
+		QFont	openSansLightFont = fontDb.font("Open Sans Light", "Normal", -1);
+		mLogin.setFont(openSansLightFont);
+		mSignin.setFont(openSansLightFont);
+		mSetting.setFont(openSansLightFont);
+	}
 
-	// action when click on signin
+	// action when click on login/signin
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mLogin, SLOT(show()));
 	QObject::connect(mFlyer.getUi().signin, SIGNAL(clicked()), &mSignin, SLOT(show()));
+	QObject::connect(mFlyer.getUi().p, SIGNAL(clicked()), &mSetting, SLOT(show()));
 
 	// action when click on back
 	QObject::connect(mLogin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 	QObject::connect(mSignin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
+	QObject::connect(mSetting.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
 {
-	cout << __FUNCTION__ << endl;
 }
 
 void	BabelMainWindow::show()

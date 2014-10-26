@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BabelInscription</class>
- <widget class="QWidget" name="BabelInscription">
+ <class>BabelSetting</class>
+ <widget class="QWidget" name="BabelSetting">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,17 +10,19 @@
     <height>870</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
-   <string>Inscription</string>
+   <string>Paramètre</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_image.png);
-</string>
+   <string notr="true">background-image: url(:/background_setting.jpg);</string>
   </property>
-  <widget class="QPushButton" name="close">
+  <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>460</x>
+     <x>10</x>
      <y>10</y>
      <width>41</width>
      <height>31</height>
@@ -36,10 +38,11 @@
     <string notr="true">background: none;
 border: none;
 background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 255, 255);
+</string>
    </property>
    <property name="text">
-    <string>x</string>
+    <string>&lt;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="minimize">
@@ -68,10 +71,10 @@ color: rgb(255, 255, 255);
     <string>-</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="back">
+  <widget class="QPushButton" name="close">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>460</x>
      <y>10</y>
      <width>41</width>
      <height>31</height>
@@ -87,35 +90,37 @@ color: rgb(255, 255, 255);
     <string notr="true">background: none;
 border: none;
 background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);
-</string>
+color: rgb(255, 255, 255);</string>
    </property>
    <property name="text">
-    <string>&lt;</string>
+    <string>x</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ok">
+  <widget class="QLabel" name="title">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>600</y>
-     <width>391</width>
-     <height>51</height>
+     <x>0</x>
+     <y>76</y>
+     <width>511</width>
+     <height>71</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(22, 87, 127);
-color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
+background-color: rgba(255, 255, 255, 192);
+font: 28pt &quot;Open Sans Light&quot;;
+color: rgba(15, 87, 154, 192);
+
+</string>
    </property>
    <property name="text">
-    <string>Valider</string>
+    <string>Paramètre</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="emailEdit">
+  <widget class="QLineEdit" name="pseudoEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -135,14 +140,14 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Entrer un nom de compte</string>
+    <string>Pseudo</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="pwdEdit1">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>460</y>
+     <y>400</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -165,7 +170,7 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>520</y>
+     <y>460</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -184,59 +189,25 @@ padding: 8px;
     <string>Confirmer votre mot de passe</string>
    </property>
   </widget>
-  <widget class="QLabel" name="title">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>77</y>
-     <width>511</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Open Sans Light</family>
-     <pointsize>28</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(255, 255, 255, 192);
-color: rgba(15, 87, 154, 192);
-font: 28pt &quot;Open Sans Light&quot;;
-</string>
-   </property>
-   <property name="text">
-    <string>Inscription</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pseudoEdit">
+  <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>380</y>
+     <y>540</y>
      <width>391</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 128);
-color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-
+background-color: rgb(22, 87, 127);
+color: rgb(255, 255, 255);
+font: 12pt &quot;Verdana&quot;;
+border-style: outset;
       </string>
    </property>
-   <property name="placeholderText">
-    <string>Entrer votre pseudo</string>
+   <property name="text">
+    <string>Valider</string>
    </property>
   </widget>
  </widget>
@@ -245,13 +216,13 @@ padding: 8px;
  </resources>
  <connections>
   <connection>
-   <sender>close</sender>
+   <sender>back</sender>
    <signal>clicked()</signal>
-   <receiver>BabelInscription</receiver>
-   <slot>close()</slot>
+   <receiver>BabelSetting</receiver>
+   <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>480</x>
+     <x>30</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">
@@ -263,7 +234,7 @@ padding: 8px;
   <connection>
    <sender>minimize</sender>
    <signal>clicked()</signal>
-   <receiver>BabelInscription</receiver>
+   <receiver>BabelSetting</receiver>
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -277,13 +248,13 @@ padding: 8px;
    </hints>
   </connection>
   <connection>
-   <sender>back</sender>
+   <sender>close</sender>
    <signal>clicked()</signal>
-   <receiver>BabelInscription</receiver>
-   <slot>hide()</slot>
+   <receiver>BabelSetting</receiver>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>30</x>
+     <x>480</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">
