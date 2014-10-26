@@ -163,7 +163,7 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Entrer votre mot de passe</string>
+    <string>Mot de passe actuel</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="pwdEdit2">
@@ -186,14 +186,14 @@ padding: 8px;
       </string>
    </property>
    <property name="placeholderText">
-    <string>Confirmer votre mot de passe</string>
+    <string>Nouveau mot de passe</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>540</y>
+     <y>600</y>
      <width>391</width>
      <height>51</height>
     </rect>
@@ -208,6 +208,29 @@ border-style: outset;
    </property>
    <property name="text">
     <string>Valider</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pwdEdit3">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>520</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: #000;
+font: 10pt &quot;Verdana&quot;;
+lineedit-password-character: 9679;
+padding: 8px;
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Confirmez le mot de passe</string>
    </property>
   </widget>
  </widget>

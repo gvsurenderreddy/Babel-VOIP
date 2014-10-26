@@ -7,7 +7,7 @@ BabelMainWindow::BabelMainWindow(void)
 {
 	mUi.setupUi(this);
 
-	// Load font
+	// Load and set fond
 	QFontDatabase	fontDb;
 	QString	openSansLightPath = "fonts/OpenSans-Light.ttf";
 	if (fontDb.addApplicationFont(openSansLightPath) != -1)
@@ -35,6 +35,7 @@ BabelMainWindow::~BabelMainWindow(void)
 
 void	BabelMainWindow::show()
 {
+	// First widget
 	mFlyer.show();
 }
 
