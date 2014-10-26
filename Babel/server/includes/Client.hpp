@@ -25,7 +25,7 @@ public:
 		virtual bool onUpdate(const std::string &account, const std::string &password) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
 		virtual void DellContact(const std::string &args) = 0;
-		virtual void onAcceptContact(const bool &accept, const std::string &account) = 0;
+		virtual void onAcceptContact(bool accept, const std::string &account) = 0;
 		virtual void onCallSomeone(const std::string &account) = 0;
 		virtual void onHangCall(const bool &hang, const std::string &account) = 0;
 	};

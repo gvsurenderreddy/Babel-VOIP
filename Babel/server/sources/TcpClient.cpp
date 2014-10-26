@@ -46,6 +46,8 @@ void TcpClient::startRecv()
         if (!error)
         {
             std::string str(mReadBuffer, bytesTransfered);
+            if (mSocket)
+                std::cout << bytesTransfered << " bytes received from " << mSocket->remote_endpoint().address() << ": " << str << std::endl;
             mBuffer.insert(mBuffer.end(), str.begin(), str.end());
             if (mListener)
                 mListener->onSocketReadable(this, bytesTransfered);

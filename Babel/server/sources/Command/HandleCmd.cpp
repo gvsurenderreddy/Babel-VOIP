@@ -24,6 +24,7 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 		;
 		param = this->body->getParam(this->socket);
 		delete this->body;
+        this->body = NULL;
 		this->header = NULL;
 		return param;
 	}
