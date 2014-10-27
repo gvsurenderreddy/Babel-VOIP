@@ -21,7 +21,7 @@ IClientSocket::Message	CommandReg::getMessage(void) const {
 	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
 	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo) - 1));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
+	packet->header.instructionCode = ICommand::REG;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandReg::PacketFromClient);
