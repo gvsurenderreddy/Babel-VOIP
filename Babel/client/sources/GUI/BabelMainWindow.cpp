@@ -28,6 +28,8 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mLogin.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 	QObject::connect(mSignup.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 	QObject::connect(mSetting.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
+
+	QObject::connect(mSetting.getUi().connexion, SIGNAL(clicked()), this, SLOT(connectToServerSuccess(const ErrorStatus &)));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -100,5 +102,7 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &) {
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 }
 
+// show dialog error state
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &) {
+
 }

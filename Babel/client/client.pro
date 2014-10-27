@@ -60,6 +60,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandShow.hpp			\
 			includes/Commands/CommandUpdate.hpp			\
 			includes/Commands/CommandException.hpp			\
+			includes/GUI/BabelDialog.hpp				\
 			includes/GUI/BabelFlyer.hpp				\
 			includes/GUI/BabelIdentification.hpp			\
 			includes/GUI/BabelContactWidget.hpp			\
@@ -86,6 +87,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Audio/AudioManager.cpp				\
 			sources/Audio/SoundPacketBuilder.cpp			\
 			sources/Audio/CallManager.cpp				\
+			sources/GUI/BabelDialog.cpp				\
 			sources/GUI/BabelMainWindow.cpp				\
 			sources/GUI/BabelContactWidget.cpp			\
 			sources/GUI/BabelFlyer.cpp				\
@@ -116,6 +118,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/ErrorStatus.cpp
 
 FORMS		+=	forms/BabelMainWindow.ui				\
+			forms/BabelDialog.ui					\
 			forms/BabelFlyer.ui					\
 			forms/BabelIdentification.ui				\
 			forms/BabelInscription.ui				\

@@ -101,7 +101,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>76</y>
-     <width>511</width>
+     <width>512</width>
      <height>71</height>
     </rect>
    </property>
@@ -233,7 +233,7 @@ padding: 8px;
     <string>Confirmez le mot de passe</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="adrEdit">
+  <widget class="QLineEdit" name="addrEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -279,7 +279,7 @@ padding: 8px;
     <string>Port</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="test">
+  <widget class="QPushButton" name="connexion">
    <property name="geometry">
     <rect>
      <x>60</x>

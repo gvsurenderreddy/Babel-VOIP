@@ -15,7 +15,7 @@ class BabelMain : public QWidget, public Ui_BabelMain
 		const BabelMain &operator=(const BabelMain &) { return *this; }
 
 
-		// attributes
+	// attributes
 	private:
 		Ui::BabelMain	mUi;
 
