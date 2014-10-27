@@ -7,9 +7,9 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient), isConnected(false)
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : Socket(clientSocket), Listener(listenerClient), isConnected(false)
 {
-    mSocket->setOnSocketEventListener(this);
+    this->Socket->setOnSocketEventListener(this);
 	handleCmd = new HandleCmd(clientSocket);
 }
 
@@ -32,7 +32,7 @@ void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead)
 	socket;
 	nbBytesToRead;
 	while ((param = this->handleCmd->unPackCmd()) != NULL){
-		this->exeCmd(this->handleCmd->getInstruction(), param);
+		this->exeCmd(this->handleCmd->getInstruction(), *param);
 		delete param;
 	}
 }
@@ -82,70 +82,70 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 /*
 ** Function cmd
 */
-void	Client::Subscribe(std::vector<std::string> *args){
-    mListener.onSubscribe((*args)[0], (*args)[1]);
+void	Client::Subscribe(std::vector<std::string> &args){
+    this->Listener.onSubscribe(args[0], args[1]);
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Connect(std::vector<std::string> *args){
-    if (mListener.onConnect((*args)[0], (*args)[1]))
+void	Client::Connect(std::vector<std::string> &args){
+    if (this->Listener.onConnect(args[0], args[1]))
     {
         isConnected = true;
     }
   	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Disconnect(std::vector<std::string> *args){
-    mListener.onDisconnect((*args)[0]);
+void	Client::Disconnect(std::vector<std::string> &args){
+    this->Listener.onDisconnect(args[0]);
     isConnected = false;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::GetContact(std::vector<std::string> *args){
+void	Client::GetContact(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Update(std::vector<std::string> *args){
+void	Client::Update(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::AddContact(std::vector<std::string> *args){
+void	Client::AddContact(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::DellContact(std::vector<std::string> *args){
+void	Client::DellContact(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::AcceptContact(std::vector<std::string> *args){
+void	Client::AcceptContact(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::CallSomeone(std::vector<std::string> *args){
+void	Client::CallSomeone(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::HangCall(std::vector<std::string> *args){
+void	Client::HangCall(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::List(std::vector<std::string> *args){
+void	Client::List(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
-void	Client::Show(std::vector<std::string> *args){
+void	Client::Show(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
-void	Client::SendMsg(std::vector<std::string> *args){
+void	Client::SendMsg(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::CloseCall(std::vector<std::string> *args){
+void	Client::CloseCall(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> *param){
+void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> &param){
 	switch (instruction)
 	{
 	case ICommand::ADD:

@@ -57,7 +57,7 @@ public:
 	const std::list<std::string>	&getContact(void);
 
 	//instance of socket for send data
-	IClientSocket*	mSocket;
+	IClientSocket*	Socket;
 
 private:
 	//boost serialize
@@ -75,33 +75,27 @@ private:
 	std::list<std::string>		contact;
 	std::string					account;
     bool                        isConnected;
+
 	//cmd
 	HandleCmd	*handleCmd;
 
-	void		Subscribe(std::vector<std::string> *args);
-	void		Connect(std::vector<std::string> *args);
-	void		Disconnect(std::vector<std::string> *args);
-	void		GetContact(std::vector<std::string> *args);
-	void		Update(std::vector<std::string> *args);
-	void		AddContact(std::vector<std::string> *args);
-	void		DellContact(std::vector<std::string> *args);
-	void		AcceptContact(std::vector<std::string> *args);
-	void		CallSomeone(std::vector<std::string> *args);
-	void		HangCall(std::vector<std::string> *args);
-	void		List(std::vector<std::string> *args);
-	void		Show(std::vector<std::string> *args);
-	void		SendMsg(std::vector<std::string> *args);
-	void		CloseCall(std::vector<std::string> *args);
+	void		Subscribe(std::vector<std::string> &args);
+	void		Connect(std::vector<std::string> &args);
+	void		Disconnect(std::vector<std::string> &args);
+	void		GetContact(std::vector<std::string> &args);
+	void		Update(std::vector<std::string> &args);
+	void		AddContact(std::vector<std::string> &args);
+	void		DellContact(std::vector<std::string> &args);
+	void		AcceptContact(std::vector<std::string> &args);
+	void		CallSomeone(std::vector<std::string> &args);
+	void		HangCall(std::vector<std::string> &args);
+	void		List(std::vector<std::string> &args);
+	void		Show(std::vector<std::string> &args);
+	void		SendMsg(std::vector<std::string> &args);
+	void		CloseCall(std::vector<std::string> &args);
 
-	void		exeCmd(ICommand::Instruction instruction, std::vector<std::string> *args);
-
-	//recup cmd
-	/*
-	std::vector<std::string>	cmdArg;
-	std::vector<int>			argSize;
-	int							nbArg;
-	int							cmdState;*/
+	void		exeCmd(ICommand::Instruction instruction, std::vector<std::string> &args);
 
 	//client's listener
-    Client::OnClientEvent&      mListener;
+    Client::OnClientEvent&      Listener;
 };

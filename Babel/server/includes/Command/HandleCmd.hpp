@@ -8,7 +8,7 @@ public:
 
 	std::vector<std::string>	*unPackCmd(void);
 	ICommand::Instruction		getInstruction(void);
-	void						packCmd(ICommand::Instruction instruction, std::vector<std::string> *param);
+	void						packCmd(ICommand::Instruction instruction, std::vector<std::string> &param);
 
 private:
 	ICommand				*body;

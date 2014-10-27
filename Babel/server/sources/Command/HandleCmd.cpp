@@ -31,11 +31,11 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 	return NULL;
 }
 
-void						HandleCmd::packCmd(ICommand::Instruction instruction, std::vector<std::string> *param){
+void						HandleCmd::packCmd(ICommand::Instruction instruction, std::vector<std::string> &param){
 	ICommand				*cmd;
 
 	cmd = Factory::getCommand(instruction);
-	this->socket->send(*(cmd->setParam(param)));
+	this->socket->send(*(cmd->setParam(&param)));
 }
 
 ICommand::Instruction		HandleCmd::getInstruction(void){
