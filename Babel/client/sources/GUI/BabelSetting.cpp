@@ -1,3 +1,4 @@
+#include "BabelMainWindow.hpp"
 #include "BabelSetting.hpp"
 
 BabelSetting::BabelSetting(void)
@@ -22,9 +23,9 @@ BabelSetting::~BabelSetting(void)
 
 void		BabelSetting::getIpPort()
 {
-	QString	addr(mUi.addrEdit->text());
-	QString port(mUi.portEdit->text());
+	mAddr = mUi.addrEdit->text();
+	mPort = mUi.portEdit->text().toInt();
 
-	QString	text("address: " + addr + "\nport: " + port);
+	QString	text("address: " + mAddr + "\nport: " + QString::number(mPort));
 	(&mDialog)->getUi().textBrowser->setText(QApplication::translate("BabelDialogClass", text.toStdString().c_str(), 0));
 }

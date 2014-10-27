@@ -19,10 +19,14 @@ class BabelSetting : public QWidget, public Ui_BabelSetting
 	private:
 		Ui::BabelSetting	mUi;
 		BabelDialog			mDialog;
+		QString				mAddr;
+		int					mPort;
 
 	// methods
 	public:
 		Ui::BabelSetting const	&getUi() const { return mUi; }
+		QString const			&getAddr() const { return mAddr; }
+		int						getPort() const { return mPort; }
 
 	// slots
 	public slots :
