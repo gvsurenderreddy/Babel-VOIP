@@ -17,7 +17,7 @@ IClientSocket::Message	CommandAcceptAdd::getMessage(void) const {
 	CommandAcceptAdd::PacketFromClient *packet = new CommandAcceptAdd::PacketFromClient;
 
 	std::memset(packet, 0, sizeof(CommandAcceptAdd::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
 	packet->hasAccepted = mHasAccepted;
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::ACCEPT_ADD;

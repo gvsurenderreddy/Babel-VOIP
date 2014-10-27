@@ -57,6 +57,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	callContactSuccess(const ErrorStatus &errorStatus);
 		void	acceptCallSuccess(const ErrorStatus &errorStatus);
 		void	terminateCallSuccess(const ErrorStatus &errorStatus);
+		void	connectToServerSuccess(const ErrorStatus &errorStatus);
 
 	// signals
 	signals:
@@ -71,6 +72,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	askForCalling(const Contact &contact);
 		void	askForAcceptingCall(const Contact &contact, bool hasAccepted);
 		void	askForTerminatingCall(const Contact &contact);
+		void	askForConnectionToServer(const QString &addr, int port);
 
 	// member function
 	public:

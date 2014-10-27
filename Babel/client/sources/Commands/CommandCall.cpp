@@ -17,7 +17,7 @@ IClientSocket::Message	CommandCall::getMessage(void) const {
 	CommandCall::PacketFromClient *packet = new CommandCall::PacketFromClient;
 
 	std::memset(packet, 0, sizeof(CommandCall::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName), mAccountName.length()));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName) - 1, mAccountName.length()));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::CALL;
 

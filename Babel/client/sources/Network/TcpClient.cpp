@@ -35,14 +35,20 @@ void	TcpClient::closeClient(void) {
 }
 
 void	TcpClient::close(void) {
-	if (mQTcpSocket)
+	if (mQTcpSocket) {
 		mQTcpSocket->disconnectFromHost();
+		delete mQTcpSocket;
+		mQTcpSocket = NULL;
+	}
 
 	if (mListener)
 		mListener->onSocketClosed(this);
 }
 
 void	TcpClient::send(const IClientSocket::Message &message) {
+	if (mQTcpSocket == NULL)
+		throw new SocketException("socket not connected");
+
 	int ret = mQTcpSocket->write(message.msg, message.msgSize);
 
 	if (ret == -1)
@@ -54,6 +60,9 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 
 	if (nbBytesToRead() == 0)
 		throw new SocketException("Socket not readable");
+
+	if (mQTcpSocket == NULL)
+		throw new SocketException("socket not connected");
 
 	message.msg = new char[sizeToRead + 1];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
@@ -68,10 +77,16 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 }
 
 unsigned int	TcpClient::nbBytesToRead(void) const {
+	if (mQTcpSocket == NULL)
+		throw new SocketException("socket not connected");
+
 	return mQTcpSocket->bytesAvailable();
 }
 
 void	TcpClient::markAsReadable(void) {
+	if (mQTcpSocket == NULL)
+		throw new SocketException("socket not connected");
+
 	mIsReadable = true;
 
 	if (mListener)

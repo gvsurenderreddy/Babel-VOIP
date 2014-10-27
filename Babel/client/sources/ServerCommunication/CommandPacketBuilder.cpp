@@ -22,6 +22,7 @@ void	CommandPacketBuilder::sendCommand(const ICommand *command) {
 }
 
 void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
+	mClient->closeClient();
 	mClient->connect(addr.toStdString(), port);
 }
 

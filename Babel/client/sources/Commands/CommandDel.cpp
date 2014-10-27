@@ -17,7 +17,7 @@ IClientSocket::Message	CommandDel::getMessage(void) const {
 	CommandDel::PacketFromClient *packet = new CommandDel::PacketFromClient;
 
 	std::memset(packet, 0, sizeof(CommandDel::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName), mAccountName.length()));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName) - 1, mAccountName.length()));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::DEL;
 
