@@ -172,7 +172,7 @@ border-style: outset;
     <string>Se connecter</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="signin">
+  <widget class="QPushButton" name="signup">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -297,7 +297,7 @@ border-style: outset;
    </hints>
   </connection>
   <connection>
-   <sender>signin</sender>
+   <sender>signup</sender>
    <signal>clicked()</signal>
    <receiver>BabelFlyer</receiver>
    <slot>hide()</slot>

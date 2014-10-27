@@ -114,7 +114,7 @@ color: rgba(15, 87, 154, 192);
 </string>
    </property>
    <property name="text">
-    <string>Paramètre</string>
+    <string>Paramètres</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>

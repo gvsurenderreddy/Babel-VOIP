@@ -16,55 +16,85 @@
   <property name="styleSheet">
    <string notr="true">background-image: url(:/background_image.png);</string>
   </property>
-  <widget class="QPushButton" name="minimize">
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
+     <x>0</x>
+     <y>0</y>
+     <width>511</width>
+     <height>151</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
+background-color: rbga(0,0,0,128);
+</string>
+   </property>
+   <widget class="QPushButton" name="close">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Small Fonts</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
+      border: none;
+      background-color: rgba(255, 255, 255, 32);
+      color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>x</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="minimize">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>10</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Small Fonts</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
       border: none;
       background-color: rgba(255, 255, 255, 32);
       color: rgb(255, 255, 255);
       </string>
-   </property>
-   <property name="text">
-    <string>-</string>
-   </property>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+   </widget>
   </widget>
-  <widget class="QPushButton" name="close">
+  <widget class="QListView" name="listView">
    <property name="geometry">
     <rect>
-     <x>460</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
+     <x>10</x>
+     <y>160</y>
+     <width>491</width>
+     <height>701</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
    <property name="styleSheet">
-    <string notr="true">background: none;
-      border: none;
-      background-color: rgba(255, 255, 255, 32);
-      color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>x</string>
+    <string notr="true">background:none;
+background-color: rgba(255, 255, 255, 64);
+</string>
    </property>
   </widget>
  </widget>
