@@ -17,7 +17,7 @@ IClientSocket::Message	CommandCloseCall::getMessage(void) const {
 	CommandCloseCall::PacketFromClient *packet = new CommandCloseCall::PacketFromClient;
 
 	std::memset(packet, 0, sizeof(CommandCloseCall::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName), mAccountName.length()));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName) - 1, mAccountName.length()));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::CLOSE_CALL;
 

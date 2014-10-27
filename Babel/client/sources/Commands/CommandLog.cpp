@@ -17,8 +17,8 @@ IClientSocket::Message	CommandLog::getMessage(void) const {
 	CommandLog::PacketFromClient *packet = new CommandLog::PacketFromClient;
 
 	std::memset(packet, 0, sizeof(CommandLog::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName)));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password)));
+	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
+	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
 	packet->header.instructionCode = ICommand::LOG;
 
