@@ -13,7 +13,7 @@ void	UdpClient::connect(const std::string &/*addr*/, int port) {
 	mQUdpSocket = new QUdpSocket(this);
 
 	if (mQUdpSocket->bind(QHostAddress::LocalHost, port) == false)
-		throw new SocketException("fail QUdpSocket::bind");
+		throw SocketException("fail QUdpSocket::bind");
 
 	QObject::connect(mQUdpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
 	QObject::connect(mQUdpSocket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
@@ -43,7 +43,7 @@ void	UdpClient::send(const IClientSocket::Message &message) {
 	int ret = mQUdpSocket->writeDatagram(message.msg, message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
 
 	if (ret == -1)
-		throw new SocketException("fail QTcpSocket::write");
+		throw SocketException("fail QTcpSocket::write");
 }
 
 IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
@@ -52,7 +52,7 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	quint16 port;
 
 	if (nbBytesToRead() == 0)
-		throw new SocketException("Socket not readable");
+		throw SocketException("Socket not readable");
 
 	message.msg = new char[sizeToRead + 1];
 	message.msgSize = mQUdpSocket->readDatagram(message.msg, sizeToRead, &host, &port);
@@ -61,7 +61,7 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	mIsReadable = false;
 
 	if (message.msgSize == -1)
-		throw new SocketException("fail QTcpSocket::read");
+		throw SocketException("fail QTcpSocket::read");
 
 	return message;
 }

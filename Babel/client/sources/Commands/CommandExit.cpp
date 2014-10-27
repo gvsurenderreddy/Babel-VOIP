@@ -26,9 +26,9 @@ IClientSocket::Message	CommandExit::getMessage(void) const {
 }
 
 unsigned int	CommandExit::getSizeToRead(void) const {
-	throw new CommandException("No packet are sent from the server for this command");
+	throw CommandException("No packet are sent from the server for this command");
 }
 
 void	CommandExit::initFromMessage(const IClientSocket::Message &) {
-	throw new CommandException("No packet are sent from the server for this command");
+	throw CommandException("No packet are sent from the server for this command");
 }

@@ -1,4 +1,5 @@
 #include <QFontDatabase>
+#include <iostream>
 #include "BabelMainWindow.hpp"
 
 using namespace std;
@@ -36,13 +37,12 @@ BabelMainWindow::~BabelMainWindow(void)
 
 void	BabelMainWindow::show()
 {
-	/*
 	Contact contact;
 
 	contact.setAccountName("someAccountName");
 	contact.setPassword("somePassword");
 	emit askForAuthentication(contact);
-	*/
+
 	mFlyer.show();
 }
 
@@ -101,4 +101,8 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 }
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &) {
+}
+
+void	BabelMainWindow::disconnectedFromServer(void) {
+	std::cout << "disconnected from server" << std::endl;
 }

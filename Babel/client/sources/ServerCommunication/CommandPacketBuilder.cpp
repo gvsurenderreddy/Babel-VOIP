@@ -1,6 +1,7 @@
 #include "CommandPacketBuilder.hpp"
 #include "TcpClient.hpp"
 #include "CommandException.hpp"
+#include "SocketException.hpp"
 
 CommandPacketBuilder::CommandPacketBuilder(void)
 	: mClient(NULL), mCurrentCommand(NULL), mCurrentState(CommandPacketBuilder::HEADER)
@@ -18,11 +19,15 @@ CommandPacketBuilder::~CommandPacketBuilder(void) {
 }
 
 void	CommandPacketBuilder::sendCommand(const ICommand *command) {
-	mClient->send(command->getMessage());
+	try {
+		mClient->send(command->getMessage());
+	}
+	catch (const SocketException &e) {
+		emit disconnectedFromHost();
+	}
 }
 
 void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
-	mClient->closeClient();
 	mClient->connect(addr.toStdString(), port);
 }
 
@@ -30,11 +35,13 @@ void	CommandPacketBuilder::fetchCommandHeader(void) {
 	IClientSocket::Message message = mClient->receive(ICommand::HEADER_SIZE);
 	ICommand::Header *header = reinterpret_cast<ICommand::Header *>(message.msg);
 
-	if (header->magicCode != ICommand::MAGIC_CODE)
-		throw new CommandException("Wrong magic code");
-
 	mCurrentCommand = ICommand::getCommand(static_cast<ICommand::Instruction>(header->instructionCode));
 	mCurrentState = CommandPacketBuilder::CONTENT;
+
+	if (header->magicCode != ICommand::MAGIC_CODE || mCurrentCommand == NULL) {
+		mClient->closeClient();
+		return;
+	}
 
 	onSocketReadable(mClient, mClient->nbBytesToRead());
 }
@@ -42,14 +49,17 @@ void	CommandPacketBuilder::fetchCommandHeader(void) {
 void	CommandPacketBuilder::fetchCommandContent(void) {
 	IClientSocket::Message message = mClient->receive(mCurrentCommand->getSizeToRead());
 
-	mCurrentCommand->initFromMessage(message);
+	try {
+		mCurrentCommand->initFromMessage(message);
+	}
+	catch (const CommandException &e) {
+		mClient->closeClient();
+		return;
+	}
+
 	emit receiveCommand(mCurrentCommand);
 
-	delete mCurrentCommand;
-	mCurrentCommand = NULL;
-
-	mCurrentState = CommandPacketBuilder::HEADER;
-
+	resetCurrentCommand();
 	onSocketReadable(mClient, mClient->nbBytesToRead());
 }
 
@@ -61,8 +71,15 @@ void	CommandPacketBuilder::onSocketReadable(IClientSocket *, unsigned int nbByte
 }
 
 void	CommandPacketBuilder::onSocketClosed(IClientSocket *) {
-	if (mCurrentCommand) {
+	resetCurrentCommand();
+}
+
+void	CommandPacketBuilder::resetCurrentCommand(void) {
+	if (mCurrentCommand)
 		delete mCurrentCommand;
-		mCurrentCommand = NULL;
-	}
+
+	mCurrentCommand = NULL;
+	mCurrentState = CommandPacketBuilder::HEADER;
+
+	emit disconnectedFromHost();
 }

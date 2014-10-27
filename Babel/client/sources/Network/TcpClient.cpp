@@ -3,7 +3,7 @@
 #include <qhostaddress.h>
 
 TcpClient::TcpClient(void)
-	: mQTcpSocket(NULL), mIsReadable(false), mListener(NULL) {}
+: mQTcpSocket(NULL), mListener(NULL) {}
 
 TcpClient::~TcpClient(void) {
 	if (mQTcpSocket)
@@ -11,11 +11,12 @@ TcpClient::~TcpClient(void) {
 }
 
 void	TcpClient::connect(const std::string &addr, int port) {
+	close(false);
 	mQTcpSocket = new QTcpSocket(this);
 	mQTcpSocket->connectToHost(QString(addr.c_str()), port);
 
 	if (mQTcpSocket->waitForConnected(-1) == false)
-		throw new SocketException("fail QTcpSocket::connectToHost & QTcpSocket::waitForConnected");
+		throw SocketException("fail QTcpSocket::connectToHost & QTcpSocket::waitForConnected");
 
 	QObject::connect(mQTcpSocket, SIGNAL(readyRead()), this, SLOT(markAsReadable()));
 	QObject::connect(mQTcpSocket, SIGNAL(disconnected()), this, SLOT(close()));
@@ -34,60 +35,57 @@ void	TcpClient::closeClient(void) {
 	close();
 }
 
-void	TcpClient::close(void) {
+void	TcpClient::close(bool callListener) {
 	if (mQTcpSocket) {
 		mQTcpSocket->disconnectFromHost();
 		delete mQTcpSocket;
 		mQTcpSocket = NULL;
 	}
 
-	if (mListener)
+	if (mListener && callListener)
 		mListener->onSocketClosed(this);
 }
 
 void	TcpClient::send(const IClientSocket::Message &message) {
 	if (mQTcpSocket == NULL)
-		throw new SocketException("socket not connected");
+		throw SocketException("socket not connected");
 
 	int ret = mQTcpSocket->write(message.msg, message.msgSize);
 
 	if (ret == -1)
-		throw new SocketException("fail QTcpSocket::write");
+		throw SocketException("fail QTcpSocket::write");
 }
 
 IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	IClientSocket::Message message;
 
 	if (nbBytesToRead() == 0)
-		throw new SocketException("Socket not readable");
+		throw SocketException("Socket not readable");
 
 	if (mQTcpSocket == NULL)
-		throw new SocketException("socket not connected");
+		throw SocketException("socket not connected");
 
 	message.msg = new char[sizeToRead + 1];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
 	message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
 	message.port = mQTcpSocket->peerPort();
-	mIsReadable = false;
 
 	if (message.msgSize == -1)
-		throw new SocketException("fail QTcpSocket::read");
+		throw SocketException("fail QTcpSocket::read");
 
 	return message;
 }
 
 unsigned int	TcpClient::nbBytesToRead(void) const {
 	if (mQTcpSocket == NULL)
-		throw new SocketException("socket not connected");
+		throw SocketException("socket not connected");
 
 	return mQTcpSocket->bytesAvailable();
 }
 
 void	TcpClient::markAsReadable(void) {
 	if (mQTcpSocket == NULL)
-		throw new SocketException("socket not connected");
-
-	mIsReadable = true;
+		throw SocketException("socket not connected");
 
 	if (mListener)
 		mListener->onSocketReadable(this, mQTcpSocket->bytesAvailable());

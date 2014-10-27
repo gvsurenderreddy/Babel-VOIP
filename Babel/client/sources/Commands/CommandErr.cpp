@@ -13,7 +13,7 @@ ICommand::Instruction	CommandErr::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandErr::getMessage(void) const {
-	throw new CommandException("No packet can be sent from the client for this command");
+	throw CommandException("No packet can be sent from the client for this command");
 }
 
 unsigned int	CommandErr::getSizeToRead(void) const {
@@ -22,7 +22,7 @@ unsigned int	CommandErr::getSizeToRead(void) const {
 
 void	CommandErr::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandErr::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandErr::PacketFromServer *packet = reinterpret_cast<CommandErr::PacketFromServer *>(message.msg);
 	mInstructionCode = static_cast<ICommand::Instruction>(packet->instructionCode);

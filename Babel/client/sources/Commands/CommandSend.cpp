@@ -34,7 +34,7 @@ unsigned int	CommandSend::getSizeToRead(void) const {
 
 void	CommandSend::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandSend::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandSend::PacketFromServer *packet = reinterpret_cast<CommandSend::PacketFromServer *>(message.msg);
 	mAccountName = packet->accountName;

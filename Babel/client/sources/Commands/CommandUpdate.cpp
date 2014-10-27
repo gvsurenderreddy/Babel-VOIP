@@ -31,11 +31,11 @@ IClientSocket::Message	CommandUpdate::getMessage(void) const {
 }
 
 unsigned int	CommandUpdate::getSizeToRead(void) const {
-	throw new CommandException("No packet are sent from the server for this command.");
+	throw CommandException("No packet are sent from the server for this command.");
 }
 
 void	CommandUpdate::initFromMessage(const IClientSocket::Message &) {
-	throw new CommandException("No packet are sent from the server for this command.");
+	throw CommandException("No packet are sent from the server for this command.");
 }
 
 const QString	&CommandUpdate::getAccountName(void) const {

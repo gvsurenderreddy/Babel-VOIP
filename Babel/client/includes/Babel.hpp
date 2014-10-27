@@ -11,13 +11,6 @@ class Babel : public QObject {
 
 	Q_OBJECT
 
-	// client state
-	enum State {
-		CONNECTED,
-		NOT_CONNECTED,
-		IN_COMMUNICATION
-	};
-
 	// ctor - dtor
 	public:
 		Babel(void);
@@ -43,7 +36,6 @@ class Babel : public QObject {
 
 	// attributes
 	private:
-		Babel::State		mState;
 		Contact				mLoggedUser;
 		QList<Contact>		mContacts;
 		BabelMainWindow		mMainWindow;

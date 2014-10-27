@@ -44,6 +44,7 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 
 ServerCommunication::ServerCommunication(void) {
 	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
+	connect(&mCommandPacketBuilder, SIGNAL(disconnectedFromHost()), this, SLOT(onDisconnection()));
 }
 
 ServerCommunication::~ServerCommunication(void) {
@@ -252,10 +253,14 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 		errorStatus.setErrorCode(ErrorStatus::OK);
 		errorStatus.setErrorOccurred(false);
 	}
-	catch (SocketException &e) {
+	catch (const SocketException &e) {
 		errorStatus.setErrorCode(ErrorStatus::FAIL_CONNECT_TO_SERVER);
 		errorStatus.setErrorOccurred(true);
 	}
 
 	emit receiveAnswerForConnectionToServer(errorStatus);
+}
+
+void	ServerCommunication::onDisconnection(void) {
+	emit disconnectedFromServer();
 }

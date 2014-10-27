@@ -33,7 +33,7 @@ unsigned int	CommandDel::getSizeToRead(void) const {
 
 void	CommandDel::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandDel::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandDel::PacketFromServer *packet = reinterpret_cast<CommandDel::PacketFromServer *>(message.msg);
 	mAccountName = packet->accountName;
