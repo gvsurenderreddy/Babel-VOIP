@@ -21,13 +21,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>511</width>
-     <height>151</height>
+     <width>512</width>
+     <height>76</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rbga(0,0,0,128);
+background-color: rbga(0,0,0,96);
 </string>
    </property>
    <widget class="QPushButton" name="close">
@@ -85,15 +85,58 @@ background-color: rbga(0,0,0,128);
   <widget class="QListView" name="listView">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>160</y>
-     <width>491</width>
-     <height>701</height>
+     <x>0</x>
+     <y>146</y>
+     <width>512</width>
+     <height>661</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background:none;
-background-color: rgba(255, 255, 255, 64);
+background-color: rgba(255, 255, 255, 96);
+border: none;
+</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="title">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>76</y>
+     <width>512</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 192);
+font: 28pt &quot;Open Sans Light&quot;;
+color: rgba(15, 87, 154, 192);
+
+</string>
+   </property>
+   <property name="text">
+    <string>Conversation</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>806</y>
+     <width>512</width>
+     <height>64</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255,255,255,192);
+border: none;
+padding: 8px;
+font: 16px &quot;Open Sans Light&quot;;
 </string>
    </property>
   </widget>

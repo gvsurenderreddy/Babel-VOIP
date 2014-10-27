@@ -16,10 +16,11 @@ BabelMainWindow::BabelMainWindow(void)
 		mLogin.setFont(openSansLightFont);
 		mSignup.setFont(openSansLightFont);
 		mSetting.setFont(openSansLightFont);
+		mMain.setFont(openSansLightFont);
 	}
 
 	// action when click on login/signin
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mLogin, SLOT(show()));
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
 	QObject::connect(mFlyer.getUi().signup, SIGNAL(clicked()), &mSignup, SLOT(show()));
 	QObject::connect(mFlyer.getUi().p, SIGNAL(clicked()), &mSetting, SLOT(show()));
 

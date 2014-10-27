@@ -1,6 +1,7 @@
 #include "BabelFlyer.hpp"
 
 BabelFlyer::BabelFlyer(void)
+	: QWidget()
 {
 	mUi.setupUi(this);
 

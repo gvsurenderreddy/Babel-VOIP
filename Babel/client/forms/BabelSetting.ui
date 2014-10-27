@@ -233,6 +233,73 @@ padding: 8px;
     <string>Confirmez le mot de passe</string>
    </property>
   </widget>
+  <widget class="QLineEdit" name="adrEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>690</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Adresse IP</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="portEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>740</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Port</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="test">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>790</y>
+     <width>391</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgb(22, 87, 127);
+color: rgb(255, 255, 255);
+font: 12pt &quot;Verdana&quot;;
+border-style: outset;
+      </string>
+   </property>
+   <property name="text">
+    <string>Se connecter</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="../resources/BabelMainWindow.qrc"/>
