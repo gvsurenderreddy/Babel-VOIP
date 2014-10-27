@@ -57,6 +57,7 @@ class ServerCommunication : public QObject {
 		void	receiveServerAnswerForCallingContact(const ErrorStatus &errorStatus);
 		void	receiveServerAnswerForAcceptingCallInvitation(const ErrorStatus &errorStatus);
 		void	receiveServerAnswerForTerminatingCall(const ErrorStatus &errorStatus);
+		void	receiveAnswerForConnectionToServer(const ErrorStatus &errorStatus);
 
 	// send commands slots
 	public slots:
@@ -73,6 +74,7 @@ class ServerCommunication : public QObject {
 		void	call(const Contact &contact);
 		void	acceptCallInvitation(const Contact &contact, bool hasAccepted);
 		void	terminateCall(const Contact &contact);
+		void	connectToServer(const QString &addr, int port);
 
 	// ctor - dtor
 	public:
@@ -83,10 +85,6 @@ class ServerCommunication : public QObject {
 	private:
 		ServerCommunication(const ServerCommunication &) : QObject() {}
 		const ServerCommunication &operator=(const ServerCommunication &) { return *this; }
-
-	// connect to server
-	public:
-		void	connectToServer(const QString &addr, int port);
 
 	// receive command
 	private slots :

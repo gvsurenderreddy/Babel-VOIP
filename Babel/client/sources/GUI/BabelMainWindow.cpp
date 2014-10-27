@@ -98,3 +98,6 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &) {
 
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 }
+
+void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &) {
+}

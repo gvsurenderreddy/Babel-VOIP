@@ -13,6 +13,7 @@
 #include "CommandAcceptAdd.hpp"
 #include "CommandUpdate.hpp"
 #include "CommandErr.hpp"
+#include "SocketException.hpp"
 
 const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[] = {
 	{ ICommand::SHOW,					&ServerCommunication::handleShowCommand			},
@@ -43,8 +44,6 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 
 ServerCommunication::ServerCommunication(void) {
 	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
-
-	//mCommandPacketBuilder.connectToServer("127.0.0.1", 4243);
 }
 
 ServerCommunication::~ServerCommunication(void) {
@@ -58,10 +57,6 @@ void	ServerCommunication::treatCommand(const ICommand *command) {
 
 	if (handleCommandsTab[i].instruction == instruction)
 		(this->*handleCommandsTab[i].handler)(command);
-}
-
-void	ServerCommunication::connectToServer(const QString &addr, int port) {
-	mCommandPacketBuilder.connectToServer(addr, port);
 }
 
 void	ServerCommunication::handleShowCommand(const ICommand *command) {
@@ -247,4 +242,20 @@ void	ServerCommunication::terminateCall(const Contact &contact) {
 	commandCloseCall->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandCloseCall);
+}
+
+void	ServerCommunication::connectToServer(const QString &addr, int port) {
+	ErrorStatus errorStatus;
+
+	try {
+		mCommandPacketBuilder.connectToServer(addr, port);
+		errorStatus.setErrorCode(ErrorStatus::OK);
+		errorStatus.setErrorOccurred(false);
+	}
+	catch (SocketException &e) {
+		errorStatus.setErrorCode(ErrorStatus::FAIL_CONNECT_TO_SERVER);
+		errorStatus.setErrorOccurred(true);
+	}
+
+	emit receiveAnswerForConnectionToServer(errorStatus);
 }

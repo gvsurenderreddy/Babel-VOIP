@@ -6,7 +6,8 @@ class ErrorStatus {
 	public:
 		enum ErrorCode {
 			OK = 0x01,
-			THE_IMPOSSIBLE_HAPPENED = 0x02
+			THE_IMPOSSIBLE_HAPPENED = 0x02,
+			FAIL_CONNECT_TO_SERVER = 0x03
 		};
 
 	// ctor dtor
