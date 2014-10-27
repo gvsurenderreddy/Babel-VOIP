@@ -43,6 +43,8 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 
 ServerCommunication::ServerCommunication(void) {
 	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
+
+	//mCommandPacketBuilder.connectToServer("127.0.0.1", 4243);
 }
 
 ServerCommunication::~ServerCommunication(void) {

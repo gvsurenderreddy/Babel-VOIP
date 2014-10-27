@@ -34,10 +34,16 @@ void TcpServer::startAccept(void)
     tcp::socket *socket = new tcp::socket(mService);
     mSockets.push_back(socket);
     mAcceptor->async_accept(*socket, [this](const boost::system::error_code& error) {
-        if (error)
+        if (!error)
+        {
+            if (mListener)
+                mListener->onNewConnection(this);
+        }
+        else
+        {
             std::cout << error.message() << std::endl;
-        else if (mListener)
-            mListener->onNewConnection(this);
+            delete this;
+        }
         startAccept();
     });
 }

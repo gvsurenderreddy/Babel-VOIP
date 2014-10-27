@@ -88,6 +88,6 @@ SOURCES         +=      sources/main.cpp                        \
 						sources/Factory.cpp
 
 
-DEFINES			+=		_AFXDLL _MBCS
+DEFINES			+=		_AFXDLL _MBCS UNICODE
 
 win32:DEFINES	+=		_WIN32_WINNT=0x0501 _CRT_SECURE_NO_WARNINGS

@@ -25,7 +25,7 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 	body->errorCode = 0;
 	body->instructionCode = ICommand::UPDATE;
 
-	msg->msgSize = sizeof(body);
+	msg->msgSize = sizeof(*body);
 	msg->msg = reinterpret_cast<char *>(body);
 	return (msg);
 }

@@ -7,7 +7,7 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient)
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient) : mSocket(clientSocket), mListener(listenerClient), isConnected(false)
 {
     mSocket->setOnSocketEventListener(this);
 	handleCmd = new HandleCmd(clientSocket);
@@ -83,14 +83,21 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 ** Function cmd
 */
 void	Client::Subscribe(std::vector<std::string> *args){
+    mListener.onSubscribe((*args)[0], (*args)[1]);
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Connect(std::vector<std::string> *args){
-	this->handleCmd->packCmd(ICommand::ERR, args);
+    if (mListener.onConnect((*args)[0], (*args)[1]))
+    {
+        isConnected = true;
+    }
+  	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Disconnect(std::vector<std::string> *args){
+    mListener.onDisconnect((*args)[0]);
+    isConnected = false;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 

@@ -1,10 +1,16 @@
-#include "BabelServer.hpp"
+﻿#include "BabelServer.hpp"
 #include "IServerSocket.hpp"
 #include "TcpServer.hpp"
 
+#include <iomanip>
 #include <iostream>
-
-const unsigned int BabelServer::BABEL_DEFAULT_LISTEN_PORT = 4242;
+#include <fstream>
+/*
+#include <boost/filesystem.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+*/
+const unsigned int BabelServer::BABEL_DEFAULT_LISTEN_PORT = 4243;
 const unsigned int BabelServer::BABEL_DEFAULT_QUEUE_SIZE = 128;
 
 BabelServer::BabelServer() : mServerSocket(NULL)
@@ -35,53 +41,101 @@ void BabelServer::onNewConnection(IServerSocket *serverSocket)
 /*
 ** OnClientEvent
 */
-bool BabelServer::onSubscribe(const std::string &acount, const std::string &password){
-	acount;
-	password;
-	return (true);
+bool BabelServer::onSubscribe(const std::string &account, const std::string &password)
+{
+    /*
+    const std::string& filename = "user/" + account + ".xml";
+
+    if (boost::filesystem::exists(filename) == true)
+        return false;
+
+    BabelServer::Account newAccount(account, password);
+
+    std::ofstream ofs(filename);
+    if (!ofs.good() || ofs.fail())
+        return false;
+    
+    boost::archive::xml_oarchive oa(ofs);
+    oa << newAccount;
+    */
+    return (true);
 }
 
 bool BabelServer::onConnect(const std::string &account, const std::string &password){
-	account;
-	password;
-	return (true);
+
+    std::cout << "account: '" << account << "'" << std::endl;
+    std::cout << "password: '" << password << "'" << std::endl;
+    /*
+    const std::string& filename = "user/" + account + ".xml";
+
+    if (boost::filesystem::exists(filename) == false)
+        return false;
+
+    BabelServer::Account wantedAccount;
+
+    std::ifstream ifs(filename);
+    if (!ifs.good() || ifs.fail())
+        return false;
+
+    boost::archive::xml_iarchive ia(ifs);
+    ia >> wantedAccount;
+
+    if (wantedAccount.mPassword != password)
+        return false;
+        */
+    return true;
 }
 
 void BabelServer::onDisconnect(const std::string &account){
-	account;
+
+    auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
+    { return client->getName() == account; });
+    if (mClients.end() != it)
+    {
+        // notify each of his contacts
+        std::for_each((*it)->getContact().begin(), (*it)->getContact().end(), [this](const std::string &account)
+        {
+            auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
+            if (mClients.end() != it) // check if he is here
+            {
+                // envoyer une commande pour indiquer aux clients que un de ses contacts s'est deconnect�
+            }
+        });
+        // (*it)->setConnected(false); // set the client to disconnect state
+    }
 }
 
 const std::string &BabelServer::onGetContact(const std::list<std::string> &contacts){
-	contacts;
+    contacts;
     std::string test = "";
-	return (test);
+    return (test);
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password){
-	password;
-	account;
-	return (true);
+    password;
+    account;
+    return (true);
 }
 
 bool BabelServer::onAddContact(const std::string &account){
-	account;
-	return (true);
+    account;
+    return (true);
 }
 
 void BabelServer::DellContact(const std::string &args){
-	args;
+    args;
 }
 
-void BabelServer::onAcceptContact(const bool &accept, const std::string &account){
-	accept;
-	account;
+void BabelServer::onAcceptContact(bool accept, const std::string &account){
+    accept;
+    account;
 }
 
 void BabelServer::onCallSomeone(const std::string &account){
-	account;
+    account;
 }
 
 void BabelServer::onHangCall(const bool &hang, const std::string &account){
-	hang;
-	account;
+    hang;
+    account;
 }

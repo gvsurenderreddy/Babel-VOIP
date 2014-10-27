@@ -35,7 +35,7 @@ IClientSocket::Message			*CommandShow::setParam(std::vector<std::string> *param)
 	std::memcpy(body->pseudo, "yolo", 4);
 	body->status = 9;
 
-	msg->msgSize = sizeof(body);
+	msg->msgSize = sizeof(*body);
 	msg->msg = reinterpret_cast<char *>(body);
 	return (msg);
 }
