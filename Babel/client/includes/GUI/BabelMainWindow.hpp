@@ -68,6 +68,8 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	connectToServerSuccess(const ErrorStatus &errorStatus);
 		void	disconnectedFromServer(void);
 
+		void	askConnectionToServer();
+
 	// signals
 	signals:
 		void	askForRegistration(const Contact &contact);
