@@ -19,11 +19,11 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 	IClientSocket::Message		*msg = new IClientSocket::Message;
 	CommandErr::Body			*body = new CommandErr::Body;
 
-	param;
 	body->header.instructionCode = ICommand::ERR;
 	body->header.magicCode = ICommand::MAGIC_CODE;
-	body->errorCode = 0;
-	body->instructionCode = ICommand::UPDATE;
+
+	body->errorCode = (*param)[0][0];
+	body->instructionCode = (*param)[1][0];
 
 	msg->msgSize = sizeof(*body);
 	msg->msg = reinterpret_cast<char *>(body);
