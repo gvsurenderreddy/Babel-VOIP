@@ -9,11 +9,6 @@ class SoundException : public std::runtime_error {
 		SoundException(const std::string &error);
 		~SoundException(void) throw() {}
 
-	// private coplien form
-	private:
-		SoundException(const SoundException &) : std::runtime_error("") {}
-		const SoundException &operator=(const SoundException &) { return *this; }
-
 	// reimplementation
 	public:
 		const char	*what(void) const throw();

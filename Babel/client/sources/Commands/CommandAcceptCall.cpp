@@ -34,7 +34,7 @@ unsigned int	CommandAcceptCall::getSizeToRead(void) const {
 
 void	CommandAcceptCall::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandAcceptCall::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandAcceptCall::PacketFromServer *packet = reinterpret_cast<CommandAcceptCall::PacketFromServer *>(message.msg);
 	mAccountName = packet->accountName;

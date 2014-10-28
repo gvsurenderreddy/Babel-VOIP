@@ -17,10 +17,13 @@ class TcpClient : public QObject, public IClientSocket {
 		TcpClient(const TcpClient &) : QObject() {}
 		const TcpClient &operator=(const TcpClient &) { return *this; }
 
-	// start-stop
+	// start
 	public:
 		void	connect(const std::string &addr, int port);
 		void	initFromSocket(void *socket);
+
+	// close
+	public slots:
 		void	closeClient(void);
 
 	// set listener
@@ -37,12 +40,11 @@ class TcpClient : public QObject, public IClientSocket {
 	private slots:
 		void	bytesWritten(qint64 nbBytes);
 		void	markAsReadable(void);
-		void	close(void);
+		void	close(bool callListener = true);
 
 	// attributes
 	private:
 		QTcpSocket	*mQTcpSocket;
-		bool		mIsReadable;
 
 		IClientSocket::OnSocketEvent	*mListener;
 

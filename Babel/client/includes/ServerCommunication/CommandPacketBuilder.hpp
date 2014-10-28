@@ -31,14 +31,19 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 		void	connectToServer(const QString &addr, int port);
 		void	sendCommand(const ICommand *command);
 
-	// receive command
+	// signals
 	signals:
 		void	receiveCommand(const ICommand *command);
+		void	disconnectedFromHost(void);
 
 	// build commands
 	private:
 		void	fetchCommandHeader(void);
 		void	fetchCommandContent(void);
+
+	// intern functions
+	private:
+		void	resetCurrentCommand(void);
 
 	// socket events
 	public:

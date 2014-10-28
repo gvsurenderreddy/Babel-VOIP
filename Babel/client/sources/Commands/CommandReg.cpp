@@ -21,7 +21,7 @@ IClientSocket::Message	CommandReg::getMessage(void) const {
 	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
 	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo) - 1));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
+	packet->header.instructionCode = ICommand::REG;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandReg::PacketFromClient);
@@ -30,11 +30,11 @@ IClientSocket::Message	CommandReg::getMessage(void) const {
 }
 
 unsigned int	CommandReg::getSizeToRead(void) const {
-	throw new CommandException("No packet are sent from the server for this command.");
+	throw CommandException("No packet are sent from the server for this command.");
 }
 
 void	CommandReg::initFromMessage(const IClientSocket::Message &) {
-	throw new CommandException("No packet are sent from the server for this command.");
+	throw CommandException("No packet are sent from the server for this command.");
 }
 
 const QString	&CommandReg::getAccountName(void) const {

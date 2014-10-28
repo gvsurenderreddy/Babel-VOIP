@@ -2,7 +2,7 @@
 #include "Sound.hpp"
 #include "Babel.hpp"
 
-Babel::Babel(void) : mState(Babel::NOT_CONNECTED) {
+Babel::Babel(void) {
 	qRegisterMetaType<Sound::Encoded>();
 
 	connect(&mServerCommunication, SIGNAL(receiveContactInfo(const Contact &)),									this,			SLOT(receiveContactInfo(const Contact &)));
@@ -24,6 +24,7 @@ Babel::Babel(void) : mState(Babel::NOT_CONNECTED) {
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForAcceptingCallInvitation(const ErrorStatus &)),	&mMainWindow,	SLOT(acceptCallSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForTerminatingCall(const ErrorStatus &)),			&mMainWindow,	SLOT(terminateCallSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveAnswerForConnectionToServer(const ErrorStatus &)),				&mMainWindow,	SLOT(connectToServerSuccess(const ErrorStatus &)));
+	connect(&mServerCommunication, SIGNAL(disconnectedFromServer()),											&mMainWindow,	SLOT(disconnectedFromServer()));
 
 	connect(&mMainWindow, SIGNAL(askForRegistration(const Contact &)),						&mServerCommunication,	SLOT(createAccount(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForAuthentication(const Contact &)),					this,					SLOT(askForAuthentication(const Contact &)));

@@ -338,7 +338,7 @@ PaDeviceIndex Pa_HostApiDeviceIndexToDeviceIndex( PaHostApiIndex hostApi,
 typedef struct PaHostErrorInfo{
     PaHostApiTypeId hostApiType;    /**< the host API which returned the error code */
     long errorCode;                 /**< the error code returned */
-    const char *errorText;          /**< a textual description of the error if available, otherwise a zero-length string */
+    const char &errorText;          /**< a textual description of the error if available, otherwise a zero-length string */
 }PaHostErrorInfo;
 
 

@@ -4,7 +4,7 @@
 
 SoundOutputDevice::SoundOutputDevice(void) : mStream(NULL), mIsRunning(false) {
 	if (Pa_Initialize() != paNoError)
-		throw new SoundException("fail Pa_Initialize");
+		throw SoundException("fail Pa_Initialize");
 
 	initOutputDevice();
 }
@@ -17,7 +17,7 @@ SoundOutputDevice::~SoundOutputDevice(void) {
 void	SoundOutputDevice::initOutputDevice(void) {
 	mOutputParameters.device = Pa_GetDefaultOutputDevice();
 	if (mOutputParameters.device == paNoDevice)
-		throw new SoundException("fail Pa_GetDefaultOutputDevice");
+		throw SoundException("fail Pa_GetDefaultOutputDevice");
 
 	mOutputParameters.channelCount = Sound::NB_CHANNELS;
 	mOutputParameters.sampleFormat = paFloat32;
@@ -28,10 +28,10 @@ void	SoundOutputDevice::initOutputDevice(void) {
 void	SoundOutputDevice::startStream(void) {
 	if (mIsRunning == false) {
 		if (Pa_OpenStream(&mStream, NULL, &mOutputParameters, Sound::SAMPLE_RATE, Sound::FRAMES_PER_BUFFER, paClipOff, SoundOutputDevice::callback, this) != paNoError)
-			throw new SoundException("fail Pa_OpenStream");
+			throw SoundException("fail Pa_OpenStream");
 
 		if (Pa_StartStream(mStream) != paNoError)
-			throw new SoundException("fail Pa_StartStream");
+			throw SoundException("fail Pa_StartStream");
 
 		mIsRunning = true;
 	}
@@ -40,7 +40,7 @@ void	SoundOutputDevice::startStream(void) {
 void	SoundOutputDevice::stopStream(void) {
 	if (mIsRunning == true) {
 		if (Pa_CloseStream(mStream) != paNoError)
-			throw new SoundException("fail Pa_StopStream");
+			throw SoundException("fail Pa_StopStream");
 
 		mIsRunning = false;
 	}

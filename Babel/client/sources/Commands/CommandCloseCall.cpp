@@ -33,7 +33,7 @@ unsigned int	CommandCloseCall::getSizeToRead(void) const {
 
 void	CommandCloseCall::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandCloseCall::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandCloseCall::PacketFromServer *packet = reinterpret_cast<CommandCloseCall::PacketFromServer *>(message.msg);
 	mAccountName = packet->accountName;

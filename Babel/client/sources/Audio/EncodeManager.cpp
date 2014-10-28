@@ -6,11 +6,11 @@ EncodeManager::EncodeManager(void) {
 
 	mEncoder = opus_encoder_create(Sound::SAMPLE_RATE, Sound::NB_CHANNELS, OPUS_APPLICATION_VOIP, &error);
 	if (error != OPUS_OK)
-		throw new SoundException("fail opus_encoder_create");
+		throw SoundException("fail opus_encoder_create");
 
 	mDecoder = opus_decoder_create(Sound::SAMPLE_RATE, Sound::NB_CHANNELS, &error);
 	if (error != OPUS_OK)
-		throw new SoundException("fail opus_decoder_create");
+		throw SoundException("fail opus_decoder_create");
 }
 
 EncodeManager::~EncodeManager(void) {
@@ -28,7 +28,7 @@ Sound::Encoded	EncodeManager::encode(const Sound::Decoded &sound) {
 	encoded.size = opus_encode_float(mEncoder, sound.buffer, Sound::FRAMES_PER_BUFFER, encoded.buffer, sound.size);
 
 	if (encoded.size < 0)
-		throw new SoundException("fail opus_encode_float");
+		throw SoundException("fail opus_encode_float");
 
 	delete sound.buffer;
 
@@ -42,7 +42,7 @@ Sound::Decoded	EncodeManager::decode(const Sound::Encoded &sound) {
 	decoded.size = opus_decode_float(mDecoder, sound.buffer, sound.size, decoded.buffer, Sound::FRAMES_PER_BUFFER, 0) * Sound::NB_CHANNELS;
 
 	if (decoded.size < 0)
-		throw new SoundException("fail opus_decode_float");
+		throw SoundException("fail opus_decode_float");
 
 	delete sound.buffer;
 

@@ -66,6 +66,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	acceptCallSuccess(const ErrorStatus &errorStatus);
 		void	terminateCallSuccess(const ErrorStatus &errorStatus);
 		void	connectToServerSuccess(const ErrorStatus &errorStatus);
+		void	disconnectedFromServer(void);
 
 	// signals
 	signals:

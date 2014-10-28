@@ -19,7 +19,7 @@ IClientSocket::Message	CommandShow::getMessage(void) const {
 	std::memset(packet, 0, sizeof(CommandShow::PacketFromClient));
 	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
+	packet->header.instructionCode = ICommand::SHOW;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandShow::PacketFromClient);
@@ -33,7 +33,7 @@ unsigned int	CommandShow::getSizeToRead(void) const {
 
 void	CommandShow::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandShow::PacketFromServer))
-		throw new CommandException("Message has an invalid size");
+		throw CommandException("Message has an invalid size");
 
 	CommandShow::PacketFromServer *packet = new CommandShow::PacketFromServer;
 	mAccountName = packet->accountName;
