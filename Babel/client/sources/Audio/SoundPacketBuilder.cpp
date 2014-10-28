@@ -21,6 +21,7 @@ void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr, int port) {
 }
 
 void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
+
 	IClientSocket::Message msg;
 	SoundPacketBuilder::SoundPacket soundPacket;
 	msg.msg = new char[sizeof(soundPacket)];

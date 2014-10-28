@@ -48,9 +48,17 @@ void	BabelMainWindow::show()
 {
 	Contact contact;
 
+    /* login
 	contact.setAccountName("someAccountName");
 	contact.setPassword("somePassword");
 	emit askForAuthentication(contact);
+    */
+
+    // registration
+    contact.setAccountName("navid");
+    contact.setPassword("123456789");
+    contact.setPseudo("desten");
+    emit askForRegistration(contact);
 
 	mFlyer.show();
 }

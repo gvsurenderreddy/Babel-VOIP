@@ -27,6 +27,7 @@ class Babel : public QObject {
 
 	// slots
 	private slots:
+		void	receiveServerAnswerForAuthentication(const ErrorStatus &errorStatus);
 		void	receiveContactInfo(const Contact &contact);
 		void	receiveContactDeletion(const Contact &contact);
 		void	receiveCallAnswer(const Contact &contact, bool hasAccept);

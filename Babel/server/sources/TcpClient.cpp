@@ -46,8 +46,10 @@ void TcpClient::startRecv()
         if (!error)
         {
             std::string str(mReadBuffer, bytesTransfered);
+            std::string test = str;
+            std::replace(test.begin(), test.end(), '\0', '.');
             if (mSocket)
-                std::cout << bytesTransfered << " bytes received from " << mSocket->remote_endpoint().address() << ": " << str << std::endl;
+                std::cout << bytesTransfered << " bytes received from " << mSocket->remote_endpoint().address() << std::endl << "DATA below: " << std::endl << "[" << test << "]" << std::endl;
             mBuffer.insert(mBuffer.end(), str.begin(), str.end());
             if (mListener)
                 mListener->onSocketReadable(this, bytesTransfered);
@@ -131,6 +133,7 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
 
 unsigned int TcpClient::nbBytesToRead() const
 {
+    //std::cout << std::endl << "nbBytesToRead (mBuffer.size()) = <" << mBuffer.size() << ">" << std::endl << std::endl;
     return mBuffer.size();
 }
 

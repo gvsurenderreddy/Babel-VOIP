@@ -43,6 +43,7 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 };
 
 ServerCommunication::ServerCommunication(void) {
+	connectToServer("127.0.0.1", 4243);
 	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
 	connect(&mCommandPacketBuilder, SIGNAL(disconnectedFromHost()), this, SLOT(onDisconnection()));
 }
