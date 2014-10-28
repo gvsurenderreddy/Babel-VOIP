@@ -44,7 +44,7 @@ void	Client::onSocketClosed(IClientSocket *socket){
 /*
 ** Function for serialization
 */
-/*void			Client::savData(void){
+void			Client::savData(void){
 	std::string path = "user/";
 
 	path += this->account;
@@ -58,9 +58,9 @@ void	Client::loadData(void){
 
 	path += this->account;
 	std::ifstream file(path.c_str());
-	boost::archive::text_iarchive archive(file);
-	archive >> *this;
-}*/
+	boost::archive::text_iarchive toto(file);
+	toto >> *this;
+}
 
 /*
 ** Use client's data

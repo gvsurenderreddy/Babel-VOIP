@@ -7,9 +7,9 @@
 #include <vector>
 #include <list>
 
-/*#include <boost/serialization/list.hpp>
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>*/
+#include <boost/serialization/list.hpp>
+#include <boost/archive/text_oarchive.hpp>	
+#include <boost/archive/text_iarchive.hpp>
 
 class Client : public IClientSocket::OnSocketEvent{
 
@@ -40,8 +40,8 @@ public:
 	void	onSocketClosed(IClientSocket *socket);
 
 	//function for serialization
-	/*void	savData(void);
-	void	loadData(void);*/
+	void	savData(void);
+	void	loadData(void);
 
 	//use client's data
 	//setter
@@ -61,13 +61,13 @@ public:
 
 private:
 	//boost serialize
-	/*friend class boost::serialization::access;
+	friend class boost::serialization::access;
 	template<class Archive>
 	void	serialize(Archive & ar, const unsigned int version){
-		ar & this->state;
-		ar & this->name;
+		ar & this->status;
+		ar & this->pseudo;
 		ar & this->contact;
-	}*/
+	}
 
 	//data of client
 	std::string					status;
