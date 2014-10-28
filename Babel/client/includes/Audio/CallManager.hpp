@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ErrorStatus.hpp"
 #include "Contact.hpp"
 #include "AudioManager.hpp"
 #include "SoundPacketBuilder.hpp"
@@ -23,6 +24,10 @@ class CallManager : public QObject {
 
 		bool			isInCommunication(void) const;
 		const Contact	&getCurrentCalledContact(void) const;
+
+	// signals
+	signals:
+		void	criticalError(const ErrorStatus &errorStatus);
 
 	// attributes
 	private:

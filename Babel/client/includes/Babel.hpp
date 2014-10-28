@@ -33,6 +33,7 @@ class Babel : public QObject {
 		void	receiveCallClose(const Contact &contact);
 		void	receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus);
 		void	askForAuthentication(const Contact &contact);
+		void	criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus);
 
 	// attributes
 	private:

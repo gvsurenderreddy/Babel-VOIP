@@ -1,4 +1,5 @@
 #include <QMetaType>
+#include <iostream>
 #include "Sound.hpp"
 #include "Babel.hpp"
 
@@ -38,6 +39,8 @@ Babel::Babel(void) {
 	connect(&mMainWindow, SIGNAL(askForAcceptingCall(const Contact &, bool)),				&mServerCommunication,	SLOT(acceptCallInvitation(const Contact &, bool)));
 	connect(&mMainWindow, SIGNAL(askForTerminatingCall(const Contact &)),					&mServerCommunication,	SLOT(terminateCall(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForConnectionToServer(const QString &, int)),			&mServerCommunication,	SLOT(connectToServer(const QString &, int)));
+
+	connect(&mCallManager, SIGNAL(criticalError(const ErrorStatus &)), this, SLOT(criticalErrorHappenedInCallManager(const ErrorStatus &)));
 }
 
 Babel::~Babel(void) {
@@ -111,3 +114,11 @@ void	Babel::askForAuthentication(const Contact &contact) {
 	mServerCommunication.authenticate(contact);
 }
 
+void	Babel::criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus) {
+	if (errorStatus.getErrorCode() == ErrorStatus::FAIL_INIT_SOCKET) {
+		std::cout << "critical error during UDP socket initialization" << std::endl;;
+		exit(0);
+	}
+	else
+		mServerCommunication.terminateCall(mCallManager.getCurrentCalledContact());
+}
