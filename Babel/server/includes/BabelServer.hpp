@@ -74,7 +74,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
 	//OnSocketEvent
 	public:
-		bool                    onSubscribe     (const std::string &acount, const std::string &password);
+        bool                    onSubscribe(const std::string &acount, const std::string &pseudo, const std::string& password);
 		bool                    onConnect       (const std::string &account, const std::string &password);
 		void                    onDisconnect    (const std::string &account);
 		const std::string &     onGetContact    (const std::list<std::string> &contacts);

@@ -19,31 +19,31 @@ ICommand	*Factory::getCommand(ICommand::Instruction instruction){
 	{
 	case ICommand::ADD:
 		return new CommandAdd;
-	case ICommand::UPDATE:
+    case ICommand::UPDATE:
 		return new CommandUpdate;
-	case ICommand::REG:
+    case ICommand::REG:
 		return new CommandReg;
-	case ICommand::LOG:
+    case ICommand::LOG:
 		return new CommandLog;
-	case ICommand::LIST:
+    case ICommand::LIST:
 		return new CommandList;
-	case ICommand::SHOW:
+    case ICommand::SHOW:
 		return new CommandShow;
-	case ICommand::CALL:
+    case ICommand::CALL:
 		return new CommandCall;
-	case ICommand::ACCEPT_ADD:
+    case ICommand::ACCEPT_ADD:
 		return new CommandAcceptAdd;
-	case ICommand::DEL:
+    case ICommand::DEL:
 		return new CommandDel;
-	case ICommand::EXIT:
+    case ICommand::EXIT:
 		return new CommandExit;
-	case ICommand::SEND:
+    case ICommand::SEND:
 		return new CommandSend;
-	case ICommand::ACCEPT_CALL:
+    case ICommand::ACCEPT_CALL:
 		return new CommandAcceptCall;
-	case ICommand::CLOSE_CALL:
+    case ICommand::CLOSE_CALL:
 		return new CommandCloseCall;
-	case ICommand::ERR:
+    case ICommand::ERR:
 		return new CommandErr;
 	default:
 		return NULL;
