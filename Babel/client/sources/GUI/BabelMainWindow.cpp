@@ -30,8 +30,14 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mSignup.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 	QObject::connect(mSetting.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 
+	// setting: when clicked "se connecter"
 	QObject::connect(mSetting.getUi().connexion, SIGNAL(clicked()), 
 		this, SLOT(askConnectionToServer()));
+
+	// inscription: when clicked "valider"
+	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), 
+		this, SLOT(askCreateAccount()));
+	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), &mDialog, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -118,5 +124,26 @@ void	BabelMainWindow::disconnectedFromServer(void) {
 void	BabelMainWindow::askConnectionToServer()
 {
 	std::cout << "request from client" << std::endl;
-	emit askForConnectionToServer(mSetting.getAddr(), mSetting.getPort());
+	emit askForConnectionToServer(mSetting.getHost(), mSetting.getPort());
+}
+
+void	BabelMainWindow::askCreateAccount()
+{
+	Contact contact;
+
+	if (!mSignup.getIsRegister() || mSignup.getPwd() == "")
+	{
+		mDialog.setWindowTitle("Probleme d'inscription");
+		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de mot de passe.");
+		return ;
+	}
+	mDialog.setWindowTitle("Envoie de la requete");
+	mDialog.setMessage("Envoie de la requete de création de votre compte...");
+	contact.setAccountName(mSignup.getEmail());
+	contact.setPseudo(mSignup.getPseudo());
+	contact.setHost(mSetting.getHost());
+	contact.setPort(mSetting.getPort());
+	contact.setPassword(mSignup.getPwd());
+	mSignup.setIsRegister(false);
+	emit askForRegistration(contact);
 }

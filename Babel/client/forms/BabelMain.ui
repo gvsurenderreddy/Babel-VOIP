@@ -126,11 +126,25 @@ color: rgba(15, 87, 154, 192);
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>806</y>
+     <y>779</y>
      <width>512</width>
-     <height>64</height>
+     <height>91</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 196);</string>
+   </property>
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>6</y>
+      <width>491</width>
+      <height>81</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>
