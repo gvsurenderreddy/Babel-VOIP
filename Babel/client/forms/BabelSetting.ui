@@ -17,7 +17,8 @@
    <string>Paramètre</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_setting.jpg);</string>
+   <string notr="true">background-image: url(:/background_setting.jpg);
+</string>
   </property>
   <widget class="QPushButton" name="back">
    <property name="geometry">

@@ -3,6 +3,7 @@
 #include <qlist.h>
 #include <QTimer>
 #include <qstring.h>
+#include <QPainter>
 #include "Contact.hpp"
 #include "BabelContactWidget.hpp"
 #include "BabelFlyer.hpp"
@@ -22,6 +23,13 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 	public:
 		BabelMainWindow(void);
 		~BabelMainWindow(void);
+		void paintEvent(QPaintEvent *)
+		{
+			QStyleOption opt;
+			opt.init(this);
+			QPainter p(this);
+			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+		}
 
 	// coplien form
 	private:
