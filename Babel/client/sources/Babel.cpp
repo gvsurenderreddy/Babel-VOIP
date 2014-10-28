@@ -13,12 +13,16 @@ Babel::Babel(void) {
 	connect(&mServerCommunication, SIGNAL(receiveCallInvitation(const Contact &)),								&mMainWindow,	SLOT(newCallInvitation(const Contact &)));
 	connect(&mServerCommunication, SIGNAL(receiveCallAnswer(const Contact &, bool)),							this,			SLOT(receiveCallAnswer(const Contact &, bool)));
 	connect(&mServerCommunication, SIGNAL(receiveCallClose(const Contact &)),									this,			SLOT(receiveCallClose(const Contact &)));
+	connect(&mServerCommunication, SIGNAL(receiveCallAnswer(const Contact &, bool)),							&mMainWindow,	SLOT(startingCommunication(const Contact &, bool)));
+	connect(&mServerCommunication, SIGNAL(receiveCallClose(const Contact &)),									&mMainWindow,	SLOT(terminatingCommunication(const Contact &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForRegistration(const ErrorStatus &)),				&mMainWindow,	SLOT(createAccountSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForAuthentication(const ErrorStatus &)),			&mMainWindow,	SLOT(authenticateSuccess(const ErrorStatus &)));
+	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForAuthentication(const ErrorStatus &)),			this,			SLOT(receiveServerAnswerForAuthentication(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForAddingContact(const ErrorStatus &)),			&mMainWindow,	SLOT(sendInvitationSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForAcceptingContact(const ErrorStatus &)),			&mMainWindow,	SLOT(acceptContactSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForDeletingContact(const ErrorStatus &)),			&mMainWindow,	SLOT(deleteContactSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForDisconnecting(const ErrorStatus &)),			this,			SLOT(receiveServerAnswerForDisconnecting(const ErrorStatus &)));
+	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForDisconnecting(const ErrorStatus &)),			&mMainWindow,	SLOT(disconnectSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForUpdatingInfo(const ErrorStatus &)),				&mMainWindow,	SLOT(updateInfoSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForSendingMessage(const ErrorStatus &)),			&mMainWindow,	SLOT(sendMessageSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForCallingContact(const ErrorStatus &)),			&mMainWindow,	SLOT(callContactSuccess(const ErrorStatus &)));
@@ -29,6 +33,7 @@ Babel::Babel(void) {
 
 	connect(&mMainWindow, SIGNAL(askForRegistration(const Contact &)),						&mServerCommunication,	SLOT(createAccount(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForAuthentication(const Contact &)),					this,					SLOT(askForAuthentication(const Contact &)));
+	connect(&mMainWindow, SIGNAL(askForAuthentication(const Contact &)),					&mServerCommunication,	SLOT(authenticate(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForAddingContact(const Contact &)),						&mServerCommunication,	SLOT(addContact(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForAcceptingContact(const Contact &, bool)),			&mServerCommunication,	SLOT(acceptContactInvitation(const Contact &, bool)));
 	connect(&mMainWindow, SIGNAL(askForDeletingContact(const Contact &)),					&mServerCommunication,	SLOT(deleteContact(const Contact &)));
@@ -91,27 +96,20 @@ void	Babel::receiveContactDeletion(const Contact &contact) {
 void	Babel::receiveCallAnswer(const Contact &contact, bool hasAccept) {
 	if (hasAccept)
 		mCallManager.startCall(contact);
-
-	mMainWindow.startingCommunication(contact, hasAccept);
 }
 
 void	Babel::receiveCallClose(const Contact &contact) {
 	if (mCallManager.getCurrentCalledContact().getAccountName() == contact.getAccountName())
 		mCallManager.stopCall();
-
-	mMainWindow.terminatingCommunication(contact);
 }
 
 void	Babel::receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus) {
 	if (errorStatus.errorOccurred() == false && mCallManager.isInCommunication())
 		mCallManager.stopCall();
-
-	mMainWindow.disconnectSuccess(errorStatus);
 }
 
 void	Babel::askForAuthentication(const Contact &contact) {
 	mLoggedUser = contact;
-	mServerCommunication.authenticate(contact);
 }
 
 void	Babel::criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus) {
@@ -121,4 +119,9 @@ void	Babel::criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus) {
 	}
 	else
 		mServerCommunication.terminateCall(mCallManager.getCurrentCalledContact());
+}
+
+void	Babel::receiveServerAnswerForAuthentication(const ErrorStatus &errorStatus) {
+	if (errorStatus.errorOccurred() == false)
+		mServerCommunication.getContactInfo(mLoggedUser);
 }
