@@ -66,7 +66,7 @@ void	Client::loadData(void){
 ** Use client's data
 ** Setter
 */
-void	Client::setState(const std::string state){this->state = state;}
+void	Client::setState(const std::string state){this->status = state;}
 void	Client::setName(const std::string name){this->account = name;}
 void	Client::setAccount(const std::string account){this->account = account;}
 void	Client::addContact(const std::string name){this->contact.push_back(name);}
@@ -74,8 +74,8 @@ void	Client::dellContact(const std::string name){this->contact.remove(name);}
 /*
 ** Getter
 */
-const std::string				&Client::getState(void){return this->state;}
-const std::string				&Client::getName(void){return this->name;}
+const std::string				&Client::getState(void){return this->status;}
+const std::string				&Client::getName(void){return this->pseudo;}
 const std::string				&Client::getAccount(void){return this->account;}
 const std::list<std::string>	&Client::getContact(void){return this->contact;}
 
@@ -84,6 +84,12 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 */
 void	Client::Subscribe(std::vector<std::string> &args){
     this->Listener.onSubscribe(args[0], args[1]);
+
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -92,56 +98,159 @@ void	Client::Connect(std::vector<std::string> &args){
     {
         isConnected = true;
     }
+
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
   	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Disconnect(std::vector<std::string> &args){
     this->Listener.onDisconnect(args[0]);
     isConnected = false;
+
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::GetContact(std::vector<std::string> &args){
+
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Update(std::vector<std::string> &args){
+	bool error = false;
+
+	if (args[1].empty() == false &&
+		(args[3][0] >= 0 && args[3][0] <= 10) &&
+		args[0].empty() == false &&
+		args[2].empty() == false
+		){
+		this->pseudo = args[1];
+		this->status = args[3][0];
+		error = !this->Listener.onUpdate(args[0], args[2], this->account);
+	}
+	else
+		error = true;
+
+	args.clear();
+	args.push_back("");
+	args[0] += error;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::AddContact(std::vector<std::string> &args){
+	bool error = false;
+
+	if (args[0].empty() == false)
+		error = !this->Listener.onAddContact(args[0]);
+	else 
+		error = true;
+
+	args.clear();
+	args.push_back("");
+	args[0] += error;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::DellContact(std::vector<std::string> &args){
+	bool error = false;
+
+	if (args[0].empty() == false)
+		error = !this->Listener.onAddContact(args[0]);
+	else
+		error = true;
+
+	args.clear();
+	args.push_back("");
+	args[0] += error;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::AcceptContact(std::vector<std::string> &args){
+	bool error = false;
+
+	if (args[0].empty() == false)
+		error = !this->Listener.onAcceptContact(args[1][0], args[0]);
+	else
+		error = true;
+
+	args.clear();
+	args.push_back("");
+	args[0] += error;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::CallSomeone(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::HangCall(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::List(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
 void	Client::Show(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
 void	Client::SendMsg(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::CloseCall(std::vector<std::string> &args){
+	args.clear();
+	args.push_back("");
+	args[0] += 1;
+	args.push_back("");
+	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 

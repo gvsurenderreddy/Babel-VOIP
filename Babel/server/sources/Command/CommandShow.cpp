@@ -26,7 +26,7 @@ IClientSocket::Message			*CommandShow::setParam(std::vector<std::string> *param)
 	IClientSocket::Message		*msg = new IClientSocket::Message;
 	CommandShow::BodySend		*body = new CommandShow::BodySend;
 
-	std::memset(body, 0, sizeof(body));
+	std::memset(body, 0, sizeof(*body));
 	param;
 	body->header.instructionCode = ICommand::ERR;
 	body->header.magicCode = ICommand::MAGIC_CODE;

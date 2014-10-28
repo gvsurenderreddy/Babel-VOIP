@@ -22,10 +22,10 @@ public:
 		virtual bool onConnect(const std::string &account, const std::string &password) = 0;
 		virtual void onDisconnect(const std::string &account) = 0;
 		virtual const std::string &onGetContact(const std::list<std::string> &contacts) = 0;
-		virtual bool onUpdate(const std::string &account, const std::string &password) = 0;
+		virtual bool onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
-		virtual void DellContact(const std::string &args) = 0;
-		virtual void onAcceptContact(bool accept, const std::string &account) = 0;
+		virtual bool DellContact(const std::string &account) = 0;
+		virtual bool onAcceptContact(bool accept, const std::string &account) = 0;
 		virtual void onCallSomeone(const std::string &account) = 0;
 		virtual void onHangCall(const bool &hang, const std::string &account) = 0;
 	};
@@ -70,8 +70,8 @@ private:
 	}*/
 
 	//data of client
-	std::string					state;
-	std::string					name;
+	std::string					status;
+	std::string					pseudo;
 	std::list<std::string>		contact;
 	std::string					account;
     bool                        isConnected;

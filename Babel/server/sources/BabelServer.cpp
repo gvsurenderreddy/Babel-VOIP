@@ -5,6 +5,8 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+
 /*
 #include <boost/filesystem.hpp>
 #include <boost/archive/xml_iarchive.hpp>
@@ -111,24 +113,49 @@ const std::string &BabelServer::onGetContact(const std::list<std::string> &conta
     return (test);
 }
 
-bool BabelServer::onUpdate(const std::string &account, const std::string &password){
-    password;
+bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){
+	/*
+	trouver le comte avec CurrentAccount
+	changer mdp / nom de comte du comte trouver
+	erreur si account n'existe pas
+	erreur taille de mot de passe 6
+	*/
+	
+	password;
     account;
+	currentAccount;
     return (true);
 }
 
 bool BabelServer::onAddContact(const std::string &account){
-    account;
+	std::vector<std::string> args;
+
+	/*
+	trouver le compte correspondant lui faire une demande d'ajout
+	via compte->handleCmd(Icommand::ADD, args)
+	erreur si account n'exist pas
+	*/
+
+    args.push_back(account);
     return (true);
 }
 
-void BabelServer::DellContact(const std::string &args){
-    args;
+bool BabelServer::DellContact(const std::string &account){
+	std::vector<std::string> args;
+	/*
+	trouver le compte correspondant lui notifier du delete
+	via compte->handleCmd(Icommand::DEll, args)
+	erreur si account n'exist pas
+	*/
+
+	args.push_back(account);
+	return true;
 }
 
-void BabelServer::onAcceptContact(bool accept, const std::string &account){
+bool BabelServer::onAcceptContact(bool accept, const std::string &account){
     accept;
     account;
+	return true;
 }
 
 void BabelServer::onCallSomeone(const std::string &account){
