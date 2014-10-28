@@ -3,7 +3,10 @@
 #include <qhostaddress.h>
 
 TcpClient::TcpClient(void)
-: mQTcpSocket(NULL), mListener(NULL) {}
+: mQTcpSocket(NULL), mListener(NULL)
+{
+	mQTcpSocket = new QTcpSocket(this);
+}
 
 TcpClient::~TcpClient(void) {
 	if (mQTcpSocket)
@@ -12,7 +15,6 @@ TcpClient::~TcpClient(void) {
 
 void	TcpClient::connect(const std::string &addr, int port) {
 	close(false);
-	mQTcpSocket = new QTcpSocket(this);
 	mQTcpSocket->connectToHost(QString(addr.c_str()), port);
 
 	if (mQTcpSocket->waitForConnected(-1) == false)
@@ -36,20 +38,14 @@ void	TcpClient::closeClient(void) {
 }
 
 void	TcpClient::close(bool callListener) {
-	if (mQTcpSocket) {
+	if (mQTcpSocket->state() == QAbstractSocket::ConnectedState)
 		mQTcpSocket->disconnectFromHost();
-		delete mQTcpSocket;
-		mQTcpSocket = NULL;
-	}
 
 	if (mListener && callListener)
 		mListener->onSocketClosed(this);
 }
 
 void	TcpClient::send(const IClientSocket::Message &message) {
-	if (mQTcpSocket == NULL)
-		throw SocketException("socket not connected");
-
 	int ret = mQTcpSocket->write(message.msg, message.msgSize);
 
 	if (ret == -1)
@@ -61,9 +57,6 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 
 	if (nbBytesToRead() == 0)
 		throw SocketException("Socket not readable");
-
-	if (mQTcpSocket == NULL)
-		throw SocketException("socket not connected");
 
 	message.msg = new char[sizeToRead + 1];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
@@ -77,16 +70,10 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 }
 
 unsigned int	TcpClient::nbBytesToRead(void) const {
-	if (mQTcpSocket == NULL)
-		throw SocketException("socket not connected");
-
 	return mQTcpSocket->bytesAvailable();
 }
 
 void	TcpClient::markAsReadable(void) {
-	if (mQTcpSocket == NULL)
-		throw SocketException("socket not connected");
-
 	if (mListener)
 		mListener->onSocketReadable(this, mQTcpSocket->bytesAvailable());
 }

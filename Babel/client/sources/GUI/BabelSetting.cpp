@@ -25,7 +25,6 @@ void		BabelSetting::getIpPort()
 {
 	mAddr = mUi.addrEdit->text();
 	mPort = mUi.portEdit->text().toInt();
-
 	QString	text("address: " + mAddr + "\nport: " + QString::number(mPort));
-	(&mDialog)->getUi().textBrowser->setText(QApplication::translate("BabelDialogClass", text.toStdString().c_str(), 0));
+	mDialog.getUi().textBrowser->setText(QApplication::translate("BabelDialogClass", text.toStdString().c_str(), 0));
 }

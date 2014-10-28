@@ -30,7 +30,8 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mSignup.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 	QObject::connect(mSetting.getUi().back, SIGNAL(clicked()), &mFlyer, SLOT(show()));
 
-	QObject::connect(mSetting.getUi().connexion, SIGNAL(clicked()), this, SLOT(connectToServerSuccess(const ErrorStatus &)));
+	QObject::connect(mSetting.getUi().connexion, SIGNAL(clicked()), 
+		this, SLOT(askConnectionToServer()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -110,11 +111,20 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &) {
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 }
 
-// show dialog error state
-void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &) {
-
+void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+		mDialog.setMessage("FAIL CONNECTION");
+	else
+		mDialog.setMessage("SUCCESS CONNECTION");
+	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
 	std::cout << "disconnected from server" << std::endl;
+}
+
+void	BabelMainWindow::askConnectionToServer()
+{
+	std::cout << "request from client" << std::endl;
+	emit askForConnectionToServer(mSetting.getAddr(), mSetting.getPort());
 }

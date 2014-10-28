@@ -5,9 +5,10 @@ class ErrorStatus {
 	// error codes
 	public:
 		enum ErrorCode {
-			OK = 0x01,
+			OK						= 0x01,
 			THE_IMPOSSIBLE_HAPPENED = 0x02,
-			FAIL_CONNECT_TO_SERVER = 0x03
+			FAIL_INIT_SOCKET		= 0x03,
+			FAIL_INIT_AUDIO			= 0x04
 		};
 
 	// ctor dtor

@@ -3,6 +3,7 @@
 #include <qlist.h>
 #include <QTimer>
 #include <qstring.h>
+#include <QPainter>
 #include "Contact.hpp"
 #include "BabelContactWidget.hpp"
 #include "BabelFlyer.hpp"
@@ -10,6 +11,7 @@
 #include "BabelInscription.hpp"
 #include "BabelSetting.hpp"
 #include "BabelMain.hpp"
+#include "BabelDialog.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
@@ -22,6 +24,13 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 	public:
 		BabelMainWindow(void);
 		~BabelMainWindow(void);
+		void paintEvent(QPaintEvent *)
+		{
+			QStyleOption opt;
+			opt.init(this);
+			QPainter p(this);
+			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+		}
 
 	// coplien form
 	private:
@@ -36,6 +45,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		BabelInscription	mSignup;
 		BabelSetting		mSetting;
 		BabelMain			mMain;
+		BabelDialog			mDialog;
 
 	// public slots
 	public slots:
@@ -59,6 +69,8 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	terminateCallSuccess(const ErrorStatus &errorStatus);
 		void	connectToServerSuccess(const ErrorStatus &errorStatus);
 		void	disconnectedFromServer(void);
+
+		void	askConnectionToServer();
 
 	// signals
 	signals:

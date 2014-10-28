@@ -1,6 +1,7 @@
 #include "CallManager.hpp"
 #include "SoundPacketBuilder.hpp"
 #include "AudioManager.hpp"
+#include "SoundException.hpp"
 
 CallManager::CallManager(void) : mInCommunication(false) {
 	connect(&mSoundPacketBuilder, SIGNAL(receiveSound(const Sound::Encoded &)), &mAudioManager, SLOT(playSound(const Sound::Encoded &)));
@@ -14,9 +15,19 @@ void	CallManager::startCall(const Contact &contact) {
 	mCurrentCalledContact = contact;
 	mInCommunication = true;
 
-	mSoundPacketBuilder.acceptPacketsFrom(contact.getHost(), contact.getPort());
-	mAudioManager.startRecording();
-	mAudioManager.startPlaying();
+	try {
+		mSoundPacketBuilder.acceptPacketsFrom(contact.getHost(), contact.getPort());
+		mAudioManager.startRecording();
+		mAudioManager.startPlaying();
+	}
+	catch (const SoundException &e) {
+		ErrorStatus errorStatus;
+
+		errorStatus.setErrorOccurred(true);
+		errorStatus.setErrorCode(ErrorStatus::FAIL_INIT_AUDIO);
+
+		emit criticalError(errorStatus);
+	}
 }
 
 void	CallManager::stopCall(void) {

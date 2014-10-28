@@ -2,7 +2,10 @@
 #include "SocketException.hpp"
 
 UdpClient::UdpClient(void)
-	: mQUdpSocket(NULL), mIsReadable(false), mListener(NULL) {}
+	: mQUdpSocket(NULL), mIsReadable(false), mListener(NULL)
+{
+	mQUdpSocket = new QUdpSocket(this);
+}
 
 UdpClient::~UdpClient(void) {
 	if (mQUdpSocket)
@@ -10,8 +13,7 @@ UdpClient::~UdpClient(void) {
 }
 
 void	UdpClient::connect(const std::string &/*addr*/, int port) {
-	mQUdpSocket = new QUdpSocket(this);
-
+	close();
 	if (mQUdpSocket->bind(QHostAddress::Any, port) == false)
 		throw SocketException("fail QUdpSocket::bind");
 
@@ -31,7 +33,7 @@ void	UdpClient::closeClient(void) {
 }
 
 void	UdpClient::close(void) {
-	if (mQUdpSocket)
+	if (mQUdpSocket->state() == QAbstractSocket::ConnectedState)
 		mQUdpSocket->close();
 
 	if (mListener)

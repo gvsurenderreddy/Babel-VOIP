@@ -255,7 +255,7 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 		errorStatus.setErrorOccurred(false);
 	}
 	catch (const SocketException &e) {
-		errorStatus.setErrorCode(ErrorStatus::FAIL_CONNECT_TO_SERVER);
+		errorStatus.setErrorCode(ErrorStatus::FAIL_INIT_SOCKET);
 		errorStatus.setErrorOccurred(true);
 	}
 
