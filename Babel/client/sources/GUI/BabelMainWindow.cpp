@@ -105,9 +105,10 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
-		std::cout << "FAIL CONNECTION" << std::endl;
+		mDialog.setMessage("FAIL CONNECTION");
 	else
-		std::cout << "SUCCESS CONNECTION" << std::endl;
+		mDialog.setMessage("SUCCESS CONNECTION");
+	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {

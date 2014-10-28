@@ -88,7 +88,7 @@ background-color: rbga(0,0,0,96);
      <x>0</x>
      <y>146</y>
      <width>512</width>
-     <height>661</height>
+     <height>660</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -122,7 +122,7 @@ color: rgba(15, 87, 154, 192);
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -130,14 +130,6 @@ color: rgba(15, 87, 154, 192);
      <width>512</width>
      <height>64</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(255,255,255,192);
-border: none;
-padding: 8px;
-font: 16px &quot;Open Sans Light&quot;;
-</string>
    </property>
   </widget>
  </widget>

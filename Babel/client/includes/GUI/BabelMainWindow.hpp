@@ -11,6 +11,7 @@
 #include "BabelInscription.hpp"
 #include "BabelSetting.hpp"
 #include "BabelMain.hpp"
+#include "BabelDialog.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "ui_BabelMainWindow.h"
@@ -44,6 +45,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		BabelInscription	mSignup;
 		BabelSetting		mSetting;
 		BabelMain			mMain;
+		BabelDialog			mDialog;
 
 	// public slots
 	public slots:
