@@ -22,7 +22,7 @@ IClientSocket::Message	CommandUpdate::getMessage(void) const {
 	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo) - 1));
 	packet->status = mStatus;
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
+	packet->header.instructionCode = ICommand::UPDATE;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandUpdate::PacketFromClient);

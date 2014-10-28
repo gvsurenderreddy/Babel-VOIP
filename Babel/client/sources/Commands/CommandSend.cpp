@@ -20,7 +20,7 @@ IClientSocket::Message	CommandSend::getMessage(void) const {
 	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
 	std::memcpy(packet->textMessage, mTextMessage.toStdString().c_str(), MIN(mTextMessage.length(), sizeof(packet->textMessage) - 1));
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
+	packet->header.instructionCode = ICommand::SEND;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandSend::PacketFromClient);

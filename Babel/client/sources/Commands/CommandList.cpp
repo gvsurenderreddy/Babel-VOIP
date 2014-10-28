@@ -17,7 +17,7 @@ IClientSocket::Message	CommandList::getMessage(void) const {
 	CommandList::PacketFromClient *packet = new CommandList::PacketFromClient;
 
 	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::EXIT;
+	packet->header.instructionCode = ICommand::LIST;
 
 	message.msg = reinterpret_cast<char *>(packet);
 	message.msgSize = sizeof(CommandList::PacketFromClient);
