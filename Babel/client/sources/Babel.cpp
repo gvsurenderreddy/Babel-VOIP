@@ -54,7 +54,7 @@ Babel::~Babel(void) {
 void	Babel::run(void) {
 	Contact simon;
 
-	simon.setHost("127.0.0.1");
+	simon.setHost("10.41.178.171");
 	simon.setPort(4242);
 	mCallManager.startCall(simon);
 	mMainWindow.show();

@@ -22,7 +22,7 @@ Client::~Client()
 ** Callback from IClientSocket
 */
 void	Client::onBytesWritten(IClientSocket *socket, unsigned int nbBytes){
-	nbBytes;
+    std::cout << nbBytes << " bytes sended" << std::endl;
 	socket;
 }
 
@@ -34,6 +34,7 @@ void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead)
 	while ((param = this->handleCmd->unPackCmd()) != NULL){
 		this->exeCmd(this->handleCmd->getInstruction(), *param);
 		delete param;
+        param = NULL;
 	}
 }
 
@@ -83,7 +84,8 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 ** Function cmd
 */
 void	Client::Subscribe(std::vector<std::string> &args){
-    this->Listener.onSubscribe(args[0], args[1]);
+
+    this->Listener.onSubscribe(args[0], args[1], args[2]);
 
 	args.clear();
 	args.push_back("");
@@ -94,6 +96,7 @@ void	Client::Subscribe(std::vector<std::string> &args){
 }
 
 void	Client::Connect(std::vector<std::string> &args){
+
     if (this->Listener.onConnect(args[0], args[1]))
     {
         isConnected = true;
@@ -259,31 +262,45 @@ void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> 
 	{
 	case ICommand::ADD:
 		this->AddContact(param);
+        break;
 	case ICommand::UPDATE:
-		this->Update(param);
+        this->Update(param);
+        break;
 	case ICommand::REG:
-		this->Subscribe(param);
-	case ICommand::LOG:
-		this->Connect(param);
+        this->Subscribe(param);
+        break;
+    case ICommand::LOG:
+        this->Connect(param);
+        break;
 	case ICommand::LIST:
-		this->List(param);
+        this->List(param);
+        break;
 	case ICommand::SHOW:
-		this->Show(param);
+        this->Show(param);
+        break;
 	case ICommand::CALL:
-		this->CallSomeone(param);
+        this->CallSomeone(param);
+        break;
 	case ICommand::ACCEPT_ADD:
-		this->AcceptContact(param);
+        this->AcceptContact(param);
+        break;
 	case ICommand::DEL:
-		this->DellContact(param);
+        this->DellContact(param);
+        break;
 	case ICommand::EXIT:
-		this->Disconnect(param);
+        this->Disconnect(param);
+        break;
 	case ICommand::SEND:
-		this->SendMsg(param);
+        this->SendMsg(param);
+        break;
 	case ICommand::ACCEPT_CALL:
-		this->HangCall(param);
-	case ICommand::CLOSE_CALL:
-		this->CloseCall(param);
+        this->HangCall(param);
+        break;
+    case ICommand::CLOSE_CALL:
+        this->CloseCall(param);
+        break;
 	default:
+        std::cout << "Unknown command" << std::endl;
 		return ;
 	}
 }
