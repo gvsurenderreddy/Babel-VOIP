@@ -1,6 +1,7 @@
 #include "BabelInscription.hpp"
 
 BabelInscription::BabelInscription(void)
+	: mEmail(""), mPseudo(""), mPwd(""), mIsRegister(false)
 {
 	mUi.setupUi(this);
 
@@ -15,8 +16,27 @@ BabelInscription::BabelInscription(void)
 	mUi.pwdEdit1->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
 	mUi.pwdEdit2->setEchoMode(QLineEdit::Password);
 	mUi.pwdEdit2->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
+
+	// Form validation
+	QObject::connect(mUi.ok, SIGNAL(clicked()), this, SLOT(formValidation()));
 }
 
 BabelInscription::~BabelInscription(void)
 {
+}
+
+void		BabelInscription::formValidation()
+{
+	mEmail = mUi.emailEdit->text();
+	mPseudo = mUi.pseudoEdit->text();
+	if (mUi.pwdEdit1->text() == mUi.pwdEdit2->text())
+	{
+		mPwd = mUi.pwdEdit1->text();
+		mIsRegister = true;
+	}
+	else
+	{
+		mPwd = "";
+		mIsRegister = false;
+	}
 }

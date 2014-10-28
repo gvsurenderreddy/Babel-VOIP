@@ -15,7 +15,6 @@ SoundPacketBuilder::SoundPacketBuilder(void)
 SoundPacketBuilder::~SoundPacketBuilder(void) {
 }
 
-#include <iostream>
 void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr, int port) {
 	mAcceptedHost = addr;
 	mAcceptedPort = port;
@@ -23,7 +22,6 @@ void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr, int port) {
 
 void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 
-    std::cout << "SendSound" << std::endl;
 	IClientSocket::Message msg;
 	SoundPacketBuilder::SoundPacket soundPacket;
 	msg.msg = new char[sizeof(soundPacket)];
@@ -38,8 +36,6 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	msg.host = mAcceptedHost.toStdString();
 	msg.port = mAcceptedPort;
 
-    std::cout << "msg.host= '" << msg.host << "'" << std::endl;
-    std::cout << "msg.port= '" << msg.port << "'" << std::endl;
 	mClient->send(msg);
 }
 
@@ -51,7 +47,6 @@ void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
 	SoundPacketBuilder::SoundPacket soundPacket;
 	Sound::Encoded sound;
 
-    std::cout << "READ" << std::endl;
 	sound.buffer = new unsigned char[sizeof(soundPacket.sound)];
 	msg = mClient->receive(sizeof(soundPacket));
 	if (msg.host == mAcceptedHost.toStdString() && msg.port == mAcceptedPort) {

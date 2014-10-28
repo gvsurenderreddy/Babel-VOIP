@@ -27,8 +27,22 @@ class BabelInscription : public QWidget, public Ui_BabelInscription
 	// attributes
 	private:
 		Ui::BabelInscription	mUi;
+		QString					mEmail;
+		QString					mPseudo;
+		QString					mPwd;
+		bool					mIsRegister;
 
 	// methods
 	public:
 		Ui::BabelInscription const	&getUi() const { return mUi; }
+		QString const				&getEmail() const { return mEmail; }
+		QString const				&getPseudo() const { return mPseudo; }
+		QString const				&getPwd() const { return mPwd; }
+		bool						getIsRegister() const { return mIsRegister; }
+
+		void						setIsRegister(bool isRegister) { mIsRegister = isRegister; }
+
+	// slots
+	public slots:
+		void					formValidation();
 };

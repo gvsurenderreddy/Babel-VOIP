@@ -71,6 +71,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	disconnectedFromServer(void);
 
 		void	askConnectionToServer();
+		void	askCreateAccount();
 
 	// signals
 	signals:
