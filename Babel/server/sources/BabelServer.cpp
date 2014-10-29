@@ -106,36 +106,32 @@ void	BabelServer::onDisconnect(Client *caller)
 
 void	BabelServer::onList(Client *caller){
 	std::vector<std::string>		args;
-	const std::list<std::string>	&contact = caller->getContact();
+	const std::list<std::string>	&contacts = caller->getContact();
+	Client							*currentContact;
 
 	/*
-	for each contact le find sur le server
-	if clientFind->getAccount != caller->getAccount
-	args.push_back(clientFind->getAccount);
-	args.push_back(clientFind->getPseudo);
+	for each contacts{
+	currentContact = this->findClient *it
+	if contact != NULL
+	args.push_back(currentContact->getAccount);
+	args.push_back(currentContact->getPseudo);
 	args.push_back("");
-	args[2] += clientFind->getStatus;
+	args[2] += currentContact->getStatus;
 	args.push_back("");
-	args[3] += clientFind->getIsConnect;
+	args[3] += currentContact->getIsConnect;
 	caller->handleCmd->packCmd(ICommand::SHOW, args);
+	}
 	*/
 }
 
-bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){
+bool BabelServer::onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status, const std::string &currentAccount){
 	/*
-	trouver le comte avec CurrentAccount
-	changer mdp / nom de comte du comte trouver
-	erreur si account n'existe pas
-	erreur taille de mot de passe 6
-	*/
-	
-	/*
-	if (password.size < 6 && mClient.find("account") == mClient.end())
+	if (password.size < 6 && mClient.find("account") != mClient.end())
 		return false;
 	else{
 		mClient[account] = password;
 		mClient.delete("currentAccount");
-		boucle de show pour les contact
+		this->updateContact(contact, account, pseudo, status, true);
 	}
 	*/
 	password;
@@ -144,16 +140,16 @@ bool BabelServer::onUpdate(const std::string &account, const std::string &passwo
     return (true);
 }
 
-bool BabelServer::onAddContact(const std::string &account){
-	std::vector<std::string> args;
+bool BabelServer::onAddContact(const std::string &targetAccount, std::string &callerAccount){
+	std::vector<std::string>	args;
+	Client						*target;
 
 	/*
-	trouver le compte correspondant lui faire une demande d'ajout
-	via compte->handleCmd(Icommand::ADD, args)
-	erreur si account n'exist pas
+	target = this->findClient(tragetAccount)
+	if target == NULL return false
+	args.push_back(callerAccount);
+	target->handleCmd->packCmd(callerAccount)
 	*/
-
-    args.push_back(account);
     return (true);
 }
 
@@ -225,4 +221,8 @@ void	BabelServer::updateContact(std::list<std::string> contact, std::string acco
 	// (*it)->setConnected(false); // set the client to disconnect state
 	}
 	*/
+}
+
+Client	*findClient(std::string account){
+	return NULL;
 }

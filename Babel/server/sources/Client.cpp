@@ -150,7 +150,7 @@ void	Client::Update(std::vector<std::string> &args){
 		args[0].empty() == false &&
 		args[2].empty() == false
 		){
-		error = !this->Listener.onUpdate(args[0], args[2], this->account);
+		error = !this->Listener.onUpdate(args[0], args[2], args[1], args[3][0], this->account);
 		if (error == false){
 			this->pseudo = args[1];
 			this->status = args[3][0];
@@ -171,7 +171,7 @@ void	Client::AddContact(std::vector<std::string> &args){
 	bool error = false;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onAddContact(args[0]);
+		error = !this->Listener.onAddContact(args[0], this->account);
 	else 
 		error = true;
 
@@ -187,7 +187,7 @@ void	Client::DelContact(std::vector<std::string> &args){
 	bool error = false;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onAddContact(args[0]);
+		error = !this->Listener.onDelContact(args[0]);
 	else
 		error = true;
 
