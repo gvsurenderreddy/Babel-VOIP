@@ -31,4 +31,6 @@ class BabelFlyer : public QWidget, public Ui_BabelFlyer
 	// methods
 	public:
 		Ui::BabelFlyer const	&getUi() const { return mUi; }
+		QString const			&getEmail() const { return mUi.emailEdit->text(); }
+		QString const			&getPwd() const { return mUi.pwdEdit->text(); }
 };

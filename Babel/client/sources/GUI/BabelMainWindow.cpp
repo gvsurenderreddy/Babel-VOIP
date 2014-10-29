@@ -33,11 +33,11 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// setting: when clicked "se connecter"
 	QObject::connect(mSetting.getUi().connexion, SIGNAL(clicked()), 
-		this, SLOT(askConnectionToServer()));
+		this, SLOT(connectionToServer()));
 
 	// inscription: when clicked "valider"
 	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), 
-		this, SLOT(askCreateAccount()));
+		this, SLOT(createAccount()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -134,13 +134,13 @@ void	BabelMainWindow::disconnectedFromServer(void) {
 	std::cout << "disconnected from server" << std::endl;
 }
 
-void	BabelMainWindow::askConnectionToServer()
+void	BabelMainWindow::connectionToServer()
 {
 	std::cout << "request from client" << std::endl;
 	emit askForConnectionToServer(mSetting.getHost(), mSetting.getPort());
 }
 
-void	BabelMainWindow::askCreateAccount()
+void	BabelMainWindow::createAccount()
 {
 	Contact contact;
 
@@ -159,8 +159,8 @@ void	BabelMainWindow::askCreateAccount()
 	}
 	else
 	{
-		mDialog.setWindowTitle("Probleme d'inscription");
-		mDialog.setMessage("Erreur ? l'inscription.\nVeuillez v?rifier les saisies de mot de passe.");
+		mDialog.setWindowTitle(QString("Probleme d'inscription").toUtf8());
+		mDialog.setMessage(QString("Erreur à l'inscription.\nVeuillez vérifier les saisies de mot de passe.").toUtf8());
 	}
 	mDialog.show();
 }

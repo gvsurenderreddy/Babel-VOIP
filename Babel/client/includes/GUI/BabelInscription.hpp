@@ -35,8 +35,8 @@ class BabelInscription : public QWidget, public Ui_BabelInscription
 	// methods
 	public:
 		Ui::BabelInscription const	&getUi() const { return mUi; }
-		QString const				&getEmail() const { return mEmail; }
-		QString const				&getPseudo() const { return mPseudo; }
+		QString const				&getEmail() const { return mUi.emailEdit->text(); }
+		QString const				&getPseudo() const { return mUi.pseudoEdit->text(); }
 		QString const				&getPwd() const { return mPwd; }
 		bool						getIsRegister() const { return mIsRegister; }
 
