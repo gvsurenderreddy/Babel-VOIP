@@ -96,9 +96,25 @@ bool BabelServer::onConnect(const std::string &account, const std::string &passw
     }
 }
 
-void BabelServer::onDisconnect(const std::string &account)
+void	BabelServer::onDisconnect(const std::string &account, const std::string &pseudo, char status, const std::list<std::string> &contact)
 {
-    account;
+	std::vector<std::string>	args;
+
+	args.push_back(account);
+	args.push_back(pseudo);
+	args.push_back("");
+	args[2] += status;
+	args.push_back("");
+	args[3] += '\0';
+
+	//PAS TROP COMPRIS CE QUE TA FAIS FAUDRA QUE TU M4EXPLIQUE JAI ESSAYER DE MADAPTER NORMALEMENT C4EST BON
+	// A FAIRE AUSSI POUR LE CONNECTED ET UPDATE
+	/*std::for_each(contact.begin(), contact.end(), [this](const std::string &account){
+		auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
+		if (mClients.end() != it)
+			it->handleCmd->packCmd(ICommand::SHOW, &args);
+	}*/
+
     /*
     auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
     { return client->getName() == account; });

@@ -22,7 +22,7 @@ public:
 		virtual ~OnClientEvent() {}
         virtual bool onSubscribe(const std::string &acount, const std::string& password) = 0;
 		virtual bool onConnect(const std::string &account, const std::string &password) = 0;
-		virtual void onDisconnect(const std::string &account) = 0;
+		virtual void onDisconnect(const std::string &account, const std::string &pseudo, char status,const std::list<std::string> &contact) = 0;
 		virtual const std::string &onGetContact(const std::list<std::string> &contacts) = 0;
 		virtual bool onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
@@ -61,6 +61,9 @@ public:
 	//instance of socket for send data
 	IClientSocket*	Socket;
 
+	//Handle Cmd
+	HandleCmd	*handleCmd;
+
 private:
     std::string                        usersFolderPath;
 
@@ -82,8 +85,6 @@ private:
     bool                        isConnected;
 
 	//cmd
-	HandleCmd	*handleCmd;
-
 	void		Subscribe(std::vector<std::string> &args);
 	void		Connect(std::vector<std::string> &args);
 	void		Disconnect(std::vector<std::string> &args);

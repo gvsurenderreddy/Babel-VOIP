@@ -103,7 +103,7 @@ void	Client::Subscribe(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-	args[0] += ret == true ? 1 : 0;
+	args[0] += !ret;
 	args.push_back("");
 	args[1] += ICommand::REG;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -113,25 +113,33 @@ void	Client::Connect(std::vector<std::string> &args){
 
     bool ret = this->Listener.onConnect(args[0], args[1]);
 
-    if (ret == true)
-        this->loadData();
+	if (ret == true){
+		this->loadData();
+		this->isConnected = true;
+	}
 
 	args.clear();
 	args.push_back("");
-    args[0] += ret;
+    args[0] += !ret;
 	args.push_back("");
 	args[1] += ICommand::LOG;
   	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Disconnect(std::vector<std::string> &args){
-    this->Listener.onDisconnect(args[0]);
-    this->saveData();
-    isConnected = false;
+void		Client::Disconnect(std::vector<std::string> &args){
+	bool	error = false;
+
+	if (this->account == args[0]){
+		this->Listener.onDisconnect(this->account, this->pseudo, this->status, this->contact);
+		this->saveData();
+		this->isConnected = false;
+	}
+	else
+		error = true;
 
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+	args[0] += error;
 	args.push_back("");
     args[1] += ICommand::EXIT;
 	this->handleCmd->packCmd(ICommand::ERR, args);
