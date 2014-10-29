@@ -13,6 +13,13 @@ public:
 		char				hasAccepted;
 	};
 
+	struct BodySend{
+		ICommand::Header	header;
+		char				accountName[256];
+		char				hasAccepted;
+	};
+
+
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);
 	IClientSocket::Message		*setParam(std::vector<std::string> *param);
