@@ -40,6 +40,6 @@ IClientSocket::Message			*CommandShow::setParam(std::vector<std::string> *param)
 	return (msg);
 }
 
-int							CommandShow::getSizeBody(void){
+unsigned int				CommandShow::getSizeBody(void){
 	return sizeof CommandShow::Body;
 }

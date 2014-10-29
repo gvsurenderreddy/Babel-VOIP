@@ -27,6 +27,6 @@ IClientSocket::Message		*CommandSend::setParam(std::vector<std::string> *param){
 	return NULL;
 }
 
-int							CommandSend::getSizeBody(void){
+unsigned int				CommandSend::getSizeBody(void){
 	return sizeof CommandSend::Body;
 }

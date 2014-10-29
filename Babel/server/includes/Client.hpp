@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable: 4308)
 
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
@@ -7,9 +8,10 @@
 #include <vector>
 #include <list>
 
-/*#include <boost/serialization/list.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/serialization/list.hpp>
 #include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>*/
+#include <boost/archive/text_iarchive.hpp>
 
 class Client : public IClientSocket::OnSocketEvent{
 
@@ -24,7 +26,7 @@ public:
 		virtual const std::string &onGetContact(const std::list<std::string> &contacts) = 0;
 		virtual bool onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
-		virtual bool DellContact(const std::string &account) = 0;
+		virtual bool onDelContact(const std::string &account) = 0;
 		virtual bool onAcceptContact(bool accept, const std::string &account) = 0;
 		virtual void onCallSomeone(const std::string &account) = 0;
 		virtual void onHangCall(const bool &hang, const std::string &account) = 0;
@@ -40,8 +42,8 @@ public:
 	void	onSocketClosed(IClientSocket *socket);
 
 	//function for serialization
-	/*void	savData(void);
-	void	loadData(void);*/
+	void	saveData(void);
+	void	loadData(void);
 
 	//use client's data
 	//setter
@@ -49,7 +51,7 @@ public:
 	void	setName(const std::string name);
 	void	setAccount(const std::string account);
 	void	addContact(const std::string name);
-	void	dellContact(const std::string name);
+	void	delContact(const std::string name);
 	//getter
 	const std::string				&getState(void);
 	const std::string				&getName(void);
@@ -60,14 +62,15 @@ public:
 	IClientSocket*	Socket;
 
 private:
+    std::string                        usersFolderPath;
 	//boost serialize
-	/*friend class boost::serialization::access;
+	friend class boost::serialization::access;
 	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int version){
-		ar & this->state;
-		ar & this->name;
+	void	serialize(Archive & ar, const unsigned int){
+		ar & this->status;
+		ar & this->pseudo;
 		ar & this->contact;
-	}*/
+	}
 
 	//data of client
 	std::string					status;
@@ -85,7 +88,7 @@ private:
 	void		GetContact(std::vector<std::string> &args);
 	void		Update(std::vector<std::string> &args);
 	void		AddContact(std::vector<std::string> &args);
-	void		DellContact(std::vector<std::string> &args);
+	void		DelContact(std::vector<std::string> &args);
 	void		AcceptContact(std::vector<std::string> &args);
 	void		CallSomeone(std::vector<std::string> &args);
 	void		HangCall(std::vector<std::string> &args);

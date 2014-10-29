@@ -4,9 +4,15 @@
 #include <iostream>
 #include <boost/bind.hpp>
 
-TcpServer::TcpServer() : mAcceptor(NULL), mListener(NULL)
+TcpServer::TcpServer() : mSigset(mService, SIGTERM, SIGINT), mAcceptor(NULL), mListener(NULL)
 {
-    startSignals();
+    #if defined(SIGQUIT)
+        mSigset.add(SIGQUIT);
+    #endif
+    #if defined(SIGHUP)
+        mSigset.add(SIGHUP);
+    #endif
+    mSigset.async_wait(boost::bind(&boost::asio::io_service::stop, boost::ref(mService)));
 }
 
 TcpServer::~TcpServer()
@@ -14,24 +20,15 @@ TcpServer::~TcpServer()
     closeServer();
 }
 
-void TcpServer::createServer(int port, int /*queueSize*/)
+void TcpServer::createServer(int port, int)
 {
     mAcceptor = new tcp::acceptor(mService, tcp::endpoint(tcp::v4(), port));
     startAccept();
 }
 
-void TcpServer::startSignals(void)
-{
-    boost::asio::signal_set signals(mService, SIGINT, SIGTERM);
-    signals.async_wait([this](const boost::system::error_code& error, int signum) {
-        if (!error && (signum == SIGINT || signum == SIGTERM))
-            mService.stop();
-    });
-}
-
 void TcpServer::startAccept(void)
-{
-    tcp::socket *socket = new tcp::socket(mService);
+{    tcp::socket *socket = new tcp::socket(mService);
+
     mSockets.push_back(socket);
     mAcceptor->async_accept(*socket, [this](const boost::system::error_code& error) {
         if (!error)
@@ -84,5 +81,6 @@ bool TcpServer::hasClientInQueue() const
 
 void TcpServer::run()
 {
-    mService.run();
+    boost::system::error_code ec;
+    mService.run(ec);
 }

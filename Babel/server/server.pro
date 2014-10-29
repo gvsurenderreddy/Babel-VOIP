@@ -29,7 +29,13 @@ OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
-QMAKE_CXXFLAGS  +=      -Wall -D_SCL_SECURE_NO_WARNINGS
+QMAKE_CXXFLAGS  +=      -Wall -D_SCL_SECURE_NO_WARNINGS /MP
+
+QMAKE_CFLAGS_WARN_ON -= -W3
+QMAKE_CFLAGS_WARN_ON += -W2
+
+QMAKE_CXXFLAGS_WARN_ON -= -W3
+QMAKE_CXXFLAGS_WARN_ON += -W2
 
 INCLUDEPATH     +=      .                                       \
 						../shared/includes						\
@@ -88,6 +94,8 @@ SOURCES         +=      sources/main.cpp                        \
 						sources/Command/HandleCmd.cpp			\
 						sources/Factory.cpp
 
+
+CharacterSet = 1
 
 DEFINES			+=		_AFXDLL _MBCS UNICODE
 

@@ -21,6 +21,6 @@ IClientSocket::Message		*CommandExit::setParam(std::vector<std::string> *param){
 	return NULL;
 }
 
-int							CommandExit::getSizeBody(void){
+unsigned int				CommandExit::getSizeBody(void){
 	return 0;
 }
