@@ -22,8 +22,18 @@ std::vector<std::string>		*CommandDel::getParam(IClientSocket *socket){
 }
 
 IClientSocket::Message			*CommandDel::setParam(std::vector<std::string> *param){
-	param;
-	return NULL;
+	CommandDel::BodySend	*body = new CommandDel::BodySend;
+	IClientSocket::Message	*msg = new IClientSocket::Message;
+
+	std::memset(body, 0, sizeof(*body));
+	body->header.instructionCode = ICommand::DEL;
+	body->header.magicCode = ICommand::MAGIC_CODE;
+
+	std::memcpy(body->accountName, (*param)[0].c_str(), (*param)[0].size());
+
+	msg->msgSize = sizeof(*body);
+	msg->msg = reinterpret_cast<char *>(body);
+	return (msg);
 }
 
 unsigned int    				CommandDel::getSizeBody(void){

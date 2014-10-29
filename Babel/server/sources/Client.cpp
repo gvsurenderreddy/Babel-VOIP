@@ -200,19 +200,7 @@ void	Client::DelContact(std::vector<std::string> &args){
 }
 
 void	Client::AcceptContact(std::vector<std::string> &args){
-    bool ret;
-
-    if (args[0].empty() == false)
-        ret = this->Listener.onAcceptContact(args[1][0], args[0]);
-    else
-        ret = false;
-
-	args.clear();
-	args.push_back("");
-	args[0] += !ret;
-	args.push_back("");
-	args[1] += ICommand::ACCEPT_ADD;
-	this->handleCmd->packCmd(ICommand::ERR, args);
+    this->Listener.onAcceptContact(args[1][0], args[0], this->account);
 }
 
 void	Client::CallSomeone(std::vector<std::string> &args){

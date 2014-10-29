@@ -144,16 +144,37 @@ bool BabelServer::onDelContact(const std::string &targetAccount, const std::stri
     return true;
 }
 
-bool BabelServer::onAcceptContact(bool accept, const std::string &account)
+bool BabelServer::onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount)
 {
-    Client* client;
+	Client						*target;
+	Client						*caller;
+	std::vector<std::string>	args;
 
-    if (!(client = findClient(account)))
-        return false;
-    if (accept)
-        return true;
-    else
-        return false;
+	if (accept == false ||
+        !(caller = findClient(callerAcount)) ||
+        !(target = findClient(targetAccount)))
+		return false;
+
+	target = findClient(targetAccount);
+	args.push_back(target->getAccount());
+	args.push_back(target->getPseudo());
+	args.push_back("");
+	args[2] += target->getStatus();
+	args.push_back("");
+	args[3] += target->isConnect();
+	target->handleCmd->packCmd(ICommand::SHOW, args);
+
+	caller = findClient(callerAcount);
+	args.clear();
+	args.push_back(caller->getAccount());
+	args.push_back(caller->getPseudo());
+	args.push_back("");
+	args[2] += caller->getStatus();
+	args.push_back("");
+	args[3] += caller->isConnect();
+	caller->handleCmd->packCmd(ICommand::SHOW, args);
+
+	return true;
 }
 
 void BabelServer::onCallSomeone(const std::string &account)
