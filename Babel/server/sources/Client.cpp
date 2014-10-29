@@ -76,7 +76,7 @@ void	Client::loadData(void){
 ** Setter
 */
 void	Client::setStatus(int state){this->status = state;}
-void	Client::setName(const std::string name){this->account = name;}
+void	Client::setPseudo(const std::string name){this->account = name;}
 void	Client::setAccount(const std::string account){this->account = account;}
 void	Client::addContact(const std::string name){this->contact.push_back(name);}
 void	Client::delContact(const std::string name){this->contact.remove(name);}
@@ -84,15 +84,16 @@ void	Client::delContact(const std::string name){this->contact.remove(name);}
 ** Getter
 */
 int								Client::getStatus(void){return this->status;}
-const std::string				&Client::getName(void){return this->pseudo;}
+const std::string				&Client::getPseudo(void){return this->pseudo;}
 const std::string				&Client::getAccount(void){return this->account;}
 const std::list<std::string>	&Client::getContact(void){return this->contact;}
+bool							Client::isConnect(void){return this->isConnected;}
 
 /*
 ** Function cmd
 */
 void	Client::Subscribe(std::vector<std::string> &args){
-
+	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
 
 	this->account = args[0];
@@ -110,13 +111,9 @@ void	Client::Subscribe(std::vector<std::string> &args){
 }
 
 void	Client::Connect(std::vector<std::string> &args){
+    bool ret = this->Listener.onConnect(args[0], args[1], this);
 
-    bool ret = this->Listener.onConnect(args[0], args[1]);
-
-	if (ret == true){
-		this->loadData();
-		this->isConnected = true;
-	}
+	this->isConnected = true;
 
 	args.clear();
 	args.push_back("");
@@ -130,7 +127,7 @@ void		Client::Disconnect(std::vector<std::string> &args){
 	bool	error = false;
 
 	if (this->account == args[0]){
-		this->Listener.onDisconnect(this->account, this->pseudo, this->status, this->contact);
+		this->Listener.onDisconnect(this);
 		this->saveData();
 		this->isConnected = false;
 	}
@@ -153,7 +150,7 @@ void	Client::Update(std::vector<std::string> &args){
 		args[0].empty() == false &&
 		args[2].empty() == false
 		){
-		error = !this->Listener.onUpdate(args[0], args[2], this->account);
+		error = !this->Listener.onUpdate(args[0], args[2], args[1], args[3][0], this->account);
 		if (error == false){
 			this->pseudo = args[1];
 			this->status = args[3][0];
@@ -174,7 +171,7 @@ void	Client::AddContact(std::vector<std::string> &args){
 	bool error = false;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onAddContact(args[0]);
+		error = !this->Listener.onAddContact(args[0], this->account);
 	else 
 		error = true;
 
@@ -190,7 +187,7 @@ void	Client::DelContact(std::vector<std::string> &args){
 	bool error = false;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onAddContact(args[0]);
+		error = !this->Listener.onDelContact(args[0]);
 	else
 		error = true;
 
@@ -232,7 +229,7 @@ void	Client::HangCall(std::vector<std::string> &args){
 }
 
 void	Client::List(std::vector<std::string> &args){
-	this->Listener.onList(this->contact);
+	this->Listener.onList(this);
 	args;
 }
 
