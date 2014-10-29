@@ -137,9 +137,9 @@ void	BabelServer::onDisconnect(const std::string &account, const std::string &ps
 
 }
 
-//fct list 
-void	onList(const std::list<std::string> &contacts){
+void	BabelServer::onList(const std::list<std::string> &contacts){
     contacts;
+
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){
