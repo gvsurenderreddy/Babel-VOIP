@@ -105,7 +105,20 @@ void	BabelServer::onDisconnect(Client *caller)
 }
 
 void	BabelServer::onList(Client *caller){
-	caller;
+	std::vector<std::string>		args;
+	const std::list<std::string>	&contact = caller->getContact();
+
+	/*
+	for each contact le find sur le server
+	if clientFind->getAccount != caller->getAccount
+	args.push_back(clientFind->getAccount);
+	args.push_back(clientFind->getPseudo);
+	args.push_back("");
+	args[2] += clientFind->getStatus;
+	args.push_back("");
+	args[3] += clientFind->getIsConnect;
+	caller->handleCmd->packCmd(ICommand::SHOW, args);
+	*/
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){

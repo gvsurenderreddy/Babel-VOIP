@@ -57,6 +57,7 @@ public:
 	const std::string				&getPseudo(void);
 	const std::string				&getAccount(void);
 	const std::list<std::string>	&getContact(void);
+	bool							isConnect(void);
 
 	//instance of socket for send data
 	IClientSocket*	Socket;

@@ -87,6 +87,7 @@ int								Client::getStatus(void){return this->status;}
 const std::string				&Client::getPseudo(void){return this->pseudo;}
 const std::string				&Client::getAccount(void){return this->account;}
 const std::list<std::string>	&Client::getContact(void){return this->contact;}
+bool							Client::isConnect(void){return this->isConnected;}
 
 /*
 ** Function cmd
