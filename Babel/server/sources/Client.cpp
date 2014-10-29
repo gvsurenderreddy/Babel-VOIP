@@ -1,7 +1,8 @@
 #include "Client.hpp"
+#include "Database.hpp"
+
 #include <fstream>
 #include <algorithm>
-
 #include <iostream>
 
 /*
@@ -11,6 +12,10 @@ Client::Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClien
 {
     this->Socket->setOnSocketEventListener(this);
 	handleCmd = new HandleCmd(clientSocket);
+    const boost::filesystem::path& absolutePathDatabaseUsersFolder = boost::filesystem::complete(Database::DATABASE_FOLDER_USERS);
+    if (boost::filesystem::exists(absolutePathDatabaseUsersFolder) == false)
+        boost::filesystem::create_directory(absolutePathDatabaseUsersFolder);
+    usersFolderPath = absolutePathDatabaseUsersFolder.string();
 }
 
 Client::~Client()
@@ -43,39 +48,42 @@ void	Client::onSocketClosed(IClientSocket *socket){
 }
 
 /*
-** Function for serialization
+** Function for serialization5
 */
-/*void			Client::savData(void){
-	std::string path = "user/";
+void			Client::saveData(void){
 
-	path += this->account;
-	std::ofstream file(path.c_str());
-	boost::archive::text_oarchive archive(file);
-	archive << *this;
+    const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
+    std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
+    if (!ofs.good() || ofs.fail())
+        return;
+    boost::archive::text_oarchive oa(ofs);
+    oa << *this;
+    ofs.close();
 }
 
 void	Client::loadData(void){
-	std::string path = "user/";
-
-	path += this->account;
-	std::ifstream file(path.c_str());
-	boost::archive::text_iarchive archive(file);
-	archive >> *this;
-}*/
+    const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
+    std::ifstream ifs(path);
+    if (!ifs.good() || ifs.fail())
+        return;
+    boost::archive::text_iarchive ia(ifs);
+    ia >> *this;
+    ifs.close();
+}
 
 /*
 ** Use client's data
 ** Setter
 */
-void	Client::setState(const std::string state){this->status = state;}
+void	Client::setStatus(int state){this->status = state;}
 void	Client::setName(const std::string name){this->account = name;}
 void	Client::setAccount(const std::string account){this->account = account;}
 void	Client::addContact(const std::string name){this->contact.push_back(name);}
-void	Client::dellContact(const std::string name){this->contact.remove(name);}
+void	Client::delContact(const std::string name){this->contact.remove(name);}
 /*
 ** Getter
 */
-const std::string				&Client::getState(void){return this->status;}
+int								Client::getStatus(void){return this->status;}
 const std::string				&Client::getName(void){return this->pseudo;}
 const std::string				&Client::getAccount(void){return this->account;}
 const std::list<std::string>	&Client::getContact(void){return this->contact;}
@@ -85,43 +93,59 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 */
 void	Client::Subscribe(std::vector<std::string> &args){
 
-    this->Listener.onSubscribe(args[0], args[1], args[2]);
+	bool ret = this->Listener.onSubscribe(args[0], args[2]);
+
+	this->account = args[0];
+	this->pseudo = args[1];
+	this->contact.clear();
+	this->status = 1;
+	this->saveData();
 
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+	args[0] += !ret;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::REG;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Connect(std::vector<std::string> &args){
 
-    if (this->Listener.onConnect(args[0], args[1]))
-    {
-        isConnected = true;
-    }
+    bool ret = this->Listener.onConnect(args[0], args[1]);
+
+	if (ret == true){
+		this->loadData();
+		this->isConnected = true;
+	}
 
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+    args[0] += !ret;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::LOG;
   	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::Disconnect(std::vector<std::string> &args){
-    this->Listener.onDisconnect(args[0]);
-    isConnected = false;
+void		Client::Disconnect(std::vector<std::string> &args){
+	bool	error = false;
+
+	if (this->account == args[0]){
+		this->Listener.onDisconnect(this->account, this->pseudo, this->status, this->contact);
+		this->saveData();
+		this->isConnected = false;
+	}
+	else
+		error = true;
 
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+	args[0] += error;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+    args[1] += ICommand::EXIT;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
+// PAS COMPRIS CETTE FONCTION
 void	Client::GetContact(std::vector<std::string> &args){
 
 	args.clear();
@@ -167,11 +191,11 @@ void	Client::AddContact(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += error;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+    args[1] += ICommand::ADD;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::DellContact(std::vector<std::string> &args){
+void	Client::DelContact(std::vector<std::string> &args){
 	bool error = false;
 
 	if (args[0].empty() == false)
@@ -183,23 +207,18 @@ void	Client::DellContact(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += error;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::DEL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::AcceptContact(std::vector<std::string> &args){
-	bool error = false;
-
-	if (args[0].empty() == false)
-		error = !this->Listener.onAcceptContact(args[1][0], args[0]);
-	else
-		error = true;
+    bool error = !args[0].empty() && this->Listener.onAcceptContact(args[1][0], args[0]) ? false : true;
 
 	args.clear();
 	args.push_back("");
 	args[0] += error;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::ACCEPT_ADD;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -208,7 +227,7 @@ void	Client::CallSomeone(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -217,7 +236,7 @@ void	Client::HangCall(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::ACCEPT_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -226,7 +245,7 @@ void	Client::List(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::LIST;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
@@ -235,7 +254,7 @@ void	Client::Show(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::SHOW;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
@@ -244,7 +263,7 @@ void	Client::SendMsg(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::SEND;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -253,7 +272,7 @@ void	Client::CloseCall(std::vector<std::string> &args){
 	args.push_back("");
 	args[0] += 1;
 	args.push_back("");
-	args[1] += ICommand::UPDATE;
+	args[1] += ICommand::CLOSE_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
@@ -285,7 +304,7 @@ void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> 
         this->AcceptContact(param);
         break;
 	case ICommand::DEL:
-        this->DellContact(param);
+        this->DelContact(param);
         break;
 	case ICommand::EXIT:
         this->Disconnect(param);

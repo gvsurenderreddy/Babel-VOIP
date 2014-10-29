@@ -8,30 +8,52 @@
 #include <fstream>
 #include <algorithm>
 
-/*
 #include <boost/filesystem.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
-*/
-const unsigned int BabelServer::BABEL_DEFAULT_LISTEN_PORT = 4243;
-const unsigned int BabelServer::BABEL_DEFAULT_QUEUE_SIZE = 128;
+
+#include <utility>
 
 BabelServer::BabelServer() : mServerSocket(NULL)
 {
-    boost::filesystem::path abs_path = boost::filesystem::complete(Database::FOLDER);
-    if (!(boost::filesystem::exists(abs_path)))
-        boost::filesystem::create_directory(abs_path);
+    const boost::filesystem::path& absolutePathDatabaseFolder = boost::filesystem::complete(Database::DATABASE_FOLDER);
+    if (boost::filesystem::exists(absolutePathDatabaseFolder) == false)
+        boost::filesystem::create_directory(absolutePathDatabaseFolder);
+    const std::string& absolutePathDatabaseFolderStr = absolutePathDatabaseFolder.string();
+    mAccountsFilePath = absolutePathDatabaseFolderStr + Database::DATABASE_ACCOUNTS_FILENAME + Database::DATABASE_EXTENSION;
+    importAccountsFromFile(mAccountsFilePath);
 }
 
 BabelServer::~BabelServer()
 {
     if (mServerSocket)
         delete mServerSocket;
+    exportAccountsFromFile(mAccountsFilePath);
 }
 
-void BabelServer::run()
+void BabelServer::importAccountsFromFile(const std::string& path)
 {
-    mServerSocket = reinterpret_cast<IServerSocket*>(new TcpServer);
+    std::ifstream ifs(path);
+    if (!ifs.good() || ifs.fail())
+        return;
+    boost::archive::text_iarchive ia(ifs);
+    ia >> *this;
+    ifs.close();
+}
+
+void BabelServer::exportAccountsFromFile(const std::string& path)
+{
+    std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
+    if (!ofs.good() || ofs.fail())
+        return;
+    boost::archive::text_oarchive oa(ofs);
+    oa << *this;
+    ofs.close();
+}
+
+void BabelServer::startServer()
+{
+    mServerSocket = dynamic_cast<IServerSocket*>(new TcpServer);
     mServerSocket->setOnSocketEventListener(this);
     mServerSocket->createServer(BabelServer::BABEL_DEFAULT_LISTEN_PORT, BabelServer::BABEL_DEFAULT_QUEUE_SIZE);
     mServerSocket->run();
@@ -39,127 +61,60 @@ void BabelServer::run()
 
 void BabelServer::onNewConnection(IServerSocket *serverSocket)
 {
-    std::cout << std::endl << "Une ip vient de se connecté au port du serveur" << std::endl << std::endl;
     if (serverSocket->hasClientInQueue())
         mClients.push_back(new Client(serverSocket->getNewClient(), *this));
 }
 
-bool BabelServer::onSubscribe(const std::string &account, const std::string &pseudo, const std::string &password)
+bool BabelServer::onSubscribe(const std::string &account, const std::string &password)
 {
-    std::cout << __FUNCTION__ << std::endl;
-
-    boost::filesystem::path abs_path = boost::filesystem::complete(Database::FOLDER + account + Database::EXTENSION);
-    std::string abs_path_str = abs_path.string();
-
-    const std::string& filename = Database::FOLDER + account + Database::EXTENSION;
-
-    if (boost::filesystem::exists(filename) == true)
+    if (mAccounts.find(account) == mAccounts.end())
     {
-        std::cerr << "account '" << account << "' is already taken (filename: <" << filename << ">)" << std::endl;
+        std::cout << "[SUCCESS] [REG] account '" << account << "' is now registered" << std::endl;
+        mAccounts[account] = password;
+        return true;
+    }
+    else
+    {
+        std::cerr << "[FAILED] [REG] account '" << account << "' is already taken" << std::endl;
         return false;
     }
-
-    std::ofstream ofs(filename);
-
-    if (!ofs.good() || ofs.fail())
-    {
-        std::cerr << "ofs.good|fail had failed" << std::endl;
-        return false;
-    }
-
-    Database::Account userCreated;
-
-    userCreated.setLogin(account);
-    userCreated.setPassword(password);
-    userCreated.setPseudo(pseudo);
-
-    bool ret;
-
-    try
-    {
-        boost::archive::xml_oarchive oa(ofs);
-        oa << BOOST_SERIALIZATION_NVP(userCreated);
-        ret = true;
-        std::cerr << "Inscription de account:'" << account << "' password:'" << password << "' pseudo:'" << pseudo << "'" << std::endl;
-    }
-    catch (const boost::archive::archive_exception& e)
-    {
-        std::cerr << "failed to serialize Database::Account with xml_oarchive: " << e.what();
-        ofs.setstate(std::ios::failbit);
-        ret = false;
-    }
-
-    ofs.close();
-
-    return (ret);
 }
 
 bool BabelServer::onConnect(const std::string &account, const std::string &password)
 {
-    std::cout << __FUNCTION__ << std::endl;
-
-    std::cout << "Tentative de connexion:" << std::endl;
-    std::cout << " - Account : '" << account << "'" << std::endl;
-    std::cout << " - Password: '" << password << "'" << std::endl;
-
-    boost::filesystem::path abs_path = boost::filesystem::complete(Database::FOLDER + account + Database::EXTENSION);
-    std::string abs_path_str = abs_path.string();
-
-    const std::string& filename = Database::FOLDER + account + Database::EXTENSION;
-
-    if (boost::filesystem::exists(filename) == false)
+    auto found = std::find_if(mAccounts.begin(), mAccounts.end(), [&](const std::pair<std::string, std::string>& item) -> bool
+    { return item.first == account && item.second == password; });
+    if (found != mAccounts.end())
     {
-        std::cerr << "account '" << account << "' doesn't exist (filename: <" << filename << ">)" << std::endl;
+        std::cout << "[SUCCESS] [LOG] account '" << account << "' is now connected" << std::endl;
+        return true;
+    }
+    else
+    {
+        std::cerr << "[FAILED] [LOG] [account or password] are wrong" << std::endl;
         return false;
     }
-
-    std::ifstream ifs(filename);
-
-    if (!ifs.good() || ifs.fail())
-    {
-        std::cerr << "ifs.good|fail had failed" << std::endl;
-        return false;
-    }
-
-    Database::Account userSelected;
-
-    bool ret;
-
-    try
-    {
-        boost::archive::xml_iarchive ia(ifs);
-        ia >> BOOST_SERIALIZATION_NVP(userSelected);
-        std::cout << "Fichier:" << std::endl;
-        std::cout << " - Account : '" << userSelected.getLogin() << "'" << std::endl;
-        std::cout << " - Password: '" << userSelected.getPassword() << "'" << std::endl;
-        std::cout << " - Pseudo  : '" << userSelected.getPseudo() << "'" << std::endl;
-
-        if (userSelected.getPassword() == password)
-        {
-            std::cerr << account << " has connected successfully with password:'" << password << "', welcome <" << userSelected.getPseudo() << ">" << std::endl;
-            ret = true;
-        }
-        else
-        {
-            std::cerr << "account : '" << account << "' has entered wrong password:'" << password << "'" << std::endl;
-            ret = false;
-        }
-    }
-    catch (const boost::archive::archive_exception& e)
-    {
-        std::cerr << "failed to unserialize Database::Account with xml_iarchive: " << e.what();
-        ifs.setstate(std::ios::failbit);
-        ret = false;
-    }
-
-    ifs.close();
-
-    return (ret);
 }
 
-void BabelServer::onDisconnect(const std::string &account)
+void	BabelServer::onDisconnect(const std::string &account, const std::string &pseudo, char status, const std::list<std::string> &contact)
 {
-    account;
+	std::vector<std::string>	args;
+
+	args.push_back(account);
+	args.push_back(pseudo);
+	args.push_back("");
+	args[2] += status;
+	args.push_back("");
+	args[3] += '\0';
+
+	//PAS TROP COMPRIS CE QUE TA FAIS FAUDRA QUE TU M4EXPLIQUE JAI ESSAYER DE MADAPTER NORMALEMENT C4EST BON
+	// A FAIRE AUSSI POUR LE CONNECTED ET UPDATE
+	/*std::for_each(contact.begin(), contact.end(), [this](const std::string &account){
+		auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
+		if (mClients.end() != it)
+			it->handleCmd->packCmd(ICommand::SHOW, &args);
+	}*/
+
     /*
     auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
     { return client->getName() == account; });
@@ -213,7 +168,7 @@ bool BabelServer::onAddContact(const std::string &account){
     return (true);
 }
 
-bool BabelServer::DellContact(const std::string &account){
+bool BabelServer::onDelContact(const std::string &account){
 	std::vector<std::string> args;
 	/*
 	trouver le compte correspondant lui notifier du delete
@@ -226,9 +181,11 @@ bool BabelServer::DellContact(const std::string &account){
 }
 
 bool BabelServer::onAcceptContact(bool accept, const std::string &account){
-    accept;
     account;
-	return true;
+    if (accept)
+        return true;
+    else
+        return false;
 }
 
 void BabelServer::onCallSomeone(const std::string &account){

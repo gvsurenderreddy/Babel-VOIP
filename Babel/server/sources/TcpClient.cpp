@@ -10,7 +10,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-
+#include <boost/lexical_cast.hpp>
 TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
 {
 
@@ -28,7 +28,7 @@ void TcpClient::connect(const std::string &/* addr */, int /* port */)
 
 void TcpClient::initFromSocket(void *socket)
 {
-    mSocket = reinterpret_cast<tcp::socket*>(socket);
+    mSocket = static_cast<tcp::socket*>(socket);
     startRecv();
 }
 
