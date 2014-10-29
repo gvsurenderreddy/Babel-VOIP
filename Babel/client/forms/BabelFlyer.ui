@@ -98,8 +98,7 @@ background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
 font: 10pt &quot;Verdana&quot;;
 padding: 8px;
-
-      </string>
+</string>
    </property>
    <property name="placeholderText">
     <string>Entrer votre nom de compte</string>

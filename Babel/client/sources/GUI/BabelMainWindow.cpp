@@ -1,4 +1,5 @@
 #include <QFontDatabase>
+#include <QTextCodec>
 #include <iostream>
 #include "BabelMainWindow.hpp"
 
@@ -37,7 +38,6 @@ BabelMainWindow::BabelMainWindow(void)
 	// inscription: when clicked "valider"
 	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), 
 		this, SLOT(askCreateAccount()));
-	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), &mDialog, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -84,7 +84,10 @@ void	BabelMainWindow::terminatingCommunication(const Contact &) {
 void	BabelMainWindow::updateInfo(const Contact &) {
 }
 
-void	BabelMainWindow::createAccountSuccess(const ErrorStatus &) {
+void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
+	mDialog.setWindowTitle("Felicitation");
+	mDialog.setMessage("Votre compte a ete cree avec succes :)");
+	mDialog.show();
 }
 
 void	BabelMainWindow::authenticateSuccess(const ErrorStatus &) {
@@ -139,19 +142,23 @@ void	BabelMainWindow::askCreateAccount()
 {
 	Contact contact;
 
-	if (!mSignup.getIsRegister() || mSignup.getPwd() == "")
+	if (mSignup.getIsRegister())
+	{
+		mDialog.setWindowTitle(QString("Envoie de la requête").toUtf8());
+		mDialog.setMessage(QString("Envoie de la requete de création de votre compte...").toUtf8());
+
+		// set Contacts
+		contact.setAccountName(mSignup.getEmail());
+		contact.setPseudo(mSignup.getPseudo());
+		contact.setPassword(mSignup.getPwd());
+
+		mSignup.setIsRegister(false);
+		emit askForRegistration(contact);
+	}
+	else
 	{
 		mDialog.setWindowTitle("Probleme d'inscription");
-		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de mot de passe.");
-		return ;
+		mDialog.setMessage("Erreur ? l'inscription.\nVeuillez v?rifier les saisies de mot de passe.");
 	}
-	mDialog.setWindowTitle("Envoie de la requete");
-	mDialog.setMessage("Envoie de la requete de création de votre compte...");
-	contact.setAccountName(mSignup.getEmail());
-	contact.setPseudo(mSignup.getPseudo());
-	contact.setHost(mSetting.getHost());
-	contact.setPort(mSetting.getPort());
-	contact.setPassword(mSignup.getPwd());
-	mSignup.setIsRegister(false);
-	emit askForRegistration(contact);
+	mDialog.show();
 }
