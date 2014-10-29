@@ -21,6 +21,6 @@ IClientSocket::Message		*CommandList::setParam(std::vector<std::string> *param){
 	return NULL;
 }
 
-int							CommandList::getSizeBody(void){
+unsigned int				CommandList::getSizeBody(void){
 	return 0;
 }

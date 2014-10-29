@@ -28,6 +28,6 @@ IClientSocket::Message		*CommandReg::setParam(std::vector<std::string> *param){
 	return NULL;
 }
 
-int							CommandReg::getSizeBody(void){
+unsigned int				CommandReg::getSizeBody(void){
 	return sizeof CommandReg::Body;
 }

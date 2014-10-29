@@ -30,6 +30,6 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 	return (msg);
 }
 
-int								CommandErr::getSizeBody(void){
+unsigned int				CommandErr::getSizeBody(void){
 	return sizeof CommandErr::Body;
 }

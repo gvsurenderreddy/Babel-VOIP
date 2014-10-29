@@ -2,17 +2,12 @@
 
 #include "IServerSocket.hpp"
 #include "Client.hpp"
+
 #include <list>
 #include <boost/filesystem.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
-
-/**
-* class BabelServer
-*
-* Manage server
-*
-*/
+#include <boost/serialization/map.hpp>
 
 class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 {
@@ -27,61 +22,47 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         BabelServer(const BabelServer &) {}
         const BabelServer & operator = (const BabelServer &) { return *this; }
 
-    // run
+    // internal functions
     public:
-        void                    run();
+        void importAccountsFromFile(const std::string& path);
+        void exportAccountsFromFile(const std::string& path);
+        void startServer();
 
     // constants
     public:
-        static const unsigned int BABEL_DEFAULT_LISTEN_PORT;
-        static const unsigned int BABEL_DEFAULT_QUEUE_SIZE;
-
-    // CallBack
-    public:
-        void                    onNewConnection(IServerSocket *socket);
+        static const unsigned int BABEL_DEFAULT_LISTEN_PORT = 4243;
+        static const unsigned int BABEL_DEFAULT_QUEUE_SIZE = 128;
 
     // attributes
     private:
-        std::list<Client*>      mClients;
-        IServerSocket*          mServerSocket;
+        IServerSocket*                     mServerSocket;
+        std::list<Client*>                 mClients;
+        std::map<std::string, std::string> mAccounts;
+        std::string                        mAccountsFilePath;
 
-    // account
-    class Account {
-        public:
-            Account(const std::string& account, const std::string& password) :
-                mAccount(account), 
-                mPassword(password), 
-                mPseudo("Player"), 
-                mState("Hors ligne")
-            { }
-            Account() { }
-            std::string mAccount;
-            std::string mPassword;
-            std::string mPseudo;
-            std::string mState;
-            std::list<std::string> mFriends;
-        private:
-            friend class boost::serialization::access;
-            template<class Archive>
-            void serialize(Archive & ar, const unsigned int version) {
-                ar & boost::serialization::make_nvp("mAccount", mAccount);
-                ar & boost::serialization::make_nvp("mPassword", mPassword);
-                ar & boost::serialization::make_nvp("mPseudo", mPseudo);
-                ar & boost::serialization::make_nvp("mState", mState);
-                ar & boost::serialization::make_nvp("mFriends", mFriends);
-            }
-    };
+    // serializer
+    private:
+	  friend class boost::serialization::access;
+      template<class Archive>
+      void serialize(Archive & ar, const unsigned int)
+      {
+          ar & mAccounts;
+      }
 
-	//OnSocketEvent
+    // IServerSocket::OnSocketEvent callbacks
+    public:
+        void onNewConnection(IServerSocket *socket);
+
+    // Client::OnClientEvent callbacks
 	public:
-        bool                    onSubscribe(const std::string &acount, const std::string &pseudo, const std::string& password);
-		bool                    onConnect       (const std::string &account, const std::string &password);
-		void                    onDisconnect    (const std::string &account);
-		const std::string &     onGetContact    (const std::list<std::string> &contacts);
-		bool                    onUpdate        (const std::string &account, const std::string &password, const std::string &currentAccount);
-		bool                    onAddContact    (const std::string &account);
-		bool                    DellContact     (const std::string &account);
-		bool                    onAcceptContact (bool accept, const std::string &account);
-		void                    onCallSomeone   (const std::string &account);
-		void                    onHangCall      (const bool &hang, const std::string &account);
+        bool               onSubscribe(const std::string &acount, const std::string& password);
+		bool               onConnect(const std::string &account, const std::string &password);
+		void               onDisconnect(const std::string &account);
+		const std::string& onGetContact(const std::list<std::string> &contacts);
+		bool               onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount);
+		bool               onAddContact(const std::string &account);
+		bool               onDelContact(const std::string &account);
+		bool               onAcceptContact(bool accept, const std::string &account);
+		void               onCallSomeone(const std::string &account);
+		void               onHangCall(const bool &hang, const std::string &account);
 };

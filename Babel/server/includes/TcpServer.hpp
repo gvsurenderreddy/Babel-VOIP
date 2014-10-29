@@ -24,7 +24,7 @@ class TcpServer : public IServerSocket
 
     // private coplien form
     private:
-        TcpServer(const TcpServer &) { }
+        TcpServer(const TcpServer &) : mSigset(mService, SIGTERM, SIGINT) {}
         const TcpServer & operator = (const TcpServer &) { return *this; }
 
     // init
@@ -41,10 +41,6 @@ class TcpServer : public IServerSocket
         IClientSocket*  getNewClient();
         bool            hasClientInQueue() const;
 
-    // handle signals
-    private:
-        void startSignals(void);
-
     // run
     public:
         void run();
@@ -56,6 +52,7 @@ class TcpServer : public IServerSocket
     // attributes
     private:
         boost::asio::io_service                     mService;
+        boost::asio::signal_set                     mSigset;
         tcp::acceptor*                              mAcceptor;
         std::list<tcp::socket*>                     mSockets;
         IServerSocket::OnSocketEvent*               mListener;
