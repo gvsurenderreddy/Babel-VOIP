@@ -15,7 +15,7 @@ class ContactListModel : public QAbstractListModel
 
 	// coplien form
 	private:
-		ContactListModel(const ContactListModel &) : QAbstractListModel() {}
+		ContactListModel(const ContactListModel &) : QAbstractListModel(nullptr) {}
 		const ContactListModel &operator=(const ContactListModel &) { return *this; }
 
 	// attributs

@@ -59,7 +59,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 		bool               onConnect(const std::string &account, const std::string &password, Client *caller);
 		void               onDisconnect(Client *caller);
 		void			   onList(Client *caller);
-		bool               onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status, const std::string &currentAccount);
+		bool               onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status);
 		bool               onAddContact(const std::string &targetAccount, std::string &callerAccount);
 		bool               onDelContact(const std::string &targetAccount, std::string &callerAccount);
 		bool               onAcceptContact(bool accept, const std::string &account);

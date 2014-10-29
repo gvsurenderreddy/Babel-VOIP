@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
+    <width>1024</width>
     <height>870</height>
    </rect>
   </property>
@@ -21,19 +21,19 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>512</width>
-     <height>76</height>
+     <width>1024</width>
+     <height>64</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rbga(0,0,0,96);
+background-color: rbga(0, 0, 0, 224);
 </string>
    </property>
    <widget class="QPushButton" name="close">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>970</x>
       <y>10</y>
       <width>41</width>
       <height>31</height>
@@ -58,7 +58,7 @@ background-color: rbga(0,0,0,96);
    <widget class="QPushButton" name="minimize">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>920</x>
       <y>10</y>
       <width>41</width>
       <height>31</height>
@@ -81,54 +81,56 @@ background-color: rbga(0,0,0,96);
      <string>-</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>10</y>
+      <width>491</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
+border: none;
+background-color: rgba(0, 0, 0, 0);
+color: rgb(255, 255, 255);
+font: 16pt &quot;Open Sans Light&quot;;</string>
+    </property>
+    <property name="text">
+     <string>Contact</string>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QListView" name="listView">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>146</y>
-     <width>512</width>
-     <height>660</height>
+     <y>64</y>
+     <width>256</width>
+     <height>746</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background:none;
-background-color: rgba(255, 255, 255, 96);
+background-color: rgba(0, 0, 0, 128);
 border: none;
 </string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="title">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>76</y>
-     <width>512</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(255, 255, 255, 192);
-font: 28pt &quot;Open Sans Light&quot;;
-color: rgba(15, 87, 154, 192);
-
-</string>
-   </property>
-   <property name="text">
-    <string>Conversation</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>779</y>
-     <width>512</width>
-     <height>91</height>
+     <x>256</x>
+     <y>810</y>
+     <width>768</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -139,9 +141,60 @@ background-color: rgba(255, 255, 255, 196);</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>6</y>
-      <width>491</width>
-      <height>81</height>
+      <y>10</y>
+      <width>751</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 96);
+padding: 7px 8px;
+font: 8pt &quot;Open Sans Light&quot;;
+</string>
+    </property>
+    <property name="placeholderText">
+     <string>Votre réponse...</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="widget_3" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>810</y>
+     <width>256</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rbga(0, 0, 0, 224);
+</string>
+   </property>
+  </widget>
+  <widget class="QScrollArea" name="scrollArea">
+   <property name="geometry">
+    <rect>
+     <x>256</x>
+     <y>64</y>
+     <width>768</width>
+     <height>746</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 32);</string>
+   </property>
+   <property name="widgetResizable">
+    <bool>true</bool>
+   </property>
+   <widget class="QWidget" name="scrollAreaWidgetContents">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>766</width>
+      <height>744</height>
      </rect>
     </property>
    </widget>

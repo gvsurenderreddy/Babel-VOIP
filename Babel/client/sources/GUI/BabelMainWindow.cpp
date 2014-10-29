@@ -22,7 +22,7 @@ BabelMainWindow::BabelMainWindow(void)
 	}
 
 	// action when click on login/signin
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
+	//QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
 	QObject::connect(mFlyer.getUi().signup, SIGNAL(clicked()), &mSignup, SLOT(show()));
 	QObject::connect(mFlyer.getUi().p, SIGNAL(clicked()), &mSetting, SLOT(show()));
 
@@ -46,12 +46,14 @@ BabelMainWindow::~BabelMainWindow(void)
 
 void	BabelMainWindow::show()
 {
-	Contact contact;
+	//Contact contact;
 
     // login
+	/*
 	contact.setAccountName("navid");
 	contact.setPassword("123456789");
 	emit askForAuthentication(contact);
+	*/
 
 
     // registration
@@ -87,12 +89,30 @@ void	BabelMainWindow::updateInfo(const Contact &) {
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
-	mDialog.setWindowTitle("Felicitation");
-	mDialog.setMessage("Votre compte a ete cree avec succes :)");
+	if (es.getErrorCode())
+	{
+		mDialog.setWindowTitle("Félicitation");
+		mDialog.setMessage("Votre compte a été crée avec succès :)");
+	}
+	else
+	{
+		mDialog.setWindowTitle("Erreur à la création");
+		mDialog.setMessage("Votre compte n'a pas pu se créer :(");
+	}
 	mDialog.show();
 }
 
-void	BabelMainWindow::authenticateSuccess(const ErrorStatus &) {
+void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
+	if (es.getErrorCode())
+	{
+		mFlyer.hide();
+		mLogin.show();
+	}
+	else
+	{
+		mDialog.setWindowTitle("Erreur de connexion");
+		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe... ;)");
+	}
 }
 
 void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &) {
@@ -143,11 +163,10 @@ void	BabelMainWindow::connectionToServer()
 void	BabelMainWindow::createAccount()
 {
 	Contact contact;
-
+	
 	if (mSignup.getIsRegister())
 	{
-		mDialog.setWindowTitle(QString("Envoie de la requ�te").toUtf8());
-		mDialog.setMessage(QString("Envoie de la requete de cr�ation de votre compte...").toUtf8());
+		mDialog.setMessage("Envoie de la requete de création de votre compte...");
 
 		// set Contacts
 		contact.setAccountName(mSignup.getEmail());
@@ -159,8 +178,16 @@ void	BabelMainWindow::createAccount()
 	}
 	else
 	{
-		mDialog.setWindowTitle(QString("Probleme d'inscription").toUtf8());
-		mDialog.setMessage(QString("Erreur � l'inscription.\nVeuillez v�rifier les saisies de mot de passe.").toUtf8());
+		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de mot de passe.");
 	}
 	mDialog.show();
+}
+
+void		BabelMainWindow::connexionToAccount()
+{
+	Contact	contact;
+
+	contact.setAccountName(mFlyer.getEmail());
+	contact.setPassword(mFlyer.getPwd());
+	emit askForAuthentication(contact);
 }

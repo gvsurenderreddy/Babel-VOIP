@@ -280,22 +280,6 @@ border-style: outset;
    </hints>
   </connection>
   <connection>
-   <sender>login</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelFlyer</receiver>
-   <slot>hide()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>255</x>
-     <y>695</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>434</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>signup</sender>
    <signal>clicked()</signal>
    <receiver>BabelFlyer</receiver>

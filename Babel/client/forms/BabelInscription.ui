@@ -220,7 +220,7 @@ font: 28pt &quot;Open Sans Light&quot;;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>380</y>
+     <y>390</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -239,7 +239,26 @@ padding: 8px;
     <string>Entrer votre pseudo</string>
    </property>
   </widget>
+  <zorder>pseudoEdit</zorder>
+  <zorder>minimize</zorder>
+  <zorder>back</zorder>
+  <zorder>ok</zorder>
+  <zorder>emailEdit</zorder>
+  <zorder>pwdEdit1</zorder>
+  <zorder>pwdEdit2</zorder>
+  <zorder>title</zorder>
+  <zorder>close</zorder>
  </widget>
+ <tabstops>
+  <tabstop>emailEdit</tabstop>
+  <tabstop>pseudoEdit</tabstop>
+  <tabstop>pwdEdit1</tabstop>
+  <tabstop>pwdEdit2</tabstop>
+  <tabstop>ok</tabstop>
+  <tabstop>back</tabstop>
+  <tabstop>minimize</tabstop>
+  <tabstop>close</tabstop>
+ </tabstops>
  <resources>
   <include location="../resources/BabelMainWindow.qrc"/>
  </resources>
