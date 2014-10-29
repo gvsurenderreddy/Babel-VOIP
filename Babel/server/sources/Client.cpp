@@ -1,5 +1,6 @@
 #include "Client.hpp"
 #include "Database.hpp"
+#include "ErrorCodes.hpp"
 
 #include <fstream>
 #include <algorithm>
@@ -96,7 +97,8 @@ void	Client::Subscribe(std::vector<std::string> &args){
 	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
 
-	if (ret == true){
+	if (ret == true)
+    {
 		this->account = args[0];
 		this->pseudo = args[1];
 		this->contact.clear();
@@ -106,7 +108,7 @@ void	Client::Subscribe(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-	args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::REG;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -119,7 +121,7 @@ void	Client::Connect(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-    args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::LOG;
   	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -128,7 +130,8 @@ void	Client::Connect(std::vector<std::string> &args){
 void		Client::Disconnect(std::vector<std::string> &args){
     bool	ret;
 
-	if (this->account == args[0]){
+	if (this->account == args[0])
+    {
 		this->Listener.onDisconnect(this);
 		this->saveData();
 		this->isConnected = false;
@@ -139,7 +142,7 @@ void		Client::Disconnect(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-    args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
     args[1] += ICommand::EXIT;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -161,7 +164,7 @@ void	Client::Update(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-	args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -177,7 +180,7 @@ void	Client::AddContact(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-	args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
     args[1] += ICommand::ADD;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -193,7 +196,7 @@ void	Client::DelContact(std::vector<std::string> &args){
 
 	args.clear();
 	args.push_back("");
-	args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::DEL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -206,7 +209,7 @@ void	Client::AcceptContact(std::vector<std::string> &args){
 void	Client::CallSomeone(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += true;
+    args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -215,7 +218,7 @@ void	Client::CallSomeone(std::vector<std::string> &args){
 void	Client::HangCall(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += true;
+	args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::ACCEPT_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -228,7 +231,7 @@ void	Client::List(std::vector<std::string> &){
 void	Client::Show(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += true;
+	args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::SHOW;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
@@ -237,7 +240,7 @@ void	Client::Show(std::vector<std::string> &args){
 void	Client::SendMsg(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += true;
+    args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::SEND;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -246,7 +249,7 @@ void	Client::SendMsg(std::vector<std::string> &args){
 void	Client::CloseCall(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += true;
+    args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::CLOSE_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
