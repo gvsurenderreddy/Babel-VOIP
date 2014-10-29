@@ -27,10 +27,20 @@ class BabelFlyer : public QWidget, public Ui_BabelFlyer
 	// attributes
 	private:
 		Ui::BabelFlyer	mUi;
+		QString			mEmail;
+		QString			mPwd;
+		bool			mIsAuthenticate;
 
 	// methods
 	public:
 		Ui::BabelFlyer const	&getUi() const { return mUi; }
-		QString const			&getEmail() const { return mUi.emailEdit->text(); }
-		QString const			&getPwd() const { return mUi.pwdEdit->text(); }
+		QString const			&getEmail() const { return mEmail; }
+		QString const			&getPwd() const { return mPwd; }
+		bool					getIsAuthenticate() const { return mIsAuthenticate; }
+
+		void					setIsAuthenticate(bool isAuthenticate) { mIsAuthenticate = isAuthenticate; }
+
+	// slots
+	public slots:
+		void			authenticateValidation();
 };

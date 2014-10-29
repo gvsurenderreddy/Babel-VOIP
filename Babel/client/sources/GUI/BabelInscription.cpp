@@ -27,10 +27,10 @@ BabelInscription::~BabelInscription(void)
 
 void		BabelInscription::formValidation()
 {
-	mEmail = mUi.emailEdit->text();
-	mPseudo = mUi.pseudoEdit->text();
 	if (mUi.pwdEdit1->text() == mUi.pwdEdit2->text())
 	{
+		mEmail = mUi.emailEdit->text();
+		mPseudo = mUi.pseudoEdit->text();
 		mPwd = mUi.pwdEdit1->text();
 		mIsRegister = true;
 	}

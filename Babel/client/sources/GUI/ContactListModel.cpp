@@ -1,7 +1,7 @@
 #include "ContactListModel.hpp"
 
 ContactListModel::ContactListModel(QObject *parent)
-	: QAbstractListModel()
+	: QAbstractListModel(parent)
 {
 }
 
@@ -9,12 +9,12 @@ ContactListModel::~ContactListModel()
 {
 }
 
-int						ContactListModel::rowCount(const QModelIndex &parent = QModelIndex()) const
+int						ContactListModel::rowCount(const QModelIndex &/*parent*/) const
 {
-	mContactList.size();
+	return mContactList.size();
 }
 
-QVariant				ContactListModel::data(const QModelIndex &index, int role = Qt::DisplayRole) const
+QVariant				ContactListModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
@@ -27,7 +27,7 @@ QVariant				ContactListModel::data(const QModelIndex &index, int role = Qt::Disp
 	return QVariant();
 }
 
-QVariant				ContactListModel::headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+QVariant				ContactListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
 	return QVariant();
 }
