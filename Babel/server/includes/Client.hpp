@@ -21,9 +21,9 @@ public:
 	public:
 		virtual ~OnClientEvent() {}
         virtual bool onSubscribe(const std::string &acount, const std::string& password) = 0;
-		virtual bool onConnect(const std::string &account, const std::string &password) = 0;
-		virtual void onDisconnect(const std::string &account, const std::string &pseudo, char status,const std::list<std::string> &contact) = 0;
-		virtual void onList(const std::list<std::string> &contacts) = 0;
+		virtual bool onConnect(const std::string &account, const std::string &password, Client *caller) = 0;
+		virtual void onDisconnect(Client *caller) = 0;
+		virtual void onList(Client *caller) = 0;
 		virtual bool onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount) = 0;
 		virtual bool onAddContact(const std::string &account) = 0;
 		virtual bool onDelContact(const std::string &account) = 0;
@@ -48,13 +48,13 @@ public:
 	//use client's data
 	//setter
 	void	setStatus(int statue);
-	void	setName(const std::string name);
+	void	setPseudo(const std::string name);
 	void	setAccount(const std::string account);
 	void	addContact(const std::string name);
 	void	delContact(const std::string name);
 	//getter
 	int								getStatus(void);
-	const std::string				&getName(void);
+	const std::string				&getPseudo(void);
 	const std::string				&getAccount(void);
 	const std::list<std::string>	&getContact(void);
 

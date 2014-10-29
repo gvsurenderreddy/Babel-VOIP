@@ -76,7 +76,7 @@ void	Client::loadData(void){
 ** Setter
 */
 void	Client::setStatus(int state){this->status = state;}
-void	Client::setName(const std::string name){this->account = name;}
+void	Client::setPseudo(const std::string name){this->account = name;}
 void	Client::setAccount(const std::string account){this->account = account;}
 void	Client::addContact(const std::string name){this->contact.push_back(name);}
 void	Client::delContact(const std::string name){this->contact.remove(name);}
@@ -84,7 +84,7 @@ void	Client::delContact(const std::string name){this->contact.remove(name);}
 ** Getter
 */
 int								Client::getStatus(void){return this->status;}
-const std::string				&Client::getName(void){return this->pseudo;}
+const std::string				&Client::getPseudo(void){return this->pseudo;}
 const std::string				&Client::getAccount(void){return this->account;}
 const std::list<std::string>	&Client::getContact(void){return this->contact;}
 
@@ -92,7 +92,7 @@ const std::list<std::string>	&Client::getContact(void){return this->contact;}
 ** Function cmd
 */
 void	Client::Subscribe(std::vector<std::string> &args){
-
+	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
 
 	this->account = args[0];
@@ -110,13 +110,9 @@ void	Client::Subscribe(std::vector<std::string> &args){
 }
 
 void	Client::Connect(std::vector<std::string> &args){
+    bool ret = this->Listener.onConnect(args[0], args[1], this);
 
-    bool ret = this->Listener.onConnect(args[0], args[1]);
-
-	if (ret == true){
-		this->loadData();
-		this->isConnected = true;
-	}
+	this->isConnected = true;
 
 	args.clear();
 	args.push_back("");
@@ -130,7 +126,7 @@ void		Client::Disconnect(std::vector<std::string> &args){
 	bool	error = false;
 
 	if (this->account == args[0]){
-		this->Listener.onDisconnect(this->account, this->pseudo, this->status, this->contact);
+		this->Listener.onDisconnect(this);
 		this->saveData();
 		this->isConnected = false;
 	}
@@ -232,7 +228,7 @@ void	Client::HangCall(std::vector<std::string> &args){
 }
 
 void	Client::List(std::vector<std::string> &args){
-	this->Listener.onList(this->contact);
+	this->Listener.onList(this);
 	args;
 }
 

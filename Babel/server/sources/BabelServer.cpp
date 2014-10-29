@@ -80,13 +80,16 @@ bool BabelServer::onSubscribe(const std::string &account, const std::string &pas
     }
 }
 
-bool BabelServer::onConnect(const std::string &account, const std::string &password)
+bool BabelServer::onConnect(const std::string &account, const std::string &password, Client *caller)
 {
     auto found = std::find_if(mAccounts.begin(), mAccounts.end(), [&](const std::pair<std::string, std::string>& item) -> bool
     { return item.first == account && item.second == password; });
     if (found != mAccounts.end())
     {
         std::cout << "[SUCCESS] [LOG] account '" << account << "' is now connected" << std::endl;
+		caller->setAccount(account);
+		caller->loadData();
+		this->updateContact(caller->getContact(), caller->getAccount(), caller->getPseudo(), caller->getStatus(), true);
         return true;
     }
     else
@@ -96,50 +99,13 @@ bool BabelServer::onConnect(const std::string &account, const std::string &passw
     }
 }
 
-//Au lieu de passer toute les arg un a un autent passer le client directement non ?
-// Ou faire une fonction dans le server juste pour faire la boucle de show pour le dry =)
-void	BabelServer::onDisconnect(const std::string &account, const std::string &pseudo, char status, const std::list<std::string> &contact)
+void	BabelServer::onDisconnect(Client *caller)
 {
-	std::vector<std::string>	args;
-
-	args.push_back(account);
-	args.push_back(pseudo);
-	args.push_back("");
-	args[2] += status;
-	args.push_back("");
-	args[3] += '\0';
-
-	//PAS TROP COMPRIS CE QUE TA FAIS FAUDRA QUE TU M4EXPLIQUE JAI ESSAYER DE MADAPTER NORMALEMENT C4EST BON
-	// A FAIRE AUSSI POUR LE CONNECTED ET UPDATE
-	/*std::for_each(contact.begin(), contact.end(), [this](const std::string &account){
-		auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
-		if (mClients.end() != it)
-			it->handleCmd->packCmd(ICommand::SHOW, &args);
-	}*/
-
-    /*
-    auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
-    { return client->getName() == account; });
-    if (mClients.end() != it)
-    {
-        // notify each of his contacts
-        std::for_each((*it)->getContact().begin(), (*it)->getContact().end(), [this](const std::string &account)
-        {
-            auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
-            if (mClients.end() != it) // check if he is here
-            {
-                // envoyer une commande pour indiquer aux clients que un de ses contacts s'est deconnect�
-            }
-        });
-        // (*it)->setConnected(false); // set the client to disconnect state
-    }
-    */
-
+	this->updateContact(caller->getContact(), caller->getAccount(), caller->getPseudo(), caller->getStatus(), false);
 }
 
-void	BabelServer::onList(const std::list<std::string> &contacts){
-    contacts;
-
+void	BabelServer::onList(Client *caller){
+	caller;
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){
@@ -205,4 +171,45 @@ void BabelServer::onCallSomeone(const std::string &account){
 void BabelServer::onHangCall(const bool &hang, const std::string &account){
     hang;
     account;
+}
+
+/*
+** Handle Client
+*/
+
+void	BabelServer::updateContact(std::list<std::string> contact, std::string account, std::string pseudo, char status, bool isConnected){
+	std::vector<std::string>	args;
+
+	args.push_back(account);
+	args.push_back(pseudo);
+	args.push_back("");
+	args[2] += status;
+	args.push_back("");
+	args[3] += isConnected;
+
+	//PAS TROP COMPRIS CE QUE TA FAIS FAUDRA QUE TU M4EXPLIQUE JAI ESSAYER DE MADAPTER NORMALEMENT C4EST BON
+	// A FAIRE AUSSI POUR LE CONNECTED ET UPDATE
+	/*std::for_each(contact.begin(), contact.end(), [this](const std::string &account){
+	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
+	if (mClients.end() != it)
+	it->handleCmd->packCmd(ICommand::SHOW, &args);
+	}*/
+
+	/*
+	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
+	{ return client->getName() == account; });
+	if (mClients.end() != it)
+	{
+	// notify each of his contacts
+	std::for_each((*it)->getContact().begin(), (*it)->getContact().end(), [this](const std::string &account)
+	{
+	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
+	if (mClients.end() != it) // check if he is here
+	{
+	// envoyer une commande pour indiquer aux clients que un de ses contacts s'est deconnect�
+	}
+	});
+	// (*it)->setConnected(false); // set the client to disconnect state
+	}
+	*/
 }
