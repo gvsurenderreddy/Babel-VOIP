@@ -67,8 +67,9 @@ private:
 		ar & this->status;
 		ar & this->pseudo;
 		ar & this->contact;
+		version;
 	}
-
+	
 	//data of client
 	std::string					status;
 	std::string					pseudo;
