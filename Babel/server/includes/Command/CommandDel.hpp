@@ -11,6 +11,7 @@ public:
 	struct Body{
 		char	accountName[256];
 	};
+
 	struct BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
