@@ -95,12 +95,13 @@ bool							Client::isConnect(void){return this->isConnected;}
 void	Client::Subscribe(std::vector<std::string> &args){
 	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
-
-	this->account = args[0];
-	this->pseudo = args[1];
-	this->contact.clear();
-	this->status = 1;
-	this->saveData();
+	if (ret == true){
+		this->account = args[0];
+		this->pseudo = args[1];
+		this->contact.clear();
+		this->status = 1;
+		this->saveData();
+	}
 
 	args.clear();
 	args.push_back("");
@@ -112,8 +113,8 @@ void	Client::Subscribe(std::vector<std::string> &args){
 
 void	Client::Connect(std::vector<std::string> &args){
     bool ret = this->Listener.onConnect(args[0], args[1], this);
-
-	this->isConnected = true;
+	
+	this->isConnected = ret;
 
 	args.clear();
 	args.push_back("");
@@ -152,6 +153,7 @@ void	Client::Update(std::vector<std::string> &args){
 		){
 		error = !this->Listener.onUpdate(args[0], args[2], args[1], args[3][0], this->account);
 		if (error == false){
+			this->account = args[0];
 			this->pseudo = args[1];
 			this->status = args[3][0];
 		}

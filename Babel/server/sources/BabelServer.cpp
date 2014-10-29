@@ -148,21 +148,22 @@ bool BabelServer::onAddContact(const std::string &targetAccount, std::string &ca
 	target = this->findClient(tragetAccount)
 	if target == NULL return false
 	args.push_back(callerAccount);
-	target->handleCmd->packCmd(callerAccount)
+	target->handleCmd->packCmd(ICommand::ADD, args)
 	*/
     return (true);
 }
 
-bool BabelServer::onDelContact(const std::string &account){
-	std::vector<std::string> args;
-	/*
-	trouver le compte correspondant lui notifier du delete
-	via compte->handleCmd(Icommand::DEll, args)
-	erreur si account n'exist pas
-	*/
+bool BabelServer::onDelContact(const std::string &targetAccount, std::string &callerAccount){
+	std::vector<std::string>	args;
+	Client						*target;
 
-	args.push_back(account);
-	return true;
+	/*
+	target = this->findClient(targetAccount)
+	if target == NULL return false
+	args.push_back(callerAccount);
+	target->handleCmd->packCmd(ICommand::DELL, args)
+	*/
+	return (true);
 }
 
 bool BabelServer::onAcceptContact(bool accept, const std::string &account){
@@ -223,6 +224,6 @@ void	BabelServer::updateContact(std::list<std::string> contact, std::string acco
 	*/
 }
 
-Client	*findClient(std::string account){
+Client	*BabelServer::findClient(std::string account){
 	return NULL;
 }
