@@ -21,7 +21,8 @@ public:
         CALL        = 0x0B,
         ACCEPT_CALL = 0x0C,
         CLOSE_CALL  = 0x0D,
-        ERR         = 0x0E
+        ERR         = 0x0E,
+        UNKNOWN_INSTRUCTION
 	};
 
 	//header

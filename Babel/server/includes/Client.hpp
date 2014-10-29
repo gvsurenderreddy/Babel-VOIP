@@ -15,7 +15,17 @@
 
 class Client : public IClientSocket::OnSocketEvent{
 
-public:
+    // handle commands
+    private:
+    struct HandleCommand {
+        ICommand::Instruction	instruction;
+        void					(Client::*handler)(std::vector<std::string> &param);
+    };
+
+    static const Client::HandleCommand	handleCommandsTab[];
+
+    public:
+
 	//interface for client callback
 	class OnClientEvent{
 	public:
@@ -24,7 +34,7 @@ public:
 		virtual bool onConnect(const std::string &account, const std::string &password, Client *caller) = 0;
 		virtual void onDisconnect(Client *caller) = 0;
 		virtual void onList(Client *caller) = 0;
-		virtual bool onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status, const std::string &currentAccount) = 0;
+		virtual bool onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status) = 0;
 		virtual bool onAddContact(const std::string &account, std::string &callerAccount) = 0;
 		virtual bool onDelContact(const std::string &account) = 0;
 		virtual bool onAcceptContact(bool accept, const std::string &account) = 0;
