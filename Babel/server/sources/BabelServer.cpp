@@ -194,6 +194,22 @@ void BabelServer::onHangCall(bool hang, const std::string &account)
     account;
 }
 
+bool BabelServer::onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount)
+{
+    Client* client;
+    std::vector<std::string> args;
+
+    if (!(client = findClient(targetAccount)))
+        return false;
+    const std::list<std::string>& friends = client->getContact();
+    if (std::find(friends.begin(), friends.end(), callerAccount) == friends.end())
+        return false;
+    args.push_back(callerAccount);
+    args.push_back(message);
+    client->handleCmd->packCmd(ICommand::SEND, args);
+    return true;
+}
+
 void	BabelServer::updateContact(const std::list<std::string>& contact, const std::string& account, const std::string& pseudo, char status, bool isConnected)
 {
 	std::vector<std::string> args;

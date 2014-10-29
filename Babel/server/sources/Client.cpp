@@ -238,12 +238,20 @@ void	Client::Show(std::vector<std::string> &args){
 }
 
 void	Client::SendMsg(std::vector<std::string> &args){
-	args.clear();
-	args.push_back("");
-    args[0] += ErrorCode::OK;
-	args.push_back("");
-	args[1] += ICommand::SEND;
-	this->handleCmd->packCmd(ICommand::ERR, args);
+
+    bool ret;
+
+    if (args[0].empty() == false)
+        ret = this->Listener.onSendMsg(args[0], args[1], this->account);
+    else
+        ret = false;
+
+    args.clear();
+    args.push_back("");
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
+    args.push_back("");
+    args[1] += ICommand::SEND;
+    this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::CloseCall(std::vector<std::string> &args){

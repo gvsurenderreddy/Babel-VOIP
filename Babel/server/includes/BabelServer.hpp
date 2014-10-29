@@ -65,6 +65,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 		bool               onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount);
 		void               onCallSomeone(const std::string &account);
 		void               onHangCall(bool hang, const std::string &account);
+        bool               onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount);
 
 	//Handle Client
 	private:
