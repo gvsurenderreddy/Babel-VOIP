@@ -96,6 +96,8 @@ bool BabelServer::onConnect(const std::string &account, const std::string &passw
     }
 }
 
+//Au lieu de passer toute les arg un a un autent passer le client directement non ?
+// Ou faire une fonction dans le server juste pour faire la boucle de show pour le dry =)
 void	BabelServer::onDisconnect(const std::string &account, const std::string &pseudo, char status, const std::list<std::string> &contact)
 {
 	std::vector<std::string>	args;
@@ -135,10 +137,9 @@ void	BabelServer::onDisconnect(const std::string &account, const std::string &ps
 
 }
 
-const std::string &BabelServer::onGetContact(const std::list<std::string> &contacts){
+void	BabelServer::onList(const std::list<std::string> &contacts){
     contacts;
-    std::string test = "";
-    return (test);
+
 }
 
 bool BabelServer::onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount){
@@ -149,6 +150,15 @@ bool BabelServer::onUpdate(const std::string &account, const std::string &passwo
 	erreur taille de mot de passe 6
 	*/
 	
+	/*
+	if (password.size < 6 && mClient.find("account") == mClient.end())
+		return false;
+	else{
+		mClient[account] = password;
+		mClient.delete("currentAccount");
+		boucle de show pour les contact
+	}
+	*/
 	password;
     account;
 	currentAccount;

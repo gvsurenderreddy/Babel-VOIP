@@ -58,7 +58,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         bool               onSubscribe(const std::string &acount, const std::string& password);
 		bool               onConnect(const std::string &account, const std::string &password);
 		void               onDisconnect(const std::string &account, const std::string &pseudo, char status,const std::list<std::string> &contact);
-		const std::string& onGetContact(const std::list<std::string> &contacts);
+		void			   onList(const std::list<std::string> &contacts);
 		bool               onUpdate(const std::string &account, const std::string &password, const std::string &currentAccount);
 		bool               onAddContact(const std::string &account);
 		bool               onDelContact(const std::string &account);

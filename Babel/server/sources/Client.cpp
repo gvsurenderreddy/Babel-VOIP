@@ -145,17 +145,6 @@ void		Client::Disconnect(std::vector<std::string> &args){
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-// PAS COMPRIS CETTE FONCTION
-void	Client::GetContact(std::vector<std::string> &args){
-
-	args.clear();
-	args.push_back("");
-	args[0] += 1;
-	args.push_back("");
-	args[1] += ICommand::UPDATE;
-	this->handleCmd->packCmd(ICommand::ERR, args);
-}
-
 void	Client::Update(std::vector<std::string> &args){
 	bool error = false;
 
@@ -164,9 +153,11 @@ void	Client::Update(std::vector<std::string> &args){
 		args[0].empty() == false &&
 		args[2].empty() == false
 		){
-		this->pseudo = args[1];
-		this->status = args[3][0];
 		error = !this->Listener.onUpdate(args[0], args[2], this->account);
+		if (error == false){
+			this->pseudo = args[1];
+			this->status = args[3][0];
+		}
 	}
 	else
 		error = true;
@@ -241,12 +232,8 @@ void	Client::HangCall(std::vector<std::string> &args){
 }
 
 void	Client::List(std::vector<std::string> &args){
-	args.clear();
-	args.push_back("");
-	args[0] += 1;
-	args.push_back("");
-	args[1] += ICommand::LIST;
-	this->handleCmd->packCmd(ICommand::SHOW, args);
+	this->Listener.onList(this->contact);
+	args;
 }
 
 void	Client::Show(std::vector<std::string> &args){
