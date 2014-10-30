@@ -23,7 +23,11 @@ class UdpClient : public QObject, public IClientSocket {
 		void	initFromSocket(void *socket);
 		void	closeClient(void);
 
-	// set listener
+    // get host ip
+    public:
+        const std::string& getRemoteIp() const;
+    
+    // set listener
 	public:
 		void	setOnSocketEventListener(IClientSocket::OnSocketEvent *listener);
 

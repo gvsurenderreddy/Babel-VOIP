@@ -97,6 +97,11 @@ void	Client::Subscribe(std::vector<std::string> &args){
 	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
 
+    if (ret == true)
+        std::cout << "Inscription Disponible" << std::endl;
+    else
+        std::cout << "Inscription Déjà existante" << std::endl;
+
 	if (ret == true)
     {
 		this->account = args[0];
@@ -116,6 +121,11 @@ void	Client::Subscribe(std::vector<std::string> &args){
 
 void	Client::Connect(std::vector<std::string> &args){
     bool ret = this->Listener.onConnect(args[0], args[1], this);
+
+    if (ret == true)
+        std::cout << "Connexion success" << std::endl;
+    else
+        std::cout << "Connexion wrong password" << std::endl;
 
 	this->isConnected = ret;
 

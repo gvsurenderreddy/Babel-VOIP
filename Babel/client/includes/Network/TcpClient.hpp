@@ -36,7 +36,11 @@ class TcpClient : public QObject, public IClientSocket {
 		Message			receive(unsigned int sizeToRead);
 		unsigned int	nbBytesToRead(void) const;
 
-	// slots
+    // get host ip
+    public:
+        const std::string& getRemoteIp() const;
+
+    // slots
 	private slots:
 		void	bytesWritten(qint64 nbBytes);
 		void	markAsReadable(void);

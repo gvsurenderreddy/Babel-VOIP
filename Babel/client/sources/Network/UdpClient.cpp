@@ -87,3 +87,7 @@ void	UdpClient::bytesWritten(qint64 nbBytes) {
 void	UdpClient::setOnSocketEventListener(OnSocketEvent *listener) {
 	mListener = listener;
 }
+
+const std::string& UdpClient::getRemoteIp() const {
+    return "127.0.0.1";
+}
