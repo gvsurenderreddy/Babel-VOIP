@@ -43,6 +43,9 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// debug
 	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
+
+	// connexion: when add contact
+	QObject::connect(mMain.getUi().addContact, SIGNAL(clicked()), this, SLOT(addNewContact()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -155,7 +158,12 @@ void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
 void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
+	if (!es.errorOccurred())
+		mDialog.setMessage("Vous avez un nouveau contact ! :)");
+	else
+		mDialog.setMessage("Le contact n'existe pas... :(");
+	mDialog.show();
 }
 
 void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
@@ -199,7 +207,7 @@ void	BabelMainWindow::createAccount()
 	}
 	else
 	{
-		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de vos mot de passe.");
+		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de vos mot de passe ;)");
 	}
 	mDialog.show();
 }
@@ -211,5 +219,15 @@ void		BabelMainWindow::connexionToAccount()
 	contact.setAccountName(mFlyer.getEmail());
 	contact.setPassword(mFlyer.getPwd());
 	emit askForAuthentication(contact);
+	mDialog.show();
+}
+
+void		BabelMainWindow::addNewContact()
+{
+	Contact	contact;
+
+	contact.setAccountName(mMain.getUi().newContact->text());
+	emit askForAddingContact(contact);
+	mDialog.setMessage("Envoie de la demande d'ami ;)");
 	mDialog.show();
 }

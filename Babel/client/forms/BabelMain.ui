@@ -212,7 +212,7 @@ padding: 0 8px;
 </string>
     </property>
     <property name="placeholderText">
-     <string>Ajouter un contact</string>
+     <string>Ajouter l'email du contact</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addContact">

@@ -1,7 +1,7 @@
 #include "BabelMain.hpp"
 
 BabelMain::BabelMain()
-	: QWidget()
+	: QWidget(), mNewContact("")
 {
 	mUi.setupUi(this);
 	mModel = new ContactListModel(this);
@@ -31,6 +31,7 @@ BabelMain::BabelMain()
 	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
+	QObject::connect(mUi.addContact, SIGNAL(clicked()), this, SLOT(onClickAddContact()));
 }
 
 BabelMain::~BabelMain()
@@ -41,4 +42,9 @@ BabelMain::~BabelMain()
 void		BabelMain::onClickContact(QModelIndex const &index)
 {
 	mUi.name->setText(mModel->getContactList()[index.row()].getPseudo());
+}
+
+void		BabelMain::onClickAddContact()
+{
+	
 }
