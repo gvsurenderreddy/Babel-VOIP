@@ -271,9 +271,13 @@ void	Client::SendMsg(std::vector<std::string> &args){
 }
 
 void	Client::CloseCall(std::vector<std::string> &args){
+	bool	ret;
+
+	ret = this->Listener.onCloseCall(args[0], this->account);
+
 	args.clear();
 	args.push_back("");
-    args[0] += ErrorCode::OK;
+	args[0] += !ret;
 	args.push_back("");
 	args[1] += ICommand::CLOSE_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
