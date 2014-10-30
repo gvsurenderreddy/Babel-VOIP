@@ -46,6 +46,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		BabelSetting		mSetting;
 		BabelMain			mMain;
 		BabelDialog			mDialog;
+		Contact				mContact;
 
 	// public slots
 	public slots:

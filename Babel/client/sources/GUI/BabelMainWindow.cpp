@@ -40,6 +40,9 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// connexion: when connect to account
 	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), this, SLOT(connexionToAccount()));
+
+	// debug
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -74,11 +77,14 @@ void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	mMain.getModel()->getContactList().push_back(contact);
+	// A completer
+	mMain.getModel()->getContactList() << contact;
 	mMain.getModel()->sort();
+	mMain.getUi().listContactView->setModel(mMain.getModel());
 
-	mDialog.setMessage(contact.getAccountName() + " figure désormais dans vos contacts.");
+	mDialog.setMessage(contact.getAccountName() + " figure désormais dans vos contacts \\o/");
 	mDialog.show();
+	//
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
@@ -96,22 +102,25 @@ void	BabelMainWindow::terminatingCommunication(const Contact &) {
 }
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
+	mContact = contact;
+	// debug
 	QString	debug("");
 
 	debug += contact.getAccountName() + "\n";
 	mDialog.setMessage(debug);
 	mDialog.show();
+	//
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mDialog.setWindowTitle("Félicitation");
-		mDialog.setMessage("Votre compte a été crée avec succès :)");
+		mDialog.setMessage("Votre compte a été crée avec succès :D");
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur à la création");
+		mDialog.setWindowTitle("Erreur à la création :(");
 		mDialog.setMessage("Votre compte n'a pas pu se créer :(\n\nError code: " + QString::number(es.getErrorCode()));
 	}
 	mDialog.show();
@@ -122,11 +131,12 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	{
 		mFlyer.hide();
 		mMain.show();
+		mMain.getUi().name->setText(mFlyer.getEmail());
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur de connexion");
-		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe... ;)");
+		mDialog.setWindowTitle("Erreur de connexion :(");
+		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe ;)");
 	}
 }
 
@@ -165,7 +175,7 @@ void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
-	mDialog.setMessage("Vous avez été déconnecté du serveur.");
+	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
 }
 
 void	BabelMainWindow::connectionToServer()
