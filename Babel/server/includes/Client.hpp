@@ -39,7 +39,7 @@ class Client : public IClientSocket::OnSocketEvent{
         virtual bool onDelContact(const std::string &targetAccount, const std::string &callerAccount) = 0;
 		virtual bool onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount) = 0;
 		virtual bool onCallSomeone(const std::string &targetAccount, std::string &callerAcount) = 0;
-        virtual void onHangCall(bool hang, const std::string &account) = 0;
+		virtual void onHangCall(bool hang, const std::string &targetAccount, std::string &callerAccount) = 0;
         virtual bool onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount) = 0;
 	};
 
