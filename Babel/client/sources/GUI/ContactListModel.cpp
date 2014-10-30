@@ -32,11 +32,6 @@ QVariant				ContactListModel::headerData(int /*section*/, Qt::Orientation /*orie
 	return QVariant();
 }
 
-void					ContactListModel::setModelList(QList<Contact> const &contactList)
-{
-	mContactList = contactList;
-}
-
 bool					ContactListModel::compare(Contact const &v1, Contact const &v2)
 {
 	return (v1.getPseudo() < v2.getPseudo());

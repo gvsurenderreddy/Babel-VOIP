@@ -3,6 +3,7 @@
 #include <QPainter>
 #include "ui_BabelMain.h"
 #include "ContactListModel.hpp"
+#include "BabelDialog.hpp"
 
 class BabelMain : public QWidget, public Ui_BabelMain
 {
@@ -30,10 +31,12 @@ class BabelMain : public QWidget, public Ui_BabelMain
 	private:
 		Ui::BabelMain		mUi;
 		ContactListModel	*mModel;
+		BabelDialog			mDialog;
 
 	// methods
 	public:
 		Ui::BabelMain const	&getUi() const { return mUi; }
+		ContactListModel	*getModel() const { return mModel; }
 
 	// slots
 	public slots :
