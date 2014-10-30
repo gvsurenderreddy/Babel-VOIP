@@ -144,6 +144,25 @@ bool BabelServer::onDelContact(const std::string &targetAccount, const std::stri
     return true;
 }
 
+bool BabelServer::onShowContact(const std::string &targetAccount)
+{
+    Client* client;
+    std::vector<std::string> args;
+
+    if (!(client = findClient(targetAccount)))
+        return false;
+
+    args.push_back(client->getAccount());
+    args.push_back(client->getPseudo());
+    args.push_back("");
+    args[2] += client->getStatus();
+    args.push_back("");
+    args[3] += client->isConnect();
+    client->handleCmd->packCmd(ICommand::SHOW, args);
+
+    return true;
+}
+
 bool BabelServer::onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount)
 {
 	Client						*target;
@@ -198,7 +217,7 @@ void BabelServer::onHangCall(bool hang, const std::string &targetAccount, std::s
 
 	caller = findClient(callerAccount);
 	args.push_back(caller->getAccount());
-	//args.push_back(caller->Socket->getRemoteIp());
+	args.push_back(caller->Socket->getRemoteIp());
 	args.push_back("");
 	args[2] += hang;
 	caller->handleCmd->packCmd(ICommand::ACCEPT_CALL, args);
@@ -206,7 +225,7 @@ void BabelServer::onHangCall(bool hang, const std::string &targetAccount, std::s
 	target = findClient(targetAccount);
 	args.clear();
 	args.push_back(target->getAccount());
-	//args.push_back(target->Socket->getRemoteIp());
+	args.push_back(target->Socket->getRemoteIp());
 	args.push_back("");
 	args[2] += hang;
 	target->handleCmd->packCmd(ICommand::ACCEPT_CALL, args);
@@ -226,6 +245,19 @@ bool BabelServer::onSendMsg(const std::string &targetAccount, const std::string 
     args.push_back(message);
     client->handleCmd->packCmd(ICommand::SEND, args);
     return true;
+}
+
+bool	BabelServer::onCloseCall(const std::string &targetAccount, const std::string &callerAccount){
+	Client						*target;
+	std::vector<std::string>	args;
+
+	target = findClient(targetAccount);
+	if (target == NULL)
+		return false;
+
+	args.push_back(callerAccount);
+	target->handleCmd->packCmd(ICommand::CLOSE_CALL, args);
+	return true;
 }
 
 void	BabelServer::updateContact(const std::list<std::string>& contact, const std::string& account, const std::string& pseudo, char status, bool isConnected)
