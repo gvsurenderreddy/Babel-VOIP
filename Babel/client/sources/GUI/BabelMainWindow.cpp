@@ -22,7 +22,7 @@ BabelMainWindow::BabelMainWindow(void)
 	}
 
 	// action when click on login/signin
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show())); // debug à supprimé
 	QObject::connect(mFlyer.getUi().signup, SIGNAL(clicked()), &mSignup, SLOT(show()));
 	QObject::connect(mFlyer.getUi().p, SIGNAL(clicked()), &mSetting, SLOT(show()));
 
@@ -38,6 +38,9 @@ BabelMainWindow::BabelMainWindow(void)
 	// inscription: when clicked "valider"
 	QObject::connect(mSignup.getUi().ok, SIGNAL(clicked()), 
 		this, SLOT(createAccount()));
+
+	// connexion: when connect to account
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), this, SLOT(connexionToAccount()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -89,7 +92,7 @@ void	BabelMainWindow::updateInfo(const Contact &) {
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
-	if (es.getErrorCode())
+	if (!es.errorOccurred())
 	{
 		mDialog.setWindowTitle("Félicitation");
 		mDialog.setMessage("Votre compte a été crée avec succès :)");
@@ -97,13 +100,13 @@ void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	else
 	{
 		mDialog.setWindowTitle("Erreur à la création");
-		mDialog.setMessage("Votre compte n'a pas pu se créer :(");
+		mDialog.setMessage("Votre compte n'a pas pu se créer :(\n\nError code: " + QString::number(es.getErrorCode()));
 	}
 	mDialog.show();
 }
 
 void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
-	if (es.getErrorCode())
+	if (!es.errorOccurred())
 	{
 		mFlyer.hide();
 		mLogin.show();
@@ -151,7 +154,7 @@ void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
-	std::cout << "disconnected from server" << std::endl;
+	mDialog.setMessage("disconnected from server");
 }
 
 void	BabelMainWindow::connectionToServer()
@@ -187,7 +190,9 @@ void		BabelMainWindow::connexionToAccount()
 {
 	Contact	contact;
 
+	mDialog.setMessage("Tentative de connexion au compte: " + mFlyer.getEmail());
 	contact.setAccountName(mFlyer.getEmail());
 	contact.setPassword(mFlyer.getPwd());
 	emit askForAuthentication(contact);
+	mDialog.show();
 }
