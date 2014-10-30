@@ -9,7 +9,8 @@ MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 RCC_DIR         =       build/rcc
 
-QMAKE_CXXFLAGS	+=	-Wall /MP
+win32:QMAKE_CXXFLAGS	+=	-Wall /MP
+unix:QMAKE_CXXFLAGS	+=	-Wall -std=c++11
 
 INCLUDEPATH     +=      .                                       		\
                         includes                                		\
