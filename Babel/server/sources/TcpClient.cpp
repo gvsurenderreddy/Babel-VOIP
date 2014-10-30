@@ -150,6 +150,11 @@ unsigned int TcpClient::nbBytesToRead() const
     return mBuffer.size();
 }
 
+const std::string& TcpClient::getRemoteIp() const
+{
+    return mSocket->remote_endpoint().address().to_string();
+}
+
 void TcpClient::setOnSocketEventListener(IClientSocket::OnSocketEvent *listener)
 {
     mListener = listener;

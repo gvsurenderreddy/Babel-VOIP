@@ -46,6 +46,10 @@ class TcpClient : public IClientSocket
     public:
         void            setOnSocketEventListener(IClientSocket::OnSocketEvent *listener);
 
+    // get host ip
+    public:
+        const std::string& getRemoteIp() const;
+
     // const
     public:
         static const int    BUFFER_SIZE = 1024;

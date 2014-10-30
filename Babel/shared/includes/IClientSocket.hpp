@@ -39,6 +39,10 @@ class IClientSocket {
 		virtual Message			receive(unsigned int sizeToRead) = 0;
 		virtual unsigned int	nbBytesToRead(void) const = 0;
 
+    // get host ip
+    public:
+        virtual const std::string& getRemoteIp() const = 0;
+
 	// set listener
 	public:
 		virtual void	setOnSocketEventListener(IClientSocket::OnSocketEvent *listener) = 0;
