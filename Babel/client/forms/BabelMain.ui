@@ -108,7 +108,7 @@ font: 16pt &quot;Open Sans Light&quot;;</string>
     </property>
    </widget>
   </widget>
-  <widget class="QListView" name="listView">
+  <widget class="QListView" name="listContactView">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -124,7 +124,7 @@ border: none;
 </string>
    </property>
   </widget>
-  <widget class="QWidget" name="widget_2" native="true">
+  <widget class="QWidget" name="messageWrapper" native="true">
    <property name="geometry">
     <rect>
      <x>256</x>
@@ -137,7 +137,7 @@ border: none;
     <string notr="true">background: none;
 background-color: rgba(255, 255, 255, 196);</string>
    </property>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="messageEdit">
     <property name="geometry">
      <rect>
       <x>10</x>
