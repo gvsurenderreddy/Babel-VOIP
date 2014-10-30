@@ -207,9 +207,13 @@ void	Client::AcceptContact(std::vector<std::string> &args){
 }
 
 void	Client::CallSomeone(std::vector<std::string> &args){
+	bool	ret;
+
+	ret = !Listener.onCallSomeone(args[0], this->account);
+
 	args.clear();
 	args.push_back("");
-    args[0] += ErrorCode::OK;
+    args[0] += ret;
 	args.push_back("");
 	args[1] += ICommand::CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);

@@ -177,15 +177,17 @@ bool BabelServer::onAcceptContact(bool accept, const std::string &targetAccount,
 	return true;
 }
 
-void BabelServer::onCallSomeone(const std::string &account)
+bool BabelServer::onCallSomeone(const std::string &targetAccount, std::string &callerAcount)
 {
-    Client* client;
-    std::vector<std::string> args;
+    Client*						client;
+    std::vector<std::string>	args;
 
-    if (!(client = findClient(account)))
-        return;
-    args.push_back(account);
+    if (!(client = findClient(targetAccount)))
+        return false;
+
+    args.push_back(callerAcount);
     client->handleCmd->packCmd(ICommand::CALL, args);
+	return true;
 }
 
 void BabelServer::onHangCall(bool hang, const std::string &account)
