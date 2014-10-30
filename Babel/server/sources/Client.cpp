@@ -220,12 +220,7 @@ void	Client::CallSomeone(std::vector<std::string> &args){
 }
 
 void	Client::HangCall(std::vector<std::string> &args){
-	args.clear();
-	args.push_back("");
-	args[0] += ErrorCode::OK;
-	args.push_back("");
-	args[1] += ICommand::ACCEPT_CALL;
-	this->handleCmd->packCmd(ICommand::ERR, args);
+	this->Listener.onHangCall(args[1][0], args[0], this->account);
 }
 
 void	Client::List(std::vector<std::string> &){

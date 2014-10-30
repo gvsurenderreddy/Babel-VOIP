@@ -190,10 +190,26 @@ bool BabelServer::onCallSomeone(const std::string &targetAccount, std::string &c
 	return true;
 }
 
-void BabelServer::onHangCall(bool hang, const std::string &account)
+void BabelServer::onHangCall(bool hang, const std::string &targetAccount, std::string &callerAccount)
 {
-    hang;
-    account;
+	std::vector<std::string> args;
+	Client	*caller;
+	Client	*target;
+
+	caller = findClient(callerAccount);
+	args.push_back(caller->getAccount());
+	//args.push_back(caller->Socket->getRemoteIp());
+	args.push_back("");
+	args[2] += hang;
+	caller->handleCmd->packCmd(ICommand::ACCEPT_CALL, args);
+
+	target = findClient(targetAccount);
+	args.clear();
+	args.push_back(target->getAccount());
+	//args.push_back(target->Socket->getRemoteIp());
+	args.push_back("");
+	args[2] += hang;
+	target->handleCmd->packCmd(ICommand::ACCEPT_CALL, args);
 }
 
 bool BabelServer::onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount)
