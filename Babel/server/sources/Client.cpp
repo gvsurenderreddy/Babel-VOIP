@@ -238,12 +238,19 @@ void	Client::List(std::vector<std::string> &){
 }
 
 void	Client::Show(std::vector<std::string> &args){
-	args.clear();
-	args.push_back("");
-	args[0] += ErrorCode::OK;
-	args.push_back("");
-	args[1] += ICommand::SHOW;
-	this->handleCmd->packCmd(ICommand::SHOW, args);
+    bool ret;
+
+    if (args[0].empty() == false)
+        ret = this->Listener.onShowContact(args[0]);
+    else
+        ret = false;
+
+    args.clear();
+    args.push_back("");
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
+    args.push_back("");
+    args[1] += ICommand::SHOW;
+    this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::SendMsg(std::vector<std::string> &args){

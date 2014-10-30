@@ -144,6 +144,25 @@ bool BabelServer::onDelContact(const std::string &targetAccount, const std::stri
     return true;
 }
 
+bool BabelServer::onShowContact(const std::string &targetAccount)
+{
+    Client* client;
+    std::vector<std::string> args;
+
+    if (!(client = findClient(targetAccount)))
+        return false;
+
+    args.push_back(client->getAccount());
+    args.push_back(client->getPseudo());
+    args.push_back("");
+    args[2] += client->getStatus();
+    args.push_back("");
+    args[3] += client->isConnect();
+    client->handleCmd->packCmd(ICommand::SHOW, args);
+
+    return true;
+}
+
 bool BabelServer::onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount)
 {
 	Client						*target;

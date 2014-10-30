@@ -37,6 +37,7 @@ class Client : public IClientSocket::OnSocketEvent{
 		virtual bool onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status) = 0;
         virtual bool onAddContact(const std::string &account, const std::string &callerAccount) = 0;
         virtual bool onDelContact(const std::string &targetAccount, const std::string &callerAccount) = 0;
+        virtual bool onShowContact(const std::string &targetAccount) = 0;
 		virtual bool onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount) = 0;
 		virtual bool onCallSomeone(const std::string &targetAccount, std::string &callerAcount) = 0;
 		virtual void onHangCall(bool hang, const std::string &targetAccount, std::string &callerAccount) = 0;
