@@ -10,7 +10,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-#include <boost/lexical_cast.hpp>
+
 TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
 {
 
@@ -90,8 +90,21 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            delete[] mWriteMessageQueue.front().msg;
-            mWriteMessageQueue.pop_front();
+            if (bytesTransfered == mWriteMessageQueue.front().msgSize)
+            {
+                delete[] mWriteMessageQueue.front().msg;
+                mWriteMessageQueue.pop_front();
+            }
+            else
+            {
+                Message& messageFront = mWriteMessageQueue.front();
+                messageFront.msgSize -= bytesTransfered;
+                char* tmp = new char[messageFront.msgSize + 1];
+                memcpy(tmp, messageFront.msg, messageFront.msgSize);
+                tmp[messageFront.msgSize] = '\0';
+                delete[] messageFront.msg;
+                messageFront.msg = tmp;
+            }
             if (!mWriteMessageQueue.empty())
             {
                 boost::asio::async_write(*mSocket,

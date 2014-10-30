@@ -2,17 +2,6 @@
 
 #include "IClientSocket.hpp"
 
-/**
-* class IServerSocket
-*
-* La classe qui souhaite utiliser un IServerSocket 
-* devra implémenter l'interface IServerSocket::OnSocketEvent.
-*
-* Elle sera automatiquement notifiée lorsqu'un 
-* client souhaite se connecter au serveur.
-*
-*/
-
 class IServerSocket {
 
 	// CallBack interface

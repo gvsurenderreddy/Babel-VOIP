@@ -59,15 +59,16 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 		bool               onConnect(const std::string &account, const std::string &password, Client *caller);
 		void               onDisconnect(Client *caller);
 		void			   onList(Client *caller);
-		bool               onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status, const std::string &currentAccount);
-		bool               onAddContact(const std::string &targetAccount, std::string &callerAccount);
-		bool               onDelContact(const std::string &account);
-		bool               onAcceptContact(bool accept, const std::string &account);
+		bool               onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status);
+		bool               onAddContact(const std::string &targetAccount, const std::string &callerAccount);
+        bool               onDelContact(const std::string &targetAccount, const std::string &callerAccount);
+		bool               onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount);
 		void               onCallSomeone(const std::string &account);
-		void               onHangCall(const bool &hang, const std::string &account);
+		void               onHangCall(bool hang, const std::string &account);
+        bool               onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount);
 
 	//Handle Client
 	private:
-		void	updateContact(std::list<std::string> contact, std::string account, std::string pseudo, char statu, bool isConnected);
-		Client	*findClient(std::string account);
+        void	updateContact(const std::list<std::string>& contact, const std::string& account, const std::string& pseudo, char status, bool isConnected);
+        Client	*findClient(const std::string& account) const;
 };

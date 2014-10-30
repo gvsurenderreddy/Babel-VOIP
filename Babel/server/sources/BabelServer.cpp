@@ -67,127 +67,152 @@ void BabelServer::onNewConnection(IServerSocket *serverSocket)
 
 bool BabelServer::onSubscribe(const std::string &account, const std::string &password)
 {
-    if (mAccounts.find(account) == mAccounts.end())
-    {
-        std::cout << "[SUCCESS] [REG] account '" << account << "' is now registered" << std::endl;
-        mAccounts[account] = password;
-        return true;
-    }
-    else
-    {
-        std::cerr << "[FAILED] [REG] account '" << account << "' is already taken" << std::endl;
+    if (mAccounts.find(account) != mAccounts.end())
         return false;
-    }
+    mAccounts[account] = password;
+    return true;
 }
 
 bool BabelServer::onConnect(const std::string &account, const std::string &password, Client *caller)
 {
-    auto found = std::find_if(mAccounts.begin(), mAccounts.end(), [&](const std::pair<std::string, std::string>& item) -> bool
+    auto target = std::find_if(mAccounts.begin(), mAccounts.end(), [&](const std::pair<std::string, std::string>& item) -> bool
     { return item.first == account && item.second == password; });
-    if (found != mAccounts.end())
-    {
-        std::cout << "[SUCCESS] [LOG] account '" << account << "' is now connected" << std::endl;
-		caller->setAccount(account);
-		caller->loadData();
-		this->updateContact(caller->getContact(), caller->getAccount(), caller->getPseudo(), caller->getStatus(), true);
-        return true;
-    }
-    else
-    {
-        std::cerr << "[FAILED] [LOG] [account or password] are wrong" << std::endl;
+    if (target == mAccounts.end())
         return false;
-    }
+    caller->setAccount(account);
+    caller->loadData();
+    this->updateContact(caller->getContact(), caller->getAccount(), caller->getPseudo(), caller->getStatus(), true);
+    return true;
 }
 
-void	BabelServer::onDisconnect(Client *caller)
+void BabelServer::onDisconnect(Client *caller)
 {
 	this->updateContact(caller->getContact(), caller->getAccount(), caller->getPseudo(), caller->getStatus(), false);
 }
 
-void	BabelServer::onList(Client *caller){
+void BabelServer::onList(Client *caller)
+{
 	std::vector<std::string>		args;
 	const std::list<std::string>	&contacts = caller->getContact();
 	Client							*currentContact;
 
-	/*
-	for each contacts{
-	currentContact = this->findClient *it
-	if contact != NULL
-	args.push_back(currentContact->getAccount);
-	args.push_back(currentContact->getPseudo);
-	args.push_back("");
-	args[2] += currentContact->getStatus;
-	args.push_back("");
-	args[3] += currentContact->getIsConnect;
-	caller->handleCmd->packCmd(ICommand::SHOW, args);
-	}
-	*/
+    std::for_each(contacts.begin(), contacts.end(), [&](const std::string &account) {
+        if ((currentContact = findClient(account)))
+        {
+            args.clear();
+            args.push_back(currentContact->getAccount());
+            args.push_back(currentContact->getPseudo());
+            args.push_back("");
+            args[2] += currentContact->getStatus();
+            args.push_back("");
+            args[3] += currentContact->isConnect();
+            caller->handleCmd->packCmd(ICommand::SHOW, args);
+        }
+    });
 }
 
-bool BabelServer::onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status, const std::string &currentAccount){
-	/*
-	if (password.size < 6 && mClient.find("account") != mClient.end())
-		return false;
-	else{
-		mClient[account] = password;
-		mClient.delete("currentAccount");
-		this->updateContact(contact, account, pseudo, status, true);
-	}
-	*/
-	password;
-    account;
-	currentAccount;
-    return (true);
+bool BabelServer::onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status)
+{
+    Client* client;
+    if (password.size() < 6 || !(client = findClient(account)))
+        return false;
+    mAccounts[account] = password;
+    updateContact(client->getContact(), account, pseudo, status, true);
+    return true;
 }
 
-bool BabelServer::onAddContact(const std::string &targetAccount, std::string &callerAccount){
-	std::vector<std::string>	args;
-	Client						*target;
-
-	/*
-	target = this->findClient(tragetAccount)
-	if target == NULL return false
-	args.push_back(callerAccount);
-	target->handleCmd->packCmd(callerAccount)
-	*/
-    return (true);
-}
-
-bool BabelServer::onDelContact(const std::string &account){
+bool BabelServer::onAddContact(const std::string &targetAccount, const std::string &callerAccount)
+{
+    Client* client;
 	std::vector<std::string> args;
-	/*
-	trouver le compte correspondant lui notifier du delete
-	via compte->handleCmd(Icommand::DEll, args)
-	erreur si account n'exist pas
-	*/
+	if (!(client = findClient(targetAccount)))
+        return false;
+	args.push_back(callerAccount);
+	client->handleCmd->packCmd(ICommand::ADD, args);
+    return (true);
+}
 
-	args.push_back(account);
+bool BabelServer::onDelContact(const std::string &targetAccount, const std::string &callerAccount)
+{
+    Client* client;
+	std::vector<std::string> args;
+
+    if (!(client = findClient(targetAccount)))
+        return false;
+    args.push_back(callerAccount);
+    client->handleCmd->packCmd(ICommand::DEL, args);
+    return true;
+}
+
+bool BabelServer::onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount)
+{
+	Client						*target;
+	Client						*caller;
+	std::vector<std::string>	args;
+
+	if (accept == false ||
+        !(caller = findClient(callerAcount)) ||
+        !(target = findClient(targetAccount)))
+		return false;
+
+	target = findClient(targetAccount);
+	args.push_back(target->getAccount());
+	args.push_back(target->getPseudo());
+	args.push_back("");
+	args[2] += target->getStatus();
+	args.push_back("");
+	args[3] += target->isConnect();
+	target->handleCmd->packCmd(ICommand::SHOW, args);
+
+	caller = findClient(callerAcount);
+	args.clear();
+	args.push_back(caller->getAccount());
+	args.push_back(caller->getPseudo());
+	args.push_back("");
+	args[2] += caller->getStatus();
+	args.push_back("");
+	args[3] += caller->isConnect();
+	caller->handleCmd->packCmd(ICommand::SHOW, args);
+
 	return true;
 }
 
-bool BabelServer::onAcceptContact(bool accept, const std::string &account){
-    account;
-    if (accept)
-        return true;
-    else
-        return false;
+void BabelServer::onCallSomeone(const std::string &account)
+{
+    Client* client;
+    std::vector<std::string> args;
+
+    if (!(client = findClient(account)))
+        return;
+    args.push_back(account);
+    client->handleCmd->packCmd(ICommand::CALL, args);
 }
 
-void BabelServer::onCallSomeone(const std::string &account){
-    account;
-}
-
-void BabelServer::onHangCall(const bool &hang, const std::string &account){
+void BabelServer::onHangCall(bool hang, const std::string &account)
+{
     hang;
     account;
 }
 
-/*
-** Handle Client
-*/
+bool BabelServer::onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount)
+{
+    Client* client;
+    std::vector<std::string> args;
 
-void	BabelServer::updateContact(std::list<std::string> contact, std::string account, std::string pseudo, char status, bool isConnected){
-	std::vector<std::string>	args;
+    if (!(client = findClient(targetAccount)))
+        return false;
+    const std::list<std::string>& friends = client->getContact();
+    if (std::find(friends.begin(), friends.end(), callerAccount) == friends.end())
+        return false;
+    args.push_back(callerAccount);
+    args.push_back(message);
+    client->handleCmd->packCmd(ICommand::SEND, args);
+    return true;
+}
+
+void	BabelServer::updateContact(const std::list<std::string>& contact, const std::string& account, const std::string& pseudo, char status, bool isConnected)
+{
+	std::vector<std::string> args;
 
 	args.push_back(account);
 	args.push_back(pseudo);
@@ -196,33 +221,16 @@ void	BabelServer::updateContact(std::list<std::string> contact, std::string acco
 	args.push_back("");
 	args[3] += isConnected;
 
-	//PAS TROP COMPRIS CE QUE TA FAIS FAUDRA QUE TU M4EXPLIQUE JAI ESSAYER DE MADAPTER NORMALEMENT C4EST BON
-	// A FAIRE AUSSI POUR LE CONNECTED ET UPDATE
-	/*std::for_each(contact.begin(), contact.end(), [this](const std::string &account){
-	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
-	if (mClients.end() != it)
-	it->handleCmd->packCmd(ICommand::SHOW, &args);
-	}*/
-
-	/*
-	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client)
-	{ return client->getName() == account; });
-	if (mClients.end() != it)
-	{
-	// notify each of his contacts
-	std::for_each((*it)->getContact().begin(), (*it)->getContact().end(), [this](const std::string &account)
-	{
-	auto it = std::find_if(mClients.begin(), mClients.end(), [&](Client* client) { return client->getName() == account; });
-	if (mClients.end() != it) // check if he is here
-	{
-	// envoyer une commande pour indiquer aux clients que un de ses contacts s'est deconnect�
-	}
-	});
-	// (*it)->setConnected(false); // set the client to disconnect state
-	}
-	*/
+    std::for_each(contact.begin(), contact.end(), [&](const std::string &account) {
+        Client* client = findClient(account);
+        if (client)
+            client->handleCmd->packCmd(ICommand::SHOW, args);
+    });
 }
 
-Client	*findClient(std::string account){
-	return NULL;
+Client	*BabelServer::findClient(const std::string& account) const
+{
+    auto it = std::find_if(mClients.begin(), mClients.end(), [account](Client* client)
+    { return client->getAccount() == account; });
+    return (mClients.end() != it ? *it : NULL);
 }

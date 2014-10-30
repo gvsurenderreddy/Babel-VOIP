@@ -1,5 +1,6 @@
 #include "Client.hpp"
 #include "Database.hpp"
+#include "ErrorCodes.hpp"
 
 #include <fstream>
 #include <algorithm>
@@ -96,15 +97,18 @@ void	Client::Subscribe(std::vector<std::string> &args){
 	
 	bool ret = this->Listener.onSubscribe(args[0], args[2]);
 
-	this->account = args[0];
-	this->pseudo = args[1];
-	this->contact.clear();
-	this->status = 1;
-	this->saveData();
+	if (ret == true)
+    {
+		this->account = args[0];
+		this->pseudo = args[1];
+		this->contact.clear();
+		this->status = 1;
+		this->saveData();
+	}
 
 	args.clear();
 	args.push_back("");
-	args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::REG;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -113,107 +117,99 @@ void	Client::Subscribe(std::vector<std::string> &args){
 void	Client::Connect(std::vector<std::string> &args){
     bool ret = this->Listener.onConnect(args[0], args[1], this);
 
-	this->isConnected = true;
+	this->isConnected = ret;
 
 	args.clear();
 	args.push_back("");
-    args[0] += !ret;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::LOG;
   	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void		Client::Disconnect(std::vector<std::string> &args){
-	bool	error = false;
+    bool	ret;
 
-	if (this->account == args[0]){
+	if (this->account == args[0])
+    {
 		this->Listener.onDisconnect(this);
 		this->saveData();
 		this->isConnected = false;
+        ret = true;
 	}
 	else
-		error = true;
+        ret = false;
 
 	args.clear();
 	args.push_back("");
-	args[0] += error;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
     args[1] += ICommand::EXIT;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::Update(std::vector<std::string> &args){
-	bool error = false;
+    bool ret;
 
-	if (args[1].empty() == false &&
-		(args[3][0] >= 0 && args[3][0] <= 10) &&
-		args[0].empty() == false &&
-		args[2].empty() == false
-		){
-		error = !this->Listener.onUpdate(args[0], args[2], args[1], args[3][0], this->account);
-		if (error == false){
+	if (args[1].empty() == false && (args[3][0] >= 0 && args[3][0] <= 10) && args[0].empty() == false && args[2].empty() == false)
+    {
+		if ((ret = this->Listener.onUpdate(args[0], args[2], args[1], args[3][0])))
+        {
 			this->pseudo = args[1];
 			this->status = args[3][0];
 		}
 	}
 	else
-		error = true;
+        ret = false;
 
 	args.clear();
 	args.push_back("");
-	args[0] += error;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::UPDATE;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::AddContact(std::vector<std::string> &args){
-	bool error = false;
+	bool ret;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onAddContact(args[0], this->account);
+		ret = this->Listener.onAddContact(args[0], this->account);
 	else 
-		error = true;
+		ret = false;
 
 	args.clear();
 	args.push_back("");
-	args[0] += error;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
     args[1] += ICommand::ADD;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::DelContact(std::vector<std::string> &args){
-	bool error = false;
+	bool ret;
 
 	if (args[0].empty() == false)
-		error = !this->Listener.onDelContact(args[0]);
+		ret = this->Listener.onDelContact(args[0], this->account);
 	else
-		error = true;
+		ret = false;
 
 	args.clear();
 	args.push_back("");
-	args[0] += error;
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
 	args.push_back("");
 	args[1] += ICommand::DEL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::AcceptContact(std::vector<std::string> &args){
-    bool error = !args[0].empty() && this->Listener.onAcceptContact(args[1][0], args[0]) ? false : true;
-
-	args.clear();
-	args.push_back("");
-	args[0] += error;
-	args.push_back("");
-	args[1] += ICommand::ACCEPT_ADD;
-	this->handleCmd->packCmd(ICommand::ERR, args);
+    this->Listener.onAcceptContact(args[1][0], args[0], this->account);
 }
 
 void	Client::CallSomeone(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+    args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
@@ -222,88 +218,73 @@ void	Client::CallSomeone(std::vector<std::string> &args){
 void	Client::HangCall(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+	args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::ACCEPT_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::List(std::vector<std::string> &args){
+void	Client::List(std::vector<std::string> &){
 	this->Listener.onList(this);
-	args;
 }
 
 void	Client::Show(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+	args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::SHOW;
 	this->handleCmd->packCmd(ICommand::SHOW, args);
 }
 
 void	Client::SendMsg(std::vector<std::string> &args){
-	args.clear();
-	args.push_back("");
-	args[0] += 1;
-	args.push_back("");
-	args[1] += ICommand::SEND;
-	this->handleCmd->packCmd(ICommand::ERR, args);
+
+    bool ret;
+
+    if (args[0].empty() == false)
+        ret = this->Listener.onSendMsg(args[0], args[1], this->account);
+    else
+        ret = false;
+
+    args.clear();
+    args.push_back("");
+    args[0] += ret == true ? ErrorCode::OK : ErrorCode::THE_IMPOSSIBLE_HAPPENED;
+    args.push_back("");
+    args[1] += ICommand::SEND;
+    this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void	Client::CloseCall(std::vector<std::string> &args){
 	args.clear();
 	args.push_back("");
-	args[0] += 1;
+    args[0] += ErrorCode::OK;
 	args.push_back("");
 	args[1] += ICommand::CLOSE_CALL;
 	this->handleCmd->packCmd(ICommand::ERR, args);
 }
 
-void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> &param){
-	switch (instruction)
-	{
-	case ICommand::ADD:
-		this->AddContact(param);
-        break;
-	case ICommand::UPDATE:
-        this->Update(param);
-        break;
-	case ICommand::REG:
-        this->Subscribe(param);
-        break;
-    case ICommand::LOG:
-        this->Connect(param);
-        break;
-	case ICommand::LIST:
-        this->List(param);
-        break;
-	case ICommand::SHOW:
-        this->Show(param);
-        break;
-	case ICommand::CALL:
-        this->CallSomeone(param);
-        break;
-	case ICommand::ACCEPT_ADD:
-        this->AcceptContact(param);
-        break;
-	case ICommand::DEL:
-        this->DelContact(param);
-        break;
-	case ICommand::EXIT:
-        this->Disconnect(param);
-        break;
-	case ICommand::SEND:
-        this->SendMsg(param);
-        break;
-	case ICommand::ACCEPT_CALL:
-        this->HangCall(param);
-        break;
-    case ICommand::CLOSE_CALL:
-        this->CloseCall(param);
-        break;
-	default:
-        std::cout << "Unknown command" << std::endl;
-		return ;
-	}
+const Client::HandleCommand Client::handleCommandsTab[] = {
+    { ICommand::ADD, &Client::AddContact },
+    { ICommand::UPDATE, &Client::Update },
+    { ICommand::REG, &Client::Subscribe },
+    { ICommand::LOG, &Client::Connect },
+    { ICommand::LIST, &Client::List },
+    { ICommand::SHOW, &Client::Show },
+    { ICommand::CALL, &Client::CallSomeone },
+    { ICommand::ACCEPT_ADD, &Client::AcceptContact },
+    { ICommand::DEL, &Client::DelContact },
+    { ICommand::EXIT, &Client::Disconnect },
+    { ICommand::SEND, &Client::SendMsg },
+    { ICommand::ACCEPT_CALL, &Client::HangCall },
+    { ICommand::CLOSE_CALL, &Client::CloseCall },
+    { ICommand::UNKNOWN_INSTRUCTION, NULL }
+};
+
+void	Client::exeCmd(ICommand::Instruction instruction, std::vector<std::string> &param)
+{
+    int i;
+    for (i = 0; handleCommandsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleCommandsTab[i].instruction != instruction; i++);
+
+    if (handleCommandsTab[i].instruction == instruction)
+        (this->*handleCommandsTab[i].handler)(param);
 }

@@ -9,13 +9,6 @@
 #include <boost/array.hpp>
 #include <boost/thread/mutex.hpp>
 
-/**
-* class TcpClient
-*
-* Client with TCP Socket sending
-*
-*/
-
 using namespace boost::asio::ip;
 
 class TcpClient : public IClientSocket
