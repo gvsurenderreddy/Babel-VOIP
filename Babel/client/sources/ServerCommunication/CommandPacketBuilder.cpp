@@ -72,6 +72,7 @@ void	CommandPacketBuilder::onSocketReadable(IClientSocket *, unsigned int nbByte
 
 void	CommandPacketBuilder::onSocketClosed(IClientSocket *) {
 	resetCurrentCommand();
+	emit disconnectedFromHost();
 }
 
 void	CommandPacketBuilder::resetCurrentCommand(void) {
@@ -80,6 +81,4 @@ void	CommandPacketBuilder::resetCurrentCommand(void) {
 
 	mCurrentCommand = NULL;
 	mCurrentState = CommandPacketBuilder::HEADER;
-
-	emit disconnectedFromHost();
 }

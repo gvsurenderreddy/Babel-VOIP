@@ -22,7 +22,6 @@ BabelMainWindow::BabelMainWindow(void)
 	}
 
 	// action when click on login/signin
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show())); // debug à supprimé
 	QObject::connect(mFlyer.getUi().signup, SIGNAL(clicked()), &mSignup, SLOT(show()));
 	QObject::connect(mFlyer.getUi().p, SIGNAL(clicked()), &mSetting, SLOT(show()));
 
@@ -88,7 +87,11 @@ void	BabelMainWindow::startingCommunication(const Contact &, bool) {
 void	BabelMainWindow::terminatingCommunication(const Contact &) {
 }
 
-void	BabelMainWindow::updateInfo(const Contact &) {
+void	BabelMainWindow::updateInfo(const Contact &contact) {
+	std::cout << contact.getAccountName().toStdString() << std::endl;
+	std::cout << contact.getPassword().toStdString() << std::endl;
+	std::cout << contact.getStatus() << std::endl;
+	std::cout << std::endl;
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
@@ -109,7 +112,7 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mFlyer.hide();
-		mLogin.show();
+		mMain.show();
 	}
 	else
 	{
