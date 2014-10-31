@@ -184,22 +184,30 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
     if (param.size() == 1)
     {
         const std::string& targetAccount = param[0];
-        Client* targetClient = findOnlineClient(targetAccount);
-        if (targetClient)
+        if (targetAccount != callerClient->getAccount())
         {
-            sendStateCommand(callerClient, ErrorCode::OK, instruction);
-            std::cout << "  [ADD] OK" << std::endl;
+            Client* targetClient = findOnlineClient(targetAccount);
+            if (targetClient)
+            {
+                sendStateCommand(callerClient, ErrorCode::OK, instruction);
+                std::cout << "  [ADD] OK" << std::endl;
 
-            std::vector<std::string> args;
+                std::vector<std::string> args;
 
-            args.push_back(callerClient->getAccount());
+                args.push_back(callerClient->getAccount());
 
-            targetClient->handleCmd->packCmd(instruction, args);
+                targetClient->handleCmd->packCmd(instruction, args);
+            }
+            else
+            {
+                std::cout << "  [ADD] ACTIONS_TO_OFFLINE_ACCOUNT" << std::endl;
+                sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+            }
         }
         else
         {
-            std::cout << "  [ADD] ACTIONS_TO_OFFLINE_ACCOUNT" << std::endl;
-            sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+            std::cout << "  [ADD] CANNOT_ADD_YOURSELF" << std::endl;
+            sendStateCommand(callerClient, ErrorCode::CANNOT_ADD_YOURSELF, instruction);
         }
     }
     else
@@ -286,6 +294,7 @@ void BabelServer::onReg(Client* client, std::vector<std::string>& param, IComman
 
 // ** Login
 // ** log #nom_de_compte #pwd
+// ** TODO: check Already Logged
 void BabelServer::onLog(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 2)
@@ -407,25 +416,33 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
         if (client->getStatusCall() == Client::StatusCall::NONE)
         {
             const std::string& targetAccount = param[0];
-            Client* targetClient = findOnlineClient(targetAccount);
-            if (targetClient)
+            if (targetAccount != callerClient->getAccount())
             {
-                sendStateCommand(client, ErrorCode::OK, instruction);
-                std::cout << "  [CALL] OK" << std::endl;
+                Client* targetClient = findOnlineClient(targetAccount);
+                if (targetClient)
+                {
+                    sendStateCommand(client, ErrorCode::OK, instruction);
+                    std::cout << "  [CALL] OK" << std::endl;
 
-                client->setStatusCall(Client::StatusCall::ISWAITING);
-                client->saveData();
+                    client->setStatusCall(Client::StatusCall::ISWAITING);
+                    client->saveData();
 
-                std::vector<std::string> args;
+                    std::vector<std::string> args;
 
-                args.push_back(client->getAccount());
+                    args.push_back(client->getAccount());
 
-                targetClient->handleCmd->packCmd(instruction, args);
+                    targetClient->handleCmd->packCmd(instruction, args);
+                }
+                else
+                {
+                    std::cout << "  [CALL] ACTIONS_TO_OFFLINE_ACCOUNT" << std::endl;
+                    sendStateCommand(client, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+                }
             }
             else
             {
-                std::cout << "  [CALL] ACTIONS_TO_OFFLINE_ACCOUNT" << std::endl;
-                sendStateCommand(client, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+                std::cout << "  [CALL] CANNOT_CALL_YOURSELF" << std::endl;
+                sendStateCommand(callerClient, ErrorCode::CANNOT_CALL_YOURSELF, instruction);
             }
         }
         else

@@ -11,6 +11,8 @@ namespace ErrorCode {
             CANNOT_DO_CALL_MULTIPLE                     = 0x0007,
             CANNOT_ACCEPT_CALL_FROM_NOT_A_CALLER        = 0x0008,
             CANNOT_CLOSE_CALL_WHEN_YOU_ARENT_CALLING    = 0x0009,
-            LOGIN_ON_ALREADY_LOGGED_ACCOUNT             = 0x0010
+            LOGIN_ON_ALREADY_LOGGED_ACCOUNT             = 0x0010,
+            CANNOT_ADD_YOURSELF                         = 0x0011,
+            CANNOT_CALL_YOURSELF                        = 0x0012
 	};
 }

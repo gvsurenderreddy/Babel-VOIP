@@ -20,7 +20,7 @@ isEmpty(_BOOST_ROOT) {
 	
 }
 
-CONFIG			+=		console
+CONFIG			+=		console c++11
 TEMPLATE        =       app
 TARGET          =       server
 
