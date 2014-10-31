@@ -76,6 +76,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	createAccount();
 		void	connexionToAccount();
 		void	addNewContact();
+		void	sendMessage();
 
 	// signals
 	signals:

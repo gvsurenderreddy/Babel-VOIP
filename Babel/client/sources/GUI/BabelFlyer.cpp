@@ -1,3 +1,5 @@
+#include <QEvent>
+#include <QKeyEvent>
 #include "BabelFlyer.hpp"
 
 BabelFlyer::BabelFlyer(void)

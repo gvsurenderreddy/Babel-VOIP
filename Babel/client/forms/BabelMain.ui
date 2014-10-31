@@ -145,7 +145,7 @@ background-color: rgba(255, 255, 255, 196);</string>
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>751</width>
+      <width>674</width>
       <height>41</height>
      </rect>
     </property>
@@ -159,6 +159,28 @@ font: 8pt &quot;Open Sans Light&quot;;
      <string>Votre réponse...</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="send">
+    <property name="geometry">
+     <rect>
+      <x>694</x>
+      <y>10</y>
+      <width>64</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgba(255, 255, 255, 192);
+padding: 7px 8px;
+font: 8pt &quot;Open Sans Light&quot;;
+</string>
+    </property>
+    <property name="text">
+     <string>Envoyer</string>
+    </property>
+   </widget>
+   <zorder>messageEdit</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>send</zorder>
   </widget>
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">
@@ -237,6 +259,44 @@ padding: 0 8px;
      <string>+</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QListView" name="listView">
+   <property name="geometry">
+    <rect>
+     <x>256</x>
+     <y>104</y>
+     <width>768</width>
+     <height>706</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:none;
+background-color: rgba(255, 255, 255, 64);
+border: none;
+font: 16px &quot;Open Sans Light&quot;;
+color: rgb(255, 255, 255);
+padding: 0 8px;
+</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget_4" native="true">
+   <property name="geometry">
+    <rect>
+     <x>256</x>
+     <y>64</y>
+     <width>768</width>
+     <height>40</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background:none;
+background-color: rgba(0, 0, 0, 160);
+border: none;
+font: 12pt &quot;Open Sans Light&quot;;
+color: rgb(255, 255, 255);
+padding: 0 8px;
+</string>
+   </property>
   </widget>
  </widget>
  <resources>
