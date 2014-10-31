@@ -216,6 +216,8 @@ void	BabelMainWindow::disconnectedFromServer(void) {
 	mSetting.hide();
 	mMain.hide();
 	mMain.getDialog().hide();
+
+	mFlyer.show();
 	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
 	mDialog.show();
 }
