@@ -160,7 +160,11 @@ void BabelServer::notifyMyFriendsOfModificationAboutMe(Client* client)
     std::for_each(client->getContact().begin(), client->getContact().end(), [&](const std::string &accountName) {
         Client* client = findOnlineClient(accountName);
         if (client)
+        {
+            std::cout << "Notify accountName: '" << accountName << "'" << std::endl;
             client->handleCmd->packCmd(ICommand::SHOW, args);
+        }
+            
     });
 }
 
@@ -189,12 +193,15 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
             Client* targetClient = findOnlineClient(targetAccount);
             if (targetClient)
             {
+                targetClient->display();
                 sendStateCommand(callerClient, ErrorCode::OK, instruction);
                 std::cout << "  [ADD] OK" << std::endl;
 
                 std::vector<std::string> args;
 
+                std::cout << "a" << std::endl;
                 args.push_back(callerClient->getAccount());
+                std::cout << "a" << std::endl;
 
                 targetClient->handleCmd->packCmd(instruction, args);
             }
@@ -308,6 +315,7 @@ void BabelServer::onLog(Client* client, std::vector<std::string>& param, IComman
             Client* targetClientOffline = findOfflineClient(account);
             if (targetClientOffline)
             {
+                targetClientOffline->display();
                 if (targetClientOffline->isConnect() == false)
                 {
                     sendStateCommand(client, ErrorCode::OK, instruction);
@@ -416,7 +424,7 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
         if (client->getStatusCall() == Client::StatusCall::NONE)
         {
             const std::string& targetAccount = param[0];
-            if (targetAccount != callerClient->getAccount())
+            if (targetAccount != client->getAccount())
             {
                 Client* targetClient = findOnlineClient(targetAccount);
                 if (targetClient)
@@ -442,7 +450,7 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
             else
             {
                 std::cout << "  [CALL] CANNOT_CALL_YOURSELF" << std::endl;
-                sendStateCommand(callerClient, ErrorCode::CANNOT_CALL_YOURSELF, instruction);
+                sendStateCommand(client, ErrorCode::CANNOT_CALL_YOURSELF, instruction);
             }
         }
         else

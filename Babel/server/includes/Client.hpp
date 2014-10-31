@@ -149,4 +149,8 @@ class Client : public IClientSocket::OnSocketEvent{
         bool                    isConnected;
         Client::OnClientEvent*  Listener;
         time_t		            lastPingTime;
+
+    // display (have to be overload <<)
+    public:
+        void display() const;
 };

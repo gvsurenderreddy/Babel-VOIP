@@ -17,6 +17,7 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 		data = this->socket->receive(ICommand::HEADER_SIZE);
 		this->header = reinterpret_cast<ICommand::Header *>(data.msg);
         this->instruction = static_cast<ICommand::Instruction>(header->instructionCode);
+        std::cout << "  # UNPACK # 0x" << this->instruction << std::endl;
 		this->body = Factory::getCommand(this->getInstruction());
 	}
 
@@ -34,7 +35,13 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 void						HandleCmd::packCmd(ICommand::Instruction instruction, std::vector<std::string> &param){
 	ICommand				*cmd;
 
-	cmd = Factory::getCommand(instruction);
+    if (instruction == ICommand::ADD)
+    {
+        std::cout << "packCMD add" << std::endl;
+        cmd = Factory::getCommand(instruction);
+    }
+    else
+    	cmd = Factory::getCommand(instruction);
 	this->socket->send(*(cmd->setParam(&param)));
 }
 

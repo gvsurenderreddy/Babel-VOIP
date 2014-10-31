@@ -59,7 +59,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "  [Error Client] " << error.message() << std::endl;
+            std::cout << "  [Error Client RECV] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -84,6 +84,8 @@ void TcpClient::send(const IClientSocket::Message &msg)
     }
 }
 
+#include "ICommand.hpp"
+
 void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
 {
     if (!error)
@@ -92,18 +94,30 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
+            IClientSocket::Message *msg = new IClientSocket::Message;
+            ICommand::Header *header = reinterpret_cast<ICommand::Header *>(mWriteMessageQueue.front().msg);
+
+            // std::cout << "magicCode       sended: '" << std::hex << header->magicCode << "'" << std::endl;
+            // std::cout << "instructionCode sended: '" << std::hex << header->instructionCode << "'" << std::endl;
+
             std::string str(mWriteMessageQueue.front().msg, bytesTransfered);
             std::string test = str;
             std::replace(test.begin(), test.end(), '\0', '.');
             if (mSocket && 1 == 2)
                 std::cout << "  SEND " << bytesTransfered << " bytes " << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
+            if (header->instructionCode == ICommand::ADD)
+            {
+                std::cout << "  ## SEND for COMMAND ADD : " << bytesTransfered << std::endl;
+            }
             if (bytesTransfered == mWriteMessageQueue.front().msgSize)
             {
+				//std::cout << "POP SEND" << std::endl;
                 delete[] mWriteMessageQueue.front().msg;
                 mWriteMessageQueue.pop_front();
             }
             else
             {
+                //std::cout << "SEND PART SEND" << std::endl;
                 Message& messageFront = mWriteMessageQueue.front();
                 messageFront.msgSize -= bytesTransfered;
                 char* tmp = new char[messageFront.msgSize + 1];
@@ -124,7 +138,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "  [Error Client] " << error.message() << std::endl;
+        std::cout << "  [Error Client SEND] " << error.message() << std::endl;
         closeClient();
     }
 }

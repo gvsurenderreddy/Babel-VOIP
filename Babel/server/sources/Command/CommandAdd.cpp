@@ -1,4 +1,4 @@
-#include "../../includes/Command/CommandAdd.hpp"
+#include "Command/CommandAdd.hpp"
 
 CommandAdd::CommandAdd(){
 
@@ -15,6 +15,8 @@ std::vector<std::string>	*CommandAdd::getParam(IClientSocket *socket){
 	CommandAdd::Body			*body;
 	IClientSocket::Message		data;
 
+    std::memset(body, 0, sizeof(*body));
+
 	data = socket->receive(this->getSizeBody());
 	body = reinterpret_cast<CommandAdd::Body *>(data.msg);
 	t->push_back(body->accountName);
@@ -22,10 +24,12 @@ std::vector<std::string>	*CommandAdd::getParam(IClientSocket *socket){
 }
 
 IClientSocket::Message		*CommandAdd::setParam(std::vector<std::string> *param){
+
 	CommandAdd::BodySend	*body = new CommandAdd::BodySend;
 	IClientSocket::Message	*msg = new IClientSocket::Message;
 
 	std::memset(body, 0, sizeof(*body));
+
 	body->header.instructionCode = ICommand::ADD;
 	body->header.magicCode = ICommand::MAGIC_CODE;
 
@@ -33,6 +37,7 @@ IClientSocket::Message		*CommandAdd::setParam(std::vector<std::string> *param){
 
 	msg->msgSize = sizeof(*body);
 	msg->msg = reinterpret_cast<char *>(body);
+
 	return (msg);
 }
 

@@ -41,8 +41,11 @@ void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead)
 	}
 }
 
-void	Client::onSocketClosed(IClientSocket *socket){
-	socket;
+void	Client::onSocketClosed(IClientSocket*)
+{
+    std::cout << "  # LOGOUT # AccountName: '" << account << "'" << std::endl;
+    this->setConnected(false);
+    this->saveData();
 }
 
 /*
@@ -130,4 +133,25 @@ void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::st
 
     if (handleCommandsTab[i].instruction == instruction && this->Listener)
         ((this->Listener)->*handleCommandsTab[i].handler)(this, param, instruction);
+}
+
+void Client::display() const
+{
+    std::cout << std::endl << "  [DISPLAY] Attributes of a client '" << this->getAccount() << "'" << std::endl
+        << "  - account: '" << this->getAccount() << "'" << std::endl
+        << "  - pseudo: '" << this->getPseudo() << "'" << std::endl
+        << "  - status: '" << this->getStatus() << "'" << std::endl
+        << "  - statusCall: '" << this->getStatusCall() << "'" << std::endl
+        << "  - isConnected: '" << this->isConnect() << "'" << std::endl
+        << "  - lastPingTime: '" << this->getLastPingTime() << "'" << std::endl
+        << "  - contacts: '" << std::endl;
+    if (this->getContact().size())
+    {
+        std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {
+            std::cout << "     * accountFriend: '" << targetAccount << "'" << std::endl;
+        });
+    }
+    else
+        std::cout << "     * Empty Contact List" << std::endl;
+    std::cout << std::endl << "-----------" << std::endl;
 }

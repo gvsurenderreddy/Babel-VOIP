@@ -2,7 +2,7 @@
 #include "TcpClient.hpp"
 #include "CommandException.hpp"
 #include "SocketException.hpp"
-
+#include <iostream>
 CommandPacketBuilder::CommandPacketBuilder(void)
 	: mClient(NULL), mCurrentCommand(NULL), mCurrentState(CommandPacketBuilder::HEADER)
 {
@@ -32,13 +32,28 @@ void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
 }
 
 void	CommandPacketBuilder::fetchCommandHeader(void) {
+    std::cout << "fetch header" << std::endl;
 	IClientSocket::Message message = mClient->receive(ICommand::HEADER_SIZE);
 	ICommand::Header *header = reinterpret_cast<ICommand::Header *>(message.msg);
 
 	mCurrentCommand = ICommand::getCommand(static_cast<ICommand::Instruction>(header->instructionCode));
 	mCurrentState = CommandPacketBuilder::CONTENT;
 
+    std::cout << std::endl;
+    std::cout << "=== DEBUG ===" << std::endl;
+    std::cout << "size to read: " << ICommand::HEADER_SIZE << std::endl;
+    std::cout << "msg size: " << message.msgSize << std::endl;
+    std::cout << "intruction code: " << std::hex << static_cast<ICommand::Instruction>(header->instructionCode) << std::endl;
+    std::cout << "mCurrentCommand: " << mCurrentCommand << std::endl;
+    std::cout << "magic code: " << std::hex << header->magicCode << std::endl;
+    std::cout << "=== END DEBUG ===" << std::endl;
+    std::cout << std::endl;
+
 	if (header->magicCode != ICommand::MAGIC_CODE || mCurrentCommand == NULL) {
+        std::cout << "wrong magic code or mcurrentcommand" << std::endl;
+        std::cout << std::hex << header->magicCode << std::endl << std::hex << ICommand::MAGIC_CODE << std::endl;
+        std::cout << mCurrentCommand << std::endl;
+        std::cout << std::hex << static_cast<ICommand::Instruction>(header->instructionCode) << std::endl;
 		mClient->closeClient();
 		return;
 	}
@@ -47,12 +62,16 @@ void	CommandPacketBuilder::fetchCommandHeader(void) {
 }
 
 void	CommandPacketBuilder::fetchCommandContent(void) {
+    std::cout << "fetch content" << std::endl;
+    std::cout << "size to read: " << mCurrentCommand->getSizeToRead() << std::endl;
 	IClientSocket::Message message = mClient->receive(mCurrentCommand->getSizeToRead());
-
+    std::cout << "msg size: " << message.msgSize << std::endl;
 	try {
 		mCurrentCommand->initFromMessage(message);
 	}
 	catch (const CommandException &e) {
+        std::cout << "command exception" << std::endl;
+        std::cout << e.what() << std::endl;
 		mClient->closeClient();
 		return;
 	}
@@ -64,6 +83,7 @@ void	CommandPacketBuilder::fetchCommandContent(void) {
 }
 
 void	CommandPacketBuilder::onSocketReadable(IClientSocket *, unsigned int nbBytesToRead) {
+    std::cout << "SOCKET READABLE" << std::endl;
 	if (mCurrentState == CommandPacketBuilder::HEADER && nbBytesToRead >= ICommand::HEADER_SIZE)
 		fetchCommandHeader();
 	else if (mCurrentState == CommandPacketBuilder::CONTENT && nbBytesToRead >= mCurrentCommand->getSizeToRead())
