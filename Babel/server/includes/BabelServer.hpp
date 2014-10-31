@@ -24,9 +24,16 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // internal functions
     public:
+        void displayAccounts() const;
         void importAccountsFromFile(const std::string& path);
         void exportAccountsFromFile(const std::string& path);
+        void removeUserFileIfAccountDoesntExist();
+        void displayAsciiHeader() const;
         void startServer();
+        Client* findOnlineClient(const std::string& account) const;
+        Client* findOfflineClient(const std::string& account) const;
+        void sendStateCommand(Client* client, int errorOccured, ICommand::Instruction instruction) const;
+        void notifyMyFriendsOfModificationAboutMe(Client* client);
 
     // constants
     public:
@@ -39,15 +46,15 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         std::list<Client*>                 mClients;
         std::map<std::string, std::string> mAccounts;
         std::string                        mAccountsFilePath;
+        const boost::filesystem::path      mAbsolutePathDatabaseFolder;
 
     // serializer
     private:
-	  friend class boost::serialization::access;
-      template<class Archive>
-      void serialize(Archive & ar, const unsigned int)
-      {
+        friend class boost::serialization::access;
+        template<class Archive>
+        void serialize(Archive & ar, const unsigned int) {
           ar & mAccounts;
-      }
+        }
 
     // IServerSocket::OnSocketEvent callbacks
     public:
@@ -55,21 +62,17 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // Client::OnClientEvent callbacks
 	public:
-        bool               onSubscribe(const std::string &acount, const std::string& password);
-		bool               onConnect(const std::string &account, const std::string &password, Client *caller);
-		void               onDisconnect(Client *caller);
-		void			   onList(Client *caller);
-		bool               onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status);
-		bool               onAddContact(const std::string &targetAccount, const std::string &callerAccount);
-        bool               onDelContact(const std::string &targetAccount, const std::string &callerAccount);
-        bool               onShowContact(const std::string &targetAccount);
-		bool               onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount);
-		bool               onCallSomeone(const std::string &targetAccount, std::string &callerAcount);
-		void               onHangCall(bool hang, const std::string &targetAccount, std::string &callerAccount);
-        bool               onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount);
-
-	//Handle Client
-	private:
-        void	updateContact(const std::list<std::string>& contact, const std::string& account, const std::string& pseudo, char status, bool isConnected);
-        Client	*findClient(const std::string& account) const;
+        void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onLog(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onList(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onShow(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onAcceptAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onDel(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onExit(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onSend(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onAcceptCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
+        void onCloseCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
 };

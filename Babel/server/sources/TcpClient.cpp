@@ -30,10 +30,12 @@ void TcpClient::initFromSocket(void *socket)
 {
     mSocket = static_cast<tcp::socket*>(socket);
     startRecv();
+    std::cout << "  [TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
 }
 
 void TcpClient::closeClient()
 {
+    std::cout << "  [TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
     if (mSocket)
         mSocket->close();
     if (mListener)
@@ -48,8 +50,8 @@ void TcpClient::startRecv()
             std::string str(mReadBuffer, bytesTransfered);
             std::string test = str;
             std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket)
-                std::cout << bytesTransfered << " bytes received from " << mSocket->remote_endpoint().address() << std::endl << "DATA below: " << std::endl << "[" << test << "]" << std::endl;
+            if (mSocket && 1 == 2)
+                std::cout << "  RECV " << bytesTransfered << " bytes from :: " << getRemoteIp() << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
             mBuffer.insert(mBuffer.end(), str.begin(), str.end());
             if (mListener)
                 mListener->onSocketReadable(this, bytesTransfered);
@@ -57,7 +59,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << error.message() << std::endl;
+            std::cout << "  [Error Client] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -90,6 +92,11 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
+            std::string str(mWriteMessageQueue.front().msg, bytesTransfered);
+            std::string test = str;
+            std::replace(test.begin(), test.end(), '\0', '.');
+            if (mSocket && 1 == 2)
+                std::cout << "  SEND " << bytesTransfered << " bytes " << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
             if (bytesTransfered == mWriteMessageQueue.front().msgSize)
             {
                 delete[] mWriteMessageQueue.front().msg;
@@ -117,7 +124,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cerr << error.message() << std::endl;
+        std::cout << "  [Error Client] " << error.message() << std::endl;
         closeClient();
     }
 }
@@ -146,11 +153,10 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
 
 unsigned int TcpClient::nbBytesToRead() const
 {
-    //std::cout << std::endl << "nbBytesToRead (mBuffer.size()) = <" << mBuffer.size() << ">" << std::endl << std::endl;
     return mBuffer.size();
 }
 
-const std::string& TcpClient::getRemoteIp() const
+const std::string TcpClient::getRemoteIp() const
 {
     return mSocket->remote_endpoint().address().to_string();
 }

@@ -68,8 +68,8 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 						includes/Command/CommandCloseCall.hpp	\
 						includes/Command/CommandErr.hpp			\
 						includes/Command/HandleCmd.hpp			\
-						includes/Database.hpp					\
 						includes/Command/ErrorCodes.hpp			\
+						includes/Database.hpp					\
 						includes/Factory.hpp
 
 SOURCES         +=      sources/main.cpp                        \

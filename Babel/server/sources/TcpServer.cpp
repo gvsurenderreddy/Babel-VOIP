@@ -22,7 +22,9 @@ TcpServer::~TcpServer()
 
 void TcpServer::createServer(int port, int)
 {
-    mAcceptor = new tcp::acceptor(mService, tcp::endpoint(tcp::v4(), port));
+    tcp::endpoint endpoint(tcp::v4(), port);
+    mAcceptor = new tcp::acceptor(mService, endpoint);
+    std::cout << "  [TCP SERVER] listening on port " << port << std::endl;
     startAccept();
 }
 
@@ -38,7 +40,7 @@ void TcpServer::startAccept(void)
         }
         else
         {
-            std::cout << error.message() << std::endl;
+            std::cout << "  [Error Server] " << error.message() << std::endl;
             delete this;
         }
         startAccept();
@@ -58,6 +60,7 @@ void TcpServer::closeServer()
     });
     if (mAcceptor && mAcceptor->is_open())
          mAcceptor->close();
+    std::cout << "  [TCP SERVER] closed" << std::endl;
 }
 
 void TcpServer::setOnSocketEventListener(TcpServer::OnSocketEvent *listener)
