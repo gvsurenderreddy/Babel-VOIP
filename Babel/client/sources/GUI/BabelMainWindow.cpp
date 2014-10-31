@@ -55,6 +55,9 @@ BabelMainWindow::BabelMainWindow(void)
 	// when close flyer
 	QObject::connect(mFlyer.getUi().close, SIGNAL(clicked()), &mDialog, SLOT(close()));
 
+	// when call somebody
+	QObject::connect(mMain.getUi().call, SIGNAL(clicked()), this, SLOT(callContact()));
+
 	// trigger return pressed
 	QObject::connect(mFlyer.getUi().emailEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
 	QObject::connect(mFlyer.getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
@@ -112,26 +115,25 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 	mMain.getUi().listView->setModel(mMain.getMessages());
 }
 
-void	BabelMainWindow::newCallInvitation(const Contact &) {
+void	BabelMainWindow::newCallInvitation(const Contact &contact) {
+	mDialog.setMessage(contact.getAccountName() + " souhaite vous appeler");
+	mDialog.show();
 }
 
-void	BabelMainWindow::startingCommunication(const Contact &, bool) {
+void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
+	if (hasAccepted)
+		mDialog.setMessage(contact.getAccountName() + " a accepté votre appel :)");
+	else
+		mDialog.setMessage(contact.getAccountName() + " a refusé votre appel :(");
+	mDialog.show();
 }
 
-void	BabelMainWindow::terminatingCommunication(const Contact &) {
+void	BabelMainWindow::terminatingCommunication(const Contact &contact) {
+	mDialog.setMessage(contact.getAccountName() + " a quitté l'appel...");
 }
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
 	mContact = contact;
-	mMain.setCurrentContact(mContact);
-
-	// debug
-	QString	debug("debug: ");
-
-	debug += contact.getAccountName() + "\n";
-	mDialog.setMessage(debug);
-	mDialog.show();
-	//
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
@@ -152,7 +154,6 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mDialog.hide();
-		mMain.setCurrentContact(mContact);
 		mFlyer.hide();
 		mMain.show();
 		mMain.getUi().name->setText(mFlyer.getEmail());
@@ -181,13 +182,28 @@ void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
 	}
 }
 
-void	BabelMainWindow::callContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::callContactSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("L'appel a échoué :/");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
+void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Votre appel n'a pas pu être établit... :/");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
+void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Une erreur s'est produit au moment de stopper l'appel...");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
@@ -198,7 +214,17 @@ void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
 	mDialog.show();
 }
 
-void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &es) {
+	if (!es.errorOccurred())
+	{
+		mDialog.setMessage("Le contact a bien été supprimé :p");
+		mDialog.show();
+	}
+	else
+	{
+		mDialog.setMessage("Le contact n'a pas pu être supprimé :/");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
@@ -299,4 +325,9 @@ void		BabelMainWindow::sendMessage()
 		mDialog.show();
 		// end
 	}
+}
+
+void		BabelMainWindow::callContact()
+{
+	emit askForCalling(mMain.getCurrentContact());
 }

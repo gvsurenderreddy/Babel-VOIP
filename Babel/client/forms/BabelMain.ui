@@ -294,6 +294,27 @@ color: rgb(255, 255, 255);
 padding: 0 8px;
 </string>
    </property>
+   <widget class="QPushButton" name="call">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>5</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
+border: none;
+background-color: rgba(0, 0, 0, 128);
+color: rgb(255, 255, 255);
+font: 16px &quot;Open Sans Light&quot;;
+</string>
+    </property>
+    <property name="text">
+     <string>Appeler</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources>
