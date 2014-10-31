@@ -32,7 +32,7 @@ MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
 win32:QMAKE_CXXFLAGS	+=	-Wall -D_SCL_SECURE_NO_WARNINGS /MP
-unix:QMAKE_CXXFLAGS		+=	-Wall -std=c++11
+unix:QMAKE_CXXFLAGS		+=	-Wall -std=c++11 -g
 
 win32:QMAKE_CFLAGS_WARN_ON -= -W3
 win32:QMAKE_CFLAGS_WARN_ON += -W2

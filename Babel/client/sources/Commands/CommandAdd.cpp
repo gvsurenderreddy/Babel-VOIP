@@ -31,15 +31,13 @@ unsigned int	CommandAdd::getSizeToRead(void) const {
   return sizeof(CommandAdd::PacketFromServer);
 }
 
-#include <iostream>
 void	CommandAdd::initFromMessage(const IClientSocket::Message &message) {
-    std::cout << "INIT FROM MESSAGE ADD" << std::endl;
   if (message.msgSize != sizeof(CommandAdd::PacketFromServer))
 		throw CommandException("Message has an invalid size");
-  std::cout << "GOOD SIZE" << std::endl;
+
 	CommandAdd::PacketFromServer *packet = reinterpret_cast<CommandAdd::PacketFromServer *>(message.msg);
+	packet->accountName[sizeof(packet->accountName) - 1] = 0;
 	mAccountName = packet->accountName;
-    std::cout << "ACCOUNT NAME" << std::endl;
 }
 
 const QString	&CommandAdd::getAccountName(void) const {
