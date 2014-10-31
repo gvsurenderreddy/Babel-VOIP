@@ -15,9 +15,9 @@ SoundPacketBuilder::SoundPacketBuilder(void)
 SoundPacketBuilder::~SoundPacketBuilder(void) {
 }
 
-void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr, int port) {
+void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr) {
 	mAcceptedHost = addr;
-	mAcceptedPort = port;
+	mAcceptedPort = SoundPacketBuilder::DEFAULT_BABEL_CALL_PORT;
 }
 
 void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {

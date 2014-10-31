@@ -29,7 +29,7 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 		void	sendSound(const Sound::Encoded &command);
 
 	public:
-		void	acceptPacketsFrom(const QString &addr, int port);
+		void	acceptPacketsFrom(const QString &addr);
 
 	// receive sound
 	signals:

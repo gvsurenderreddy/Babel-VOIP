@@ -16,7 +16,7 @@ void	CallManager::startCall(const Contact &contact) {
 	mInCommunication = true;
 
 	try {
-		mSoundPacketBuilder.acceptPacketsFrom(contact.getHost(), contact.getPort());
+		mSoundPacketBuilder.acceptPacketsFrom(contact.getHost());
 		mAudioManager.startRecording();
 		mAudioManager.startPlaying();
 	}
@@ -35,7 +35,7 @@ void	CallManager::stopCall(void) {
 
 	mAudioManager.stopRecording();
 	mAudioManager.stopPlaying();
-	mSoundPacketBuilder.acceptPacketsFrom("", 0);
+	mSoundPacketBuilder.acceptPacketsFrom("");
 
 	mCurrentCalledContact.setAccountName("");
 }
