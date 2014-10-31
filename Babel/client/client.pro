@@ -10,7 +10,7 @@ UI_DIR          =       build/ui
 RCC_DIR         =       build/rcc
 
 win32:QMAKE_CXXFLAGS	+=	-Wall /MP
-unix:QMAKE_CXXFLAGS	+=	-Wall -std=c++11
+unix:QMAKE_CXXFLAGS	+=	-Wall -std=c++11 -g
 
 INCLUDEPATH     +=      .                                       		\
                         includes                                		\
@@ -62,10 +62,10 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandUpdate.hpp			\
 			includes/Commands/CommandException.hpp			\
 			includes/GUI/ContactListModel.hpp			\
+			includes/GUI/MessageListModel.hpp			\
 			includes/GUI/BabelDialog.hpp				\
 			includes/GUI/BabelFlyer.hpp				\
 			includes/GUI/BabelIdentification.hpp			\
-			includes/GUI/BabelContactWidget.hpp			\
 			includes/GUI/BabelInscription.hpp			\
 			includes/GUI/BabelSetting.hpp				\
 			includes/GUI/BabelMain.hpp				\
@@ -90,9 +90,9 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Audio/SoundPacketBuilder.cpp			\
 			sources/Audio/CallManager.cpp				\
 			sources/GUI/ContactListModel.cpp			\
+			sources/GUI/MessageListModel.cpp			\
 			sources/GUI/BabelDialog.cpp				\
 			sources/GUI/BabelMainWindow.cpp				\
-			sources/GUI/BabelContactWidget.cpp			\
 			sources/GUI/BabelFlyer.cpp				\
 			sources/GUI/BabelInscription.cpp			\
 			sources/GUI/BabelSetting.cpp				\
@@ -126,8 +126,7 @@ FORMS		+=	forms/BabelMainWindow.ui				\
 			forms/BabelIdentification.ui				\
 			forms/BabelInscription.ui				\
 			forms/BabelSetting.ui					\
-			forms/BabelMain.ui					\
-			forms/BabelContactWidget.ui
+			forms/BabelMain.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc
 

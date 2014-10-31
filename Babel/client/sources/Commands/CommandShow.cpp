@@ -36,7 +36,9 @@ void	CommandShow::initFromMessage(const IClientSocket::Message &message) {
 		throw CommandException("Message has an invalid size");
 
 	CommandShow::PacketFromServer *packet = new CommandShow::PacketFromServer;
+	packet->accountName[sizeof(packet->accountName) - 1] = 0;
 	mAccountName = packet->accountName;
+	packet->pseudo[sizeof(packet->pseudo) - 1] = 0;
 	mPseudo = packet->pseudo;
 	mStatus = static_cast<Contact::Status>(packet->status);
 	mIsConnected = packet->isConnected;

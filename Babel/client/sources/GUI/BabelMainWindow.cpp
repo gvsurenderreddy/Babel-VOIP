@@ -6,6 +6,7 @@
 using namespace std;
 
 BabelMainWindow::BabelMainWindow(void)
+	: QMainWindow()
 {
 	mUi.setupUi(this);
 
@@ -42,10 +43,42 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), this, SLOT(connexionToAccount()));
 
 	// debug
-	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
+	//QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
 
 	// connexion: when add contact
 	QObject::connect(mMain.getUi().addContact, SIGNAL(clicked()), this, SLOT(addNewContact()));
+
+	// when send message to somebody
+	QObject::connect(mMain.getUi().send, SIGNAL(clicked()), this, SLOT(sendMessage()));
+	QObject::connect(mMain.getUi().messageEdit, SIGNAL(returnPressed()), mMain.getUi().send, SIGNAL(clicked()));
+
+	// when close flyer
+	QObject::connect(mFlyer.getUi().close, SIGNAL(clicked()), &mDialog, SLOT(close()));
+
+	// when call somebody
+	QObject::connect(mMain.getUi().call, SIGNAL(clicked()), this, SLOT(callContact()));
+
+	// trigger return pressed
+	QObject::connect(mFlyer.getUi().emailEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
+	QObject::connect(mFlyer.getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
+	QObject::connect(mFlyer.getUi().login, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
+	QObject::connect(mFlyer.getUi().signup, SIGNAL(returnPressed()), mFlyer.getUi().signup, SIGNAL(clicked()));
+
+	QObject::connect(mSetting.getUi().addrEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().portEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
+
+	QObject::connect(mSetting.getUi().pseudoEdit, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit1, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit2, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit3, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+
+	QObject::connect(mSignup.getUi().emailEdit, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSignup.getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSignup.getUi().pwdEdit1, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSignup.getUi().pwdEdit2, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
+
+	QObject::connect(mMain.getUi().newContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
+	QObject::connect(mMain.getUi().addContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -54,24 +87,6 @@ BabelMainWindow::~BabelMainWindow(void)
 
 void	BabelMainWindow::show()
 {
-	//Contact contact;
-
-    // login
-	/*
-	contact.setAccountName("navid");
-	contact.setPassword("123456789");
-	emit askForAuthentication(contact);
-	*/
-
-
-    // registration
-    /*
-    contact.setAccountName("navid");
-    contact.setPassword("123456789");
-    contact.setPseudo("desten");
-    emit askForRegistration(contact);
-    */
-
 	mFlyer.show();
 }
 
@@ -80,7 +95,7 @@ void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	// A completer
+	// A changer
 	mMain.getModel()->getContactList() << contact;
 	mMain.getModel()->sort();
 	mMain.getUi().listContactView->setModel(mMain.getModel());
@@ -91,39 +106,45 @@ void	BabelMainWindow::newContactInvitation(const Contact &contact) {
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
-	mDialog.setMessage(contact.getAccountName() + "vous envoie:\n" + msg);
+	MessageListModel::sMessage	message = {
+		contact.getAccountName(),
+		msg,
+		QDateTime::currentDateTime()
+	};
+	mMain.getMessages()->getContactList() << message;
+	mMain.getUi().listView->setModel(mMain.getMessages());
+}
+
+void	BabelMainWindow::newCallInvitation(const Contact &contact) {
+	mDialog.setMessage(contact.getAccountName() + " souhaite vous appeler");
 	mDialog.show();
 }
 
-void	BabelMainWindow::newCallInvitation(const Contact &) {
+void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
+	if (hasAccepted)
+		mDialog.setMessage(contact.getAccountName() + " a accepté votre appel :)");
+	else
+		mDialog.setMessage(contact.getAccountName() + " a refusé votre appel :(");
+	mDialog.show();
 }
 
-void	BabelMainWindow::startingCommunication(const Contact &, bool) {
-}
-
-void	BabelMainWindow::terminatingCommunication(const Contact &) {
+void	BabelMainWindow::terminatingCommunication(const Contact &contact) {
+	mDialog.setMessage(contact.getAccountName() + " a quitté l'appel...");
 }
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
 	mContact = contact;
-	// debug
-	QString	debug("");
-
-	debug += contact.getAccountName() + "\n";
-	mDialog.setMessage(debug);
-	mDialog.show();
-	//
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
-		mDialog.setWindowTitle("Félicitation");
+		mSignup.hide();
+		mFlyer.show();
 		mDialog.setMessage("Votre compte a été crée avec succès :D");
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur à la création :(");
 		mDialog.setMessage("Votre compte n'a pas pu se créer :(\n\nError code: " + QString::number(es.getErrorCode()));
 	}
 	mDialog.show();
@@ -132,6 +153,7 @@ void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
+		mDialog.hide();
 		mFlyer.hide();
 		mMain.show();
 		mMain.getUi().name->setText(mFlyer.getEmail());
@@ -140,22 +162,48 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	{
 		mDialog.setWindowTitle("Erreur de connexion :(");
 		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe ;)");
+		mDialog.show();
 	}
 }
 
-void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &) {
+void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Demande d'invitation échoué :(");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &) {
+void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Votre profile est introuvable - -'");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::callContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::callContactSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("L'appel a échoué :/");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
+void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Votre appel n'a pas pu être établit... :/");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
+void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Une erreur s'est produit au moment de stopper l'appel...");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
@@ -166,13 +214,37 @@ void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
 	mDialog.show();
 }
 
-void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &es) {
+	if (!es.errorOccurred())
+	{
+		mDialog.setMessage("Le contact a bien été supprimé :p");
+		mDialog.show();
+	}
+	else
+	{
+		mDialog.setMessage("Le contact n'a pas pu être supprimé :/");
+		mDialog.show();
+	}
 }
 
-void	BabelMainWindow::disconnectSuccess(const ErrorStatus &) {
+void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
+	if (!es.errorOccurred())
+	{
+		mMain.hide();
+		mFlyer.show();
+		mDialog.setMessage("Vous venez de vous déconnecter ;)");
+	}
+	else
+		mDialog.setMessage("Erreur à la déconnexion :s");
+	mDialog.show();
 }
 
-void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
+void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Impossible d'envoyer le message au destinataire :/");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
@@ -183,7 +255,11 @@ void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
+	mMain.hide();
+	mMain.getDialog().hide();
+	mFlyer.show();
 	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
+	mDialog.show();
 }
 
 void	BabelMainWindow::connectionToServer()
@@ -208,8 +284,8 @@ void	BabelMainWindow::createAccount()
 	else
 	{
 		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de vos mot de passe ;)");
+		mDialog.show();
 	}
-	mDialog.show();
 }
 
 void		BabelMainWindow::connexionToAccount()
@@ -219,7 +295,6 @@ void		BabelMainWindow::connexionToAccount()
 	contact.setAccountName(mFlyer.getEmail());
 	contact.setPassword(mFlyer.getPwd());
 	emit askForAuthentication(contact);
-	mDialog.show();
 }
 
 void		BabelMainWindow::addNewContact()
@@ -228,6 +303,31 @@ void		BabelMainWindow::addNewContact()
 
 	contact.setAccountName(mMain.getUi().newContact->text());
 	emit askForAddingContact(contact);
-	mDialog.setMessage("Envoie de la demande d'ami ;)");
-	mDialog.show();
+}
+
+void		BabelMainWindow::sendMessage()
+{
+	if (mMain.getUi().messageEdit->toPlainText() != "")
+	{
+		emit askForSendingMessage(mMain.getCurrentContact(), mMain.getUi().messageEdit->toPlainText());
+
+		// debug
+		MessageListModel::sMessage	msg = {
+			mContact.getPseudo(),
+			mMain.getUi().messageEdit->toPlainText(),
+			QDateTime::currentDateTime()
+		};
+		mMain.getMessages()->getContactList() << msg;
+		mMain.getUi().listView->setModel(mMain.getMessages());
+		//
+
+		mDialog.setMessage(mMain.getUi().messageEdit->toPlainText());
+		mDialog.show();
+		// end
+	}
+}
+
+void		BabelMainWindow::callContact()
+{
+	emit askForCalling(mMain.getCurrentContact());
 }

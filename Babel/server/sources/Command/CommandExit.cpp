@@ -10,14 +10,13 @@ CommandExit::~CommandExit(){
 /*
 ** Heritage from ICommand
 */
-std::vector<std::string>		*CommandExit::getParam(IClientSocket *socket){
+std::vector<std::string>		*CommandExit::getParam(IClientSocket *){
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	socket;
+
 	return t;
 }
 
-IClientSocket::Message		*CommandExit::setParam(std::vector<std::string> *param){
-	param;
+IClientSocket::Message		*CommandExit::setParam(std::vector<std::string> *){
 	return NULL;
 }
 

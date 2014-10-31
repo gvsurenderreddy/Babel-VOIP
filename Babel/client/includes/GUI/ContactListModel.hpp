@@ -2,8 +2,8 @@
 
 #include <QtWidgets/QWidget>
 #include <QAbstractListModel>
-#include <QList>
 #include <QListView>
+#include <QList>
 #include "Contact.hpp"
 
 class ContactListModel : public QAbstractListModel

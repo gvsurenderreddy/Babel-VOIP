@@ -93,7 +93,7 @@ int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long,
 	for (int i = 0; i < sound->size; i++)
 		*wptr++ = sound->buffer[i];
 
-	delete sound->buffer;
+	delete[] sound->buffer;
 	delete sound;
 	obj->mBuffers.pop_front();
 

@@ -7,13 +7,13 @@ class CommandAcceptCall : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClient {
+		struct __attribute__ ((packed)) PacketFromClient {
 			ICommand::Header	header;
 			char				accountName[256];
 			char				hasAccepted;
 		};
 
-		struct PacketFromServer {
+		struct __attribute__ ((packed)) PacketFromServer {
 			char	accountName[256];
 			char	host[15];
 			char	hasAccepted;

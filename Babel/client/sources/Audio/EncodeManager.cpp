@@ -30,7 +30,7 @@ Sound::Encoded	EncodeManager::encode(const Sound::Decoded &sound) {
 	if (encoded.size < 0)
 		throw SoundException("fail opus_encode_float");
 
-	delete sound.buffer;
+	delete[] sound.buffer;
 
 	return encoded;
 }
@@ -44,7 +44,7 @@ Sound::Decoded	EncodeManager::decode(const Sound::Encoded &sound) {
 	if (decoded.size < 0)
 		throw SoundException("fail opus_decode_float");
 
-	delete sound.buffer;
+	delete[] sound.buffer;
 
 	return decoded;
 }

@@ -29,7 +29,7 @@ public:
 	static const unsigned int	MAGIC_CODE;
 	static const unsigned int	HEADER_SIZE;
 
-	struct Header{
+	struct __attribute__ ((packed)) Header{
 		int	magicCode;
 		int	instructionCode;
 	};

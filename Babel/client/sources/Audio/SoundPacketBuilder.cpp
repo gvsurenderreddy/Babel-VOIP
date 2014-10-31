@@ -1,4 +1,5 @@
 #include <QDate>
+#include <cstring>
 #include "SoundPacketBuilder.hpp"
 #include "UdpClient.hpp"
 
@@ -28,6 +29,7 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 
 	soundPacket.magic_code = 0x150407CA;
 	soundPacket.soundSize = sound.size;
+	std::memset(soundPacket.sound, 0, sizeof(soundPacket.sound));
 	memcpy(soundPacket.sound, sound.buffer, sound.size);
 	soundPacket.timestamp = QDateTime::currentDateTime().toTime_t();
 

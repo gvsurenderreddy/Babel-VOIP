@@ -26,8 +26,6 @@ QVariant				ContactListModel::data(const QModelIndex &index, int role) const
 	if (role == Qt::DisplayRole)
 		return mContactList[index.row()].getPseudo();
 
-/*	if (role == Qt::TextColorRole)
-		return QColor(QColor::colorNames().at(index.row()));*/
 	return QVariant();
 }
 

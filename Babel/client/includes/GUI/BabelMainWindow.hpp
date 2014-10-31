@@ -5,7 +5,6 @@
 #include <qstring.h>
 #include <QPainter>
 #include "Contact.hpp"
-#include "BabelContactWidget.hpp"
 #include "BabelFlyer.hpp"
 #include "BabelIdentification.hpp"
 #include "BabelInscription.hpp"
@@ -76,6 +75,8 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	createAccount();
 		void	connexionToAccount();
 		void	addNewContact();
+		void	sendMessage();
+		void	callContact();
 
 	// signals
 	signals:
