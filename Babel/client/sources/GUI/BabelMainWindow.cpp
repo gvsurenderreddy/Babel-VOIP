@@ -61,6 +61,14 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mFlyer.getUi().login, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
 	QObject::connect(mFlyer.getUi().signup, SIGNAL(returnPressed()), mFlyer.getUi().signup, SIGNAL(clicked()));
 
+	QObject::connect(mSetting.getUi().addrEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().portEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
+
+	QObject::connect(mSetting.getUi().pseudoEdit, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit1, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit2, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+	QObject::connect(mSetting.getUi().pwdEdit3, SIGNAL(returnPressed()), mSetting.getUi().ok, SIGNAL(clicked()));
+
 	QObject::connect(mSignup.getUi().emailEdit, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
 	QObject::connect(mSignup.getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
 	QObject::connect(mSignup.getUi().pwdEdit1, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
@@ -203,7 +211,13 @@ void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
+	mLogin.hide();
+	mSignup.hide();
+	mSetting.hide();
+	mMain.hide();
+	mMain.getDialog().hide();
 	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
+	mDialog.show();
 }
 
 void	BabelMainWindow::connectionToServer()
@@ -255,7 +269,16 @@ void		BabelMainWindow::sendMessage()
 	if (mMain.getUi().messageEdit->toPlainText() != "")
 	{
 		emit askForSendingMessage(mMain.getCurrentContact(), mMain.getUi().messageEdit->toPlainText());
+
+		// debug
+/*		MessageListModel::sMessage	msg = {
+			mMain.getCurrentContact,
+			mMain.getUi().messageEdit->toPlainText(),
+			QDateTime()
+		};
+		mMain.getMessages()->getContactList << msg;*/
 		mDialog.setMessage(mMain.getUi().messageEdit->toPlainText());
 		mDialog.show();
+		// end
 	}
 }
