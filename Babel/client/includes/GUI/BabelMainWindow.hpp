@@ -5,7 +5,6 @@
 #include <qstring.h>
 #include <QPainter>
 #include "Contact.hpp"
-#include "BabelContactWidget.hpp"
 #include "BabelFlyer.hpp"
 #include "BabelIdentification.hpp"
 #include "BabelInscription.hpp"
