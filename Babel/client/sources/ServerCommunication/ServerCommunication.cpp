@@ -174,11 +174,6 @@ void	ServerCommunication::getContactInfo(const Contact &contact) {
 void	ServerCommunication::addContact(const Contact &contact) {
 	CommandAdd *commandAdd = new CommandAdd;
 
-    /*
-    Contact toto;
-    toto.setAccountName("navid");
-    getContactInfo(toto);
-    */
 	commandAdd->setAccountName(contact.getAccountName());
 
 	mCommandPacketBuilder.sendCommand(commandAdd);

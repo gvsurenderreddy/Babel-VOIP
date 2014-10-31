@@ -44,9 +44,8 @@ void	TcpClient::close(bool callListener) {
 	if (mListener && callListener)
 		mListener->onSocketClosed(this);
 }
-#include <iostream>
+
 void	TcpClient::send(const IClientSocket::Message &message) {
-    std::cout << "SEND" << std::endl;
 	int ret = mQTcpSocket->write(message.msg, message.msgSize);
 
 	if (ret == -1)
@@ -54,18 +53,13 @@ void	TcpClient::send(const IClientSocket::Message &message) {
 }
 
 IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
-    std::cout << "RECEIVE" << std::endl;
 	IClientSocket::Message message;
 
 	if (nbBytesToRead() == 0)
 		throw SocketException("Socket not readable");
 
-    std::cout << "BYTES READABLE: " << nbBytesToRead() << std::endl;
 	message.msg = new char[sizeToRead];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
-    std::cout << "READ SIZE: " << sizeToRead << std::endl;
-    std::cout << "NB BYTES READ :" << message.msgSize << std::endl;
-    std::cout << "BYTES STILL AVAILABLE: " << nbBytesToRead() << std::endl;
     message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
 	message.port = mQTcpSocket->peerPort();
 

@@ -94,29 +94,13 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            ICommand::Header *header = reinterpret_cast<ICommand::Header *>(mWriteMessageQueue.front().msg);
-
-            // std::cout << "magicCode       sended: '" << std::hex << header->magicCode << "'" << std::endl;
-            // std::cout << "instructionCode sended: '" << std::hex << header->instructionCode << "'" << std::endl;
-
-            std::string str(mWriteMessageQueue.front().msg, bytesTransfered);
-            std::string test = str;
-            std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket && 1 == 2)
-                std::cout << "  SEND " << bytesTransfered << " bytes " << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
-            if (header->instructionCode == ICommand::ADD)
-            {
-                std::cout << "  ## SEND for COMMAND ADD : " << bytesTransfered << std::endl;
-            }
             if (bytesTransfered == static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-				//std::cout << "POP SEND" << std::endl;
-                delete[] mWriteMessageQueue.front().msg;
+                delete mWriteMessageQueue.front().msg;
                 mWriteMessageQueue.pop_front();
             }
             else
             {
-                //std::cout << "SEND PART SEND" << std::endl;
                 Message& messageFront = mWriteMessageQueue.front();
                 messageFront.msgSize -= bytesTransfered;
                 char* tmp = new char[messageFront.msgSize + 1];

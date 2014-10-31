@@ -199,9 +199,7 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
 
                 std::vector<std::string> args;
 
-                std::cout << "a" << std::endl;
                 args.push_back(callerClient->getAccount());
-                std::cout << "a" << std::endl;
 
                 targetClient->handleCmd->packCmd(instruction, args);
             }

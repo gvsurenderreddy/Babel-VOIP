@@ -8,7 +8,7 @@ public:
 	~CommandErr();
 
 	//body
-	struct Body{
+	struct __attribute__ ((packed)) Body{
 		ICommand::Header	header;
 		int					instructionCode;
 		int					errorCode;

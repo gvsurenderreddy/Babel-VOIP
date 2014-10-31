@@ -8,12 +8,12 @@ public:
 	~CommandSend();
 
 	//body
-	struct Body{
+	struct __attribute__ ((packed)) Body{
 		char				accountName[256];
 		char				textMessage[4096];
 	};
 
-    struct BodySend{
+    struct __attribute__ ((packed)) BodySend{
         ICommand::Header	header;
         char				accountName[256];
         char				textMessage[4096];
