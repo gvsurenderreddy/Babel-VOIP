@@ -103,8 +103,13 @@ void	BabelMainWindow::newContactInvitation(const Contact &contact) {
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
-	mDialog.setMessage(contact.getAccountName() + "vous envoie:\n" + msg);
-	mDialog.show();
+	MessageListModel::sMessage	message = {
+		contact.getAccountName(),
+		msg,
+		QDateTime::currentDateTime()
+	};
+	mMain.getMessages()->getContactList() << message;
+	mMain.getUi().listView->setModel(mMain.getMessages());
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &) {
@@ -118,6 +123,8 @@ void	BabelMainWindow::terminatingCommunication(const Contact &) {
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
 	mContact = contact;
+	mMain.setCurrentContact(mContact);
+
 	// debug
 	QString	debug("debug: ");
 
@@ -166,7 +173,12 @@ void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
 	}
 }
 
-void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &) {
+void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Votre profile est introuvable - -'");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::callContactSuccess(const ErrorStatus &) {
@@ -275,12 +287,13 @@ void		BabelMainWindow::sendMessage()
 
 		// debug
 		MessageListModel::sMessage	msg = {
-			mMain.getCurrentContact().getPseudo(),
+			mContact.getPseudo(),
 			mMain.getUi().messageEdit->toPlainText(),
 			QDateTime::currentDateTime()
 		};
 		mMain.getMessages()->getContactList() << msg;
 		mMain.getUi().listView->setModel(mMain.getMessages());
+		//
 
 		mDialog.setMessage(mMain.getUi().messageEdit->toPlainText());
 		mDialog.show();
