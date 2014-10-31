@@ -46,6 +46,7 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		BabelSetting		mSetting;
 		BabelMain			mMain;
 		BabelDialog			mDialog;
+		Contact				mContact;
 
 	// public slots
 	public slots:
@@ -70,9 +71,11 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	connectToServerSuccess(const ErrorStatus &errorStatus);
 		void	disconnectedFromServer(void);
 
+		// actions - requests
 		void	connectionToServer();
 		void	createAccount();
 		void	connexionToAccount();
+		void	addNewContact();
 
 	// signals
 	signals:

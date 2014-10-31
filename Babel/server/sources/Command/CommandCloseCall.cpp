@@ -22,17 +22,17 @@ std::vector<std::string>		*CommandCloseCall::getParam(IClientSocket *socket){
 }
 
 IClientSocket::Message		*CommandCloseCall::setParam(std::vector<std::string> *param){
-    IClientSocket::Message		*msg = new IClientSocket::Message;
-    CommandCloseCall::BodySend	*body = new CommandCloseCall::BodySend;
+	IClientSocket::Message		*msg = new IClientSocket::Message;
+	CommandCloseCall::BodySend	*body = new CommandCloseCall::BodySend;
 
-    std::memset(body, 0, sizeof(*body));
-    body->header.instructionCode = ICommand::CLOSE_CALL;
-    body->header.magicCode = ICommand::MAGIC_CODE;
-    std::memcpy(body->accountName, (*param)[0].c_str(), (*param)[0].size());
+	std::memset(body, 0, sizeof(*body));
+	body->header.instructionCode = ICommand::CLOSE_CALL;
+	body->header.magicCode = ICommand::MAGIC_CODE;
+	std::memcpy(body->accountName, (*param)[0].c_str(), (*param)[0].size());
 
-    msg->msgSize = sizeof(*body);
-    msg->msg = reinterpret_cast<char *>(body);
-    return (msg);
+	msg->msgSize = sizeof(*body);
+	msg->msg = reinterpret_cast<char *>(body);
+	return (msg);
 }
 
 unsigned int				CommandCloseCall::getSizeBody(void){

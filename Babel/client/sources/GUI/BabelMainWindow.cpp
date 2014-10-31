@@ -40,6 +40,12 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// connexion: when connect to account
 	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), this, SLOT(connexionToAccount()));
+
+	// debug
+	QObject::connect(mFlyer.getUi().login, SIGNAL(clicked()), &mMain, SLOT(show()));
+
+	// connexion: when add contact
+	QObject::connect(mMain.getUi().addContact, SIGNAL(clicked()), this, SLOT(addNewContact()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -69,13 +75,24 @@ void	BabelMainWindow::show()
 	mFlyer.show();
 }
 
-void	BabelMainWindow::updateContactList(const QList<Contact> &) {
+void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
+	mMain.getModel()->setContactList(list);
 }
 
-void	BabelMainWindow::newContactInvitation(const Contact &) {
+void	BabelMainWindow::newContactInvitation(const Contact &contact) {
+	// A completer
+	mMain.getModel()->getContactList() << contact;
+	mMain.getModel()->sort();
+	mMain.getUi().listContactView->setModel(mMain.getModel());
+
+	mDialog.setMessage(contact.getAccountName() + " figure désormais dans vos contacts \\o/");
+	mDialog.show();
+	//
 }
 
-void	BabelMainWindow::newMessage(const Contact &, const QString &) {
+void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
+	mDialog.setMessage(contact.getAccountName() + "vous envoie:\n" + msg);
+	mDialog.show();
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &) {
@@ -88,21 +105,25 @@ void	BabelMainWindow::terminatingCommunication(const Contact &) {
 }
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
-	std::cout << contact.getAccountName().toStdString() << std::endl;
-	std::cout << contact.getPassword().toStdString() << std::endl;
-	std::cout << contact.getStatus() << std::endl;
-	std::cout << std::endl;
+	mContact = contact;
+	// debug
+	QString	debug("");
+
+	debug += contact.getAccountName() + "\n";
+	mDialog.setMessage(debug);
+	mDialog.show();
+	//
 }
 
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mDialog.setWindowTitle("Félicitation");
-		mDialog.setMessage("Votre compte a été crée avec succès :)");
+		mDialog.setMessage("Votre compte a été crée avec succès :D");
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur à la création");
+		mDialog.setWindowTitle("Erreur à la création :(");
 		mDialog.setMessage("Votre compte n'a pas pu se créer :(\n\nError code: " + QString::number(es.getErrorCode()));
 	}
 	mDialog.show();
@@ -113,11 +134,12 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	{
 		mFlyer.hide();
 		mMain.show();
+		mMain.getUi().name->setText(mFlyer.getEmail());
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur de connexion");
-		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe... ;)");
+		mDialog.setWindowTitle("Erreur de connexion :(");
+		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe ;)");
 	}
 }
 
@@ -136,7 +158,12 @@ void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &) {
 void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &) {
 }
 
-void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &) {
+void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
+	if (!es.errorOccurred())
+		mDialog.setMessage("Vous avez un nouveau contact ! :)");
+	else
+		mDialog.setMessage("Le contact n'existe pas... :(");
+	mDialog.show();
 }
 
 void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
@@ -149,20 +176,18 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &) {
 }
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
-	if (es.errorOccurred())
-		mDialog.setMessage("FAIL CONNECTION");
-	else
-		mDialog.setMessage("SUCCESS CONNECTION");
+	QString	success = !es.errorOccurred() ? "Succès" : "Echec";
+
+	mDialog.setMessage(success + " à la connection de l'addresse IP (" + mSetting.getHost() + ")");
 	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
-	mDialog.setMessage("disconnected from server");
+	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
 }
 
 void	BabelMainWindow::connectionToServer()
 {
-	std::cout << "request from client" << std::endl;
 	emit askForConnectionToServer(mSetting.getHost(), mSetting.getPort());
 }
 
@@ -172,8 +197,6 @@ void	BabelMainWindow::createAccount()
 	
 	if (mSignup.getIsRegister())
 	{
-		mDialog.setMessage("Envoie de la requete de création de votre compte...");
-
 		// set Contacts
 		contact.setAccountName(mSignup.getEmail());
 		contact.setPseudo(mSignup.getPseudo());
@@ -184,7 +207,7 @@ void	BabelMainWindow::createAccount()
 	}
 	else
 	{
-		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de mot de passe.");
+		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de vos mot de passe ;)");
 	}
 	mDialog.show();
 }
@@ -193,9 +216,18 @@ void		BabelMainWindow::connexionToAccount()
 {
 	Contact	contact;
 
-	mDialog.setMessage("Tentative de connexion au compte: " + mFlyer.getEmail());
 	contact.setAccountName(mFlyer.getEmail());
 	contact.setPassword(mFlyer.getPwd());
 	emit askForAuthentication(contact);
+	mDialog.show();
+}
+
+void		BabelMainWindow::addNewContact()
+{
+	Contact	contact;
+
+	contact.setAccountName(mMain.getUi().newContact->text());
+	emit askForAddingContact(contact);
+	mDialog.setMessage("Envoie de la demande d'ami ;)");
 	mDialog.show();
 }

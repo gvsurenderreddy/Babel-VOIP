@@ -72,7 +72,6 @@ bool Client::loadData(void)
     return true;
 }
 
-
 /*
 ** Use client's data
 */

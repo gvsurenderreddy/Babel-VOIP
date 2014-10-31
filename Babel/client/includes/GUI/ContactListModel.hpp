@@ -20,17 +20,17 @@ class ContactListModel : public QAbstractListModel
 
 	// attributs
 	private:
-		QList<Contact>			mContactList;
+		QList<Contact>	mContactList;
 
 	// methods
 	public:
-		int						rowCount(const QModelIndex &parent = QModelIndex()) const;
-		QVariant				data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-		QVariant				headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+		int				rowCount(const QModelIndex &parent = QModelIndex()) const;
+		QVariant		data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+		QVariant		headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-		void					setModelList(QList<Contact> const &contactList);
-		QList<Contact> const	&getListModel() const { return mContactList; }
-		void					sort();
+		void			setContactList(QList<Contact> const &contactList) { mContactList = contactList; }
+		QList<Contact> 	&getContactList() { return mContactList; }
+		void			sort();
 
-		static bool				compare(Contact const &v1, Contact const &v2);
+		static bool		compare(Contact const &v1, Contact const &v2);
 };

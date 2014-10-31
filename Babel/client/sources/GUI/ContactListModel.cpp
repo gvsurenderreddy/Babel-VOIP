@@ -3,6 +3,7 @@
 ContactListModel::ContactListModel(QObject *parent)
 	: QAbstractListModel(parent)
 {
+
 }
 
 ContactListModel::~ContactListModel()
@@ -23,18 +24,16 @@ QVariant				ContactListModel::data(const QModelIndex &index, int role) const
 		return QVariant();
 
 	if (role == Qt::DisplayRole)
-		return QVariant(mContactList[index.row()].getPseudo());
+		return mContactList[index.row()].getPseudo();
+
+/*	if (role == Qt::TextColorRole)
+		return QColor(QColor::colorNames().at(index.row()));*/
 	return QVariant();
 }
 
 QVariant				ContactListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
 	return QVariant();
-}
-
-void					ContactListModel::setModelList(QList<Contact> const &contactList)
-{
-	mContactList = contactList;
 }
 
 bool					ContactListModel::compare(Contact const &v1, Contact const &v2)
