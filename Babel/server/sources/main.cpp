@@ -16,6 +16,6 @@ int main(void)
         std::cerr << e.what() << std::endl;
         ret = -1;
     }
-    // do { std::cout << std::endl << "Press the Enter key to exit."; } while (std::cin.get() != '\n');
+    do { std::cout << std::endl << "  [EXIT] Press the Enter key to exit" << std::endl; } while (std::cin.get() != '\n');
     return (ret);
 }

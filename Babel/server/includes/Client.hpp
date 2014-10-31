@@ -15,106 +15,138 @@
 
 class Client : public IClientSocket::OnSocketEvent{
 
+    // interface for client callback
+    public:
+	    class OnClientEvent{
+	    public:
+		    virtual ~OnClientEvent() {}
+            virtual void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onLog(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onList(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onShow(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onAcceptAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onDel(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onExit(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onSend(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onAcceptCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+            virtual void onCloseCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
+	    };
+
+    // default ctor-dtor
+    public:
+        Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient);
+        ~Client();
+
+    // private coplien form
+    private:
+        Client(const Client &) : Listener(NULL) { }
+        const Client & operator = (const Client &) { return *this; }
+
     // handle commands
     private:
-    struct HandleCommand {
-        ICommand::Instruction	instruction;
-        void					(Client::*handler)(std::vector<std::string> &param);
-    };
-
-    static const Client::HandleCommand	handleCommandsTab[];
-
+        struct HandleCommand {
+            ICommand::Instruction instruction;
+            void				  (Client::OnClientEvent::*handler)(Client*, std::vector<std::string> &param, ICommand::Instruction instruction);
+        };
+        static const Client::HandleCommand	handleCommandsTab[];
     public:
+        void treatCommand(ICommand::Instruction instruction, std::vector<std::string> &args);
 
-	//interface for client callback
-	class OnClientEvent{
-	public:
-		virtual ~OnClientEvent() {}
-        virtual bool onSubscribe(const std::string &acount, const std::string& password) = 0;
-		virtual bool onConnect(const std::string &account, const std::string &password, Client *caller) = 0;
-		virtual void onDisconnect(Client *caller) = 0;
-		virtual void onList(Client *caller) = 0;
-		virtual bool onUpdate(const std::string &account, const std::string &password, std::string pseudo, char status) = 0;
-        virtual bool onAddContact(const std::string &account, const std::string &callerAccount) = 0;
-        virtual bool onDelContact(const std::string &targetAccount, const std::string &callerAccount) = 0;
-        virtual bool onShowContact(const std::string &targetAccount) = 0;
-		virtual bool onAcceptContact(bool accept, const std::string &targetAccount, const std::string &callerAcount) = 0;
-		virtual bool onCallSomeone(const std::string &targetAccount, std::string &callerAcount) = 0;
-		virtual void onHangCall(bool hang, const std::string &targetAccount, std::string &callerAccount) = 0;
-        virtual bool onSendMsg(const std::string &targetAccount, const std::string &message, const std::string &callerAccount) = 0;
-		virtual bool onCloseCall(const std::string &targetAccount, const std::string &callerAccount) = 0;
-	};
+	// callback from IClientSocket
+    public:
+        void onBytesWritten(IClientSocket *socket, unsigned int nbBytes) { }
+	    void onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
+	    void onSocketClosed(IClientSocket *socket);
 
-	//copelien
-    Client(IClientSocket* clientSocket, Client::OnClientEvent &listenerClient);
-	~Client();
+	// function for serialization
+    public:
+	    bool saveData(void);
+        bool loadData(void);
 
-	//callback from IClientSocket
-	void	onBytesWritten(IClientSocket *socket, unsigned int nbBytes);
-	void	onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
-	void	onSocketClosed(IClientSocket *socket);
+    // status
+    public:
+        enum Status
+        {
+            CONNECTED = 0x00,
+            DISCONNECTED = 0x01,
+            BUSY = 0x02,
+            AWAY = 0x03,
+            KIPOUR = 0x04,
+            SLEEPING = 0x05,
+            RAMADAN = 0x06,
+            SPORT = 0x07,
+            TOILET = 0x08,
+            YOLO = 0x09,
+            CRYING = 0x0A
+        };
 
-	//function for serialization
-	void	saveData(void);
-	void	loadData(void);
+    // status communication
+    public:
+        enum StatusCall
+        {
+            NONE = 0x00,
+            ISWAITING = 0x01,
+            ISCALLING = 0x02
+        };
 
-	//use client's data
-	//setter
-	void	setStatus(int statue);
-	void	setPseudo(const std::string name);
-	void	setAccount(const std::string account);
-	void	addContact(const std::string name);
-	void	delContact(const std::string name);
-	//getter
-	int								getStatus(void);
-	const std::string				&getPseudo(void);
-	const std::string				&getAccount(void);
-	const std::list<std::string>	&getContact(void);
-	bool							isConnect(void);
+	// use client's data :: setter
+    public:
+        void setConnected(bool state);
+        void setStatus(Client::Status state);
+        void setStatusCall(Client::StatusCall state);
+        void setPseudo(const std::string& pseudoName);
+        void setAccount(const std::string& accountName);
+        void clearContact();
+        void addContact(const std::string& accountName);
+        void delContact(const std::string& accountName);
+        void updateLastPingTime();
 
-	//instance of socket for send data
-	IClientSocket*	Socket;
+    // use client's data :: getter
+    public:
+        Client::Status				  getStatus(void) const;
+        Client::StatusCall			  getStatusCall(void) const;
+	    const std::string&            getPseudo(void) const;
+	    const std::string&            getAccount(void) const;
+	    const std::list<std::string>& getContact(void) const;
+        IClientSocket*                getSocket(void) const;
+        time_t		                  getLastPingTime() const;
+	    bool						  isConnect(void) const;
 
-	//Handle Cmd
-	HandleCmd	*handleCmd;
+	// instance of socket for send data
+    public:
+	    IClientSocket* Socket;
 
-private:
-    std::string                        usersFolderPath;
+	// handleCmd
+    public:
+	    HandleCmd*  handleCmd;
 
-	//boost serialize
-	friend class boost::serialization::access;
-	template<class Archive>
-	void	serialize(Archive & ar, const unsigned int){
-		ar & this->status;
-		ar & this->pseudo;
-		ar & this->contact;
-	}
+    // path folder for storing users data
+    private:
+        std::string usersFolderPath;
 
-	//data of client
-	int							status;
-	std::string					pseudo;
-	std::list<std::string>		contact;
-	std::string					account;
-    bool                        isConnected;
+	// boost serialize
+    private:
+	    friend class boost::serialization::access;
+	    template<class Archive>
+	    void serialize(Archive & ar, const unsigned int) {
+		    ar & this->status;
+            ar & this->statusCall;
+		    ar & this->pseudo;
+		    ar & this->contact;
+            ar & this->isConnected;
+	    }
 
-	//cmd
-	void		Subscribe(std::vector<std::string> &args);
-	void		Connect(std::vector<std::string> &args);
-	void		Disconnect(std::vector<std::string> &args);
-	void		GetContact(std::vector<std::string> &args);
-	void		Update(std::vector<std::string> &args);
-	void		AddContact(std::vector<std::string> &args);
-	void		DelContact(std::vector<std::string> &args);
-	void		AcceptContact(std::vector<std::string> &args);
-	void		CallSomeone(std::vector<std::string> &args);
-	void		HangCall(std::vector<std::string> &args);
-	void		List(std::vector<std::string> &args);
-	void		Show(std::vector<std::string> &args);
-	void		SendMsg(std::vector<std::string> &args);
-	void		CloseCall(std::vector<std::string> &args);
-
-	void		exeCmd(ICommand::Instruction instruction, std::vector<std::string> &args);
-
-	//client's listener
-    Client::OnClientEvent&      Listener;
+	// attributes (data of client + listener)
+    private:
+        Client::Status			status;
+        Client::StatusCall		statusCall;
+	    std::string				pseudo;
+	    std::list<std::string>	contact;
+	    std::string				account;
+        bool                    isConnected;
+        Client::OnClientEvent*  Listener;
+        time_t		            lastPingTime;
 };

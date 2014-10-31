@@ -41,7 +41,7 @@ class IClientSocket {
 
     // get host ip
     public:
-        virtual const std::string& getRemoteIp() const = 0;
+        virtual const std::string getRemoteIp() const = 0;
 
 	// set listener
 	public:

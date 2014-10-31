@@ -87,6 +87,6 @@ void	TcpClient::setOnSocketEventListener(OnSocketEvent *listener) {
 	mListener = listener;
 }
 
-const std::string& TcpClient::getRemoteIp() const {
+const std::string TcpClient::getRemoteIp() const {
     return mQTcpSocket->peerAddress().toString().toStdString();
 }

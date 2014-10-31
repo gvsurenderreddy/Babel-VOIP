@@ -11,10 +11,11 @@ public:
 	struct Body{
 		char	accountName[256];
 	};
-	struct BodySend{
-		ICommand::Header	header;
-		char				accountName[256];
-	};
+
+    struct BodySend{
+        ICommand::Header	header;
+        char				accountName[256];
+    };
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);
