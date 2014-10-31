@@ -8,7 +8,7 @@ public:
 	~CommandLog();
 
 	//body
-	struct Body{
+	struct __attribute__ ((packed)) Body{
 		char				accountName[256];
 		char				password[256];
 	};

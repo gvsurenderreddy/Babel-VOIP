@@ -26,11 +26,10 @@ std::vector<std::string>		*CommandUpdate::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message		*CommandUpdate::setParam(std::vector<std::string> *param){
-	param;
+IClientSocket::Message		*CommandUpdate::setParam(std::vector<std::string> *){
 	return NULL;
 }
 
 unsigned int    			CommandUpdate::getSizeBody(void){
-	return sizeof CommandUpdate::Body;
+	return sizeof(CommandUpdate::Body);
 }

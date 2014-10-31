@@ -8,11 +8,11 @@ public:
 	~CommandAdd();
 
 	//body
-	struct Body{
+	struct __attribute__ ((packed)) Body{
 		char	accountName[256];
 	};
 
-	struct BodySend{
+	struct __attribute__ ((packed)) BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
 	};

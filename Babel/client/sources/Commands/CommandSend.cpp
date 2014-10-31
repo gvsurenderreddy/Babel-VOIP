@@ -37,7 +37,9 @@ void	CommandSend::initFromMessage(const IClientSocket::Message &message) {
 		throw CommandException("Message has an invalid size");
 
 	CommandSend::PacketFromServer *packet = reinterpret_cast<CommandSend::PacketFromServer *>(message.msg);
+	packet->accountName[sizeof(packet->accountName) - 1] = 0;
 	mAccountName = packet->accountName;
+	packet->textMessage[sizeof(packet->textMessage) - 1] = 0;
 	mTextMessage = packet->textMessage;
 }
 

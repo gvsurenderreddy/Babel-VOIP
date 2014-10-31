@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
-TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
+TcpClient::TcpClient() : mSocket(NULL), mListener(NULL)
 {
 
 }
@@ -59,7 +59,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "  [Error Client] " << error.message() << std::endl;
+            std::cout << "  [Error Client RECV] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -84,6 +84,8 @@ void TcpClient::send(const IClientSocket::Message &msg)
     }
 }
 
+#include "ICommand.hpp"
+
 void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
 {
     if (!error)
@@ -92,14 +94,9 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            std::string str(mWriteMessageQueue.front().msg, bytesTransfered);
-            std::string test = str;
-            std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket && 1 == 2)
-                std::cout << "  SEND " << bytesTransfered << " bytes " << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
-            if (bytesTransfered == mWriteMessageQueue.front().msgSize)
+            if (bytesTransfered == static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-                delete[] mWriteMessageQueue.front().msg;
+                delete mWriteMessageQueue.front().msg;
                 mWriteMessageQueue.pop_front();
             }
             else
@@ -124,7 +121,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "  [Error Client] " << error.message() << std::endl;
+        std::cout << "  [Error Client SEND] " << error.message() << std::endl;
         closeClient();
     }
 }

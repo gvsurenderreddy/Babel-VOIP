@@ -7,7 +7,7 @@ class CommandErr : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromServer {
+		struct __attribute__ ((packed)) PacketFromServer {
 			int	instructionCode;
 			int	errorCode;
 		};

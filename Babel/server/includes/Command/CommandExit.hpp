@@ -8,7 +8,7 @@ public:
 	~CommandExit();
 
 	//body
-	struct Body{
+	struct __attribute__ ((packed)) Body{
 
 	};
 

@@ -22,11 +22,10 @@ std::vector<std::string>		*CommandLog::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message		*CommandLog::setParam(std::vector<std::string> *param){
-	param;
+IClientSocket::Message		*CommandLog::setParam(std::vector<std::string> *){
 	return NULL;
 }
 
 unsigned int				CommandLog::getSizeBody(void){
-	return sizeof CommandLog::Body;
+	return sizeof(CommandLog::Body);
 }

@@ -40,5 +40,5 @@ IClientSocket::Message			*CommandShow::setParam(std::vector<std::string> *param)
 }
 
 unsigned int				CommandShow::getSizeBody(void){
-	return sizeof CommandShow::Body;
+	return sizeof(CommandShow::Body);
 }

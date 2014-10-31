@@ -57,7 +57,7 @@ class Client : public IClientSocket::OnSocketEvent{
 
 	// callback from IClientSocket
     public:
-        void onBytesWritten(IClientSocket *socket, unsigned int nbBytes) { }
+        void onBytesWritten(IClientSocket *, unsigned int) { }
 	    void onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	    void onSocketClosed(IClientSocket *socket);
 
@@ -149,4 +149,8 @@ class Client : public IClientSocket::OnSocketEvent{
         bool                    isConnected;
         Client::OnClientEvent*  Listener;
         time_t		            lastPingTime;
+
+    // display (have to be overload <<)
+    public:
+        void display() const;
 };
