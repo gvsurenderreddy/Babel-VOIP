@@ -29,13 +29,14 @@ OBJECTS_DIR     =       build/obj
 MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
-QMAKE_CXXFLAGS  +=      -Wall -D_SCL_SECURE_NO_WARNINGS /MP
+win32:QMAKE_CXXFLAGS	+=	-Wall -D_SCL_SECURE_NO_WARNINGS /MP
+unix:QMAKE_CXXFLAGS		+=	-Wall -std=c++11
 
-QMAKE_CFLAGS_WARN_ON -= -W3
-QMAKE_CFLAGS_WARN_ON += -W2
+win32:QMAKE_CFLAGS_WARN_ON -= -W3
+win32:QMAKE_CFLAGS_WARN_ON += -W2
 
-QMAKE_CXXFLAGS_WARN_ON -= -W3
-QMAKE_CXXFLAGS_WARN_ON += -W2
+win32:QMAKE_CXXFLAGS_WARN_ON -= -W3
+win32:QMAKE_CXXFLAGS_WARN_ON += -W2
 
 INCLUDEPATH     +=      .                                       \
 						../shared/includes						\
