@@ -57,7 +57,7 @@ class Client : public IClientSocket::OnSocketEvent{
 
 	// callback from IClientSocket
     public:
-        void onBytesWritten(IClientSocket *socket, unsigned int nbBytes) { }
+        void onBytesWritten(IClientSocket *, unsigned int) { }
 	    void onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	    void onSocketClosed(IClientSocket *socket);
 

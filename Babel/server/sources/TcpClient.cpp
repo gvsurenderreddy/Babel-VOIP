@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
-TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
+TcpClient::TcpClient() : mSocket(NULL), mListener(NULL)
 {
 
 }
@@ -94,7 +94,6 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            IClientSocket::Message *msg = new IClientSocket::Message;
             ICommand::Header *header = reinterpret_cast<ICommand::Header *>(mWriteMessageQueue.front().msg);
 
             // std::cout << "magicCode       sended: '" << std::hex << header->magicCode << "'" << std::endl;
@@ -109,7 +108,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             {
                 std::cout << "  ## SEND for COMMAND ADD : " << bytesTransfered << std::endl;
             }
-            if (bytesTransfered == mWriteMessageQueue.front().msgSize)
+            if (bytesTransfered == static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
 				//std::cout << "POP SEND" << std::endl;
                 delete[] mWriteMessageQueue.front().msg;

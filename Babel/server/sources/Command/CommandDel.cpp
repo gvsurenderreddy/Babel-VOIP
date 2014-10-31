@@ -37,5 +37,5 @@ IClientSocket::Message			*CommandDel::setParam(std::vector<std::string> *param){
 }
 
 unsigned int    				CommandDel::getSizeBody(void){
-	return sizeof CommandDel::Body;
+	return sizeof(CommandDel::Body);
 }

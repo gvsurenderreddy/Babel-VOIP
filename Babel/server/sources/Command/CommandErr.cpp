@@ -10,8 +10,7 @@ CommandErr::~CommandErr(){
 /*
 ** Heritage from ICommand
 */
-std::vector<std::string>		*CommandErr::getParam(IClientSocket *socket){
-	socket;
+std::vector<std::string>		*CommandErr::getParam(IClientSocket *){
 	return NULL;
 }
 
@@ -36,5 +35,5 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 }
 
 unsigned int				CommandErr::getSizeBody(void){
-	return sizeof CommandErr::Body;
+	return sizeof(CommandErr::Body);
 }

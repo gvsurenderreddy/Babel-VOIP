@@ -9,7 +9,7 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : Socket(clientSocket), Listener(listenerClient), isConnected(false)
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : Socket(clientSocket), isConnected(false), Listener(listenerClient)
 {
     updateLastPingTime();
     if (this->Socket)
@@ -29,12 +29,10 @@ Client::~Client()
 /*
 ** IClientSocket::OnSocketEvent
 */
-void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
+void	Client::onSocketReadable(IClientSocket *, unsigned int){
 	std::vector<std::string> *param;
 
-	socket;
-	nbBytesToRead;
-    while (this->handleCmd && (param = this->handleCmd->unPackCmd()) != NULL){
+    while (this->handleCmd && (param = this->handleCmd->unPackCmd()) != NULL) {
         this->treatCommand(this->handleCmd->getInstruction(), *param);
 		delete param;
         param = NULL;

@@ -36,5 +36,5 @@ IClientSocket::Message		*CommandCloseCall::setParam(std::vector<std::string> *pa
 }
 
 unsigned int				CommandCloseCall::getSizeBody(void){
-	return sizeof CommandCloseCall::Body;
+	return sizeof(CommandCloseCall::Body);
 }

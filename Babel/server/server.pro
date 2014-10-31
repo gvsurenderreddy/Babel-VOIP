@@ -20,6 +20,8 @@ isEmpty(_BOOST_ROOT) {
 	
 }
 
+unix:LIBS += -lboost_system -lboost_serialization -lboost_filesystem
+
 CONFIG			+=		console c++11
 TEMPLATE        =       app
 TARGET          =       server
