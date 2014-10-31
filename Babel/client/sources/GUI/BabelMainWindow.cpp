@@ -130,12 +130,12 @@ void	BabelMainWindow::updateInfo(const Contact &contact) {
 void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
-		mDialog.setWindowTitle("Félicitation");
+		mSignup.hide();
+		mFlyer.show();
 		mDialog.setMessage("Votre compte a été crée avec succès :D");
 	}
 	else
 	{
-		mDialog.setWindowTitle("Erreur à la création :(");
 		mDialog.setMessage("Votre compte n'a pas pu se créer :(\n\nError code: " + QString::number(es.getErrorCode()));
 	}
 	mDialog.show();
@@ -144,6 +144,7 @@ void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
+		mDialog.hide();
 		mMain.setCurrentContact(mContact);
 		mFlyer.hide();
 		mMain.show();
@@ -153,6 +154,7 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	{
 		mDialog.setWindowTitle("Erreur de connexion :(");
 		mDialog.setMessage("Problème de connexion\nVeuillez vérifier vos email ou mot de passe ;)");
+		mDialog.show();
 	}
 }
 
@@ -189,9 +191,13 @@ void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &) {
 
 void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
-		mDialog.setMessage("Vous vous êtes déconnecté de votre session ;)");
+	{
+		mMain.hide();
+		mFlyer.show();
+		mDialog.setMessage("Vous venez de vous déconnecter ;)");
+	}
 	else
-		mDialog.setMessage("Vous vous êtes déconnecté de votre session ;)");
+		mDialog.setMessage("Erreur à la déconnexion :s");
 	mDialog.show();
 }
 
@@ -206,17 +212,15 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 	QString	success = !es.errorOccurred() ? "Succès" : "Echec";
 
+	mSetting.hide();
+	mFlyer.show();
 	mDialog.setMessage(success + " à la connection de l'addresse IP (" + mSetting.getHost() + ")");
 	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectedFromServer(void) {
-	mLogin.hide();
-	mSignup.hide();
-	mSetting.hide();
 	mMain.hide();
 	mMain.getDialog().hide();
-
 	mFlyer.show();
 	mDialog.setMessage("Vous êtes connecté à aucun serveur :/");
 	mDialog.show();
@@ -244,8 +248,8 @@ void	BabelMainWindow::createAccount()
 	else
 	{
 		mDialog.setMessage("Erreur à l'inscription.\nVeuillez vérifier les saisies de vos mot de passe ;)");
+		mDialog.show();
 	}
-	mDialog.show();
 }
 
 void		BabelMainWindow::connexionToAccount()
@@ -255,7 +259,6 @@ void		BabelMainWindow::connexionToAccount()
 	contact.setAccountName(mFlyer.getEmail());
 	contact.setPassword(mFlyer.getPwd());
 	emit askForAuthentication(contact);
-	mDialog.show();
 }
 
 void		BabelMainWindow::addNewContact()
