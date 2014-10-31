@@ -212,8 +212,6 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
 	QString	success = !es.errorOccurred() ? "Succès" : "Echec";
 
-	mSetting.hide();
-	mFlyer.show();
 	mDialog.setMessage(success + " à la connection de l'addresse IP (" + mSetting.getHost() + ")");
 	mDialog.show();
 }
@@ -276,12 +274,14 @@ void		BabelMainWindow::sendMessage()
 		emit askForSendingMessage(mMain.getCurrentContact(), mMain.getUi().messageEdit->toPlainText());
 
 		// debug
-/*		MessageListModel::sMessage	msg = {
-			mMain.getCurrentContact,
+		MessageListModel::sMessage	msg = {
+			mMain.getCurrentContact().getPseudo(),
 			mMain.getUi().messageEdit->toPlainText(),
-			QDateTime()
+			QDateTime::currentDateTime()
 		};
-		mMain.getMessages()->getContactList << msg;*/
+		mMain.getMessages()->getContactList() << msg;
+		mMain.getUi().listView->setModel(mMain.getMessages());
+
 		mDialog.setMessage(mMain.getUi().messageEdit->toPlainText());
 		mDialog.show();
 		// end

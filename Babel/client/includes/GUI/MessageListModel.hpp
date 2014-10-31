@@ -30,7 +30,7 @@ class MessageListModel : public QAbstractListModel
 
 	// attributs
 	private:
-		QList<sMessage>	mMessageList;
+		QList<MessageListModel::sMessage>	mMessageList;
 
 	// methods
 	public:
@@ -38,9 +38,9 @@ class MessageListModel : public QAbstractListModel
 		QVariant		data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant		headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-		void			setContactList(QList<sMessage> const &messageList) { mMessageList = messageList; }
-		QList<sMessage> 	&getContactList() { return mMessageList; }
+		void			setContactList(QList<MessageListModel::sMessage> const &messageList) { mMessageList = messageList; }
+		QList<MessageListModel::sMessage> 	&getContactList() { return mMessageList; }
 		void			sort();
 
-		static bool		compare(sMessage const &v1, sMessage const &v2);
+		static bool		compare(MessageListModel::sMessage const &v1, MessageListModel::sMessage const &v2);
 };
