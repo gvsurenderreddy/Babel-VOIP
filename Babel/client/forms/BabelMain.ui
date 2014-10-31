@@ -178,9 +178,6 @@ font: 8pt &quot;Open Sans Light&quot;;
      <string>Envoyer</string>
     </property>
    </widget>
-   <zorder>messageEdit</zorder>
-   <zorder>lineEdit</zorder>
-   <zorder>send</zorder>
   </widget>
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">

@@ -40,7 +40,7 @@ QVariant				MessageListModel::headerData(int /*section*/, Qt::Orientation /*orie
 	return QVariant();
 }
 
-bool					MessageListModel::compare(sMessage const &v1, sMessage const &v2)
+bool					MessageListModel::compare(MessageListModel::sMessage const &v1, MessageListModel::sMessage const &v2)
 {
 	return (v1.datetime.toString() < v2.datetime.toString());
 }
