@@ -65,6 +65,9 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mSignup.getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
 	QObject::connect(mSignup.getUi().pwdEdit1, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
 	QObject::connect(mSignup.getUi().pwdEdit2, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
+
+	QObject::connect(mMain.getUi().newContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
+	QObject::connect(mMain.getUi().addContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)
@@ -145,8 +148,12 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	}
 }
 
-void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &) {
-
+void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
+	if (es.errorOccurred())
+	{
+		mDialog.setMessage("Demande d'invitation échoué :(");
+		mDialog.show();
+	}
 }
 
 void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &) {
