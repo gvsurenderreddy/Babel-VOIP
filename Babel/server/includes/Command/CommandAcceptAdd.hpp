@@ -8,29 +8,16 @@ public:
 	~CommandAcceptAdd();
 
 	//body
-#ifdef WIN32
-	struct __declspec(align(1)) Body{
+	struct NO_PADDING Body{
 		char				accountName[256];
 		char				hasAccepted;
 	};
 
-	struct __declspec(align(1)) BodySend{
+	struct NO_PADDING BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
 		char				hasAccepted;
 	};
-#else
-	struct __attribute__((packed)) Body{
-		char				accountName[256];
-		char				hasAccepted;
-	};
-
-	struct __attribute__((packed)) BodySend{
-		ICommand::Header	header;
-		char				accountName[256];
-		char				hasAccepted;
-	};
-#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

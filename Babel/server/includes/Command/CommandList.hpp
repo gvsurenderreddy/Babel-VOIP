@@ -8,15 +8,9 @@ public:
 	~CommandList();
 
 	//body
-#ifdef WIN32
-	struct __declspec(align(1)) Body{
+	struct NO_PADDING Body{
 
 	};
-#else
-	struct __attribute__((packed)) Body{
-
-	};
-#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

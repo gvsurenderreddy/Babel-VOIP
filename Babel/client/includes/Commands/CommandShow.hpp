@@ -8,31 +8,17 @@ class CommandShow : public ICommand {
 
 	// packet
 	private:
-#ifdef WIN32
-		struct __declspec(align(1)) PacketFromClient{
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 		};
 
-		struct __declspec(align(1)) PacketFromServer{
+		struct NO_PADDING PacketFromServer{
 			char	accountName[256];
 			char	pseudo[256];
 			char	status;
 			char	isConnected;
 		};
-#else
-		struct __attribute__((packed)) PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
-		};
-
-		struct __attribute__((packed)) PacketFromServer{
-			char	accountName[256];
-			char	pseudo[256];
-			char	status;
-			char	isConnected;
-		};
-#endif
 
 	// ctor - dtor
 	public:

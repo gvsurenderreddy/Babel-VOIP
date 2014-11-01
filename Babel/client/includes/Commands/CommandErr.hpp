@@ -7,17 +7,10 @@ class CommandErr : public ICommand {
 
 	// packet
 	private:
-#ifdef WIN32
-		struct __declspec(align(1)) PacketFromServer{
+		struct NO_PADDING PacketFromServer{
 			int	instructionCode;
 			int	errorCode;
 		};
-#else
-		struct __attribute__((packed)) PacketFromServer{
-			int	instructionCode;
-			int	errorCode;
-		};
-#endif
 
 	// ctor - dtor
 	public:

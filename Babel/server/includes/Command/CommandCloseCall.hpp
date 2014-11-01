@@ -8,25 +8,14 @@ public:
 	~CommandCloseCall();
 
 	//body
-#ifdef WIN32
-	struct __declspec(align(1)) Body{
+	struct NO_PADDING Body{
 		char	accountName[256];
 	};
 
-	struct __declspec(align(1)) BodySend{
+	struct NO_PADDING BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
 	};
-#else
-	struct __attribute__((packed)) Body{
-		char	accountName[256];
-	};
-
-	struct __attribute__((packed)) BodySend{
-		ICommand::Header	header;
-		char				accountName[256];
-	};
-#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

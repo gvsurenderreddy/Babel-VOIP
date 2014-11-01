@@ -4,6 +4,12 @@
 #include <string>
 #include "TcpClient.hpp"
 
+#ifdef WIN32
+# define NO_PADDING __declspec(align(1))
+#else
+# define NO_PADDING __attribute__((packed))
+#endif
+
 class ICommand{
 public:
 	//instruction
@@ -29,17 +35,10 @@ public:
 	static const unsigned int	MAGIC_CODE;
 	static const unsigned int	HEADER_SIZE;
 
-#ifdef WIN32
-	struct __declspec(align(1)) Header{
+	struct NO_PADDING Header{
 		int	magicCode;
 		int	instructionCode;
 	};
-#else
-	struct __attribute__((packed)) Header{
-		int	magicCode;
-		int	instructionCode;
-	};
-#endif
 
 	//virtual destructor
 	virtual ~ICommand() {}

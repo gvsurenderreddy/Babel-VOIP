@@ -8,23 +8,13 @@ class CommandUpdate : public ICommand {
 
 	// packet
 	private:
-#ifdef WIN32
-		struct __declspec(align(1)) PacketFromClient{
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 			char				pseudo[256];
 			char				password[256];
 			char				status;
 		};
-#else
-		struct __attribute__((packed)) PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
-			char				pseudo[256];
-			char				password[256];
-			char				status;
-		};
-#endif
 
 	// ctor - dtor
 	public:

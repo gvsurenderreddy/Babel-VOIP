@@ -7,31 +7,17 @@ class CommandAcceptCall : public ICommand {
 
 	// packet
 	private:
-#ifdef WIN32
-		struct __declspec(align(1)) PacketFromClient{
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 			char				hasAccepted;
 		};
 
-		struct __declspec(align(1)) PacketFromServer{
+		struct NO_PADDING PacketFromServer{
 			char	accountName[256];
 			char	host[15];
 			char	hasAccepted;
 		};
-#else
-		struct __attribute__((packed)) PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
-			char				hasAccepted;
-		};
-
-		struct __attribute__((packed)) PacketFromServer{
-			char	accountName[256];
-			char	host[15];
-			char	hasAccepted;
-		};
-#endif
 
 	// ctor - dtor
 	public:
