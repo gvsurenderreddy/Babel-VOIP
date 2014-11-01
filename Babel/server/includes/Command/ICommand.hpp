@@ -2,7 +2,10 @@
 
 #include <vector>
 #include <string>
+#include <cstring>
 #include "TcpClient.hpp"
+
+#define MIN(x, y) (static_cast<int>(x) < static_cast<int>(y) ? (x) : (y))
 
 #ifdef WIN32
 # define NO_PADDING __declspec(align(1))

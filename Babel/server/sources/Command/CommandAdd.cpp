@@ -10,37 +10,37 @@ CommandAdd::~CommandAdd(){
 /*
 ** Heritage from ICommand
 */
-std::vector<std::string>	*CommandAdd::getParam(IClientSocket *socket){
+std::vector<std::string>		*CommandAdd::getParam(IClientSocket *socket){
+
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandAdd::Body			*body;
+	CommandAdd::Body			*body = NULL;
 	IClientSocket::Message		data;
 
-    std::memset(body, 0, sizeof(*body));
-
+	std::memset(body, 0, this->getSizeBody());
 	data = socket->receive(this->getSizeBody());
-	body = reinterpret_cast<CommandAdd::Body *>(data.msg);
+	body = reinterpret_cast<CommandAdd::Body*>(data.msg);
+
 	t->push_back(body->accountName);
+
 	return t;
 }
 
-IClientSocket::Message		*CommandAdd::setParam(std::vector<std::string> *param){
+IClientSocket::Message			*CommandAdd::setParam(std::vector<std::string> *param){
 
-	CommandAdd::BodySend	*body = new CommandAdd::BodySend;
-	IClientSocket::Message	*msg = new IClientSocket::Message;
+	CommandAdd::BodySend		*bodySend = new CommandAdd::BodySend;
+	IClientSocket::Message		*msg = new IClientSocket::Message;
 
-	std::memset(body, 0, sizeof(*body));
+	std::memset(bodySend, 0, sizeof(CommandAdd::BodySend));
+	bodySend->header.instructionCode = ICommand::ADD;
+	bodySend->header.magicCode = ICommand::MAGIC_CODE;
+	std::memcpy(bodySend->accountName, (*param)[0].c_str(), MIN((*param)[0].size(), sizeof(bodySend->accountName) - 1));
 
-	body->header.instructionCode = ICommand::ADD;
-	body->header.magicCode = ICommand::MAGIC_CODE;
-
-	std::memcpy(body->accountName, (*param)[0].c_str(), (*param)[0].size());
-
-	msg->msgSize = sizeof(*body);
-	msg->msg = reinterpret_cast<char *>(body);
+	msg->msgSize = sizeof(CommandAdd::BodySend);
+	msg->msg = reinterpret_cast<char*>(bodySend);
 
 	return (msg);
 }
 
-unsigned int    			CommandAdd::getSizeBody(void){
+unsigned int    				CommandAdd::getSizeBody(void){
 	return sizeof(CommandAdd::Body);
 }

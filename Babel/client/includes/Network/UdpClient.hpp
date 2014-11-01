@@ -25,7 +25,7 @@ class UdpClient : public QObject, public IClientSocket {
 
     // get host ip
     public:
-        const std::string getRemoteIp() const;
+        std::string getRemoteIp() const;
     
     // set listener
 	public:

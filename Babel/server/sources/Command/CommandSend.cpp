@@ -11,33 +11,39 @@ CommandSend::~CommandSend(){
 ** Heritage from ICommand
 */
 std::vector<std::string>		*CommandSend::getParam(IClientSocket *socket){
+
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandSend::Body			*body;
+	CommandSend::Body			*body = NULL;
 	IClientSocket::Message		data;
 
+    std::memset(body, 0, this->getSizeBody());
 	data = socket->receive(this->getSizeBody());
 	body = reinterpret_cast<CommandSend::Body *>(data.msg);
+
 	t->push_back(body->accountName);
     t->push_back(body->textMessage);
+
 	return t;
 }
 
-IClientSocket::Message		*CommandSend::setParam(std::vector<std::string> *param){
-    CommandSend::BodySend	*body = new CommandSend::BodySend;
-    IClientSocket::Message	*msg = new IClientSocket::Message;
+IClientSocket::Message		    *CommandSend::setParam(std::vector<std::string> *param){
 
-    std::memset(body, 0, sizeof(*body));
-    body->header.instructionCode = ICommand::SEND;
-    body->header.magicCode = ICommand::MAGIC_CODE;
+    CommandSend::BodySend	    *bodySend = new CommandSend::BodySend;
+    IClientSocket::Message	    *msg = new IClientSocket::Message;
 
-    std::memcpy(body->accountName, (*param)[0].c_str(), (*param)[0].size());
-    std::memcpy(body->textMessage, (*param)[1].c_str(), (*param)[1].size());
+    std::memset(bodySend, 0, sizeof(CommandSend::BodySend));
+    bodySend->header.instructionCode = ICommand::SEND;
+    bodySend->header.magicCode = ICommand::MAGIC_CODE;
 
-    msg->msgSize = sizeof(*body);
-    msg->msg = reinterpret_cast<char *>(body);
+    std::memcpy(bodySend->accountName, (*param)[0].c_str(), MIN((*param)[0].size(), sizeof(bodySend->accountName) - 1));
+    std::memcpy(bodySend->textMessage, (*param)[1].c_str(), MIN((*param)[1].size(), sizeof(bodySend->textMessage) - 1));
+
+    msg->msgSize = sizeof(CommandSend::BodySend);
+    msg->msg = reinterpret_cast<char *>(bodySend);
+
     return (msg);
 }
 
-unsigned int				CommandSend::getSizeBody(void){
+unsigned int				    CommandSend::getSizeBody(void){
 	return sizeof(CommandSend::Body);
 }

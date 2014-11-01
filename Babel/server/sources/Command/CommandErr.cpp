@@ -15,10 +15,11 @@ std::vector<std::string>		*CommandErr::getParam(IClientSocket *){
 }
 
 IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
+
 	IClientSocket::Message		*msg = new IClientSocket::Message;
 	CommandErr::Body			*body = new CommandErr::Body;
 
-    std::memset(body, 0, sizeof(*body));
+    std::memset(body, 0, this->getSizeBody());
 
 	body->header.instructionCode = ICommand::ERR;
 	body->header.magicCode = ICommand::MAGIC_CODE;
@@ -26,14 +27,14 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 	body->errorCode = (*param)[0][0];
 	body->instructionCode = (*param)[1][0];
 
-    std::cout << "errorCode= '" << body->errorCode << "'" << std::endl;
+    std::cout << "  [ERR] [" << body->errorCode << "] body->instructionCode [" << body->instructionCode <<"]" << std::endl;
 
-	msg->msgSize = sizeof(*body);
+	msg->msgSize = this->getSizeBody();
 	msg->msg = reinterpret_cast<char *>(body);
 
 	return (msg);
 }
 
-unsigned int				CommandErr::getSizeBody(void){
+unsigned int					CommandErr::getSizeBody(void){
 	return sizeof(CommandErr::Body);
 }

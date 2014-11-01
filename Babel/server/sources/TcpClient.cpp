@@ -48,10 +48,6 @@ void TcpClient::startRecv()
         if (!error)
         {
             std::string str(mReadBuffer, bytesTransfered);
-            std::string test = str;
-            std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket && 1 == 2)
-                std::cout << "  RECV " << bytesTransfered << " bytes from :: " << getRemoteIp() << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
             mBuffer.insert(mBuffer.end(), str.begin(), str.end());
             if (mListener)
                 mListener->onSocketReadable(this, bytesTransfered);
@@ -59,7 +55,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "  [Error Client RECV] " << error.message() << std::endl;
+            std::cout << "  [Error Client async_receive] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -121,7 +117,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "  [Error Client SEND] " << error.message() << std::endl;
+        std::cout << "  [Error Client async_write] " << error.message() << std::endl;
         closeClient();
     }
 }
@@ -153,7 +149,7 @@ unsigned int TcpClient::nbBytesToRead() const
     return mBuffer.size();
 }
 
-const std::string TcpClient::getRemoteIp() const
+std::string TcpClient::getRemoteIp() const
 {
     return mSocket->remote_endpoint().address().to_string();
 }
