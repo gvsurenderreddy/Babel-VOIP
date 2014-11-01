@@ -28,13 +28,20 @@ class ICommand {
 
 	// header
 	public:
-		static const int		MAGIC_CODE;
+		static const int			MAGIC_CODE;
 		static const unsigned int	HEADER_SIZE;
 
-		struct Header {
+#ifdef WIN32
+		struct __declspec(align(1)) Header {
 			int	magicCode;
 			int	instructionCode;
 		};
+#else
+		struct __attribute__((packed)) Header {
+			int	magicCode;
+			int	instructionCode;
+		};
+#endif
 
 	// virtual destructor
 	public:

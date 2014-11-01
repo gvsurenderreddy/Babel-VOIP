@@ -7,16 +7,29 @@ class CommandSend : public ICommand {
 
 	// packet
 	private:
-		struct __attribute__ ((packed)) PacketFromClient {
+#ifdef WIN32
+		struct __declspec(align(1)) PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 			char				textMessage[4096];
 		};
 
-		struct __attribute__ ((packed)) PacketFromServer {
+		struct __declspec(align(1)) PacketFromServer{
 			char	accountName[256];
 			char	textMessage[4096];
 		};
+#else
+		struct __attribute__((packed)) PacketFromClient{
+			ICommand::Header	header;
+			char				accountName[256];
+			char				textMessage[4096];
+		};
+
+		struct __attribute__((packed)) PacketFromServer{
+			char	accountName[256];
+			char	textMessage[4096];
+		};
+#endif
 
 	// ctor - dtor
 	public:

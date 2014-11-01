@@ -8,11 +8,19 @@ public:
 	~CommandErr();
 
 	//body
-	struct __attribute__ ((packed)) Body{
+#ifdef WIN32
+	struct __declspec(align(1)) Body{
 		ICommand::Header	header;
 		int					instructionCode;
 		int					errorCode;
 	};
+#else
+	struct __attribute__((packed)) Body{
+		ICommand::Header	header;
+		int					instructionCode;
+		int					errorCode;
+	};
+#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

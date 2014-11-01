@@ -8,11 +8,19 @@ public:
 	~CommandReg();
 
 	//body
-	struct __attribute__ ((packed)) Body{
+#ifdef WIN32
+	struct __declspec(align(1)) Body{
 		char				accountName[256];
 		char				pseudo[256];
 		char				password[256];
 	};
+#else
+	struct __attribute__((packed)) Body{
+		char				accountName[256];
+		char				pseudo[256];
+		char				password[256];
+	};
+#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

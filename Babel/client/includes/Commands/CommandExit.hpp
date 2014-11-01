@@ -6,9 +6,15 @@ class CommandExit : public ICommand {
 
 	// packet
 	private:
-		struct __attribute__ ((packed)) PacketFromClient {
+#ifdef WIN32
+		struct __declspec(align(1)) PacketFromClient{
 			ICommand::Header	header;
 		};
+#else
+		struct __attribute__((packed)) PacketFromClient{
+			ICommand::Header	header;
+		};
+#endif
 
 	// ctor - dtor
 	public:

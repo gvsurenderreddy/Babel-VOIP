@@ -8,17 +8,31 @@ public:
 	~CommandShow();
 
 	//body
-	struct __attribute__ ((packed)) Body{
+#ifdef WIN32
+	struct __declspec(align(1)) Body{
 		char				accountName[256];
 	};
 
-	struct __attribute__ ((packed)) BodySend{
+	struct __declspec(align(1)) BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
 		char				pseudo[256];
 		char				status;
 		char				isConnected;
 	};
+#else
+	struct __attribute__((packed)) Body{
+		char				accountName[256];
+	};
+
+	struct __attribute__((packed)) BodySend{
+		ICommand::Header	header;
+		char				accountName[256];
+		char				pseudo[256];
+		char				status;
+		char				isConnected;
+	};
+#endif
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);
