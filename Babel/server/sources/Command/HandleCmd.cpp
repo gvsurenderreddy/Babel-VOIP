@@ -1,12 +1,10 @@
 #include "HandleCmd.hpp"
 #include "Factory.hpp"
 
-HandleCmd::HandleCmd(IClientSocket *socket)
-:socket(socket){
-	this->header = NULL;
+HandleCmd::HandleCmd(IClientSocket *socket) : header(NULL), socket(socket) {
 }
 
-HandleCmd::~HandleCmd(){
+HandleCmd::~HandleCmd() {
 }
 
 std::vector<std::string>		*HandleCmd::unPackCmd(void){
@@ -22,7 +20,6 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 
 	if (this->header != NULL && this->socket->nbBytesToRead() >= this->body->getSizeBody()){
 		param = this->body->getParam(this->socket);
-        this->socket->nbBytesToRead();
 		delete this->body;
         this->body = NULL;
 		this->header = NULL;
@@ -34,8 +31,10 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 void						HandleCmd::packCmd(ICommand::Instruction instruction, const std::vector<std::string> &param){
 	ICommand				*cmd;
 
-    cmd = Factory::getCommand(instruction);
-	this->socket->send(*(cmd->setParam(param)));
+    if ((cmd = Factory::getCommand(instruction)))
+    	this->socket->send(*(cmd->setParam(param)));
+    else
+    	std::cerr << "  [UNKNOWN CMD]" << std::endl;
 }
 
 ICommand::Instruction		HandleCmd::getInstruction(void){
