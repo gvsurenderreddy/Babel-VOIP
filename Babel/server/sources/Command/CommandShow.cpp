@@ -13,8 +13,8 @@ CommandShow::~CommandShow(){
 */
 std::vector<std::string>		*CommandShow::getParam(IClientSocket *socket){
 
+    CommandShow::Body			*body = new CommandShow::Body;
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandShow::Body			*body = NULL;
 	IClientSocket::Message		data;
 
 	std::memset(body, 0, this->getSizeBody());

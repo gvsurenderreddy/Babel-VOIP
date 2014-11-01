@@ -12,8 +12,8 @@ CommandUpdate::~CommandUpdate(){
 */
 std::vector<std::string>		*CommandUpdate::getParam(IClientSocket *socket){
 
+    CommandUpdate::Body			*body = new CommandUpdate::Body;
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandUpdate::Body			*body = NULL;
 	IClientSocket::Message		data;
 	std::string					status = "";
 

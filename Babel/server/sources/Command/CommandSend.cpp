@@ -12,8 +12,8 @@ CommandSend::~CommandSend(){
 */
 std::vector<std::string>		*CommandSend::getParam(IClientSocket *socket){
 
+    CommandSend::Body			*body = new CommandSend::Body;
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandSend::Body			*body = NULL;
 	IClientSocket::Message		data;
 
     std::memset(body, 0, this->getSizeBody());

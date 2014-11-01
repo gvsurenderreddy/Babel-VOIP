@@ -13,7 +13,7 @@ CommandAdd::~CommandAdd(){
 std::vector<std::string>		*CommandAdd::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandAdd::Body			*body = NULL;
+    CommandAdd::Body			*body = new CommandAdd::Body;
 	IClientSocket::Message		data;
 
 	std::memset(body, 0, this->getSizeBody());

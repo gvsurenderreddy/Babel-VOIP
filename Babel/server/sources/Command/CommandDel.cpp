@@ -13,7 +13,7 @@ CommandDel::~CommandDel(){
 std::vector<std::string>		*CommandDel::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandDel::Body			*body = NULL;
+    CommandDel::Body			*body = new CommandDel::Body;
 	IClientSocket::Message		data;
 
 	std::memset(body, 0, this->getSizeBody());

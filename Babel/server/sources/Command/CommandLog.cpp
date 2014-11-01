@@ -12,13 +12,13 @@ CommandLog::~CommandLog(){
 */
 std::vector<std::string>		*CommandLog::getParam(IClientSocket *socket){
 
+    CommandLog::Body            *body = new CommandLog::Body;
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandLog::Body			*body = NULL;
 	IClientSocket::Message		data;
 
 	std::memset(body, 0, this->getSizeBody());
 	data = socket->receive(this->getSizeBody());
-	body = reinterpret_cast<CommandLog::Body *>(data.msg);
+	body = reinterpret_cast<CommandLog::Body*>(data.msg);
 
 	t->push_back(body->accountName);
 	t->push_back(body->password);

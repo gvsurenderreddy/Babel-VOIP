@@ -30,11 +30,23 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 
 void						HandleCmd::packCmd(ICommand::Instruction instruction, const std::vector<std::string> &param){
 	ICommand				*cmd;
+    IClientSocket::Message	*msg;
 
     if ((cmd = Factory::getCommand(instruction)))
-    	this->socket->send(*(cmd->setParam(param)));
+    {
+        if ((msg = cmd->setParam(param)))
+        {
+            this->socket->send(*msg);
+        }   
+        else
+        {
+            std::cerr << "  [WRONG USAGE - INSTR '" << instruction << "' SHOULD NOT BE EXEC OF A CMD SET PARAM]" << std::endl;
+        }
+    }
     else
-    	std::cerr << "  [UNKNOWN CMD]" << std::endl;
+    {
+        std::cerr << "  [UNKNOWN CMD]" << std::endl;
+    }	
 }
 
 ICommand::Instruction		HandleCmd::getInstruction(void){

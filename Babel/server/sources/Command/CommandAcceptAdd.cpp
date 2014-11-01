@@ -13,7 +13,7 @@ CommandAcceptAdd::~CommandAcceptAdd(){
 std::vector<std::string>		*CommandAcceptAdd::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;
-	CommandAcceptAdd::Body		*body = NULL;
+    CommandAcceptAdd::Body		*body = new CommandAcceptAdd::Body;
 	IClientSocket::Message		data;
 	std::string					status = "";
 

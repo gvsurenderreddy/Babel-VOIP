@@ -16,8 +16,8 @@ std::vector<std::string>		*CommandErr::getParam(IClientSocket *){
 
 IClientSocket::Message			*CommandErr::setParam(const std::vector<std::string> &param){
 
+    CommandErr::Body			*body = new CommandErr::Body;
 	IClientSocket::Message		*msg = new IClientSocket::Message;
-	CommandErr::Body			*body = new CommandErr::Body;
 
     std::memset(body, 0, this->getSizeBody());
 
