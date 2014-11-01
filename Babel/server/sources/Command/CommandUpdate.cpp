@@ -30,7 +30,7 @@ std::vector<std::string>		*CommandUpdate::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message			*CommandUpdate::setParam(std::vector<std::string> *){
+IClientSocket::Message			*CommandUpdate::setParam(const std::vector<std::string> &){
 	return NULL;
 }
 

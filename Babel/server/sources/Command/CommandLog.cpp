@@ -26,7 +26,7 @@ std::vector<std::string>		*CommandLog::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message			*CommandLog::setParam(std::vector<std::string> *){
+IClientSocket::Message			*CommandLog::setParam(const std::vector<std::string> &){
 	return NULL;
 }
 

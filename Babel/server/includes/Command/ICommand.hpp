@@ -48,6 +48,6 @@ public:
 
 	//handle ICommand
 	virtual std::vector<std::string>	*getParam(IClientSocket *socket) = 0;
-	virtual IClientSocket::Message		*setParam(std::vector<std::string> *param) = 0;
+	virtual IClientSocket::Message		*setParam(const std::vector<std::string> &param) = 0;
     virtual unsigned int				getSizeBody(void) = 0;
 };

@@ -14,7 +14,7 @@ std::vector<std::string>		*CommandErr::getParam(IClientSocket *){
 	return NULL;
 }
 
-IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
+IClientSocket::Message			*CommandErr::setParam(const std::vector<std::string> &param){
 
 	IClientSocket::Message		*msg = new IClientSocket::Message;
 	CommandErr::Body			*body = new CommandErr::Body;
@@ -24,8 +24,8 @@ IClientSocket::Message			*CommandErr::setParam(std::vector<std::string> *param){
 	body->header.instructionCode = ICommand::ERR;
 	body->header.magicCode = ICommand::MAGIC_CODE;
 
-	body->errorCode = (*param)[0][0];
-	body->instructionCode = (*param)[1][0];
+	body->errorCode = param[0][0];
+	body->instructionCode = param[1][0];
 
     std::cout << "  [ERR] [" << body->errorCode << "] body->instructionCode [" << body->instructionCode <<"]" << std::endl;
 

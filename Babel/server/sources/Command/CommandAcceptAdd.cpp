@@ -28,7 +28,7 @@ std::vector<std::string>		*CommandAcceptAdd::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message			*CommandAcceptAdd::setParam(std::vector<std::string> *param){
+IClientSocket::Message			*CommandAcceptAdd::setParam(const std::vector<std::string> &param){
 
 	CommandAcceptAdd::BodySend	*bodySend = new CommandAcceptAdd::BodySend;
 	IClientSocket::Message		*msg = new IClientSocket::Message;
@@ -36,9 +36,9 @@ IClientSocket::Message			*CommandAcceptAdd::setParam(std::vector<std::string> *p
 	std::memset(bodySend, 0, sizeof(CommandAcceptAdd::BodySend));
 	bodySend->header.instructionCode = ICommand::ACCEPT_ADD;
 	bodySend->header.magicCode = ICommand::MAGIC_CODE;
-	std::memcpy(bodySend->accountName, (*param)[0].c_str(), MIN((*param)[0].size(), sizeof(bodySend->accountName) - 1));
+	std::memcpy(bodySend->accountName, param[0].c_str(), MIN(param[0].size(), sizeof(bodySend->accountName) - 1));
 
-	bodySend->hasAccepted = (*param)[1][0];
+	bodySend->hasAccepted = param[1][0];
 
 	msg->msgSize = sizeof(CommandAcceptAdd::BodySend);
 	msg->msg = reinterpret_cast<char *>(bodySend);

@@ -25,7 +25,7 @@ std::vector<std::string>		*CommandCloseCall::getParam(IClientSocket *socket){
 	return t;
 }
 
-IClientSocket::Message			*CommandCloseCall::setParam(std::vector<std::string> *param){
+IClientSocket::Message			*CommandCloseCall::setParam(const std::vector<std::string> &param){
 
 	IClientSocket::Message		*msg = new IClientSocket::Message;
 	CommandCloseCall::BodySend	*bodySend = new CommandCloseCall::BodySend;
@@ -33,7 +33,7 @@ IClientSocket::Message			*CommandCloseCall::setParam(std::vector<std::string> *p
 	std::memset(bodySend, 0, sizeof(CommandCloseCall::BodySend));
 	bodySend->header.instructionCode = ICommand::CLOSE_CALL;
 	bodySend->header.magicCode = ICommand::MAGIC_CODE;
-	std::memcpy(bodySend->accountName, (*param)[0].c_str(), MIN((*param)[0].size(), sizeof(bodySend->accountName) - 1));
+	std::memcpy(bodySend->accountName, param[0].c_str(), MIN(param[0].size(), sizeof(bodySend->accountName) - 1));
 
 	msg->msgSize = sizeof(CommandCloseCall::BodySend);
 	msg->msg = reinterpret_cast<char *>(bodySend);

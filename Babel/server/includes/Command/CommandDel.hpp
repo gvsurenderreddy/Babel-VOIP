@@ -19,6 +19,6 @@ public:
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);
-	IClientSocket::Message		*setParam(std::vector<std::string> *param);
+	IClientSocket::Message		*setParam(const std::vector<std::string> &param);
     unsigned int				getSizeBody(void);
 };

@@ -90,9 +90,9 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            if (bytesTransfered == static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
+            if (bytesTransfered >= static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-                delete mWriteMessageQueue.front().msg;
+                delete[] mWriteMessageQueue.front().msg;
                 mWriteMessageQueue.pop_front();
             }
             else
@@ -100,7 +100,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
                 Message& messageFront = mWriteMessageQueue.front();
                 messageFront.msgSize -= bytesTransfered;
                 char* tmp = new char[messageFront.msgSize + 1];
-                memcpy(tmp, messageFront.msg, messageFront.msgSize);
+                std::memcpy(tmp, &messageFront.msg[bytesTransfered], messageFront.msgSize);
                 tmp[messageFront.msgSize] = '\0';
                 delete[] messageFront.msg;
                 messageFront.msg = tmp;
