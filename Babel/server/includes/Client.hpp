@@ -1,5 +1,8 @@
 #pragma once
-#pragma warning(disable: 4308)
+
+#ifdef WIN32
+# pragma warning(disable: 4308)
+#endif
 
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
