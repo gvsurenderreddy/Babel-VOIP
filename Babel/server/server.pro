@@ -16,6 +16,7 @@ isEmpty(_BOOST_ROOT) {
 }
 
 unix:LIBS += -lboost_system -lboost_serialization -lboost_filesystem
+unix::CXX = clang++
 
 CONFIG			+=		console c++11
 TEMPLATE        =       app

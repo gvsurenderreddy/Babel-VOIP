@@ -13,6 +13,8 @@ namespace ErrorCode {
             CANNOT_CLOSE_CALL_WHEN_YOU_ARENT_CALLING    = 0x0009,
             LOGIN_ON_ALREADY_LOGGED_ACCOUNT             = 0x0010,
             CANNOT_ADD_YOURSELF                         = 0x0011,
-            CANNOT_CALL_YOURSELF                        = 0x0012
+            CANNOT_CALL_YOURSELF                        = 0x0012,
+            YOU_ARE_NOT_LOGGED	                        = 0x0013,
+	    ALREADY_CONNECTED				= 0x0014
 	};
 }

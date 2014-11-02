@@ -136,10 +136,10 @@ class Client : public IClientSocket::OnSocketEvent{
 	    template<class Archive>
 	    void serialize(Archive & ar, const unsigned int) {
 		    ar & this->status;
-            ar & this->statusCall;
+		    ar & this->account;
 		    ar & this->pseudo;
 		    ar & this->contact;
-            ar & this->isConnected;
+        	    ar & this->isConnected;
 	    }
 
 	// attributes (data of client + listener)

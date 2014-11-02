@@ -9,7 +9,15 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : Socket(clientSocket), isConnected(false), Listener(listenerClient)
+/* TODO: init default account, pseudo, status, statusCall */
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : 
+Socket(clientSocket),
+status(Client::Status::DISCONNECTED),
+statusCall(Client::StatusCall::NONE),
+pseudo(""),
+account(""),
+isConnected(false),
+Listener(listenerClient)
 {
     updateLastPingTime();
     if (this->Socket)
@@ -41,9 +49,17 @@ void	Client::onSocketReadable(IClientSocket *, unsigned int){
 
 void	Client::onSocketClosed(IClientSocket*)
 {
-    std::cout << "  # LOGOUT # AccountName: '" << account << "'" << std::endl;
-    this->setConnected(false);
-    this->saveData();
+    std::cout << "  [SOCKET CLIENT CLOSE]";
+    if (this->isConnect())
+    {
+    	std::cout << " account: '" << account << "'" << std::endl;
+    	this->setConnected(false);
+    	this->saveData();
+    }
+    else
+    {
+	std::cout << " not logged user" << std::endl;
+    }
 }
 
 /*
@@ -51,6 +67,7 @@ void	Client::onSocketClosed(IClientSocket*)
 */
 bool Client::saveData(void)
 {
+    std::cout << "  [DATABASE] try export user '" << this->account << "'" << std::endl;
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
     if (!ofs.good() || ofs.fail())
@@ -136,20 +153,19 @@ void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::st
 void Client::display() const
 {
     std::cout << std::endl << "  [DISPLAY] Attributes of a client '" << this->getAccount() << "'" << std::endl
-        << "  - account: '" << this->getAccount() << "'" << std::endl
-        << "  - pseudo: '" << this->getPseudo() << "'" << std::endl
-        << "  - status: '" << this->getStatus() << "'" << std::endl
-        << "  - statusCall: '" << this->getStatusCall() << "'" << std::endl
-        << "  - isConnected: '" << this->isConnect() << "'" << std::endl
-        << "  - lastPingTime: '" << this->getLastPingTime() << "'" << std::endl
-        << "  - contacts: '" << std::endl;
+        << "    - account: '" << this->getAccount() << "'" << std::endl
+        << "    - pseudo: '" << this->getPseudo() << "'" << std::endl
+        << "    - status: '" << this->getStatus() << "'" << std::endl
+        << "    - statusCall: '" << this->getStatusCall() << "'" << std::endl
+        << "    - isConnected: '" << this->isConnect() << "'" << std::endl
+        << "    - lastPingTime: '" << this->getLastPingTime() << "'" << std::endl
+        << "    - contacts: '" << std::endl;
     if (this->getContact().size())
     {
         std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {
-            std::cout << "     * accountFriend: '" << targetAccount << "'" << std::endl;
+            std::cout << "       * accountFriend: '" << targetAccount << "'" << std::endl;
         });
     }
     else
-        std::cout << "     * Empty Contact List" << std::endl;
-    std::cout << std::endl << "-----------" << std::endl;
+        std::cout << "       * Empty Contact List" << std::endl;
 }

@@ -7,6 +7,7 @@
 
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
@@ -92,17 +93,17 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
         {
             if (bytesTransfered >= static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-                delete[] mWriteMessageQueue.front().msg;
+                free(mWriteMessageQueue.front().msg);
                 mWriteMessageQueue.pop_front();
             }
             else
             {
                 Message& messageFront = mWriteMessageQueue.front();
                 messageFront.msgSize -= bytesTransfered;
-                char* tmp = new char[messageFront.msgSize + 1];
+                char* tmp = (char*)malloc(sizeof(char) * (messageFront.msgSize + 1));
                 std::memcpy(tmp, &messageFront.msg[bytesTransfered], messageFront.msgSize);
                 tmp[messageFront.msgSize] = '\0';
-                delete[] messageFront.msg;
+                free(messageFront.msg);
                 messageFront.msg = tmp;
             }
             if (!mWriteMessageQueue.empty())
@@ -134,7 +135,7 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
     }
 
     std::string str(mBuffer.begin(), mBuffer.begin() + sizeToRead);
-    message.msg = new char[str.size() + 1];
+    message.msg = (char*)malloc(sizeof(char) * (str.size() + 1));
     message.msgSize = str.size();
     std::copy(str.begin(), str.end(), message.msg);
     message.msg[str.size()] = '\0';
