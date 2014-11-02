@@ -67,8 +67,8 @@ void	Client::onSocketClosed(IClientSocket*)
 */
 bool Client::saveData(void)
 {
-    std::cout << "  [DATABASE] try export user '" << this->account << "'" << std::endl;
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
+    std::cout << "  [DATABASE] update user file '" << path << "'" << std::endl;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
     if (!ofs.good() || ofs.fail())
         return false;

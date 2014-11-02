@@ -117,7 +117,7 @@ void BabelServer::startServer()
 Client* BabelServer::findOnlineClient(const std::string& account) const
 {
     auto it = std::find_if(mClients.begin(), mClients.end(), [&account](Client* client)
-    { return client->getAccount() == account; });
+    { return client->getAccount() == account && client->isConnect(); });
     return (mClients.end() != it ? *it : NULL);
 }
 
@@ -545,11 +545,11 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
 
 // ** AcceptAdd
 // ** accept_add #nom_de_compte OK/KO
-void BabelServer::onAcceptAdd(Client* callerClient, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onAcceptAdd(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 2)
     {
-	if (callerClient->isConnect() == true)
+	if (currentClient->isConnect() == true)
 	{
 		const std::string& targetAccount = param[0];
 		bool accept = param[1][0];
@@ -558,48 +558,49 @@ void BabelServer::onAcceptAdd(Client* callerClient, std::vector<std::string>& pa
 		{
 			if (targetClient->isAlreadyFriends(targetAccount) == false)
 			{
-			    sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			    sendStateCommand(currentClient, ErrorCode::OK, instruction);
 			    std::cout << "  [ACCEPT_ADD] OK" << std::endl;
 
 			    if (accept == false)
 			        return;
 
-			    std::vector<std::string> args;
+			    std::vector<std::string> argsToCurrentClient;
+			    std::vector<std::string> argsToTargetClient;
 
-			    args.push_back(callerClient->getAccount());
-			    targetClient->addContact(callerClient->getAccount());
+			    argsToTargetClient.push_back(currentClient->getAccount());
+			    argsToCurrentClient.push_back(targetClient->getAccount());
+
+			    targetClient->addContact(currentClient->getAccount());
+			    currentClient->addContact(targetClient->getAccount());
+
 			    targetClient->saveData();
-			    onShow(targetClient, args, ICommand::SHOW);
+			    currentClient->saveData();
 
-			    args.clear();
-
-			    args.push_back(targetClient->getAccount());
-			    callerClient->addContact(targetClient->getAccount());
-			    callerClient->saveData();
-			    onShow(callerClient, args, ICommand::SHOW);
+			    onShow(targetClient, argsToTargetClient, ICommand::SHOW);
+			    onShow(currentClient, argsToCurrentClient, ICommand::SHOW);
 			}
 			else
 			{
 			        std::cout << "  [ACCEPT_ADD] ALREADY_IN_YOUR_CONTACT_LIST" << std::endl;
-			        sendStateCommand(callerClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        					
+			        sendStateCommand(currentClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        					
 			}
 		}
 		else
 		{
 		    std::cout << "  [ACCEPT_ADD] ACTIONS_TO_OFFLINE_ACCOUNT" << std::endl;
-		    sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+		    sendStateCommand(currentClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
 		}
 	}
 	else
 	{
 	    std::cout << "  [ACCEPT_ADD] YOU_ARE_NOT_LOGGED" << std::endl;
-	    sendStateCommand(callerClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+	    sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
 	}
     }
     else
     {
         std::cout << "  [ACCEPT_ADD] WRONG_PACKET_STRUCT" << std::endl;
-        sendStateCommand(callerClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+        sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
     }
 }
 
