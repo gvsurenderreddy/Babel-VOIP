@@ -191,6 +191,7 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
 	if (callerClient->isConnect() == true)
 	{
 		const std::string& targetAccount = param[0];
+		std::cout << "trying to add '" << targetAccount << "'" << std::endl;
 		if (targetAccount != callerClient->getAccount())
 		{
 		    Client* targetClient = findOnlineClient(targetAccount);
@@ -489,6 +490,7 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
 		    const std::string& targetAccount = param[0];
 		    if (targetAccount != client->getAccount())
 		    {
+		    	std::cout << "trying to call '" << targetAccount << "'" << std::endl;
 		        Client* targetClient = findOnlineClient(targetAccount);
 		        if (targetClient)
 		        {
@@ -553,6 +555,7 @@ void BabelServer::onAcceptAdd(Client* currentClient, std::vector<std::string>& p
 	{
 		const std::string& targetAccount = param[0];
 		bool accept = param[1][0];
+		std::cout << "trying to accept add '" << targetAccount << "' accept: '" << accept << "'" << std::endl;
 		Client* targetClient = findOnlineClient(targetAccount);
 		if (targetClient)
 		{
