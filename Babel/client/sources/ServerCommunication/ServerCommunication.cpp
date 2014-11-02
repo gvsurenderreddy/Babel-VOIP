@@ -13,7 +13,7 @@
 #include "CommandAcceptAdd.hpp"
 #include "CommandUpdate.hpp"
 #include "CommandErr.hpp"
-#include "SocketException.hpp"
+#include "SocketException.hpp"	
 
 const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[] = {
 	{ ICommand::SHOW,					&ServerCommunication::handleShowCommand			},

@@ -69,6 +69,10 @@ class Client : public IClientSocket::OnSocketEvent{
 	    bool saveData(void);
         bool loadData(void);
 
+    // function to initialize when logout
+    public:
+        void initialize(void);
+        
     // status
     public:
         enum Status

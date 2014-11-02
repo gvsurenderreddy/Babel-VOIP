@@ -19,7 +19,7 @@ account(""),
 isConnected(false),
 Listener(listenerClient)
 {
-    updateLastPingTime();
+    initialize();
     if (this->Socket)
         this->Socket->setOnSocketEventListener(this);
     this->handleCmd = this->Socket ? new HandleCmd(this->Socket) : NULL;
@@ -32,6 +32,14 @@ Listener(listenerClient)
 Client::~Client()
 {
 
+}
+
+void Client::initialize(void)
+{
+    this->setConnected(false);
+    this->setStatusCall(Client::StatusCall::NONE);
+    this->setStatus(Client::Status::DISCONNECTED);
+    updateLastPingTime();
 }
 
 /*

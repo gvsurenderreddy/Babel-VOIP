@@ -29,6 +29,7 @@ BabelServer::~BabelServer()
 {
     if (mServerSocket)
         delete mServerSocket;
+    logOutClients();
     exportAccountsFromFile(mAccountsFilePath);
     std::for_each(mClients.begin(), mClients.end(), [](Client* client) { if (client->isConnect()) client->saveData(); });
 }
@@ -62,6 +63,17 @@ void BabelServer::importAccountsFromFile(const std::string& path)
     ia >> *this;
     ifs.close();
     displayAccounts();
+}
+
+void BabelServer::logOutClients()
+{
+	std::for_each(mClients.begin(), mClients.end(), [](Client* client) { 
+		if (client->isConnect())
+		{
+			client->initialize();
+			client->saveData();
+		}
+	});
 }
 
 void BabelServer::exportAccountsFromFile(const std::string& path)

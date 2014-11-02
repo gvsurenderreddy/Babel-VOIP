@@ -25,6 +25,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
     // internal functions
     public:
         void displayAccounts() const;
+        void logOutClients();
         void importAccountsFromFile(const std::string& path);
         void exportAccountsFromFile(const std::string& path);
         void removeUserFileIfAccountDoesntExist();
