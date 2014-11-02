@@ -39,9 +39,17 @@ void BabelServer::displayAccounts() const
     if (mAccounts.size())
     {
         std::cout << "  [DATABASE] " << mAccounts.size() << " rows found:" << std::endl;
+        std::size_t i = 1;
         std::for_each(mAccounts.begin(), mAccounts.end(),
-            [](const std::pair<std::string, std::string>& item) {
-            std::cout << "    '" << item.first << "'   '" << item.second << "'" << std::endl;
+            [this, &i](const std::pair<std::string, std::string>& item) {
+          	std::cout << "      [Profil #" << i++ << "] Username: '" << item.first << "' | Password: '" << item.second << "'" << std::endl;
+   		    Client* targetClientOffline = findOfflineClient(item.first);
+		    if (targetClientOffline)
+		    {
+		        targetClientOffline->display();
+		        delete targetClientOffline;
+		        targetClientOffline = NULL;
+		    }
         });
     }
     else
@@ -85,7 +93,6 @@ void BabelServer::exportAccountsFromFile(const std::string& path)
     boost::archive::text_oarchive oa(ofs);
     oa << *this;
     ofs.close();
-    displayAccounts();
 }
 
 void BabelServer::removeUserFileIfAccountDoesntExist()
@@ -373,6 +380,8 @@ void BabelServer::onLog(Client* client, std::vector<std::string>& param, IComman
 				    client->setConnected(true);
 				    client->saveData();
 
+				    std::vector<std::string> args;
+					onList(client, args, ICommand::LIST);
 				    notifyMyFriendsOfModificationAboutMe(client);
 			    }
 			    else

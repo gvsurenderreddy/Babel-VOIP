@@ -165,20 +165,21 @@ void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::st
 
 void Client::display() const
 {
-    std::cout << std::endl << "  [DISPLAY] Attributes of a client '" << this->getAccount() << "'" << std::endl
-        << "    - account: '" << this->getAccount() << "'" << std::endl
-        << "    - pseudo: '" << this->getPseudo() << "'" << std::endl
-        << "    - status: '" << this->getStatus() << "'" << std::endl
-        << "    - statusCall: '" << this->getStatusCall() << "'" << std::endl
-        << "    - isConnected: '" << this->isConnect() << "'" << std::endl
-        << "    - lastPingTime: '" << this->getLastPingTime() << "'" << std::endl
-        << "    - contacts: '" << std::endl;
+    std::cout
+        << "          [#] account      : '" << this->getAccount() << "'" << std::endl
+        << "          [#] pseudo       : '" << this->getPseudo() << "'" << std::endl
+        << "          [#] status       : '" << this->getStatus() << "'" << std::endl
+        << "          [#] statusCall   : '" << this->getStatusCall() << "'" << std::endl
+        << "          [#] isConnected  : '" << std::boolalpha << this->isConnect() << "'" << std::endl
+        << "          [#] lastPingTime : '" << this->getLastPingTime() << "'" << std::endl
+        << "          [#] contacts     : ";
     if (this->getContact().size())
     {
         std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {
-            std::cout << "       * accountFriend: '" << targetAccount << "'" << std::endl;
+            std::cout << "'" << targetAccount << "' ";
         });
+        std::cout << std::endl;
     }
     else
-        std::cout << "       * Empty Contact List" << std::endl;
+        std::cout << " no friends" << std::endl;
 }

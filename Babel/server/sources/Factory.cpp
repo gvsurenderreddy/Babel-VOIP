@@ -14,53 +14,92 @@
 #include "Command/CommandCloseCall.hpp"
 #include "Command/CommandErr.hpp"
 
-ICommand	*Factory::getCommand(ICommand::Instruction instruction){
+#include <string>
+
+std::string Factory::getName(int instruction)
+{
+    switch (instruction)
+    {
+    case ICommand::ADD:
+        return "ADD";
+    case ICommand::UPDATE:
+        return "UPDATE";
+    case ICommand::REG:
+        return "REG";
+    case ICommand::LOG:
+        return "LOG";
+    case ICommand::LIST:
+        return "LIST";
+    case ICommand::SHOW:
+        return "SHOW";
+    case ICommand::CALL:
+        return "CALL";
+    case ICommand::ACCEPT_ADD:
+        return "ACCEPT_ADD";
+    case ICommand::DEL:
+        return "DEL";
+    case ICommand::EXIT:
+        return "EXIT";
+    case ICommand::SEND:
+        return "SEND";
+    case ICommand::ACCEPT_CALL:
+        return "ACCEPT_CALL";
+    case ICommand::CLOSE_CALL:
+        return "CLOSE_CALL";
+    case ICommand::ERR:
+        return "CommandErr";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+ICommand	*Factory::getCommand(ICommand::Instruction instruction)
+{
 	switch (instruction)
 	{
 	case ICommand::ADD:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::ADD]" << std::endl;
+        std::cout << "[ADD]" << std::endl;
 		return new CommandAdd;
     case ICommand::UPDATE:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::UPDATE]" << std::endl;
+        std::cout << "[UPDATE]" << std::endl;
 		return new CommandUpdate;
     case ICommand::REG:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::REG]" << std::endl;
+        std::cout << "[REG]" << std::endl;
 		return new CommandReg;
     case ICommand::LOG:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::LOG]" << std::endl;
+        std::cout << "[LOG]" << std::endl;
 		return new CommandLog;
     case ICommand::LIST:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::LIST]" << std::endl;
+        std::cout << "[LIST]" << std::endl;
 		return new CommandList;
     case ICommand::SHOW:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::SHOW]" << std::endl;
+        std::cout << "[SHOW]" << std::endl;
 		return new CommandShow;
     case ICommand::CALL:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::CALL]" << std::endl;
+        std::cout << "[CALL]" << std::endl;
 		return new CommandCall;
     case ICommand::ACCEPT_ADD:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::ACCEPT_ADD]" << std::endl;
+        std::cout << "[ACCEPT_ADD]" << std::endl;
 		return new CommandAcceptAdd;
     case ICommand::DEL:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::DEL]" << std::endl;
+        std::cout << "[DEL]" << std::endl;
 		return new CommandDel;
     case ICommand::EXIT:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::EXIT]" << std::endl;
+        std::cout << "[EXIT]" << std::endl;
 		return new CommandExit;
     case ICommand::SEND:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::SEND]" << std::endl;
+        std::cout << "[SEND]" << std::endl;
 		return new CommandSend;
     case ICommand::ACCEPT_CALL:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::ACCEPT_CALL]" << std::endl;
+        std::cout << "[ACCEPT_CALL]" << std::endl;
 		return new CommandAcceptCall;
     case ICommand::CLOSE_CALL:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::CLOSE_CALL]" << std::endl;
+        std::cout << "[CLOSE_CALL]" << std::endl;
 		return new CommandCloseCall;
     case ICommand::ERR:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [ICommand::ERR]" << std::endl;
 		return new CommandErr;
 	default:
-        std::cout << "  # PACKCMD [0x" << instruction << "] [UNKNOWN CMD]" << std::endl;
+        std::cout << "[ --- UNKNOWN CMD --- ]" << std::endl;
 		return NULL;
 	}
 }
