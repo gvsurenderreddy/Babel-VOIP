@@ -64,12 +64,17 @@ void	Babel::receiveContactInfo(const Contact &contact) {
 		QList<Contact>::iterator it = mContacts.begin();
 		QList<Contact>::iterator end = mContacts.end();
 
+		// AMELIORER AVEC UN FIND!!!
 		while (it != end) {
-			if (it->getAccountName() == contact.getAccountName())
+			if (it->getAccountName() == contact.getAccountName()) {
 				*it = contact;
+				mMainWindow.updateContactList(mContacts);
+				return ;
+			}
 			it++;
 		}
 
+		mContacts.push_back(contact);
 		mMainWindow.updateContactList(mContacts);
 	}
 }
