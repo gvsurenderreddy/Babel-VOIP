@@ -24,8 +24,8 @@ BabelMain::BabelMain()
 	for (int i = 0; i < 100; ++i)
 		mModel->getContactList() << contact;
 	mModel->sort();
-	mUi.listContactView->setModel(mModel);
 	*/
+	mUi.listContactView->setModel(mModel);
 
 	// Remove window borders
 	setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
