@@ -117,6 +117,8 @@ class Client : public IClientSocket::OnSocketEvent{
         IClientSocket*                getSocket(void) const;
         time_t		                  getLastPingTime() const;
 	    bool						  isConnect(void) const;
+        bool                          isAlreadyFriends(const std::string& accountName) const;
+
 
 	// instance of socket for send data
     public:

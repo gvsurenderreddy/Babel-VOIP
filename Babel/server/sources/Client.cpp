@@ -123,6 +123,11 @@ IClientSocket*                Client::getSocket(void) const { return this->Socke
 bool						  Client::isConnect(void) const { return this->isConnected; }
 time_t		                  Client::getLastPingTime() const { return this->lastPingTime; }
 
+bool                          Client::isAlreadyFriends(const std::string& accountName) const
+{
+    return (std::find(this->contact.begin(), this->contact.end(), accountName) != this->contact.end());
+}
+
 const Client::HandleCommand Client::handleCommandsTab[] =
 {
     { ICommand::ADD, &Client::OnClientEvent::onAdd },

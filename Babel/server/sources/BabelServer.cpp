@@ -196,15 +196,23 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
 		    Client* targetClient = findOnlineClient(targetAccount);
 		    if (targetClient)
 		    {
-		        targetClient->display();
-		        sendStateCommand(callerClient, ErrorCode::OK, instruction);
-		        std::cout << "  [ADD] OK" << std::endl;
+		    	if (targetClient->isAlreadyFriends(targetAccount) == false)
+		    	{
+			        targetClient->display();
+			        sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			        std::cout << "  [ADD] OK" << std::endl;
 
-		        std::vector<std::string> args;
+			        std::vector<std::string> args;
 
-		        args.push_back(callerClient->getAccount());
+			        args.push_back(callerClient->getAccount());
 
-		        targetClient->handleCmd->packCmd(instruction, args);
+			        targetClient->handleCmd->packCmd(instruction, args);
+		        }
+		        else
+		        {
+			        std::cout << "  [ADD] ALREADY_IN_YOUR_CONTACT_LIST" << std::endl;
+			        sendStateCommand(callerClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        	
+		        }
 		    }
 		    else
 		    {
@@ -484,17 +492,25 @@ void BabelServer::onCall(Client* client, std::vector<std::string>& param, IComma
 		        Client* targetClient = findOnlineClient(targetAccount);
 		        if (targetClient)
 		        {
-		            sendStateCommand(client, ErrorCode::OK, instruction);
-		            std::cout << "  [CALL] OK" << std::endl;
+			    	if (targetClient->isAlreadyFriends(targetAccount) == true)
+			    	{
+			            sendStateCommand(client, ErrorCode::OK, instruction);
+			            std::cout << "  [CALL] OK" << std::endl;
 
-		            client->setStatusCall(Client::StatusCall::ISWAITING);
-		            client->saveData();
+			            client->setStatusCall(Client::StatusCall::ISWAITING);
+			            client->saveData();
 
-		            std::vector<std::string> args;
+			            std::vector<std::string> args;
 
-		            args.push_back(client->getAccount());
+			            args.push_back(client->getAccount());
 
-		            targetClient->handleCmd->packCmd(instruction, args);
+			            targetClient->handleCmd->packCmd(instruction, args);
+		            }
+		            else
+		            {
+   				        std::cout << "  [CALL] NOT_IN_YOUR_CONTACT_LIST" << std::endl;
+				        sendStateCommand(client, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);		        	
+		            }
 		        }
 		        else
 		        {
@@ -540,25 +556,33 @@ void BabelServer::onAcceptAdd(Client* callerClient, std::vector<std::string>& pa
 		Client* targetClient = findOnlineClient(targetAccount);
 		if (targetClient)
 		{
-		    sendStateCommand(callerClient, ErrorCode::OK, instruction);
-		    std::cout << "  [ACCEPT_ADD] OK" << std::endl;
+			if (targetClient->isAlreadyFriends(targetAccount) == false)
+			{
+			    sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			    std::cout << "  [ACCEPT_ADD] OK" << std::endl;
 
-		    if (accept == false)
-		        return;
+			    if (accept == false)
+			        return;
 
-		    std::vector<std::string> args;
+			    std::vector<std::string> args;
 
-		    args.push_back(callerClient->getAccount());
-		    targetClient->addContact(callerClient->getAccount());
-		    targetClient->saveData();
-		    onShow(targetClient, args, ICommand::SHOW);
+			    args.push_back(callerClient->getAccount());
+			    targetClient->addContact(callerClient->getAccount());
+			    targetClient->saveData();
+			    onShow(targetClient, args, ICommand::SHOW);
 
-		    args.clear();
+			    args.clear();
 
-		    args.push_back(targetClient->getAccount());
-		    callerClient->addContact(targetClient->getAccount());
-		    callerClient->saveData();
-		    onShow(callerClient, args, ICommand::SHOW);
+			    args.push_back(targetClient->getAccount());
+			    callerClient->addContact(targetClient->getAccount());
+			    callerClient->saveData();
+			    onShow(callerClient, args, ICommand::SHOW);
+			}
+			else
+			{
+			        std::cout << "  [ACCEPT_ADD] ALREADY_IN_YOUR_CONTACT_LIST" << std::endl;
+			        sendStateCommand(callerClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        					
+			}
 		}
 		else
 		{
@@ -592,29 +616,45 @@ void BabelServer::onDel(Client* callerClient, std::vector<std::string>& param, I
 		Client* targetClientOffline = findOfflineClient(targetAccount);
 		if (targetClientOnline || targetClientOffline)
 		{
-		    sendStateCommand(callerClient, ErrorCode::OK, instruction);
-		    std::cout << "  [DEL] OK" << std::endl;
+			bool isFriend;
+			if (targetClientOnline && targetClientOnline->isAlreadyFriends(targetAccount))
+				isFriend = true;
+			else if (targetClientOffline && targetClientOffline->isAlreadyFriends(targetAccount))
+				isFriend = true;
+			else
+				isFriend = false;
 
-		    std::vector<std::string> args;
+			if (isFriend)
+			{
+			    sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			    std::cout << "  [DEL] OK" << std::endl;
 
-		    if (targetClientOnline)
-		    {
-		        targetClientOnline->delContact(callerClient->getAccount());
-		        targetClientOnline->saveData();
-		        args.push_back(targetAccount);
-		        onShow(targetClientOnline, args, ICommand::SHOW);
+			    std::vector<std::string> args;
+
+			    if (targetClientOnline)
+			    {
+			        targetClientOnline->delContact(callerClient->getAccount());
+			        targetClientOnline->saveData();
+			        args.push_back(targetAccount);
+			        onShow(targetClientOnline, args, ICommand::SHOW);
+			    }
+			    else
+			    {
+			        targetClientOffline->delContact(callerClient->getAccount());
+			        targetClientOffline->saveData();
+			    }
+			    
+			    callerClient->delContact(targetAccount);
+			    callerClient->saveData();
+
+			    args.push_back(callerClient->getAccount());
+			    onShow(callerClient, args, ICommand::SHOW);
 		    }
 		    else
 		    {
-		        targetClientOffline->delContact(callerClient->getAccount());
-		        targetClientOffline->saveData();
+		        std::cout << "  [DEL] NOT_IN_YOUR_CONTACT_LIST" << std::endl;
+		        sendStateCommand(callerClient, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);	
 		    }
-		    
-		    callerClient->delContact(targetAccount);
-		    callerClient->saveData();
-
-		    args.push_back(callerClient->getAccount());
-		    onShow(callerClient, args, ICommand::SHOW);
 
 		    if (targetClientOffline)
 		        delete targetClientOffline;
@@ -681,15 +721,23 @@ void BabelServer::onSend(Client* client, std::vector<std::string>& param, IComma
 		Client* targetClient = findOnlineClient(targetAccount);
 		if (targetClient)
 		{
-		    sendStateCommand(client, ErrorCode::OK, instruction);
-		    std::cout << "  [SEND] OK" << std::endl;
+			if (targetClient->isAlreadyFriends(targetAccount))
+			{
+			    sendStateCommand(client, ErrorCode::OK, instruction);
+			    std::cout << "  [SEND] OK" << std::endl;
 
-		    std::vector<std::string> args;
+			    std::vector<std::string> args;
 
-		    args.push_back(client->getAccount());
-		    args.push_back(message);
+			    args.push_back(client->getAccount());
+			    args.push_back(message);
 
-		    targetClient->handleCmd->packCmd(instruction, args);
+			    targetClient->handleCmd->packCmd(instruction, args);
+			}
+			else
+			{
+		        std::cout << "  [SEND] NOT_IN_YOUR_CONTACT_LIST" << std::endl;
+		        sendStateCommand(client, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);		
+			}
 		}
 		else
 		{
@@ -725,28 +773,36 @@ void BabelServer::onAcceptCall(Client* callerClient, std::vector<std::string>& p
 		    Client* targetClient = findOnlineClient(targetAccount);
 		    if (targetClient)
 		    {
-		        sendStateCommand(callerClient, ErrorCode::OK, instruction);
-		        std::cout << "  [ACCEPT_CALL] OK" << std::endl;
+		    	if (targetClient->isAlreadyFriends(targetAccount))
+				{
+			        sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			        std::cout << "  [ACCEPT_CALL] OK" << std::endl;
 
-		        std::vector<std::string> args;
+			        std::vector<std::string> args;
 
-		        callerClient->setStatusCall(Client::StatusCall::ISCALLING);
-		        callerClient->saveData();
-		        args.push_back(callerClient->getAccount());
-		        args.push_back(callerClient->getSocket()->getRemoteIp());
-		        args.push_back("");
-		        args[2] += accept;
-		        callerClient->handleCmd->packCmd(instruction, args);
+			        callerClient->setStatusCall(Client::StatusCall::ISCALLING);
+			        callerClient->saveData();
+			        args.push_back(callerClient->getAccount());
+			        args.push_back(callerClient->getSocket()->getRemoteIp());
+			        args.push_back("");
+			        args[2] += accept;
+			        callerClient->handleCmd->packCmd(instruction, args);
 
-		        args.clear();
+			        args.clear();
 
-		        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
-		        targetClient->saveData();
-		        args.push_back(targetClient->getAccount());
-		        args.push_back(targetClient->getSocket()->getRemoteIp());
-		        args.push_back("");
-		        args[2] += accept;
-		        targetClient->handleCmd->packCmd(instruction, args);
+			        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
+			        targetClient->saveData();
+			        args.push_back(targetClient->getAccount());
+			        args.push_back(targetClient->getSocket()->getRemoteIp());
+			        args.push_back("");
+			        args[2] += accept;
+			        targetClient->handleCmd->packCmd(instruction, args);
+			    }
+			    else
+			    {
+			        std::cout << "  [ACCEPT_CALL] NOT_IN_YOUR_CONTACT_LIST" << std::endl;
+			        sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);			    	
+			    }
 		    }
 		    else
 		    {
@@ -787,14 +843,22 @@ void BabelServer::onCloseCall(Client* callerClient, std::vector<std::string>& pa
 		    Client* targetClient = findOnlineClient(targetAccount);
 		    if (targetClient)
 		    {
-		        sendStateCommand(callerClient, ErrorCode::OK, instruction);
-		        std::cout << "  [CLOSE_CALL] OK" << std::endl;
+		    	if (targetClient->isAlreadyFriends(targetAccount))
+				{
+			        sendStateCommand(callerClient, ErrorCode::OK, instruction);
+			        std::cout << "  [CLOSE_CALL] OK" << std::endl;
 
-		        std::vector<std::string> args;
+			        std::vector<std::string> args;
 
-		        args.push_back(callerClient->getAccount());
+			        args.push_back(callerClient->getAccount());
 
-		        targetClient->handleCmd->packCmd(instruction, args);
+			        targetClient->handleCmd->packCmd(instruction, args);
+			    }
+			    else
+			    {
+			        std::cout << "  [CLOSE_CALL] NOT_IN_YOUR_CONTACT_LIST" << std::endl;
+			        sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);			    				    	
+			    }
 		    }
 		    else
 		    {

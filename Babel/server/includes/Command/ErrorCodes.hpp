@@ -15,6 +15,8 @@ namespace ErrorCode {
             CANNOT_ADD_YOURSELF                         = 0x0011,
             CANNOT_CALL_YOURSELF                        = 0x0012,
             YOU_ARE_NOT_LOGGED	                        = 0x0013,
-	    ALREADY_CONNECTED				= 0x0014
+            ALREADY_CONNECTED                           = 0x0014,
+            ALREADY_IN_YOUR_CONTACT_LIST                = 0x0015,
+            NOT_IN_YOUR_CONTACT_LIST                    = 0x0016
 	};
 }
