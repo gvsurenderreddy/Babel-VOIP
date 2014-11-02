@@ -55,6 +55,7 @@ void	Babel::run(void) {
 	mMainWindow.show();
 }
 
+#include <iostream>
 void	Babel::receiveContactInfo(const Contact &contact) {
 	if (contact.getAccountName() == mLoggedUser.getAccountName()) {
 		mLoggedUser = contact;
@@ -63,8 +64,8 @@ void	Babel::receiveContactInfo(const Contact &contact) {
 	else {
 
 		std::cout << "== Contact receive ==" << std::endl;
-		std::cout << "contact.name: '" << contact.getAccountName() << "'" << std::endl;
-		
+		std::cout << "contact.name: '" << contact.getAccountName().toStdString() << "'" << std::endl;
+
 		QList<Contact>::iterator it = mContacts.begin();
 		QList<Contact>::iterator end = mContacts.end();
 
