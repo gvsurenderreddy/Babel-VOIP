@@ -58,6 +58,9 @@ BabelMainWindow::BabelMainWindow(void)
 	// when call somebody
 	QObject::connect(mMain.getUi().call, SIGNAL(clicked()), this, SLOT(callContact()));
 
+	// when deconnection
+	QObject::connect(mMain.getUi().logout, SIGNAL(clicked()), this, SLOT(disconnectionToAccount()));
+
 	// trigger return pressed
 	QObject::connect(mFlyer.getUi().emailEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
 	QObject::connect(mFlyer.getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
@@ -113,13 +116,18 @@ void	BabelMainWindow::newCallInvitation(const Contact &contact) {
 
 void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
 	if (hasAccepted)
+	{
+		mMain.getUi().call->setText("Raccrocher");
 		mDialog.setMessage(contact.getAccountName() + " a accepté votre appel :)");
+		mMain.setContactInCall(contact);
+	}
 	else
 		mDialog.setMessage(contact.getAccountName() + " a refusé votre appel :(");
 	mDialog.show();
 }
 
 void	BabelMainWindow::terminatingCommunication(const Contact &contact) {
+	mMain.getUi().call->setText("Appeler");
 	mDialog.setMessage(contact.getAccountName() + " a quitté l'appel...");
 }
 
@@ -132,6 +140,7 @@ void	BabelMainWindow::createAccountSuccess(const ErrorStatus &es) {
 	{
 		mSignup.hide();
 		mFlyer.show();
+		mFlyer.getUi().emailEdit->setText(mSignup.getEmail());
 		mDialog.setMessage("Votre compte a été crée avec succès :D");
 	}
 	else
@@ -225,6 +234,7 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 	{
 		mMain.hide();
 		mFlyer.show();
+		mMain.getDialog().hide();
 		mDialog.setMessage("Vous venez de vous déconnecter ;)");
 	}
 	else
@@ -322,5 +332,13 @@ void		BabelMainWindow::sendMessage()
 
 void		BabelMainWindow::callContact()
 {
-	emit askForCalling(mMain.getCurrentContact());
+	if (mMain.getUi().call->text() == "Appeler")
+		emit askForCalling(mMain.getCurrentContact());
+	else
+		emit askForTerminatingCall(mMain.getContactInCall());
+}
+
+void		BabelMainWindow::disconnectionToAccount()
+{
+	emit askForDisconnection();
 }
