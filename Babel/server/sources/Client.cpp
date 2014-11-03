@@ -57,16 +57,16 @@ void	Client::onSocketReadable(IClientSocket *, unsigned int){
 
 void	Client::onSocketClosed(IClientSocket*)
 {
-    std::cout << "  [SOCKET CLIENT CLOSE]";
+    std::cout << "[SOCKET CLIENT CLOSE]";
     if (this->isConnect())
     {
     	std::cout << " account: '" << account << "'" << std::endl;
-    	this->setConnected(false);
+        this->initialize();
     	this->saveData();
     }
     else
     {
-	std::cout << " not logged user" << std::endl;
+    	std::cout << " not logged user" << std::endl;
     }
 }
 
@@ -76,7 +76,7 @@ void	Client::onSocketClosed(IClientSocket*)
 bool Client::saveData(void)
 {
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
-    std::cout << "  [DATABASE] update user file '" << path << "'" << std::endl;
+    std::cout << "[DATABASE] update user file '" << path << "'" << std::endl;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
     if (!ofs.good() || ofs.fail())
         return false;
@@ -166,13 +166,13 @@ void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::st
 void Client::display() const
 {
     std::cout
-        << "          [#] account      : '" << this->getAccount() << "'" << std::endl
-        << "          [#] pseudo       : '" << this->getPseudo() << "'" << std::endl
-        << "          [#] status       : '" << this->getStatus() << "'" << std::endl
-        << "          [#] statusCall   : '" << this->getStatusCall() << "'" << std::endl
-        << "          [#] isConnected  : '" << std::boolalpha << this->isConnect() << "'" << std::endl
-        << "          [#] lastPingTime : '" << this->getLastPingTime() << "'" << std::endl
-        << "          [#] contacts     : ";
+        << "        [#] account      : '" << this->getAccount() << "'" << std::endl
+        << "        [#] pseudo       : '" << this->getPseudo() << "'" << std::endl
+        << "        [#] status       : '" << this->getStatus() << "'" << std::endl
+        << "        [#] statusCall   : '" << this->getStatusCall() << "'" << std::endl
+        << "        [#] isConnected  : '" << std::boolalpha << this->isConnect() << "'" << std::endl
+        << "        [#] lastPingTime : '" << this->getLastPingTime() << "'" << std::endl
+        << "        [#] contacts     : ";
     if (this->getContact().size())
     {
         std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {

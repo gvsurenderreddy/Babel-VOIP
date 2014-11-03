@@ -3,7 +3,7 @@
 #include "SoundPacketBuilder.hpp"
 #include "UdpClient.hpp"
 
-const int SoundPacketBuilder::DEFAULT_BABEL_CALL_PORT = 4241;
+const int SoundPacketBuilder::DEFAULT_BABEL_CALL_PORT = 4242;
 
 SoundPacketBuilder::SoundPacketBuilder(void)
 : mClient(NULL), mAcceptedHost(""), mAcceptedPort(0), mTimestamp(0)

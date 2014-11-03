@@ -31,12 +31,12 @@ void TcpClient::initFromSocket(void *socket)
 {
     mSocket = static_cast<tcp::socket*>(socket);
     startRecv();
-    std::cout << "  [TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
+    std::cout << "[TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
 }
 
 void TcpClient::closeClient()
 {
-    std::cout << "  [TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
+    std::cout << "[TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
     if (mSocket)
         mSocket->close();
     if (mListener)
@@ -56,7 +56,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "  [Error Client async_receive] " << error.message() << std::endl;
+            std::cout << "[Error Client async_receive] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -66,7 +66,7 @@ void TcpClient::send(const IClientSocket::Message &msg)
 {
     boost::mutex::scoped_lock lock(mMutex);
     {
-        bool write_in_progress = !mWriteMessageQueue.empty();
+        bool write_in_progress = mWriteMessageQueue.size() > 0;
         if (msg.msgSize <= 0)
             return;
         mWriteMessageQueue.push_back(msg);
@@ -93,7 +93,6 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
         {
             if (bytesTransfered >= static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-                free(mWriteMessageQueue.front().msg);
                 mWriteMessageQueue.pop_front();
             }
             else
@@ -118,7 +117,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "  [Error Client async_write] " << error.message() << std::endl;
+        std::cout << "[Error Client async_write] " << error.message() << std::endl;
         closeClient();
     }
 }
