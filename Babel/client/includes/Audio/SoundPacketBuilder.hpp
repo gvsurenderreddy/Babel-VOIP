@@ -12,7 +12,7 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 	#pragma pack(push, 1)
 	struct SoundPacket {
 		int   magic_code;
-		long  timestamp;
+		int64_t  timestamp;
 		int   soundSize;
 		char  sound[500];
 	};
