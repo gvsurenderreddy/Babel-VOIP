@@ -41,9 +41,8 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	mClient->send(msg);
 }
 
-#include <iostream>
-void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int nbBytesTransfered) {
-    std::cout << std::endl << std::endl << "nbBytesTransfered: '" << nbBytesTransfered << "'" << std::endl << std::endl << std::endl;
+void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int) {
+
 }
 
 void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {

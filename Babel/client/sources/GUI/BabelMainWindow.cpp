@@ -166,9 +166,7 @@ void	BabelMainWindow::authenticateSuccess(const ErrorStatus &es) {
 	}
 }
 
-#include <iostream>
 void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
-    std::cout << "BabelMainWindow::sendInvitationSuccess" << std::endl;
 	if (es.errorOccurred())
 	{
 		mDialog.setMessage("Demande d'invitation échoué :(");

@@ -55,9 +55,9 @@ void	Client::onSocketReadable(IClientSocket *, unsigned int){
 	}
 }
 
-void    Client::onBytesWritten(IClientSocket *, unsigned int nbBytesTransfered)
+void    Client::onBytesWritten(IClientSocket *, unsigned int)
 {
-    std::cout << std::endl << std::endl << "nbBytesTransfered: '" << nbBytesTransfered << "'" << std::endl << std::endl << std::endl;
+
 }
 
 void	Client::onSocketClosed(IClientSocket*)
