@@ -28,7 +28,7 @@ BabelMain::BabelMain()
 	mUi.listContactView->setModel(mModel);
 
 	// Remove window borders
-	setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+	// setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
 
 	// Desable resize window
 	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);

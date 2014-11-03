@@ -8,16 +8,18 @@ public:
 	~CommandSend();
 
 	//body
-	struct NO_PADDING Body{
+    #pragma pack(push, 1)
+	struct Body{
 		char				accountName[256];
 		char				textMessage[4096];
 	};
 
-	struct NO_PADDING BodySend{
+	struct BodySend{
 		ICommand::Header	header;
 		char				accountName[256];
 		char				textMessage[4096];
 	};
+    #pragma pack(pop)
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);

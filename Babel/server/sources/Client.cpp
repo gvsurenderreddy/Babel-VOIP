@@ -55,6 +55,11 @@ void	Client::onSocketReadable(IClientSocket *, unsigned int){
 	}
 }
 
+void    Client::onBytesWritten(IClientSocket *, unsigned int)
+{
+
+}
+
 void	Client::onSocketClosed(IClientSocket*)
 {
     std::cout << "[SOCKET CLIENT CLOSE]";

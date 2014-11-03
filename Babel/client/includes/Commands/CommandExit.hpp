@@ -6,9 +6,11 @@ class CommandExit : public ICommand {
 
 	// packet
 	private:
-		struct NO_PADDING PacketFromClient{
+        #pragma pack(push, 1)
+		struct PacketFromClient{
 			ICommand::Header	header;
 		};
+        #pragma pack(pop)
 
 	// ctor - dtor
 	public:

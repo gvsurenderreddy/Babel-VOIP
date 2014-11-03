@@ -7,12 +7,6 @@
 
 #define MIN(x, y) (static_cast<int>(x) < static_cast<int>(y) ? (x) : (y))
 
-#ifdef WIN32
-# define NO_PADDING __declspec(align(1))
-#else
-# define NO_PADDING __attribute__((packed))
-#endif
-
 class ICommand{
 public:
 	//instruction
@@ -38,10 +32,12 @@ public:
 	static const unsigned int	MAGIC_CODE;
 	static const unsigned int	HEADER_SIZE;
 
-	struct NO_PADDING Header{
+    #pragma pack(push, 1)
+	struct Header{
 		int	magicCode;
 		int	instructionCode;
 	};
+    #pragma pack(pop)
 
 	//virtual destructor
 	virtual ~ICommand() {}

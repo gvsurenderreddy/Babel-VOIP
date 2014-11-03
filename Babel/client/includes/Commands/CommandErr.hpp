@@ -7,10 +7,12 @@ class CommandErr : public ICommand {
 
 	// packet
 	private:
-		struct NO_PADDING PacketFromServer{
+        #pragma pack(push, 1)
+		struct PacketFromServer{
 			int	instructionCode;
 			int	errorCode;
 		};
+        #pragma pack(pop)
 
 	// ctor - dtor
 	public:
