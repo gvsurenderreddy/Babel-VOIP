@@ -7,11 +7,12 @@
 
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 
-TcpClient::TcpClient() : mListener(NULL), mSocket(NULL)
+TcpClient::TcpClient() : mSocket(NULL), mListener(NULL)
 {
 
 }
@@ -30,12 +31,12 @@ void TcpClient::initFromSocket(void *socket)
 {
     mSocket = static_cast<tcp::socket*>(socket);
     startRecv();
-    std::cout << "  [TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
+    std::cout << "[TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
 }
 
 void TcpClient::closeClient()
 {
-    std::cout << "  [TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
+    std::cout << "[TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
     if (mSocket)
         mSocket->close();
     if (mListener)
@@ -48,10 +49,6 @@ void TcpClient::startRecv()
         if (!error)
         {
             std::string str(mReadBuffer, bytesTransfered);
-            std::string test = str;
-            std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket && 1 == 2)
-                std::cout << "  RECV " << bytesTransfered << " bytes from :: " << getRemoteIp() << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
             mBuffer.insert(mBuffer.end(), str.begin(), str.end());
             if (mListener)
                 mListener->onSocketReadable(this, bytesTransfered);
@@ -59,7 +56,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "  [Error Client] " << error.message() << std::endl;
+            std::cout << "[Error Client async_receive] " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -69,7 +66,7 @@ void TcpClient::send(const IClientSocket::Message &msg)
 {
     boost::mutex::scoped_lock lock(mMutex);
     {
-        bool write_in_progress = !mWriteMessageQueue.empty();
+        bool write_in_progress = mWriteMessageQueue.size() > 0;
         if (msg.msgSize <= 0)
             return;
         mWriteMessageQueue.push_back(msg);
@@ -84,6 +81,8 @@ void TcpClient::send(const IClientSocket::Message &msg)
     }
 }
 
+#include "ICommand.hpp"
+
 void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t bytesTransfered)
 {
     if (!error)
@@ -92,24 +91,18 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
             mListener->onBytesWritten(this, bytesTransfered);
         boost::mutex::scoped_lock lock(mMutex);
         {
-            std::string str(mWriteMessageQueue.front().msg, bytesTransfered);
-            std::string test = str;
-            std::replace(test.begin(), test.end(), '\0', '.');
-            if (mSocket && 1 == 2)
-                std::cout << "  SEND " << bytesTransfered << " bytes " << std::endl << "  {" << std::endl << test << std::endl << "  }" << std::endl << std::endl;
-            if (bytesTransfered == mWriteMessageQueue.front().msgSize)
+            if (bytesTransfered >= static_cast<unsigned int>(mWriteMessageQueue.front().msgSize))
             {
-                delete[] mWriteMessageQueue.front().msg;
                 mWriteMessageQueue.pop_front();
             }
             else
             {
                 Message& messageFront = mWriteMessageQueue.front();
                 messageFront.msgSize -= bytesTransfered;
-                char* tmp = new char[messageFront.msgSize + 1];
-                memcpy(tmp, messageFront.msg, messageFront.msgSize);
+                char* tmp = (char*)malloc(sizeof(char) * (messageFront.msgSize + 1));
+                std::memcpy(tmp, &messageFront.msg[bytesTransfered], messageFront.msgSize);
                 tmp[messageFront.msgSize] = '\0';
-                delete[] messageFront.msg;
+                free(messageFront.msg);
                 messageFront.msg = tmp;
             }
             if (!mWriteMessageQueue.empty())
@@ -124,7 +117,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "  [Error Client] " << error.message() << std::endl;
+        std::cout << "[Error Client async_write] " << error.message() << std::endl;
         closeClient();
     }
 }
@@ -141,7 +134,7 @@ IClientSocket::Message TcpClient::receive(unsigned int sizeToRead)
     }
 
     std::string str(mBuffer.begin(), mBuffer.begin() + sizeToRead);
-    message.msg = new char[str.size() + 1];
+    message.msg = (char*)malloc(sizeof(char) * (str.size() + 1));
     message.msgSize = str.size();
     std::copy(str.begin(), str.end(), message.msg);
     message.msg[str.size()] = '\0';
@@ -156,7 +149,7 @@ unsigned int TcpClient::nbBytesToRead() const
     return mBuffer.size();
 }
 
-const std::string TcpClient::getRemoteIp() const
+std::string TcpClient::getRemoteIp() const
 {
     return mSocket->remote_endpoint().address().to_string();
 }

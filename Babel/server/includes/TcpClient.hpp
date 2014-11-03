@@ -48,7 +48,7 @@ class TcpClient : public IClientSocket
 
     // get host ip
     public:
-        const std::string getRemoteIp() const;
+        std::string getRemoteIp() const;
 
     // const
     public:

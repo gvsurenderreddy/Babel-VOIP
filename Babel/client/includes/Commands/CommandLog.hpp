@@ -7,7 +7,7 @@ class CommandLog : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClient {
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 			char				password[256];

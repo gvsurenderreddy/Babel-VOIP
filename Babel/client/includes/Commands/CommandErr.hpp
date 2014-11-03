@@ -7,7 +7,7 @@ class CommandErr : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromServer {
+		struct NO_PADDING PacketFromServer{
 			int	instructionCode;
 			int	errorCode;
 		};

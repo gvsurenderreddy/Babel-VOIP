@@ -7,13 +7,13 @@ class CommandSend : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClient {
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 			char				textMessage[4096];
 		};
 
-		struct PacketFromServer {
+		struct NO_PADDING PacketFromServer{
 			char	accountName[256];
 			char	textMessage[4096];
 		};

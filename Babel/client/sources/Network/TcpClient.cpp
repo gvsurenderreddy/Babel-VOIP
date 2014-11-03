@@ -58,9 +58,9 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	if (nbBytesToRead() == 0)
 		throw SocketException("Socket not readable");
 
-	message.msg = new char[sizeToRead + 1];
+	message.msg = new char[sizeToRead];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
-	message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
+    message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
 	message.port = mQTcpSocket->peerPort();
 
 	if (message.msgSize == -1)
@@ -87,6 +87,6 @@ void	TcpClient::setOnSocketEventListener(OnSocketEvent *listener) {
 	mListener = listener;
 }
 
-const std::string TcpClient::getRemoteIp() const {
+std::string TcpClient::getRemoteIp() const {
     return mQTcpSocket->peerAddress().toString().toStdString();
 }

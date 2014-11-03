@@ -28,9 +28,9 @@ class ContactListModel : public QAbstractListModel
 		QVariant		data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant		headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-		void			setContactList(QList<Contact> const &contactList) { mContactList = contactList; }
-		QList<Contact> 	&getContactList() { return mContactList; }
-		void			sort();
+		void					setContactList(QList<Contact> const &contactList);
+		const QList<Contact> 	&getContactList(void);
+		void					sort(void);
 
 		static bool		compare(Contact const &v1, Contact const &v2);
 };

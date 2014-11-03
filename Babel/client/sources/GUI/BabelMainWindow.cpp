@@ -92,14 +92,8 @@ void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	// A changer
-	mMain.getModel()->getContactList() << contact;
-	mMain.getModel()->sort();
-	mMain.getUi().listContactView->setModel(mMain.getModel());
-
-	mDialog.setMessage(contact.getAccountName() + " figure désormais dans vos contacts \\o/");
-	mDialog.show();
-	//
+	// A CHANGER
+	emit askForAcceptingContact(contact, true);
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
@@ -113,8 +107,8 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
-	mDialog.setMessage(contact.getAccountName() + " souhaite vous appeler");
-	mDialog.show();
+	// A CHANGER
+	emit askForAcceptingCall(contact, true);
 }
 
 void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {

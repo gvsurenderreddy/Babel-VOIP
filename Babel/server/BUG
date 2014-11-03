@@ -1,0 +1,50 @@
+
+
+
+APRES UNE CONNEXION
+DANS LA LISTE DE SHOW
+
+
+
+
+[SHOW]
+==5531== Mismatched free() / delete / delete []
+==5531==    at 0x4C2BE10: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5531==    by 0x40DEF7: TcpClient::sendHandler(boost::system::error_code const&, unsigned long) (TcpClient.cpp:96)
+==5531==    by 0x4105F9: operator() (mem_fn_template.hpp:280)
+==5531==    by 0x4105F9: operator()<boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list2<const boost::system::error_code&, long unsigned int const&> > (bind.hpp:392)
+==5531==    by 0x4105F9: operator()<boost::system::error_code, long unsigned int> (bind_template.hpp:102)
+==5531==    by 0x4105F9: operator() (write.hpp:269)
+==5531==    by 0x4105F9: operator() (bind_handler.hpp:127)
+==5531==    by 0x4105F9: asio_handler_invoke<boost::asio::detail::binder2<boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > >, boost::system::error_code, long unsigned int> > (handler_invoke_hook.hpp:69)
+==5531==    by 0x4105F9: invoke<boost::asio::detail::binder2<boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > >, boost::system::error_code, long unsigned int>, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > > (handler_invoke_helpers.hpp:37)
+==5531==    by 0x4105F9: asio_handler_invoke<boost::asio::detail::binder2<boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > >, boost::system::error_code, long unsigned int>, boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > > (write.hpp:565)
+==5531==    by 0x4105F9: invoke<boost::asio::detail::binder2<boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > >, boost::system::error_code, long unsigned int>, boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp>, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, const boost::system::error_code&, long unsigned int>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > > > (handler_invoke_helpers.hpp:37)
+==5531==    by 0x4105F9: boost::asio::detail::reactive_socket_send_op<boost::asio::mutable_buffers_1, boost::asio::detail::write_op<boost::asio::basic_stream_socket<boost::asio::ip::tcp, boost::asio::stream_socket_service<boost::asio::ip::tcp> >, boost::asio::mutable_buffers_1, boost::asio::detail::transfer_all_t, boost::_bi::bind_t<void, boost::_mfi::mf2<void, TcpClient, boost::system::error_code const&, unsigned long>, boost::_bi::list3<boost::_bi::value<TcpClient*>, boost::arg<1> (*)(), boost::arg<2> (*)()> > > >::do_complete(boost::asio::detail::task_io_service*, boost::asio::detail::task_io_service_operation*, boost::system::error_code const&, unsigned long) (reactive_socket_send_op.hpp:107)
+==5531==    by 0x416AF0: complete (task_io_service_operation.hpp:38)
+==5531==    by 0x416AF0: do_run_one (task_io_service.ipp:372)
+==5531==    by 0x416AF0: boost::asio::detail::task_io_service::run(boost::system::error_code&) (task_io_service.ipp:149)
+==5531==    by 0x413844: run (io_service.ipp:66)
+==5531==    by 0x413844: TcpServer::run() (TcpServer.cpp:88)
+==5531==    by 0x40835C: main (main.cpp:11)
+==5531==  Address 0x62de2e0 is 0 bytes inside a block of size 16 alloc'd
+==5531==    at 0x4C2B100: operator new(unsigned long) (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5531==    by 0x42A234: CommandErr::setParam(std::vector<std::string, std::allocator<std::string> > const&) (CommandErr.cpp:20)
+==5531==    by 0x42A6D3: HandleCmd::packCmd(ICommand::Instruction, std::vector<std::string, std::allocator<std::string> > const&) (HandleCmd.cpp:37)
+==5531==    by 0x41EA9C: BabelServer::sendStateCommand(Client*, int, ICommand::Instruction) const (BabelServer.cpp:166)
+==5531==    by 0x421AC6: BabelServer::onLog(Client*, std::vector<std::string, std::allocator<std::string> >&, ICommand::Instruction) (BabelServer.cpp:376)
+==5531==    by 0x418CE9: Client::onSocketReadable(IClientSocket*, unsigned int) (Client.cpp:52)
+==5531==    by 0x40E29E: operator() (TcpClient.cpp:54)
+==5531==    by 0x40E29E: operator() (bind_handler.hpp:127)
+==5531==    by 0x40E29E: asio_handler_invoke<boost::asio::detail::binder2<TcpClient::startRecv()::<lambda(const boost::system::error_code&, std::size_t)>, boost::system::error_code, long unsigned int> > (handler_invoke_hook.hpp:69)
+==5531==    by 0x40E29E: invoke<boost::asio::detail::binder2<TcpClient::startRecv()::<lambda(const boost::system::error_code&, std::size_t)>, boost::system::error_code, long unsigned int>, TcpClient::startRecv()::<lambda(const boost::system::error_code&, std::size_t)> > (handler_invoke_helpers.hpp:37)
+==5531==    by 0x40E29E: boost::asio::detail::reactive_socket_recv_op<boost::asio::mutable_buffers_1, TcpClient::startRecv()::{lambda(boost::system::error_code const&, unsigned long)#1}>::do_complete(boost::asio::detail::task_io_service*, boost::asio::detail::task_io_service_operation*, boost::system::error_code const&, unsigned long) (reactive_socket_recv_op.hpp:110)
+==5531==    by 0x416F1F: complete (task_io_service_operation.hpp:38)
+==5531==    by 0x416F1F: boost::asio::detail::epoll_reactor::descriptor_state::do_complete(boost::asio::detail::task_io_service*, boost::asio::detail::task_io_service_operation*, boost::system::error_code const&, unsigned long) (epoll_reactor.ipp:651)
+==5531==    by 0x416AF0: complete (task_io_service_operation.hpp:38)
+==5531==    by 0x416AF0: do_run_one (task_io_service.ipp:372)
+==5531==    by 0x416AF0: boost::asio::detail::task_io_service::run(boost::system::error_code&) (task_io_service.ipp:149)
+==5531==    by 0x413844: run (io_service.ipp:66)
+==5531==    by 0x413844: TcpServer::run() (TcpServer.cpp:88)
+==5531==    by 0x40835C: main (main.cpp:11)
+==5531==

@@ -1,5 +1,8 @@
 #pragma once
-#pragma warning(disable: 4308)
+
+#ifdef WIN32
+# pragma warning(disable: 4308)
+#endif
 
 #include "IClientSocket.hpp"
 #include "IServerSocket.hpp"
@@ -57,7 +60,7 @@ class Client : public IClientSocket::OnSocketEvent{
 
 	// callback from IClientSocket
     public:
-        void onBytesWritten(IClientSocket *socket, unsigned int nbBytes) { }
+        void onBytesWritten(IClientSocket *, unsigned int) { }
 	    void onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	    void onSocketClosed(IClientSocket *socket);
 
@@ -66,6 +69,10 @@ class Client : public IClientSocket::OnSocketEvent{
 	    bool saveData(void);
         bool loadData(void);
 
+    // function to initialize when logout
+    public:
+        void initialize(void);
+        
     // status
     public:
         enum Status
@@ -114,6 +121,8 @@ class Client : public IClientSocket::OnSocketEvent{
         IClientSocket*                getSocket(void) const;
         time_t		                  getLastPingTime() const;
 	    bool						  isConnect(void) const;
+        bool                          isAlreadyFriends(const std::string& accountName) const;
+
 
 	// instance of socket for send data
     public:
@@ -133,10 +142,10 @@ class Client : public IClientSocket::OnSocketEvent{
 	    template<class Archive>
 	    void serialize(Archive & ar, const unsigned int) {
 		    ar & this->status;
-            ar & this->statusCall;
+		    ar & this->account;
 		    ar & this->pseudo;
 		    ar & this->contact;
-            ar & this->isConnected;
+        	    ar & this->isConnected;
 	    }
 
 	// attributes (data of client + listener)
@@ -149,4 +158,8 @@ class Client : public IClientSocket::OnSocketEvent{
         bool                    isConnected;
         Client::OnClientEvent*  Listener;
         time_t		            lastPingTime;
+
+    // display (have to be overload <<)
+    public:
+        void display() const;
 };

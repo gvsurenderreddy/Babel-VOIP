@@ -10,12 +10,12 @@ ContactListModel::~ContactListModel()
 {
 }
 
-int						ContactListModel::rowCount(const QModelIndex &/*parent*/) const
+int	ContactListModel::rowCount(const QModelIndex &/*parent*/) const
 {
 	return mContactList.size();
 }
 
-QVariant				ContactListModel::data(const QModelIndex &index, int role) const
+QVariant	ContactListModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
@@ -29,18 +29,27 @@ QVariant				ContactListModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-QVariant				ContactListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
+QVariant	ContactListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
 	return QVariant();
 }
 
-bool					ContactListModel::compare(Contact const &v1, Contact const &v2)
+bool	ContactListModel::compare(Contact const &v1, Contact const &v2)
 {
 	return (v1.getPseudo() < v2.getPseudo());
 }
 
-void					ContactListModel::sort()
+void	ContactListModel::sort()
 {
 	qSort(mContactList.begin(), mContactList.end(), compare);
 }
 
+void	ContactListModel::setContactList(QList<Contact> const &contactList) {
+	beginResetModel();
+	mContactList = contactList;
+	endResetModel();
+}
+
+const QList<Contact> 	&ContactListModel::getContactList(void) {
+	return mContactList;
+}

@@ -24,7 +24,7 @@ void TcpServer::createServer(int port, int)
 {
     tcp::endpoint endpoint(tcp::v4(), port);
     mAcceptor = new tcp::acceptor(mService, endpoint);
-    std::cout << "  [TCP SERVER] listening on port " << port << std::endl;
+    std::cout << "[TCP SERVER] listening on port " << port << std::endl;
     startAccept();
 }
 
@@ -40,7 +40,7 @@ void TcpServer::startAccept(void)
         }
         else
         {
-            std::cout << "  [Error Server] " << error.message() << std::endl;
+            std::cout << "[Error Server async_accept] " << error.message() << std::endl;
             delete this;
         }
         startAccept();
@@ -60,7 +60,7 @@ void TcpServer::closeServer()
     });
     if (mAcceptor && mAcceptor->is_open())
          mAcceptor->close();
-    std::cout << "  [TCP SERVER] closed" << std::endl;
+    std::cout << "[TCP SERVER] closed" << std::endl;
 }
 
 void TcpServer::setOnSocketEventListener(TcpServer::OnSocketEvent *listener)

@@ -8,12 +8,12 @@ class CommandShow : public ICommand {
 
 	// packet
 	private:
-		struct PacketFromClient {
+		struct NO_PADDING PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 		};
 
-		struct PacketFromServer {
+		struct NO_PADDING PacketFromServer{
 			char	accountName[256];
 			char	pseudo[256];
 			char	status;

@@ -9,9 +9,17 @@
 /*
 ** Copelien
 */
-Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : Socket(clientSocket), Listener(listenerClient), isConnected(false)
+/* TODO: init default account, pseudo, status, statusCall */
+Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : 
+Socket(clientSocket),
+status(Client::Status::DISCONNECTED),
+statusCall(Client::StatusCall::NONE),
+pseudo(""),
+account(""),
+isConnected(false),
+Listener(listenerClient)
 {
-    updateLastPingTime();
+    initialize();
     if (this->Socket)
         this->Socket->setOnSocketEventListener(this);
     this->handleCmd = this->Socket ? new HandleCmd(this->Socket) : NULL;
@@ -26,23 +34,40 @@ Client::~Client()
 
 }
 
+void Client::initialize(void)
+{
+    this->setConnected(false);
+    this->setStatusCall(Client::StatusCall::NONE);
+    this->setStatus(Client::Status::DISCONNECTED);
+    updateLastPingTime();
+}
+
 /*
 ** IClientSocket::OnSocketEvent
 */
-void	Client::onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead){
+void	Client::onSocketReadable(IClientSocket *, unsigned int){
 	std::vector<std::string> *param;
 
-	socket;
-	nbBytesToRead;
-    while (this->handleCmd && (param = this->handleCmd->unPackCmd()) != NULL){
+    while (this->handleCmd && (param = this->handleCmd->unPackCmd()) != NULL) {
         this->treatCommand(this->handleCmd->getInstruction(), *param);
 		delete param;
         param = NULL;
 	}
 }
 
-void	Client::onSocketClosed(IClientSocket *socket){
-	socket;
+void	Client::onSocketClosed(IClientSocket*)
+{
+    std::cout << "[SOCKET CLIENT CLOSE]";
+    if (this->isConnect())
+    {
+    	std::cout << " account: '" << account << "'" << std::endl;
+        this->initialize();
+    	this->saveData();
+    }
+    else
+    {
+    	std::cout << " not logged user" << std::endl;
+    }
 }
 
 /*
@@ -51,6 +76,7 @@ void	Client::onSocketClosed(IClientSocket *socket){
 bool Client::saveData(void)
 {
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
+    std::cout << "[DATABASE] update user file '" << path << "'" << std::endl;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
     if (!ofs.good() || ofs.fail())
         return false;
@@ -105,6 +131,11 @@ IClientSocket*                Client::getSocket(void) const { return this->Socke
 bool						  Client::isConnect(void) const { return this->isConnected; }
 time_t		                  Client::getLastPingTime() const { return this->lastPingTime; }
 
+bool                          Client::isAlreadyFriends(const std::string& accountName) const
+{
+    return (std::find(this->contact.begin(), this->contact.end(), accountName) != this->contact.end());
+}
+
 const Client::HandleCommand Client::handleCommandsTab[] =
 {
     { ICommand::ADD, &Client::OnClientEvent::onAdd },
@@ -130,4 +161,25 @@ void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::st
 
     if (handleCommandsTab[i].instruction == instruction && this->Listener)
         ((this->Listener)->*handleCommandsTab[i].handler)(this, param, instruction);
+}
+
+void Client::display() const
+{
+    std::cout
+        << "        [#] account      : '" << this->getAccount() << "'" << std::endl
+        << "        [#] pseudo       : '" << this->getPseudo() << "'" << std::endl
+        << "        [#] status       : '" << this->getStatus() << "'" << std::endl
+        << "        [#] statusCall   : '" << this->getStatusCall() << "'" << std::endl
+        << "        [#] isConnected  : '" << std::boolalpha << this->isConnect() << "'" << std::endl
+        << "        [#] lastPingTime : '" << this->getLastPingTime() << "'" << std::endl
+        << "        [#] contacts     : ";
+    if (this->getContact().size())
+    {
+        std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {
+            std::cout << "'" << targetAccount << "' ";
+        });
+        std::cout << std::endl;
+    }
+    else
+        std::cout << " no friends" << std::endl;
 }

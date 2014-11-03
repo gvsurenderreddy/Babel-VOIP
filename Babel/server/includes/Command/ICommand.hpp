@@ -2,7 +2,16 @@
 
 #include <vector>
 #include <string>
+#include <cstring>
 #include "TcpClient.hpp"
+
+#define MIN(x, y) (static_cast<int>(x) < static_cast<int>(y) ? (x) : (y))
+
+#ifdef WIN32
+# define NO_PADDING __declspec(align(1))
+#else
+# define NO_PADDING __attribute__((packed))
+#endif
 
 class ICommand{
 public:
@@ -29,7 +38,7 @@ public:
 	static const unsigned int	MAGIC_CODE;
 	static const unsigned int	HEADER_SIZE;
 
-	struct Header{
+	struct NO_PADDING Header{
 		int	magicCode;
 		int	instructionCode;
 	};
@@ -39,6 +48,6 @@ public:
 
 	//handle ICommand
 	virtual std::vector<std::string>	*getParam(IClientSocket *socket) = 0;
-	virtual IClientSocket::Message		*setParam(std::vector<std::string> *param) = 0;
+	virtual IClientSocket::Message		*setParam(const std::vector<std::string> &param) = 0;
     virtual unsigned int				getSizeBody(void) = 0;
 };

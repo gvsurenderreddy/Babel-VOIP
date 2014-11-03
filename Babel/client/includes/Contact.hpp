@@ -31,7 +31,6 @@ class Contact {
 		const QString	&getPseudo(void) const;
 		Contact::Status	getStatus(void) const;
 		const QString	&getHost(void) const;
-		int				getPort(void) const;
 		const QString	&getPassword(void) const;
 		bool			isConnected(void) const;
 
@@ -39,7 +38,6 @@ class Contact {
 		void	setPseudo(const QString &pseudo);
 		void	setStatus(Contact::Status status);
 		void	setHost(const QString &host);
-		void	setPort(int host);
 		void	setPassword(const QString &password);
 		void	setIsConnected(bool isConnected);
 
@@ -49,7 +47,6 @@ class Contact {
 		QString			mPseudo;
 		Contact::Status	mStatus;
 		QString			mHost;
-		int				mPort;
 		QString			mPassword;
 		bool			mIsConnected;
 

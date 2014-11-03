@@ -1,24 +1,22 @@
-# Find Boost library.
-
-# Try to use qmake variable's value.
 _BOOST_ROOT = $$BOOST_ROOT
 isEmpty(_BOOST_ROOT) {
-    message(\"Boost Library\" qmake value not detected...)
-
-    # Try to use the system environment value.
+    message(Boost Library qmake value not detected...)
     _BOOST_ROOT = $$(BOOST_ROOT)
 }
-
 isEmpty(_BOOST_ROOT) {
-    message(\"Boost Library\" environment variable not detected... => `qmake BOOST_ROOT=C:\Boost\1.56.0\VC\12.0`)
-    !build_pass:error(Please set the environment variable `BOOST_ROOT`. For example, BOOST_ROOT=c:\\boost_1_53_0)
+    message(Boost Library environment variable not detected... try below)
+    message(qmake BOOST_ROOT=C:\\Boost\\1.56.0\\VC\\12.0 -tp vc)
 } else {
-    message(\"Boost Library\" detected in BOOST_ROOT = \"$$_BOOST_ROOT\")
+    message(Boost Library detected in BOOST_ROOT = $$_BOOST_ROOT)
     INCLUDEPATH += $$_BOOST_ROOT
-	LIBS += -L$$_BOOST_ROOT/stage/lib
-	LIBPATH += $$_BOOST_ROOT/stage/lib
-	
+	win32:LIBS += -L$$_BOOST_ROOT/stage/lib
+	win32:QMAKE_LIBDIR += $$_BOOST_ROOT/stage/lib
+	unix:LIBS += -L$$_BOOST_ROOT/lib
+	unix:QMAKE_LIBDIR += $$_BOOST_ROOT/lib
 }
+
+unix:LIBS += -lboost_system -lboost_serialization -lboost_filesystem
+unix::CXX = clang++
 
 CONFIG			+=		console c++11
 TEMPLATE        =       app
@@ -30,7 +28,7 @@ MOC_DIR         =       build/moc
 UI_DIR          =       build/ui
 
 win32:QMAKE_CXXFLAGS	+=	-Wall -D_SCL_SECURE_NO_WARNINGS /MP
-unix:QMAKE_CXXFLAGS		+=	-Wall -std=c++11
+unix:QMAKE_CXXFLAGS		+=	-Wall -std=gnu++11 -g
 
 win32:QMAKE_CFLAGS_WARN_ON -= -W3
 win32:QMAKE_CFLAGS_WARN_ON += -W2
