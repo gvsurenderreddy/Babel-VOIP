@@ -7,11 +7,13 @@ class CommandAcceptAdd : public ICommand {
 
 	// packet
 	private:
-		struct NO_PADDING PacketFromClient {
+        #pragma pack(push, 1)
+		struct PacketFromClient {
 			ICommand::Header	header;
 			char				accountName[256];
 			char				hasAccepted;
 		};
+        #pragma pack(pop)
 
 	// ctor - dtor
 	public:

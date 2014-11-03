@@ -8,17 +8,19 @@ class CommandShow : public ICommand {
 
 	// packet
 	private:
-		struct NO_PADDING PacketFromClient{
+        #pragma pack(push, 1)
+		struct PacketFromClient{
 			ICommand::Header	header;
 			char				accountName[256];
 		};
 
-		struct NO_PADDING PacketFromServer{
+		struct PacketFromServer{
 			char	accountName[256];
 			char	pseudo[256];
 			char	status;
 			char	isConnected;
 		};
+        #pragma pack(pop)
 
 	// ctor - dtor
 	public:

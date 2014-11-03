@@ -3,7 +3,7 @@
 #include "SoundPacketBuilder.hpp"
 #include "UdpClient.hpp"
 
-const int SoundPacketBuilder::DEFAULT_BABEL_CALL_PORT = 4242;
+const int SoundPacketBuilder::DEFAULT_BABEL_CALL_PORT = 4241;
 
 SoundPacketBuilder::SoundPacketBuilder(void)
 : mClient(NULL), mAcceptedHost(""), mAcceptedPort(0), mTimestamp(0)
@@ -41,7 +41,9 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	mClient->send(msg);
 }
 
-void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int) {
+#include <iostream>
+void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int nbBytesTransfered) {
+    std::cout << std::endl << std::endl << "nbBytesTransfered: '" << nbBytesTransfered << "'" << std::endl << std::endl << std::endl;
 }
 
 void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {

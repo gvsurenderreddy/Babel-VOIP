@@ -8,11 +8,13 @@ public:
 	~CommandErr();
 
 	//body
-	struct NO_PADDING Body{
+    #pragma pack(push, 1)
+	struct Body{
 		ICommand::Header	header;
 		int					instructionCode;
 		int					errorCode;
 	};
+    #pragma pack(pop)
 
 	//heritage from ICommand
 	std::vector<std::string>	*getParam(IClientSocket *socket);
