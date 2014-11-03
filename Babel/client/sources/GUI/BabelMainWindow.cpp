@@ -50,7 +50,7 @@ BabelMainWindow::BabelMainWindow(void)
 
 	// when send message to somebody
 	QObject::connect(mMain.getUi().send, SIGNAL(clicked()), this, SLOT(sendMessage()));
-	QObject::connect(mMain.getUi().messageEdit, SIGNAL(returnPressed()), mMain.getUi().send, SIGNAL(clicked()));
+
 
 	// when close flyer
 	QObject::connect(mFlyer.getUi().close, SIGNAL(clicked()), &mDialog, SLOT(close()));
@@ -61,8 +61,6 @@ BabelMainWindow::BabelMainWindow(void)
 	// trigger return pressed
 	QObject::connect(mFlyer.getUi().emailEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
 	QObject::connect(mFlyer.getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
-	QObject::connect(mFlyer.getUi().login, SIGNAL(returnPressed()), mFlyer.getUi().login, SIGNAL(clicked()));
-	QObject::connect(mFlyer.getUi().signup, SIGNAL(returnPressed()), mFlyer.getUi().signup, SIGNAL(clicked()));
 
 	QObject::connect(mSetting.getUi().addrEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
 	QObject::connect(mSetting.getUi().portEdit, SIGNAL(returnPressed()), mSetting.getUi().connexion, SIGNAL(clicked()));
@@ -78,7 +76,6 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mSignup.getUi().pwdEdit2, SIGNAL(returnPressed()), mSignup.getUi().ok, SIGNAL(clicked()));
 
 	QObject::connect(mMain.getUi().newContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
-	QObject::connect(mMain.getUi().addContact, SIGNAL(returnPressed()), mMain.getUi().addContact, SIGNAL(clicked()));
 }
 
 BabelMainWindow::~BabelMainWindow(void)

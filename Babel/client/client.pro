@@ -64,6 +64,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/GUI/ContactListModel.hpp			\
 			includes/GUI/MessageListModel.hpp			\
 			includes/GUI/BabelDialog.hpp				\
+			includes/GUI/BabelDialogButton.hpp			\
 			includes/GUI/BabelFlyer.hpp				\
 			includes/GUI/BabelIdentification.hpp			\
 			includes/GUI/BabelInscription.hpp			\
@@ -92,6 +93,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/GUI/ContactListModel.cpp			\
 			sources/GUI/MessageListModel.cpp			\
 			sources/GUI/BabelDialog.cpp				\
+			sources/GUI/BabelDialogButton.cpp			\
 			sources/GUI/BabelMainWindow.cpp				\
 			sources/GUI/BabelFlyer.cpp				\
 			sources/GUI/BabelInscription.cpp			\
@@ -122,6 +124,7 @@ SOURCES         +=      sources/main.cpp                        		\
 
 FORMS		+=	forms/BabelMainWindow.ui				\
 			forms/BabelDialog.ui					\
+			forms/BabelDialogButton.ui				\
 			forms/BabelFlyer.ui					\
 			forms/BabelIdentification.ui				\
 			forms/BabelInscription.ui				\
