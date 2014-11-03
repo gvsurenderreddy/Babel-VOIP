@@ -1,7 +1,7 @@
 #include "BabelMain.hpp"
 
 BabelMain::BabelMain()
-	: QWidget(), mNewContact("")
+	: QWidget(), mNewContact(""), mIsCall(false)
 {
 	mUi.setupUi(this);
 	mModel = new ContactListModel(this);

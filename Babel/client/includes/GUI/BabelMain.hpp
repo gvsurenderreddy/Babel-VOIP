@@ -37,6 +37,7 @@ class BabelMain : public QWidget, public Ui_BabelMain
 		BabelDialog			mDialog;
 		Contact				mCurrentContact;
 		Contact				mContactInCall;
+		bool				mIsCall;
 
 	// methods
 	public:
@@ -46,8 +47,10 @@ class BabelMain : public QWidget, public Ui_BabelMain
 		MessageListModel	*getMessages() const { return mMessages; }
 		Contact const		&getCurrentContact() const { return mCurrentContact; }
 		Contact const		&getContactInCall() const { return mContactInCall; }
+		bool				getIsCall() const { return mIsCall; }
 		void				setCurrentContact(Contact const &contact) { mCurrentContact = contact; }
 		void				setContactInCall(Contact const &contact) { mContactInCall = contact; }
+		void				setIsCall(bool isCall) { mIsCall = isCall; }
 		BabelDialog 		&getDialog() { return mDialog; }
 
 	// slots

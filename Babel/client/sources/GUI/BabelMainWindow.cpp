@@ -120,6 +120,7 @@ void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAcce
 		mMain.getUi().call->setText("Raccrocher");
 		mDialog.setMessage(contact.getAccountName() + " a accepté votre appel :)");
 		mMain.setContactInCall(contact);
+		mMain.setIsCall(true);
 	}
 	else
 		mDialog.setMessage(contact.getAccountName() + " a refusé votre appel :(");
@@ -129,6 +130,7 @@ void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAcce
 void	BabelMainWindow::terminatingCommunication(const Contact &contact) {
 	mMain.getUi().call->setText("Appeler");
 	mDialog.setMessage(contact.getAccountName() + " a quitté l'appel...");
+	mMain.setIsCall(false);
 }
 
 void	BabelMainWindow::updateInfo(const Contact &contact) {
@@ -183,15 +185,24 @@ void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::callContactSuccess(const ErrorStatus &es) {
-	if (es.errorOccurred())
+	if (!es.errorOccurred())
+	{
+		mMain.setIsCall(true);
+	}
+	else
 	{
 		mDialog.setMessage("L'appel a échoué :/");
 		mDialog.show();
+		mMain.setIsCall(false);
 	}
 }
 
 void	BabelMainWindow::acceptCallSuccess(const ErrorStatus &es) {
-	if (es.errorOccurred())
+	if (!es.errorOccurred())
+	{
+		mMain.setIsCall(true);
+	}
+	else
 	{
 		mDialog.setMessage("Votre appel n'a pas pu être établit... :/");
 		mDialog.show();
@@ -204,6 +215,7 @@ void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &es) {
 		mDialog.setMessage("Une erreur s'est produit au moment de stopper l'appel...");
 		mDialog.show();
 	}
+	mMain.setIsCall(false);
 }
 
 void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
@@ -234,6 +246,7 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 		mFlyer.show();
 		mMain.getDialog().hide();
 		mDialog.setMessage("Vous venez de vous déconnecter ;)");
+		emit askForTerminatingCall(mMain.getCurrentContact());
 	}
 	else
 		mDialog.setMessage("Erreur à la déconnexion :s");
@@ -243,7 +256,7 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
 	{
-		mDialog.setMessage("Impossible d'envoyer le message au destinataire :/");
+		mDialog.setMessage("Impossible d'envoyer le message au destinataire :(");
 		mDialog.show();
 	}
 }
