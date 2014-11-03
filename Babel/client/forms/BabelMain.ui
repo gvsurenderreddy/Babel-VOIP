@@ -72,10 +72,10 @@ background-color: rbga(0, 0, 0, 224);
     </property>
     <property name="styleSheet">
      <string notr="true">background: none;
-      border: none;
-      background-color: rgba(255, 255, 255, 32);
-      color: rgb(255, 255, 255);
-      </string>
+border: none;
+background-color: rgba(255, 255, 255, 32);
+color: rgb(255, 255, 255);
+</string>
     </property>
     <property name="text">
      <string>-</string>
@@ -105,6 +105,27 @@ font: 16pt &quot;Open Sans Light&quot;;</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="logout">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 32);
+color: rgb(255, 255, 255);
+font: 8pt &quot;Open Sans Light&quot;;
+</string>
+    </property>
+    <property name="text">
+     <string>Déconnexion</string>
     </property>
    </widget>
   </widget>
@@ -297,9 +318,9 @@ padding: 0 8px;
    <widget class="QPushButton" name="call">
     <property name="geometry">
      <rect>
-      <x>650</x>
+      <x>632</x>
       <y>5</y>
-      <width>93</width>
+      <width>111</width>
       <height>28</height>
      </rect>
     </property>
