@@ -42,14 +42,7 @@ void BabelServer::displayAccounts() const
         std::size_t i = 1;
         std::for_each(mAccounts.begin(), mAccounts.end(),
             [this, &i](const std::pair<std::string, std::string>& item) {
-          	std::cout << "    [Profil #" << i++ << "] Username: '" << item.first << "' | Password: '" << item.second << "'" << std::endl;
-   		    Client* targetClientOffline = findOfflineClient(item.first);
-		    if (targetClientOffline)
-		    {
-		        targetClientOffline->display();
-		        delete targetClientOffline;
-		        targetClientOffline = NULL;
-		    }
+            std::cout << "    #" << i++ << "\tUsername: '" << item.first << "' | Password: '" << item.second << "'" << std::endl;
         });
     }
     else
@@ -367,7 +360,6 @@ void BabelServer::onLog(Client* client, std::vector<std::string>& param, IComman
 			    Client* targetClientOffline = findOfflineClient(account);
 			    if (targetClientOffline)
 			    {
-			        targetClientOffline->display();
 			        if (targetClientOffline->isConnect() == false)
 			        {
 			            client->setAccount(account);
@@ -430,7 +422,7 @@ void BabelServer::onList(Client* client, std::vector<std::string>& param, IComma
     {
 		if (client->isConnect() == true)
 		{
-			std::cout << "[LIST] do for each contact a [SHOW]" << std::endl;
+			std::cout << "[LIST] OK" << std::endl;
 			std::for_each(client->getContact().begin(), client->getContact().end(), [=](const std::string &targetAccount) {
 			    std::vector<std::string> args;
 

@@ -56,7 +56,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "[Error Client async_receive] " << error.message() << std::endl;
+            std::cout << "[TCP CLIENT] async_receive failed: '" << error.message() << "'" << std::endl;
             closeClient();
         }
     });

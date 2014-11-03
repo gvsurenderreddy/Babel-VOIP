@@ -28,7 +28,7 @@ IClientSocket::Message			*CommandErr::setParam(const std::vector<std::string> &p
 	body->errorCode = param[0][0];
 	body->instructionCode = param[1][0];
 
-    std::cout << "? [ERR] [" << body->errorCode << "] for instruction [" << Factory::getName(body->instructionCode) <<"]" << std::endl;
+    std::cout << "[CommandErr] [errorCode = '" << body->errorCode << "'] for instruction [" << Factory::getName(body->instructionCode) <<"]" << std::endl;
 
 	msg->msgSize = this->getSizeBody();
 	msg->msg = reinterpret_cast<char *>(body);
