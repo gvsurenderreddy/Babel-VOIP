@@ -50,6 +50,6 @@ void	ContactListModel::setContactList(QList<Contact> const &contactList) {
 	endResetModel();
 }
 
-const QList<Contact> 	&ContactListModel::getContactList(void) {
+QList<Contact> 	&ContactListModel::getContactList(void) {
 	return mContactList;
 }
