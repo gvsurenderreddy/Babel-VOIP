@@ -8,7 +8,7 @@ BabelMain::BabelMain()
 	mModel = new ContactListModel(this);
 	mMessages = new MessageListModel(this);
 	mUi.listContactView->setModel(mModel);
-	mUi.listView->setModel(mModel);
+	mUi.listView->setModel(mMessages);
 
 	mOriginalSize = size();
 
