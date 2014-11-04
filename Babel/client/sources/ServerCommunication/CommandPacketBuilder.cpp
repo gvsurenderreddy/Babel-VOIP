@@ -22,7 +22,7 @@ void	CommandPacketBuilder::sendCommand(const ICommand *command) {
 	try {
 		mClient->send(command->getMessage());
 	}
-	catch (const SocketException &e) {
+	catch (const SocketException &) {
 		emit disconnectedFromHost();
 	}
 }
@@ -52,7 +52,7 @@ void	CommandPacketBuilder::fetchCommandContent(void) {
 	try {
 		mCurrentCommand->initFromMessage(message);
 	}
-	catch (const CommandException &e) {
+	catch (const CommandException &) {
 		mClient->closeClient();
 		return;
 	}

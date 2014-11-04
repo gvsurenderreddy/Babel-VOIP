@@ -3,6 +3,7 @@
 #include "Sound.hpp"
 #include "IClientSocket.hpp"
 #include <qobject.h>
+#include <cstdint>
 
 class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 
@@ -11,10 +12,10 @@ class SoundPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 	// SoundPacket
 	#pragma pack(push, 1)
 	struct SoundPacket {
-		int   magic_code;
-		int64_t  timestamp;
-		int   soundSize;
-		char  sound[500];
+		int			magic_code;
+		int64_t		timestamp;
+		int			soundSize;
+		char		sound[500];
 	};
 	#pragma pack(pop)
 

@@ -20,7 +20,7 @@ void	CallManager::startCall(const Contact &contact) {
 		mAudioManager.startRecording();
 		mAudioManager.startPlaying();
 	}
-	catch (const SoundException &e) {
+	catch (const SoundException &) {
 		ErrorStatus errorStatus;
 
 		errorStatus.setErrorOccurred(true);

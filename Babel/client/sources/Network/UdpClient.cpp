@@ -42,10 +42,7 @@ void	UdpClient::close(void) {
 
 
 void	UdpClient::send(const IClientSocket::Message &message) {
-	int ret = mQUdpSocket->writeDatagram(message.msg, message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
-
-	if (ret == -1)
-		throw SocketException("fail QTcpSocket::write");
+	mQUdpSocket->writeDatagram(message.msg, message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
 }
 
 IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
@@ -53,8 +50,12 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	QHostAddress host;
 	quint16 port;
 
-	if (nbBytesToRead() == 0)
-		throw SocketException("Socket not readable");
+	if (nbBytesToRead() == 0) {
+		message.msg = "";
+		message.msgSize = 0;
+
+		return message;
+	}
 
 	message.msg = new char[sizeToRead + 1];
 	message.msgSize = mQUdpSocket->readDatagram(message.msg, sizeToRead, &host, &port);
@@ -63,7 +64,7 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	mIsReadable = false;
 
 	if (message.msgSize == -1)
-		throw SocketException("fail QTcpSocket::read");
+		throw SocketException("fail QUdpSocket::read");
 
 	return message;
 }

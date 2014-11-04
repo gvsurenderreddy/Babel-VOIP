@@ -2,10 +2,10 @@
 #include "Babel.hpp"
 #include <iostream>
 
-int						main(int ac, char **av) {
+int	main(int ac, char **av) {
 	try {
-		QApplication		app(ac, av);
-		Babel				babel;
+		QApplication	app(ac, av);
+		Babel			babel;
 
 		babel.run();
 		return app.exec();

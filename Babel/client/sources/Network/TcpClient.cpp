@@ -55,8 +55,12 @@ void	TcpClient::send(const IClientSocket::Message &message) {
 IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	IClientSocket::Message message;
 
-	if (nbBytesToRead() == 0)
-		throw SocketException("Socket not readable");
+	if (nbBytesToRead() == 0) {
+		message.msg = "";
+		message.msgSize = 0;
+
+		return message;
+	}
 
 	message.msg = new char[sizeToRead];
 	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
