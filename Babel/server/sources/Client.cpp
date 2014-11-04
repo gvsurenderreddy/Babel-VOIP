@@ -9,7 +9,6 @@
 /*
 ** Copelien
 */
-/* TODO: init default account, pseudo, status, statusCall */
 Client::Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient) : 
 Socket(clientSocket),
 status(Client::Status::DISCONNECTED),
@@ -17,29 +16,19 @@ statusCall(Client::StatusCall::NONE),
 pseudo(""),
 account(""),
 isConnected(false),
-Listener(listenerClient)
+Listener(listenerClient),
+lastPingTime(std::time(nullptr)),
+communicationClient(NULL)
 {
-    initialize();
     if (this->Socket)
         this->Socket->setOnSocketEventListener(this);
     this->handleCmd = this->Socket ? new HandleCmd(this->Socket) : NULL;
-    const boost::filesystem::path& absolutePathDatabaseUsersFolder = boost::filesystem::complete(Database::DATABASE_FOLDER_USERS);
-    if (boost::filesystem::exists(absolutePathDatabaseUsersFolder) == false)
-        boost::filesystem::create_directory(absolutePathDatabaseUsersFolder);
-    usersFolderPath = absolutePathDatabaseUsersFolder.string();
+    usersFolderPath = getAbsolutePathDatabaseUsersFolder();
 }
 
 Client::~Client()
 {
 
-}
-
-void Client::initialize(void)
-{
-    this->setConnected(false);
-    this->setStatusCall(Client::StatusCall::NONE);
-    this->setStatus(Client::Status::DISCONNECTED);
-    updateLastPingTime();
 }
 
 /*
@@ -66,7 +55,10 @@ void	Client::onSocketClosed(IClientSocket*)
     if (this->isConnect())
     {
     	std::cout << " account: '" << account << "'" << std::endl;
-        this->initialize();
+        this->setConnected(false);
+        this->setStatusCall(Client::StatusCall::NONE);
+        this->setStatus(Client::Status::DISCONNECTED);
+        this->setLastPingTime(std::time(nullptr));
     	this->saveData();
     }
     else
@@ -78,6 +70,14 @@ void	Client::onSocketClosed(IClientSocket*)
 /*
 ** internal functions
 */
+std::string Client::getAbsolutePathDatabaseUsersFolder(void) const
+{
+    const boost::filesystem::path& absolutePathDatabaseUsersFolder = boost::filesystem::complete(Database::DATABASE_FOLDER_USERS);
+    if (boost::filesystem::exists(absolutePathDatabaseUsersFolder) == false)
+        boost::filesystem::create_directory(absolutePathDatabaseUsersFolder);
+    return (absolutePathDatabaseUsersFolder.string());
+}
+
 bool Client::saveData(void)
 {
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
@@ -124,7 +124,11 @@ void Client::delContact(const std::string& accountName)
         this->contact.remove(accountName);
 }
 void Client::clearContact() { this->contact.clear(); }
-void Client::updateLastPingTime() { this->lastPingTime = std::time(nullptr); }
+void Client::setLastPingTime(std::time_t time) { this->lastPingTime = time; }
+void Client::setCommunicationClient(Client* client)
+{
+    this->communicationClient = client;
+}
 
 // ** Getter
 Client::Status				  Client::getStatus(void) const { return this->status; }
@@ -134,7 +138,9 @@ const std::string&            Client::getAccount(void) const { return this->acco
 const std::list<std::string>& Client::getContact(void) const { return this->contact; }
 IClientSocket*                Client::getSocket(void) const { return this->Socket; }
 bool						  Client::isConnect(void) const { return this->isConnected; }
-time_t		                  Client::getLastPingTime() const { return this->lastPingTime; }
+std::time_t	                  Client::getLastPingTime() const { return this->lastPingTime; }
+Client*                       Client::getCommunicationClient(void) const { return this->communicationClient; }
+Client::OnClientEvent*        Client::getListener(void) const { return this->Listener; }
 
 bool                          Client::isAlreadyFriends(const std::string& accountName) const
 {
