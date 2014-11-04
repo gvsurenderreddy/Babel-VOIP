@@ -340,8 +340,8 @@ void		BabelMainWindow::sendMessage()
 		mMain->getMessages()->getMessageList() << msg;
 		emit mMain->getMessages()->layoutChanged();
 
+		emit askForSendingMessage(mMain->getCurrentContact(), msg.msg);
 		mMain->getUi().messageEdit->clear();
-		emit askForSendingMessage(mMain->getCurrentContact(), mMain->getUi().messageEdit->toPlainText());
 	}
 }
 

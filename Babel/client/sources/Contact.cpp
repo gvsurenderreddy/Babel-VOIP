@@ -27,6 +27,11 @@ bool	Contact::isConnected(void) const {
 	return mIsConnected;
 }
 
+MessageListModel::sMessage const	&Contact::getMessages() const
+{
+	return mMessages;
+}
+
 void	Contact::setAccountName(const QString &accountName) {
 	mAccountName = accountName;
 }
@@ -49,4 +54,9 @@ void	Contact::setPassword(const QString &password) {
 
 void	Contact::setIsConnected(bool isConnected) {
 	mIsConnected = isConnected;
+}
+
+void	Contact::setMessages(const MessageListModel::sMessage &msg)
+{
+	mMessages = msg;
 }

@@ -28,12 +28,13 @@ class Contact {
 
 	// getters - setters
 	public:
-		const QString	&getAccountName(void) const;
-		const QString	&getPseudo(void) const;
-		Contact::Status	getStatus(void) const;
-		const QString	&getHost(void) const;
-		const QString	&getPassword(void) const;
-		bool			isConnected(void) const;
+		const QString						&getAccountName(void) const;
+		const QString						&getPseudo(void) const;
+		Contact::Status						getStatus(void) const;
+		const QString						&getHost(void) const;
+		const QString						&getPassword(void) const;
+		bool								isConnected(void) const;
+		MessageListModel::sMessage const	&getMessages(void) const;
 
 		void	setAccountName(const QString &accountName);
 		void	setPseudo(const QString &pseudo);
@@ -41,6 +42,7 @@ class Contact {
 		void	setHost(const QString &host);
 		void	setPassword(const QString &password);
 		void	setIsConnected(bool isConnected);
+		void	setMessages(const MessageListModel::sMessage &msg);
 
 	// attributes
 	private:
