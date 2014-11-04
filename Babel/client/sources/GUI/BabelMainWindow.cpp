@@ -118,8 +118,7 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 		msg,
 		QDateTime::currentDateTime()
 	};
-	mMain->getMessages()->getContactList() << message;
-	mMain->getUi().listView->setModel(mMain->getMessages());
+	mMain->getMessages()->getMessageList().push_back(message);
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
@@ -338,13 +337,8 @@ void		BabelMainWindow::sendMessage()
 			mMain->getUi().messageEdit->toPlainText(),
 			QDateTime::currentDateTime()
 		};
-		mMain->getMessages()->getContactList() << msg;
-		mMain->getUi().listView->setModel(mMain->getMessages());
+		mMain->getMessages()->getMessageList().push_back(msg);
 		//
-
-		mDialog.setMessage(mMain->getUi().messageEdit->toPlainText());
-		mDialog.show();
-		// end
 	}
 }
 

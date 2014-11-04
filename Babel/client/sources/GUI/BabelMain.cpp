@@ -8,12 +8,14 @@ BabelMain::BabelMain()
 	mModel = new ContactListModel(this);
 	mMessages = new MessageListModel(this);
 	mUi.listContactView->setModel(mModel);
+	mUi.listView->setModel(mModel);
 
 	mOriginalSize = size();
 
 	// Event on list contact
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
 	QObject::connect(mUi.addContact, SIGNAL(clicked()), this, SLOT(onClickAddContact()));
+	QObject::connect(mUi.send, SIGNAL(clicked()), this, SLOT(onClickSendMsg));
 }
 
 BabelMain::~BabelMain()
@@ -41,6 +43,16 @@ void		BabelMain::onClickContact(QModelIndex const &index)
 
 void		BabelMain::onClickAddContact()
 {
-	mDialog.setMessage("Envoie de la demande d'ami ;)");
-	mDialog.show();
+
+}
+
+void		BabelMain::onClickSendMsg()
+{
+	MessageListModel::sMessage	msg = {
+		mCurrentContact.getAccountName(),
+		mUi.messageEdit->toPlainText(),
+		QDateTime::currentDateTime()
+	};
+	mMessages->getMessageList().push_back(msg);
+	mUi.listView->setModel(mMessages);
 }

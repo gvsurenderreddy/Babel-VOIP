@@ -55,4 +55,5 @@ class BabelMain : public QWidget
 	public slots :
 		void		onClickContact(QModelIndex const &index);
 		void		onClickAddContact();
+		void		onClickSendMsg();
 };

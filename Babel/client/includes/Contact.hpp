@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qstring.h>
+#include "MessageListModel.hpp"
 
 class Contact {
 
@@ -43,11 +44,11 @@ class Contact {
 
 	// attributes
 	private:
-		QString			mAccountName;
-		QString			mPseudo;
-		Contact::Status	mStatus;
-		QString			mHost;
-		QString			mPassword;
-		bool			mIsConnected;
-
+		QString						mAccountName;
+		QString						mPseudo;
+		Contact::Status				mStatus;
+		QString						mHost;
+		QString						mPassword;
+		bool						mIsConnected;
+		MessageListModel::sMessage	mMessages;
 };
