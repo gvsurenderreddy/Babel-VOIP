@@ -42,7 +42,7 @@ class Client : public IClientSocket::OnSocketEvent{
     // default ctor-dtor
     public:
         Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient);
-        ~Client();
+        virtual ~Client();
 
     // private coplien form
     private:
@@ -67,7 +67,7 @@ class Client : public IClientSocket::OnSocketEvent{
 
 	// internal functions
     public:
-        std::string getAbsolutePathDatabaseUsersFolder(void) const;
+        static boost::filesystem::path getAbsolutePathDatabaseUsersFolder(void);
 	    bool saveData(void);
         bool loadData(void);
 
@@ -109,6 +109,7 @@ class Client : public IClientSocket::OnSocketEvent{
         void delContact(const std::string& accountName);
         void setLastPingTime(std::time_t timer);
         void setCommunicationClient(Client*);
+        void resetAttributes(void);
 
     // use client's data :: getter
     public:

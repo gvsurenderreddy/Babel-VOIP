@@ -38,7 +38,10 @@ void TcpClient::closeClient()
 {
     std::cout << "[TCP] stop socket from address " << getRemoteIp() << std::endl;
     if (mSocket)
+    {
         mSocket->close();
+        delete mSocket;
+    }
     if (mListener)
         mListener->onSocketClosed(this);
 }

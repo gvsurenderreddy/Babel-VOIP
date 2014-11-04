@@ -20,6 +20,7 @@ BabelServer::BabelServer() :mServerSocket(NULL)
     displayAsciiHeader();
     mAccountsFilePath = getAbsolutePathAccountsUsersFolder();
     importAccountsUsernamePasswordFromFile(mAccountsFilePath);
+    cleanWrongsUserFile();
 }
 
 BabelServer::~BabelServer()
@@ -77,6 +78,18 @@ std::string BabelServer::getAbsolutePathAccountsUsersFolder(void) const
         boost::filesystem::create_directory(mAbsolutePathDatabaseFolder);
     const std::string& absolutePathDatabaseFolderStr = mAbsolutePathDatabaseFolder.string();
     return absolutePathDatabaseFolderStr + Database::DATABASE_ACCOUNTS_FILENAME + Database::DATABASE_EXTENSION;
+}
+
+void BabelServer::cleanWrongsUserFile(void) const
+{
+    boost::filesystem::path PathDatabaseUsersFolder = Client::getAbsolutePathDatabaseUsersFolder();
+    for (boost::filesystem::directory_iterator end_dir_it, it(PathDatabaseUsersFolder); it != end_dir_it; ++it)
+    {
+        const boost::filesystem::path path = it->path();
+        const std::string filename = path.filename().stem().string();
+        if (mAccounts.count(filename) == 0)
+            boost::filesystem::remove(path);
+    }
 }
 
 void BabelServer::importAccountsUsernamePasswordFromFile(const std::string& path)
@@ -176,7 +189,10 @@ void BabelServer::onCloseConnection(Client* client)
     while (it != it_end)
     {
         if (*it == client)
+        {
+            notifyMyFriendsOfModificationAboutMe(*it);
             it = mClients.erase(it);
+        }   
         else
             ++it;
     }
@@ -198,15 +214,12 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
 			    {
 			    	if (targetClient->isAlreadyFriends(callerClient->getAccount()) == false)
 			    	{
-				        targetClient->display();
 				        sendStateCommand(callerClient, ErrorCode::OK, instruction);
 
-				        std::vector<std::string> args;
-
-				        args.push_back(callerClient->getAccount());
-
-				        targetClient->handleCmd->packCmd(instruction, args);
-			        } else sendStateCommand(callerClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        	
+                        std::vector<std::string> argsToTargetClient;
+                        argsToTargetClient.push_back(callerClient->getAccount());
+                        targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+			        } else sendStateCommand(callerClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);  	
 			    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
 			} else sendStateCommand(callerClient, ErrorCode::CANNOT_ADD_YOURSELF, instruction);
 		} else sendStateCommand(callerClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
@@ -215,31 +228,37 @@ void BabelServer::onAdd(Client* callerClient, std::vector<std::string>& param, I
 
 // ** Update
 // ** update #nom_de_compte #pseudo #pwd #status
-void BabelServer::onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onUpdate(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 4)
     {
-		if (client->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
 			const std::string& account = param[0];
 			const std::string& pseudo = param[1];
 			const std::string& password = param[2];
 			Client::Status status = static_cast<Client::Status>(param[3][0]);
 
-			if (client->getAccount() == account && mAccounts.count(account) && status >= Client::Status::CONNECTED && status <= Client::Status::CRYING)
+            if (currentClient->getAccount() == account && mAccounts.count(account) && status >= Client::Status::CONNECTED && status <= Client::Status::CRYING)
 			{
-			    sendStateCommand(client, ErrorCode::OK, instruction);
+                sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-			    client->setAccount(account);
-			    client->setPseudo(pseudo);
-			    client->setStatus(status);
-			    client->saveData();
+                currentClient->setAccount(account);
+                currentClient->setPseudo(pseudo);
+                currentClient->setStatus(status);
+                currentClient->saveData();
 
 			    mAccounts[account] = password;
+
+                std::vector<std::string> args;
+
+                args.push_back(account);
+                onShow(currentClient, args, ICommand::SHOW);
+                notifyMyFriendsOfModificationAboutMe(currentClient);
 			}
-			else sendStateCommand(client, ErrorCode::WRONG_PACKET_STRUCT, instruction);
-		} else sendStateCommand(client, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-	} else sendStateCommand(client, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+            else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+        } else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    } else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }
 
 // ** Inscription
@@ -347,16 +366,13 @@ void BabelServer::onShow(Client* client, std::vector<std::string>& param, IComma
 			if (targetClient)
 			{
 			    sendStateCommand(client, ErrorCode::OK, instruction);
-
                 std::vector<std::string> args;
 
                 args.push_back(targetClient->getAccount());
                 args.push_back(targetClient->getPseudo());
                 args.push_back(std::string(1, client->getStatus()));
                 args.push_back(std::string(1, client->isConnect()));
-
 			    delete targetClient;
-
 			    client->handleCmd->packCmd(instruction, args);            
 			} else sendStateCommand(client, ErrorCode::UNKNOWN_ACCOUNT, instruction);
 		} else sendStateCommand(client, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
@@ -365,44 +381,54 @@ void BabelServer::onShow(Client* client, std::vector<std::string>& param, IComma
 
 // ** Call
 // ** call #nom_de_compte
-void BabelServer::onCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onCall(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 1)
     {
-		if (client->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
-			if (client->getStatusCall() == Client::StatusCall::NONE)
+            if (currentClient->getStatusCall() == Client::StatusCall::NONE)
 			{
 			    const std::string& targetAccount = param[0];
-			    if (targetAccount != client->getAccount())
+                if (targetAccount != currentClient->getAccount())
 			    {
 			        Client* targetClient = findOnlineClient(targetAccount);
 			        if (targetClient)
 			        {
-				    	if (targetClient->isAlreadyFriends(client->getAccount()) == true)
+                        if (targetClient->isAlreadyFriends(currentClient->getAccount()) == true)
 				    	{
 				    		if (targetClient->getStatusCall() == Client::StatusCall::NONE)
 				    		{
-					            sendStateCommand(client, ErrorCode::OK, instruction);
+                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-					            client->setStatusCall(Client::StatusCall::ISWAITING);
-					            client->saveData();
+                                std::vector<std::string> argsToTargetClient;
+
+                                argsToTargetClient.push_back(currentClient->getAccount());
+
+                                currentClient->setStatusCall(Client::StatusCall::ISWAITING);
+                                currentClient->saveData();
 
 								targetClient->setStatusCall(Client::StatusCall::ISWAITING);
 					            targetClient->saveData();
 
-					            std::vector<std::string> args;
+                                currentClient->setCommunicationClient(targetClient);
+                                targetClient->setCommunicationClient(currentClient);
 
-					            args.push_back(client->getAccount());
-
-					            targetClient->handleCmd->packCmd(instruction, args);
-				        	} else sendStateCommand(client, ErrorCode::BUSY_CONTACT_CANNOT_REPLY, instruction);
-			            } else sendStateCommand(client, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);		        	
-			        } else sendStateCommand(client, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
-			    } else sendStateCommand(client, ErrorCode::CANNOT_CALL_YOURSELF, instruction);
-			} else sendStateCommand(client, ErrorCode::CANNOT_DO_CALL_MULTIPLE, instruction);
-		} else sendStateCommand(client, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-    } else sendStateCommand(client, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+                                targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                            }
+                            else sendStateCommand(currentClient, ErrorCode::BUSY_CONTACT_CANNOT_REPLY, instruction);
+                        }
+                        else sendStateCommand(currentClient, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);
+                    }
+                    else sendStateCommand(currentClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+                }
+                else sendStateCommand(currentClient, ErrorCode::CANNOT_CALL_YOURSELF, instruction);
+            }
+            else sendStateCommand(currentClient, ErrorCode::CANNOT_DO_CALL_MULTIPLE, instruction);
+        }
+        else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    }
+    else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }
 
 // ** AcceptAdd
@@ -422,8 +448,10 @@ void BabelServer::onAcceptAdd(Client* currentClient, std::vector<std::string>& p
 				{
 				    sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-				    if (accept == false)
-				        return;
+                    if (accept == false)
+                    {
+                        return;
+                    }
 
 				    std::vector<std::string> argsToCurrentClient;
 				    std::vector<std::string> argsToTargetClient;
@@ -448,11 +476,11 @@ void BabelServer::onAcceptAdd(Client* currentClient, std::vector<std::string>& p
 
 // ** Delete Contact
 // ** del #nom_de_compte
-void BabelServer::onDel(Client* callerClient, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onDel(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 { 
     if (param.size() == 1)
     {
-		if (callerClient->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
 			const std::string& targetAccount = param[0];
 			Client* targetClientOnline = findOnlineClient(targetAccount);
@@ -460,65 +488,71 @@ void BabelServer::onDel(Client* callerClient, std::vector<std::string>& param, I
 			if (targetClientOnline || targetClientOffline)
 			{
 				bool isFriend;
-				if (targetClientOnline && targetClientOnline->isAlreadyFriends(callerClient->getAccount()) == true)
+                if (targetClientOnline && targetClientOnline->isAlreadyFriends(currentClient->getAccount()) == true)
 					isFriend = true;
-				else if (targetClientOffline && targetClientOffline->isAlreadyFriends(callerClient->getAccount()) == true)
+                else if (targetClientOffline && targetClientOffline->isAlreadyFriends(currentClient->getAccount()) == true)
 					isFriend = true;
 				else
 					isFriend = false;
 
 				if (isFriend)
 				{
-				    sendStateCommand(callerClient, ErrorCode::OK, instruction);
+                    sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-				    std::vector<std::string> args;
+                    std::vector<std::string> argsToCurrentClient;
+                    std::vector<std::string> argsToTargetClient;
+
+                    argsToTargetClient.push_back(currentClient->getAccount());
+                    argsToCurrentClient.push_back(targetAccount);
+
+                    currentClient->delContact(targetAccount);
+                    currentClient->saveData();
 
 				    if (targetClientOnline)
 				    {
-				        targetClientOnline->delContact(callerClient->getAccount());
+                        targetClientOnline->delContact(currentClient->getAccount());
 				        targetClientOnline->saveData();
-				        args.push_back(targetAccount);
-				        onShow(targetClientOnline, args, ICommand::SHOW);
+                        targetClientOnline->handleCmd->packCmd(instruction, argsToTargetClient);
 				    }
 				    else
 				    {
-				        targetClientOffline->delContact(callerClient->getAccount());
+                        targetClientOffline->delContact(currentClient->getAccount());
 				        targetClientOffline->saveData();
 				    }
-				    
-				    callerClient->delContact(targetAccount);
-				    callerClient->saveData();
 
-				    args.push_back(callerClient->getAccount());
-				    onShow(callerClient, args, ICommand::SHOW);
-			    }
-			    else sendStateCommand(callerClient, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);	
+                    currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+			    } else sendStateCommand(currentClient, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);
 			    if (targetClientOffline)
 			        delete targetClientOffline;
-			} else sendStateCommand(callerClient, ErrorCode::UNKNOWN_ACCOUNT, instruction);
-		} else sendStateCommand(callerClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-    } else sendStateCommand(callerClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+            } else sendStateCommand(currentClient, ErrorCode::UNKNOWN_ACCOUNT, instruction);
+        } else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    } else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }
 
 // ** Disconnect
 // ** exit
-void BabelServer::onExit(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onExit(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 0)
     {
-		if (client->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
-			sendStateCommand(client, ErrorCode::OK, instruction);
+            sendStateCommand(currentClient, ErrorCode::OK, instruction);
+            
+            Client* communicationClient = currentClient->getCommunicationClient();
+            if (communicationClient)
+            {
+                std::vector<std::string> args;
 
-            client->setConnected(false);
-            client->setStatusCall(Client::StatusCall::NONE);
-            client->setStatus(Client::Status::DISCONNECTED);
-            client->setLastPingTime(std::time(nullptr));
-			client->saveData();
-
-			notifyMyFriendsOfModificationAboutMe(client);
-		} else sendStateCommand(client, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-    } else sendStateCommand(client, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+                args.push_back(communicationClient->getAccount());
+                onCloseCall(currentClient, args, ICommand::CLOSE_CALL);
+            }
+            currentClient->resetAttributes();
+            currentClient->saveData();
+        }
+        else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    }
+    else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }
 
 // ** Send Messsage
@@ -553,77 +587,97 @@ void BabelServer::onSend(Client* client, std::vector<std::string>& param, IComma
 
 // ** Accept Call
 // ** accept_call #nom_de_compte OK/KO
-void BabelServer::onAcceptCall(Client* callerClient, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onAcceptCall(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 2)
     {
-		if (callerClient->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
-			if (callerClient->getStatusCall() == Client::StatusCall::ISWAITING)
+            if (currentClient->getStatusCall() == Client::StatusCall::ISWAITING)
 			{
 			    const std::string& targetAccount = param[0];
 			    bool accept = param[1][0];
 			    Client* targetClient = findOnlineClient(targetAccount);
 			    if (targetClient)
 			    {
-			    	if (targetClient->isAlreadyFriends(callerClient->getAccount()) == true)
+                    if (targetClient == currentClient->getCommunicationClient())
 					{
-				        sendStateCommand(callerClient, ErrorCode::OK, instruction);
+                        sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-				        std::vector<std::string> args;
+                        std::vector<std::string> argsToCurrentClient;
+                        std::vector<std::string> argsToTargetClient;
 
-				        callerClient->setStatusCall(Client::StatusCall::ISCALLING);
-				        callerClient->saveData();
+                        if (!accept)
+                        {
+                            currentClient->setStatusCall(Client::StatusCall::ISCALLING);
+                            currentClient->saveData();
+                            return;
+                        }
 
-                        args.push_back(callerClient->getAccount());
-                        args.push_back(callerClient->getSocket()->getRemoteIp());
-                        args.push_back(std::string(1, accept));
+                        argsToTargetClient.push_back(currentClient->getAccount());
+                        argsToTargetClient.push_back(currentClient->getSocket()->getRemoteIp());
+                        argsToTargetClient.push_back(std::string(1, accept));
 
-				        targetClient->handleCmd->packCmd(instruction, args);
+                        argsToCurrentClient.push_back(targetClient->getAccount());
+                        argsToCurrentClient.push_back(targetClient->getSocket()->getRemoteIp());
+                        argsToCurrentClient.push_back(std::string(1, accept));
 
-				        args.clear();
+                        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
+                        currentClient->setStatusCall(Client::StatusCall::ISCALLING);
 
-				        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
-				        targetClient->saveData();
+                        targetClient->saveData();
+                        currentClient->saveData();
 
-                        args.push_back(targetClient->getAccount());
-                        args.push_back(targetClient->getSocket()->getRemoteIp());
-                        args.push_back(std::string(1, accept));
+                        currentClient->setCommunicationClient(targetClient);
+                        targetClient->setCommunicationClient(currentClient);
 
-				        callerClient->handleCmd->packCmd(instruction, args);
-				    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
-			    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
-			} else sendStateCommand(callerClient, ErrorCode::CANNOT_ACCEPT_CALL_FROM_NOT_A_CALLER, instruction);
-		} else sendStateCommand(callerClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-    } else sendStateCommand(callerClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+                        targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                        currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                    } else sendStateCommand(currentClient, ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM, instruction);
+                } else sendStateCommand(currentClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+            } else sendStateCommand(currentClient, ErrorCode::CANNOT_ACCEPT_CALL_FROM_NOT_A_CALLER, instruction);
+        } else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    } else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }
 
 // ** Close Call
 // ** close_call #nom_de_compte
-void BabelServer::onCloseCall(Client* callerClient, std::vector<std::string>& param, ICommand::Instruction instruction)
+void BabelServer::onCloseCall(Client* currentClient, std::vector<std::string>& param, ICommand::Instruction instruction)
 {
     if (param.size() == 1)
     {
-		if (callerClient->isConnect() == true)
+        if (currentClient->isConnect() == true)
 		{
-			if (callerClient->getStatusCall() == Client::StatusCall::ISCALLING)
+            if (currentClient->getStatusCall() == Client::StatusCall::ISCALLING)
 			{
 			    const std::string& targetAccount = param[0];
 			    Client* targetClient = findOnlineClient(targetAccount);
 			    if (targetClient)
 			    {
-			    	if (targetClient->isAlreadyFriends(callerClient->getAccount()) == true)
+                    if (targetClient == currentClient->getCommunicationClient())
 					{
-				        sendStateCommand(callerClient, ErrorCode::OK, instruction);
+                        sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-				        std::vector<std::string> args;
+                        std::vector<std::string> argsToCurrentClient;
+                        std::vector<std::string> argsToTargetClient;
 
-				        args.push_back(callerClient->getAccount());
+                        argsToTargetClient.push_back(currentClient->getAccount());
+                        argsToCurrentClient.push_back(targetClient->getAccount());
 
-				        targetClient->handleCmd->packCmd(instruction, args);
-				    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
-			    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
-			} else sendStateCommand(callerClient, ErrorCode::CANNOT_CLOSE_CALL_WHEN_YOU_ARENT_CALLING, instruction);
-		} else sendStateCommand(callerClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
-    } else sendStateCommand(callerClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+                        currentClient->setStatusCall(Client::StatusCall::NONE);
+                        currentClient->saveData();
+
+                        targetClient->setStatusCall(Client::StatusCall::NONE);
+                        targetClient->saveData();
+
+                        currentClient->setCommunicationClient(NULL);
+                        targetClient->setCommunicationClient(NULL);
+
+                        targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                        currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                    } else sendStateCommand(currentClient, ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM, instruction);
+			    } else sendStateCommand(currentClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
+            } else sendStateCommand(currentClient, ErrorCode::CANNOT_CLOSE_CALL_WHEN_YOU_ARENT_CALLING, instruction);
+        } else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
+    } else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
 }

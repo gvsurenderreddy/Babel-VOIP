@@ -118,7 +118,13 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 		msg,
 		QDateTime::currentDateTime()
 	};
-	mMain->getMessages()->getMessageList().push_back(message);
+
+	// set current contact's list message on model
+	mMain->getCurrentContact().getMessages() << message;
+	mMain->getMessages()->setMessageList(mMain->getCurrentContact().getMessages());
+
+	//mMain->getMessages()->getMessageList() << message;
+	emit mMain->getMessages()->layoutChanged();
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
@@ -239,13 +245,12 @@ void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mDialog.setMessage("Le contact a bien été supprimé :p");
-		mDialog.show();
 	}
 	else
 	{
 		mDialog.setMessage("Le contact n'a pas pu être supprimé :/");
-		mDialog.show();
 	}
+	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
@@ -264,15 +269,23 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
 	{
+		/*
 		mDialog.setMessage("Impossible d'envoyer le message au destinataire :(");
 		mDialog.show();
+		*/
 	}
 }
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
-	QString	success = !es.errorOccurred() ? "Succès" : "Echec";
-
-	mDialog.setMessage(success + " à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+	if (!es.errorOccurred())
+	{
+		mDialog.setMessage("Succès à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+		updateContent(mFlyer);
+	}
+	else
+	{
+		mDialog.setMessage("Echec à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+	}
 	mDialog.show();
 }
 
@@ -329,17 +342,23 @@ void		BabelMainWindow::sendMessage()
 {
 	if (mMain->getUi().messageEdit->toPlainText() != "")
 	{
-		emit askForSendingMessage(mMain->getCurrentContact(), mMain->getUi().messageEdit->toPlainText());
-
-		// debug
 		MessageListModel::sMessage	msg = {
 			mContact.getPseudo(),
 			mMain->getUi().messageEdit->toPlainText(),
 			QDateTime::currentDateTime()
 		};
-		mMain->getMessages()->getMessageList().push_back(msg);
-		//
+
+		// set your list message on model
+		mMain->getCurrentContact().getMessages() << msg;
+		mMain->getMessages()->setMessageList(mMain->getCurrentContact().getMessages());
+
+		//mMain->getMessages()->getMessageList() << msg;
+		emit mMain->getMessages()->layoutChanged();
+
+		emit askForSendingMessage(mMain->getCurrentContact(), msg.msg);
+		mMain->getUi().messageEdit->clear();
 	}
+	mMain->getUi().messageEdit->setFocus();
 }
 
 void		BabelMainWindow::callContact()
@@ -353,6 +372,7 @@ void		BabelMainWindow::callContact()
 void		BabelMainWindow::disconnectionToAccount()
 {
 	emit askForDisconnection();
+	updateContent(mFlyer);
 }
 
 void	BabelMainWindow::displayOptions(void) {

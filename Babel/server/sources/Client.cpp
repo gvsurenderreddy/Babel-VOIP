@@ -23,7 +23,19 @@ communicationClient(NULL)
     if (this->Socket)
         this->Socket->setOnSocketEventListener(this);
     this->handleCmd = this->Socket ? new HandleCmd(this->Socket) : NULL;
-    usersFolderPath = getAbsolutePathDatabaseUsersFolder();
+    usersFolderPath = getAbsolutePathDatabaseUsersFolder().string();
+}
+
+void Client::resetAttributes(void)
+{
+    this->status = Client::Status::DISCONNECTED;
+    this->statusCall = Client::StatusCall::NONE;
+    this->pseudo = "";
+    this->clearContact();
+    this->account = "";
+    this->isConnected = false;
+    this->lastPingTime = std::time(nullptr);
+    this->communicationClient = NULL;
 }
 
 Client::~Client()
@@ -37,20 +49,27 @@ Client::~Client()
         this->saveData();
     }
     if (Listener)
+    {
         Listener->onCloseConnection(this);
+    }
+    delete this->handleCmd;
 }
 
 /*
 ** IClientSocket::OnSocketEvent
 */
-void	Client::onSocketReadable(IClientSocket *, unsigned int){
-	std::vector<std::string> *param;
+void	Client::onSocketReadable(IClientSocket *, unsigned int)
+{
+    std::vector<std::string> *param;
+    ICommand::Instruction instruction;
 
-    while (this->handleCmd && (param = this->handleCmd->unPackCmd()) != NULL) {
-        this->treatCommand(this->handleCmd->getInstruction(), *param);
-		delete param;
+    while ((param = this->handleCmd->unPackCmd()) != NULL)
+    {
+        instruction = this->handleCmd->getInstruction();
+        this->treatCommand(instruction, *param);
+        delete param;
         param = NULL;
-	}
+    }
 }
 
 void    Client::onBytesWritten(IClientSocket *, unsigned int)
@@ -67,12 +86,12 @@ void	Client::onSocketClosed(IClientSocket*)
 /*
 ** internal functions
 */
-std::string Client::getAbsolutePathDatabaseUsersFolder(void) const
+boost::filesystem::path Client::getAbsolutePathDatabaseUsersFolder(void)
 {
-    const boost::filesystem::path& absolutePathDatabaseUsersFolder = boost::filesystem::complete(Database::DATABASE_FOLDER_USERS);
+    boost::filesystem::path absolutePathDatabaseUsersFolder = boost::filesystem::complete(Database::DATABASE_FOLDER_USERS);
     if (boost::filesystem::exists(absolutePathDatabaseUsersFolder) == false)
         boost::filesystem::create_directory(absolutePathDatabaseUsersFolder);
-    return (absolutePathDatabaseUsersFolder.string());
+    return absolutePathDatabaseUsersFolder;
 }
 
 bool Client::saveData(void)

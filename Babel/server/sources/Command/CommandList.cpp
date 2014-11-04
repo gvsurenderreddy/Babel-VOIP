@@ -11,7 +11,7 @@ CommandList::~CommandList(){
 ** Heritage from ICommand
 */
 std::vector<std::string>		*CommandList::getParam(IClientSocket *){
-	return NULL;
+    return new std::vector<std::string>;
 }
 
 IClientSocket::Message			*CommandList::setParam(const std::vector<std::string> &){

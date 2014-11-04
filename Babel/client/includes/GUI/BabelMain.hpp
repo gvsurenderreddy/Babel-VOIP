@@ -43,7 +43,7 @@ class BabelMain : public QWidget
 		QString const		&getNewContact() const { return mNewContact; }
 		ContactListModel	*getModel() const { return mModel; }
 		MessageListModel	*getMessages() const { return mMessages; }
-		Contact const		&getCurrentContact() const { return mCurrentContact; }
+		Contact				&getCurrentContact() { return mCurrentContact; }
 		Contact const		&getContactInCall() const { return mContactInCall; }
 		bool				getIsCall() const { return mIsCall; }
 		void				setCurrentContact(Contact const &contact) { mCurrentContact = contact; }
@@ -54,6 +54,4 @@ class BabelMain : public QWidget
 	// slots
 	public slots :
 		void		onClickContact(QModelIndex const &index);
-		void		onClickAddContact();
-		void		onClickSendMsg();
 };

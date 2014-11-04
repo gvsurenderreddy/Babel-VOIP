@@ -11,7 +11,7 @@ CommandExit::~CommandExit(){
 ** Heritage from ICommand
 */
 std::vector<std::string>		*CommandExit::getParam(IClientSocket *){
-	return NULL;
+   return new std::vector<std::string>;
 }
 
 IClientSocket::Message			*CommandExit::setParam(const std::vector<std::string> &){
