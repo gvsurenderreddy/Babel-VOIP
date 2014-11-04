@@ -252,7 +252,7 @@ padding: 0 8px;
 </string>
     </property>
     <property name="placeholderText">
-     <string>Ajouter l'email du contact</string>
+     <string>Ajouter un contact</string>
     </property>
    </widget>
    <widget class="QPushButton" name="addContact">
@@ -318,7 +318,7 @@ padding: 0 8px;
    <widget class="QPushButton" name="call">
     <property name="geometry">
      <rect>
-      <x>632</x>
+      <x>500</x>
       <y>5</y>
       <width>111</width>
       <height>28</height>
@@ -334,6 +334,27 @@ font: 16px &quot;Open Sans Light&quot;;
     </property>
     <property name="text">
      <string>Appeler</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteContact">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>5</y>
+      <width>111</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: none;
+border: none;
+background-color: rgba(207, 60, 60, 128);
+color: rgb(255, 255, 255);
+font: 16px &quot;Open Sans Light&quot;;
+</string>
+    </property>
+    <property name="text">
+     <string>Supprimer</string>
     </property>
    </widget>
   </widget>

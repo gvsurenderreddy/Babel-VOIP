@@ -221,13 +221,13 @@ border-style: outset;
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>41</width>
+     <width>91</width>
      <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Small Fonts</family>
+     <family>Verdana</family>
      <pointsize>16</pointsize>
     </font>
    </property>
@@ -239,7 +239,7 @@ border-style: outset;
       </string>
    </property>
    <property name="text">
-    <string>p</string>
+    <string>Options</string>
    </property>
   </widget>
  </widget>
@@ -247,38 +247,6 @@ border-style: outset;
   <include location="../resources/BabelMainWindow.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>close</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelFlyer</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>480</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimize</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelFlyer</receiver>
-   <slot>showMinimized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>430</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>signup</sender>
    <signal>clicked()</signal>
@@ -308,6 +276,38 @@ border-style: outset;
     <hint type="destinationlabel">
      <x>255</x>
      <y>434</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimize</sender>
+   <signal>clicked()</signal>
+   <receiver>BabelFlyer</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>430</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>435</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>close</sender>
+   <signal>clicked()</signal>
+   <receiver>BabelFlyer</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>480</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>435</y>
     </hint>
    </hints>
   </connection>

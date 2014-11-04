@@ -126,7 +126,6 @@ FORMS		+=	forms/BabelMainWindow.ui				\
 			forms/BabelDialog.ui					\
 			forms/BabelDialogButton.ui				\
 			forms/BabelFlyer.ui					\
-			forms/BabelIdentification.ui				\
 			forms/BabelInscription.ui				\
 			forms/BabelSetting.ui					\
 			forms/BabelMain.ui

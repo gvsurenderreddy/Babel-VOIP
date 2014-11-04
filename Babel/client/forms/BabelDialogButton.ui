@@ -142,38 +142,6 @@ qproperty-alignment: AlignCenter;
  </resources>
  <connections>
   <connection>
-   <sender>close</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelDialogButton</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>370</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>200</x>
-     <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimize</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelDialogButton</receiver>
-   <slot>showMinimized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>320</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>200</x>
-     <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>no</sender>
    <signal>clicked()</signal>
    <receiver>BabelDialogButton</receiver>
@@ -202,6 +170,38 @@ qproperty-alignment: AlignCenter;
     <hint type="destinationlabel">
      <x>200</x>
      <y>75</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimize</sender>
+   <signal>clicked()</signal>
+   <receiver>BabelDialogButton</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>320</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>174</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>close</sender>
+   <signal>clicked()</signal>
+   <receiver>BabelDialogButton</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>370</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>174</y>
     </hint>
    </hints>
   </connection>
