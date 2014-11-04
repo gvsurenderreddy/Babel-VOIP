@@ -4,7 +4,7 @@
 #include "BabelDialog.hpp"
 #include "ui_BabelSetting.h"
 
-class BabelSetting : public QWidget, public Ui_BabelSetting
+class BabelSetting : public QWidget
 {
 	Q_OBJECT
 
@@ -12,18 +12,16 @@ class BabelSetting : public QWidget, public Ui_BabelSetting
 	public:
 		BabelSetting(void);
 		~BabelSetting(void);
-		void paintEvent(QPaintEvent *)
-		{
-			QStyleOption opt;
-			opt.init(this);
-			QPainter p(this);
-			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-		}
 
 	// coplien form
 	private:
 		BabelSetting(const BabelSetting &) : QWidget() {}
 		const BabelSetting &operator=(const BabelSetting &) { return *this; }
+
+	// overrides
+	public:
+		void paintEvent(QPaintEvent *);
+		QSize minimumSizeHint() const;
 
 	// attributes
 	private:
@@ -31,6 +29,7 @@ class BabelSetting : public QWidget, public Ui_BabelSetting
 		BabelDialog			mDialog;
 		QString				mHost;
 		int					mPort;
+		QSize				mOriginalSize;
 
 	// methods
 	public:

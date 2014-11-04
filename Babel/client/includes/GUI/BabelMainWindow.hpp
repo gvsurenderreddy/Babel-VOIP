@@ -6,16 +6,15 @@
 #include <QPainter>
 #include "Contact.hpp"
 #include "BabelFlyer.hpp"
-#include "BabelIdentification.hpp"
 #include "BabelInscription.hpp"
 #include "BabelSetting.hpp"
 #include "BabelMain.hpp"
 #include "BabelDialog.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
-#include "ui_BabelMainWindow.h"
+#include <QStackedWidget>
 
-class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
+class BabelMainWindow : public QMainWindow {
 
 	Q_OBJECT
 
@@ -23,13 +22,6 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 	public:
 		BabelMainWindow(void);
 		~BabelMainWindow(void);
-		void paintEvent(QPaintEvent *)
-		{
-			QStyleOption opt;
-			opt.init(this);
-			QPainter p(this);
-			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-		}
 
 	// coplien form
 	private:
@@ -38,12 +30,11 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 
 	// attributes
 	private:
-		Ui::BabelMainWindow	mUi;
-		BabelFlyer			mFlyer;
-		BabelIdentification	mLogin;
-		BabelInscription	mSignup;
-		BabelSetting		mSetting;
-		BabelMain			mMain;
+		QStackedWidget		*mCentralWidget;
+		BabelFlyer			*mFlyer;
+		BabelInscription	*mSignup;
+		BabelSetting		*mSetting;
+		BabelMain			*mMain;
 		BabelDialog			mDialog;
 		Contact				mContact;
 
@@ -70,7 +61,8 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	connectToServerSuccess(const ErrorStatus &errorStatus);
 		void	disconnectedFromServer(void);
 
-		// actions - requests
+	// actions - requests
+	private slots:
 		void	connectionToServer();
 		void	createAccount();
 		void	connexionToAccount();
@@ -78,6 +70,13 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 		void	sendMessage();
 		void	callContact();
 		void	disconnectionToAccount();
+
+
+	// slots display
+	private slots:
+		void	displayOptions();
+		void	displaySignUp();
+		void	displayFlyer();
 
 	// signals
 	signals:
@@ -97,5 +96,6 @@ class BabelMainWindow : public QMainWindow, public Ui_BabelMainWindow {
 	// member function
 	public:
 		void	show();
+		void	updateContent(QWidget *widget);
 
 };

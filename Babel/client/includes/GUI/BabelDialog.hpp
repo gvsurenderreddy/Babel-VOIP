@@ -11,6 +11,9 @@ class BabelDialog : public QDialog
 	public:
 		BabelDialog();
 		~BabelDialog();
+
+	// painter
+	public:
 		void paintEvent(QPaintEvent *)
 		{
 			QStyleOption opt;

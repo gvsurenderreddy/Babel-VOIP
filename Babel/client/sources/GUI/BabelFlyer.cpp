@@ -7,11 +7,7 @@ BabelFlyer::BabelFlyer(void)
 {
 	mUi.setupUi(this);
 
-	// Remove window borders
-	// setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-
-	// Desable resize window
-	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	mOriginalSize = size();
 
 	// Echo mode for input password
 	mUi.pwdEdit->setEchoMode(QLineEdit::Password);
@@ -28,4 +24,15 @@ void			BabelFlyer::authenticateValidation()
 {
 	mEmail = mUi.emailEdit->text();
 	mPwd = mUi.pwdEdit->text();
+}
+
+void	BabelFlyer::paintEvent(QPaintEvent *) {
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+QSize	BabelFlyer::minimumSizeHint() const {
+	return mOriginalSize;
 }

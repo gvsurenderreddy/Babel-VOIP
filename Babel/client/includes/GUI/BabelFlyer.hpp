@@ -3,7 +3,7 @@
 #include <QPainter>
 #include "ui_BabelFlyer.h"
 
-class BabelFlyer : public QWidget, public Ui_BabelFlyer
+class BabelFlyer : public QWidget
 {
 	Q_OBJECT
 
@@ -11,13 +11,11 @@ class BabelFlyer : public QWidget, public Ui_BabelFlyer
 	public:
 		BabelFlyer(void);
 		~BabelFlyer(void);
-		void paintEvent(QPaintEvent *)
-		{
-			QStyleOption opt;
-			opt.init(this);
-			QPainter p(this);
-			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-		}
+
+	// overrides
+	public:
+		void paintEvent(QPaintEvent *);
+		QSize minimumSizeHint() const;
 
 	// coplien form
 	private:
@@ -30,6 +28,7 @@ class BabelFlyer : public QWidget, public Ui_BabelFlyer
 		QString			mEmail;
 		QString			mPwd;
 		bool			mIsAuthenticate;
+		QSize			mOriginalSize;
 
 	// methods
 	public:

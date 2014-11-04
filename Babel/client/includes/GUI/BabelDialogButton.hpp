@@ -3,7 +3,7 @@
 #include <QPainter>
 #include "ui_BabelDialogButton.h"
 
-class BabelDialogButton : public QDialog, public Ui_BabelDialogButton
+class BabelDialogButton : public QDialog
 {
 	Q_OBJECT
 
@@ -11,6 +11,9 @@ class BabelDialogButton : public QDialog, public Ui_BabelDialogButton
 	public:
 		BabelDialogButton();
 		~BabelDialogButton();
+
+	// painter
+	public:
 		void paintEvent(QPaintEvent *)
 		{
 			QStyleOption opt;

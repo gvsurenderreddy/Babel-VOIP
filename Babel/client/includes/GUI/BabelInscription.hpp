@@ -3,7 +3,7 @@
 #include <QPainter>
 #include "ui_BabelInscription.h"
 
-class BabelInscription : public QWidget, public Ui_BabelInscription
+class BabelInscription : public QWidget
 {
 	Q_OBJECT
 
@@ -11,13 +11,11 @@ class BabelInscription : public QWidget, public Ui_BabelInscription
 	public:
 		BabelInscription(void);
 		~BabelInscription(void);
-		void paintEvent(QPaintEvent *)
-		{
-			QStyleOption opt;
-			opt.init(this);
-			QPainter p(this);
-			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-		}
+
+	// overrides
+	public:
+		void paintEvent(QPaintEvent *);
+		QSize minimumSizeHint() const;
 
 	// coplien form
 	private:
@@ -31,6 +29,7 @@ class BabelInscription : public QWidget, public Ui_BabelInscription
 		QString					mPseudo;
 		QString					mPwd;
 		bool					mIsRegister;
+		QSize			mOriginalSize;
 
 	// methods
 	public:
