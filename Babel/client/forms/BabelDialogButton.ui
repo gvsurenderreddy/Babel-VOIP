@@ -174,13 +174,13 @@ qproperty-alignment: AlignCenter;
    </hints>
   </connection>
   <connection>
-   <sender>minimize</sender>
+   <sender>close</sender>
    <signal>clicked()</signal>
    <receiver>BabelDialogButton</receiver>
-   <slot>showMinimized()</slot>
+   <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
+     <x>370</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">
@@ -190,13 +190,13 @@ qproperty-alignment: AlignCenter;
    </hints>
   </connection>
   <connection>
-   <sender>close</sender>
+   <sender>minimize</sender>
    <signal>clicked()</signal>
    <receiver>BabelDialogButton</receiver>
-   <slot>close()</slot>
+   <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>370</x>
+     <x>320</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">

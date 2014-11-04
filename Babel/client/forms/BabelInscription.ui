@@ -17,57 +17,6 @@
    <string notr="true">background-image: url(:/background_image.png);
 </string>
   </property>
-  <widget class="QPushButton" name="close">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>x</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="minimize">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);
-</string>
-   </property>
-   <property name="text">
-    <string>-</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
@@ -240,14 +189,12 @@ padding: 8px;
    </property>
   </widget>
   <zorder>pseudoEdit</zorder>
-  <zorder>minimize</zorder>
   <zorder>back</zorder>
   <zorder>ok</zorder>
   <zorder>emailEdit</zorder>
   <zorder>pwdEdit1</zorder>
   <zorder>pwdEdit2</zorder>
   <zorder>title</zorder>
-  <zorder>close</zorder>
  </widget>
  <tabstops>
   <tabstop>emailEdit</tabstop>
@@ -256,45 +203,11 @@ padding: 8px;
   <tabstop>pwdEdit2</tabstop>
   <tabstop>ok</tabstop>
   <tabstop>back</tabstop>
-  <tabstop>minimize</tabstop>
-  <tabstop>close</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/BabelMainWindow.qrc"/>
  </resources>
  <connections>
-  <connection>
-   <sender>close</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelInscription</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>480</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>434</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimize</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelInscription</receiver>
-   <slot>showMinimized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>430</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>434</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>back</sender>
    <signal>clicked()</signal>

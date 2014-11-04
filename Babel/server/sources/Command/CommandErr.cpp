@@ -1,4 +1,5 @@
 #include "Factory.hpp"
+#include "ErrorCode.hpp"
 #include "Command/CommandErr.hpp"
 
 CommandErr::CommandErr(){
@@ -28,7 +29,7 @@ IClientSocket::Message			*CommandErr::setParam(const std::vector<std::string> &p
 	body->errorCode = param[0][0];
 	body->instructionCode = param[1][0];
 
-    std::cout << "[CommandErr] [errorCode = '" << body->errorCode << "'] for instruction [" << Factory::getName(body->instructionCode) <<"]" << std::endl;
+    std::cout << "[ERR] [" << Factory::getName(body->instructionCode) << "] [" << ErrorCode::getName(body->errorCode) << "]" << std::endl;
 
 	msg->msgSize = this->getSizeBody();
 	msg->msg = reinterpret_cast<char *>(body);

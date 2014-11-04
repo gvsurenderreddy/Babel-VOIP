@@ -1,3 +1,7 @@
+#pragma once
+
+#include <string>
+
 namespace ErrorCode {
 	enum 
 	{
@@ -16,10 +20,11 @@ namespace ErrorCode {
             LOGIN_ON_ALREADY_LOGGED_ACCOUNT             = 0x12,
             CANNOT_ADD_YOURSELF                         = 0x13,
             CANNOT_CALL_YOURSELF                        = 0x14,
-            YOU_ARE_NOT_LOGGED	                    = 0x15,
+            YOU_ARE_NOT_LOGGED	                        = 0x15,
             ALREADY_CONNECTED                           = 0x16,
             ALREADY_IN_YOUR_CONTACT_LIST                = 0x17,
             NOT_IN_YOUR_CONTACT_LIST                    = 0x18,
             BUSY_CONTACT_CANNOT_REPLY                   = 0x19
 	};
+    std::string getName(int errorCode);
 }

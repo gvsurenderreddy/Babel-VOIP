@@ -4,7 +4,7 @@
 #include <iostream>
 #include <boost/bind.hpp>
 
-TcpServer::TcpServer() : mSigset(mService, SIGTERM, SIGINT), mAcceptor(NULL), mListener(NULL)
+TcpServer::TcpServer() : mSigset(mService, SIGTERM, SIGINT), mAcceptor(NULL), mListener(NULL), mPort(-1)
 {
     #if defined(SIGQUIT)
         mSigset.add(SIGQUIT);
@@ -23,9 +23,12 @@ TcpServer::~TcpServer()
 void TcpServer::createServer(int port, int)
 {
     tcp::endpoint endpoint(tcp::v4(), port);
+    mPort = port;
     mAcceptor = new tcp::acceptor(mService, endpoint);
-    std::cout << "[TCP SERVER] listening on port " << port << std::endl;
+    std::cout << "[TCP] start listening on port " << port << std::endl;
     startAccept();
+    boost::system::error_code ec;
+    mService.run(ec);
 }
 
 void TcpServer::startAccept(void)
@@ -40,7 +43,7 @@ void TcpServer::startAccept(void)
         }
         else
         {
-            std::cout << "[Error Server async_accept] " << error.message() << std::endl;
+            std::cout << "[TCP] async_accept failed: " << error.message() << std::endl;
             delete this;
         }
         startAccept();
@@ -60,7 +63,7 @@ void TcpServer::closeServer()
     });
     if (mAcceptor && mAcceptor->is_open())
          mAcceptor->close();
-    std::cout << "[TCP SERVER] closed" << std::endl;
+    std::cout << "[TCP] stop listening on port " << mPort << std::endl;
 }
 
 void TcpServer::setOnSocketEventListener(TcpServer::OnSocketEvent *listener)
@@ -80,10 +83,4 @@ IClientSocket* TcpServer::getNewClient()
 bool TcpServer::hasClientInQueue() const
 {
     return true;
-}
-
-void TcpServer::run()
-{
-    boost::system::error_code ec;
-    mService.run(ec);
 }

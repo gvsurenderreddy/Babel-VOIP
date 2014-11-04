@@ -23,6 +23,7 @@ class Client : public IClientSocket::OnSocketEvent{
 	    class OnClientEvent{
 	    public:
 		    virtual ~OnClientEvent() {}
+            virtual void onCloseConnection(Client* client) = 0;
             virtual void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
             virtual void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
             virtual void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;

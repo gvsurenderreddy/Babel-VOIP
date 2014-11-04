@@ -70,7 +70,7 @@ class BabelMainWindow : public QMainWindow {
 		void	sendMessage();
 		void	callContact();
 		void	disconnectionToAccount();
-
+		void	deleteContact(void);
 
 	// slots display
 	private slots:

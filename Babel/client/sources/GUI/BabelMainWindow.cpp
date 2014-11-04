@@ -53,12 +53,12 @@ BabelMainWindow::BabelMainWindow(void)
 	// connexion: when add contact
 	QObject::connect(mMain->getUi().addContact, SIGNAL(clicked()), this, SLOT(addNewContact()));
 
+	// when deleting contact
+	QObject::connect(mMain->getUi().deleteContact, SIGNAL(clicked()), this, SLOT(deleteContact()));
+
 	// when send message to somebody
 	QObject::connect(mMain->getUi().send, SIGNAL(clicked()), this, SLOT(sendMessage()));
 
-
-	// when close flyer
-	QObject::connect(mFlyer->getUi().close, SIGNAL(clicked()), &mDialog, SLOT(close()));
 
 	// when call somebody
 	QObject::connect(mMain->getUi().call, SIGNAL(clicked()), this, SLOT(callContact()));
@@ -368,4 +368,8 @@ void	BabelMainWindow::displaySignUp(void) {
 
 void	BabelMainWindow::displayFlyer(void) {
 	updateContent(mFlyer);
+}
+
+void	BabelMainWindow::deleteContact(void) {
+	emit askForDeletingContact(mMain->getCurrentContact());
 }

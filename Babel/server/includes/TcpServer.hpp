@@ -41,10 +41,6 @@ class TcpServer : public IServerSocket
         IClientSocket*  getNewClient();
         bool            hasClientInQueue() const;
 
-    // run
-    public:
-        void run();
-
     // accept
     public:
         void startAccept(void);
@@ -56,5 +52,6 @@ class TcpServer : public IServerSocket
         tcp::acceptor*                              mAcceptor;
         std::list<tcp::socket*>                     mSockets;
         IServerSocket::OnSocketEvent*               mListener;
+        int                                         mPort;
 
 };
