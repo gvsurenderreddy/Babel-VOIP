@@ -30,6 +30,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         void importAccountsUsernamePasswordFromFile(const std::string& path);
         void exportAccountsUsernamePasswordFromFile(const std::string& path);
         void displayAsciiHeader() const;
+        void displayAsciiFooter() const;
         void startServer();
         Client* findOnlineClient(const std::string& account) const;
         Client* findOfflineClient(const std::string& account) const;

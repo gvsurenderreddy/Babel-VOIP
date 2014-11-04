@@ -56,5 +56,6 @@ class TcpServer : public IServerSocket
         tcp::acceptor*                              mAcceptor;
         std::list<tcp::socket*>                     mSockets;
         IServerSocket::OnSocketEvent*               mListener;
+        int                                         mPort;
 
 };

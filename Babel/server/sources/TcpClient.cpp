@@ -31,12 +31,12 @@ void TcpClient::initFromSocket(void *socket)
 {
     mSocket = static_cast<tcp::socket*>(socket);
     startRecv();
-    std::cout << "[TCP CLIENT] inserted on address " << getRemoteIp() << std::endl;
+    std::cout << "[TCP] start socket from address " << getRemoteIp() << std::endl;
 }
 
 void TcpClient::closeClient()
 {
-    std::cout << "[TCP CLIENT] removed on address  " << getRemoteIp() << std::endl;
+    std::cout << "[TCP] stop socket from address " << getRemoteIp() << std::endl;
     if (mSocket)
         mSocket->close();
     if (mListener)
@@ -56,7 +56,7 @@ void TcpClient::startRecv()
         }
         else
         {
-            std::cout << "[TCP CLIENT] async_receive failed: '" << error.message() << "'" << std::endl;
+            std::cout << "[TCP] async_receive failed: " << error.message() << std::endl;
             closeClient();
         }
     });
@@ -117,7 +117,7 @@ void TcpClient::sendHandler(const boost::system::error_code &error, std::size_t 
     }
     else
     {
-        std::cout << "[Error Client async_write] " << error.message() << std::endl;
+        std::cout << "[TCP] async_write failed: " << error.message() << std::endl;
         closeClient();
     }
 }
