@@ -259,7 +259,6 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 		updateContent(mFlyer);
 		mMain->getDialog().hide();
 		mDialog.setMessage("Vous venez de vous déconnecter ;)");
-		emit askForTerminatingCall(mMain->getCurrentContact());
 	}
 	else
 		mDialog.setMessage("Erreur à la déconnexion :s");

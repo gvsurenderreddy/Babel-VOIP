@@ -105,8 +105,8 @@ void	Babel::askForAuthentication(const Contact &contact) {
 
 void	Babel::criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus) {
 	if (errorStatus.getErrorCode() == ErrorStatus::FAIL_INIT_SOCKET) {
-		std::cout << "critical error during UDP socket initialization" << std::endl;;
-		exit(0);
+		std::cerr << "critical error during UDP socket initialization" << std::endl;;
+		exit(-1);
 	}
 	else
 		mServerCommunication.terminateCall(mCallManager.getCurrentCalledContact());
