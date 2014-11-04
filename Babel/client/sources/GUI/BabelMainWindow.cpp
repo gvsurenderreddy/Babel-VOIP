@@ -118,7 +118,8 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 		msg,
 		QDateTime::currentDateTime()
 	};
-	mMain->getMessages()->getMessageList().push_back(message);
+	mMain->getMessages()->getMessageList() << message;
+	emit mMain->getMessages()->layoutChanged();
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
@@ -264,8 +265,10 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
 	{
+		/*
 		mDialog.setMessage("Impossible d'envoyer le message au destinataire :(");
 		mDialog.show();
+		*/
 	}
 }
 
@@ -329,16 +332,16 @@ void		BabelMainWindow::sendMessage()
 {
 	if (mMain->getUi().messageEdit->toPlainText() != "")
 	{
-		emit askForSendingMessage(mMain->getCurrentContact(), mMain->getUi().messageEdit->toPlainText());
-
-		// debug
 		MessageListModel::sMessage	msg = {
 			mContact.getPseudo(),
 			mMain->getUi().messageEdit->toPlainText(),
 			QDateTime::currentDateTime()
 		};
-		mMain->getMessages()->getMessageList().push_back(msg);
-		//
+		mMain->getMessages()->getMessageList() << msg;
+		emit mMain->getMessages()->layoutChanged();
+
+		mMain->getUi().messageEdit->clear();
+		emit askForSendingMessage(mMain->getCurrentContact(), mMain->getUi().messageEdit->toPlainText());
 	}
 }
 
