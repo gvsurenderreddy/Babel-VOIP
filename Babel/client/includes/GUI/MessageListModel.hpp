@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QListView>
 #include <QList>
-#include "Contact.hpp"
 
 class MessageListModel : public QAbstractListModel
 {
@@ -38,8 +37,8 @@ class MessageListModel : public QAbstractListModel
 		QVariant		data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant		headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-		void			setContactList(QList<MessageListModel::sMessage> const &messageList) { mMessageList = messageList; }
-		QList<MessageListModel::sMessage> 	&getContactList() { return mMessageList; }
+		void			setMessageList(QList<MessageListModel::sMessage> const &messageList) { mMessageList = messageList; }
+		QList<MessageListModel::sMessage> 	&getMessageList() { return mMessageList; }
 		void			sort();
 
 		static bool		compare(MessageListModel::sMessage const &v1, MessageListModel::sMessage const &v2);

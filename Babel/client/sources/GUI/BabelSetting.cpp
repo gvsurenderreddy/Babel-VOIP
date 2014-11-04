@@ -6,11 +6,7 @@ BabelSetting::BabelSetting(void)
 {
 	mUi.setupUi(this);
 
-	// Remove window borders
-	// setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-
-	// Desable resize window
-	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	mOriginalSize = size();
 
 	QObject::connect(mUi.connexion, SIGNAL(clicked()), this, SLOT(getIpPort()));
 }
@@ -24,4 +20,15 @@ void		BabelSetting::getIpPort()
 {
 	mHost = mUi.addrEdit->text();
 	mPort = mUi.portEdit->text().toInt();
+}
+
+void	BabelSetting::paintEvent(QPaintEvent *) {
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+QSize	BabelSetting::minimumSizeHint() const {
+	return mOriginalSize;
 }

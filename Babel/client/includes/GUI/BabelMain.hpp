@@ -6,7 +6,7 @@
 #include "MessageListModel.hpp"
 #include "BabelDialog.hpp"
 
-class BabelMain : public QWidget, public Ui_BabelMain
+class BabelMain : public QWidget
 {
 	Q_OBJECT
 
@@ -14,19 +14,16 @@ class BabelMain : public QWidget, public Ui_BabelMain
 	public:
 		BabelMain();
 		~BabelMain();
-		void paintEvent(QPaintEvent *)
-		{
-			QStyleOption opt;
-			opt.init(this);
-			QPainter p(this);
-			style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-		}
 
 	// coplien form
 	private:
 		BabelMain(const BabelMain &) : QWidget() {}
 		const BabelMain &operator=(const BabelMain &) { return *this; }
 
+	// overrides
+	public:
+		void paintEvent(QPaintEvent *);
+		QSize minimumSizeHint() const;
 
 	// attributes
 	private:
@@ -38,6 +35,7 @@ class BabelMain : public QWidget, public Ui_BabelMain
 		Contact				mCurrentContact;
 		Contact				mContactInCall;
 		bool				mIsCall;
+		QSize				mOriginalSize;
 
 	// methods
 	public:
@@ -57,4 +55,5 @@ class BabelMain : public QWidget, public Ui_BabelMain
 	public slots :
 		void		onClickContact(QModelIndex const &index);
 		void		onClickAddContact();
+		void		onClickSendMsg();
 };

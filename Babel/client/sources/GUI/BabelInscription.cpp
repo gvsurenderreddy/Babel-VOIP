@@ -5,11 +5,7 @@ BabelInscription::BabelInscription(void)
 {
 	mUi.setupUi(this);
 
-	// Remove window borders
-	// setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
-
-	// Desable resize window
-	setWindowFlags(windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	mOriginalSize = size();
 
 	// Echo mode for input password
 	mUi.pwdEdit1->setEchoMode(QLineEdit::Password);
@@ -39,4 +35,15 @@ void		BabelInscription::formValidation()
 		mPwd = "";
 		mIsRegister = false;
 	}
+}
+
+void	BabelInscription::paintEvent(QPaintEvent *) {
+	QStyleOption opt;
+	opt.init(this);
+	QPainter p(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+QSize	BabelInscription::minimumSizeHint() const {
+	return mOriginalSize;
 }
