@@ -64,15 +64,12 @@ class Client : public IClientSocket::OnSocketEvent{
 	    void onSocketReadable(IClientSocket *socket, unsigned int nbBytesToRead);
 	    void onSocketClosed(IClientSocket *socket);
 
-	// function for serialization
+	// internal functions
     public:
+        std::string getAbsolutePathDatabaseUsersFolder(void) const;
 	    bool saveData(void);
         bool loadData(void);
 
-    // function to initialize when logout
-    public:
-        void initialize(void);
-        
     // status
     public:
         enum Status
@@ -109,7 +106,8 @@ class Client : public IClientSocket::OnSocketEvent{
         void clearContact();
         void addContact(const std::string& accountName);
         void delContact(const std::string& accountName);
-        void updateLastPingTime();
+        void setLastPingTime(std::time_t timer);
+        void setCommunicationClient(Client*);
 
     // use client's data :: getter
     public:
@@ -119,7 +117,9 @@ class Client : public IClientSocket::OnSocketEvent{
 	    const std::string&            getAccount(void) const;
 	    const std::list<std::string>& getContact(void) const;
         IClientSocket*                getSocket(void) const;
-        time_t		                  getLastPingTime() const;
+        Client*                       getCommunicationClient(void) const;
+        Client::OnClientEvent*        getListener(void) const;
+        std::time_t                   getLastPingTime(void) const;
 	    bool						  isConnect(void) const;
         bool                          isAlreadyFriends(const std::string& accountName) const;
 
@@ -158,6 +158,7 @@ class Client : public IClientSocket::OnSocketEvent{
         bool                    isConnected;
         Client::OnClientEvent*  Listener;
         time_t		            lastPingTime;
+        Client*                 communicationClient;
 
     // display (have to be overload <<)
     public:

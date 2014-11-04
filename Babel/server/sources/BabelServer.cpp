@@ -15,14 +15,11 @@
 
 #include <utility>
 
-BabelServer::BabelServer() :mServerSocket(NULL), mAbsolutePathDatabaseFolder(boost::filesystem::complete(Database::DATABASE_FOLDER))
+BabelServer::BabelServer() :mServerSocket(NULL)
 {
     displayAsciiHeader();
-    if (boost::filesystem::exists(mAbsolutePathDatabaseFolder) == false)
-        boost::filesystem::create_directory(mAbsolutePathDatabaseFolder);
-    const std::string& absolutePathDatabaseFolderStr = mAbsolutePathDatabaseFolder.string();
-    mAccountsFilePath = absolutePathDatabaseFolderStr + Database::DATABASE_ACCOUNTS_FILENAME + Database::DATABASE_EXTENSION;
-    importAccountsFromFile(mAccountsFilePath);
+    mAccountsFilePath = getAbsolutePathAccountsUsersFolder();
+    importAccountsUsernamePasswordFromFile(mAccountsFilePath);
 }
 
 BabelServer::~BabelServer()
@@ -30,7 +27,7 @@ BabelServer::~BabelServer()
     if (mServerSocket)
         delete mServerSocket;
     logOutClients();
-    exportAccountsFromFile(mAccountsFilePath);
+    exportAccountsUsernamePasswordFromFile(mAccountsFilePath);
     std::for_each(mClients.begin(), mClients.end(), [](Client* client) { if (client->isConnect()) client->saveData(); });
 }
 
@@ -51,7 +48,16 @@ void BabelServer::displayAccounts() const
     }
 }
 
-void BabelServer::importAccountsFromFile(const std::string& path)
+std::string BabelServer::getAbsolutePathAccountsUsersFolder(void) const
+{
+    const boost::filesystem::path mAbsolutePathDatabaseFolder = boost::filesystem::complete(Database::DATABASE_FOLDER);
+    if (boost::filesystem::exists(mAbsolutePathDatabaseFolder) == false)
+        boost::filesystem::create_directory(mAbsolutePathDatabaseFolder);
+    const std::string& absolutePathDatabaseFolderStr = mAbsolutePathDatabaseFolder.string();
+    return absolutePathDatabaseFolderStr + Database::DATABASE_ACCOUNTS_FILENAME + Database::DATABASE_EXTENSION;
+}
+
+void BabelServer::importAccountsUsernamePasswordFromFile(const std::string& path)
 {
     std::cout << "[DATABASE] try import users already created" << std::endl;
     std::ifstream ifs(path);
@@ -66,18 +72,7 @@ void BabelServer::importAccountsFromFile(const std::string& path)
     displayAccounts();
 }
 
-void BabelServer::logOutClients()
-{
-	std::for_each(mClients.begin(), mClients.end(), [](Client* client) { 
-		if (client->isConnect())
-		{
-			client->initialize();
-			client->saveData();
-		}
-	});
-}
-
-void BabelServer::exportAccountsFromFile(const std::string& path)
+void BabelServer::exportAccountsUsernamePasswordFromFile(const std::string& path)
 {
     std::cout << "[DATABASE] try export users created" << std::endl;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
@@ -88,22 +83,17 @@ void BabelServer::exportAccountsFromFile(const std::string& path)
     ofs.close();
 }
 
-void BabelServer::removeUserFileIfAccountDoesntExist()
+void BabelServer::logOutClients()
 {
-    // via boost, delete all users/<account>.data qui ne sont pas dans la database.data
-    /*
-    std::for_each(mAccounts.begin(), mAccounts.end(),
-        [](const std::pair<std::string, std::string>& item) {
-        std::cout << "    '" << item.first << "'   '" << item.second << "'" << std::endl;
-    });
-
-    boost::filesystem::directory_iterator end_iter;
-    typedef std::multimap<std::time_t, boost::filesystem::path> result_set_t;
-    result_set_t result_set;
-    for (boost::filesystem::directory_iterator dir_iter(mAbsolutePathDatabaseFolder); dir_iter != end_iter; ++dir_iter)
-        if (boost::filesystem::is_regular_file(dir_iter->status()))
-            result_set.insert(result_set_t::value_type(boost::filesystem::last_write_time(dir_iter->path()), *dir_iter));
-    */
+	std::for_each(mClients.begin(), mClients.end(), [](Client* client) { 
+		if (client->isConnect())
+		{
+            client->setConnected(false);
+            client->setStatusCall(Client::StatusCall::NONE);
+            client->setStatus(Client::Status::DISCONNECTED);
+			client->saveData();
+		}
+	});
 }
 
 void BabelServer::displayAsciiHeader() const
@@ -715,7 +705,10 @@ void BabelServer::onExit(Client* client, std::vector<std::string>& param, IComma
 			sendStateCommand(client, ErrorCode::OK, instruction);
 			std::cout << "[EXIT] OK" << std::endl;
 
-			client->initialize();
+            client->setConnected(false);
+            client->setStatusCall(Client::StatusCall::NONE);
+            client->setStatus(Client::Status::DISCONNECTED);
+            client->setLastPingTime(std::time(nullptr));
 			client->saveData();
 
 			notifyMyFriendsOfModificationAboutMe(client);

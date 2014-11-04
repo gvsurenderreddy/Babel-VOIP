@@ -26,9 +26,9 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
     public:
         void displayAccounts() const;
         void logOutClients();
-        void importAccountsFromFile(const std::string& path);
-        void exportAccountsFromFile(const std::string& path);
-        void removeUserFileIfAccountDoesntExist();
+        std::string getAbsolutePathAccountsUsersFolder(void) const;
+        void importAccountsUsernamePasswordFromFile(const std::string& path);
+        void exportAccountsUsernamePasswordFromFile(const std::string& path);
         void displayAsciiHeader() const;
         void startServer();
         Client* findOnlineClient(const std::string& account) const;
@@ -47,7 +47,6 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         std::list<Client*>                 mClients;
         std::map<std::string, std::string> mAccounts;
         std::string                        mAccountsFilePath;
-        const boost::filesystem::path      mAbsolutePathDatabaseFolder;
 
     // serializer
     private:
