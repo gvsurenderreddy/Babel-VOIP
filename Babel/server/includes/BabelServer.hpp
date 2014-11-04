@@ -25,16 +25,20 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
     // internal functions
     public:
         void displayAccounts() const;
-        void logOutClients();
+        void displayAsciiHeader() const;
+        void displayAsciiFooter() const;
+
         std::string getAbsolutePathAccountsUsersFolder(void) const;
         void importAccountsUsernamePasswordFromFile(const std::string& path);
         void exportAccountsUsernamePasswordFromFile(const std::string& path);
-        void displayAsciiHeader() const;
-        void displayAsciiFooter() const;
+
         void startServer();
+
         Client* findOnlineClient(const std::string& account) const;
         Client* findOfflineClient(const std::string& account) const;
+
         void sendStateCommand(Client* client, int errorOccured, ICommand::Instruction instruction) const;
+
         void notifyMyFriendsOfModificationAboutMe(Client* client);
 
     // constants
@@ -63,6 +67,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // Client::OnClientEvent callbacks
 	public:
+        void onCloseConnection(Client* client);
         void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
         void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
         void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);

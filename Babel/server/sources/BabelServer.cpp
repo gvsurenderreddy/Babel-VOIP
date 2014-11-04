@@ -27,9 +27,32 @@ BabelServer::~BabelServer()
     displayAsciiFooter();
     if (mServerSocket)
         delete mServerSocket;
-    logOutClients();
     exportAccountsUsernamePasswordFromFile(mAccountsFilePath);
-    std::for_each(mClients.begin(), mClients.end(), [](Client* client) { if (client->isConnect()) client->saveData(); });
+    for (std::list<Client*>::iterator it = mClients.begin(); it != mClients.end(); ++it)
+        delete *it;
+    mClients.clear();
+}
+
+void BabelServer::displayAsciiHeader() const
+{
+    std::cout << std::endl;
+    std::cout << "  ____          _            _   " << std::endl;
+    std::cout << " |  _ \\        | |          | |  " << std::endl;
+    std::cout << " | |_) |  __ _ | |__    ___ | |  " << std::endl;
+    std::cout << " |  _ <  / _` || '_ \\  / _ \\| |  " << std::endl;
+    std::cout << " | |_) || (_| || |_) ||  __/| |  " << std::endl;
+    std::cout << " |____/  \\__,_||_.__/  \\___||_| Epitech Project" << std::endl;
+    std::cout << std::endl;
+}
+
+void BabelServer::displayAsciiFooter() const
+{
+    std::cout << "        ____                           " << std::endl;
+    std::cout << "   _||__|  |  ______   ______   ______   ______ " << std::endl;
+    std::cout << "  (        | |      | |      | |      | |      |" << std::endl;
+    std::cout << "  /-()---() ~ ()--() ~ ()--() ~ ()--() ~ ()--()~" << std::endl;
+    std::cout << "    (emad_n, ninon_s, guego_p, nguy_1, tran_y)" << std::endl;
+    std::cout << std::endl;
 }
 
 void BabelServer::displayAccounts() const
@@ -81,52 +104,16 @@ void BabelServer::exportAccountsUsernamePasswordFromFile(const std::string& path
     ofs.close();
 }
 
-void BabelServer::logOutClients()
-{
-	std::for_each(mClients.begin(), mClients.end(), [](Client* client) { 
-		if (client->isConnect())
-		{
-            client->setConnected(false);
-            client->setStatusCall(Client::StatusCall::NONE);
-            client->setStatus(Client::Status::DISCONNECTED);
-			client->saveData();
-		}
-	});
-}
-
-void BabelServer::displayAsciiHeader() const
-{
-    std::cout << std::endl;
-    std::cout << "  ____          _            _   " << std::endl;
-    std::cout << " |  _ \\        | |          | |  " << std::endl;
-    std::cout << " | |_) |  __ _ | |__    ___ | |  " << std::endl;
-    std::cout << " |  _ <  / _` || '_ \\  / _ \\| |  " << std::endl;
-    std::cout << " | |_) || (_| || |_) ||  __/| |  " << std::endl;
-    std::cout << " |____/  \\__,_||_.__/  \\___||_| Epitech Project" << std::endl;
-    std::cout << std::endl;
-}
-
-void BabelServer::displayAsciiFooter() const
-{
-    std::cout << "        ____                           " << std::endl;
-    std::cout << "   _||__|  |  ______   ______   ______   ______ " << std::endl;
-    std::cout << "  (        | |      | |      | |      | |      |" << std::endl;
-    std::cout << "  /-()---() ~ ()--() ~ ()--() ~ ()--() ~ ()--()~" << std::endl;
-    std::cout << "    (emad_n, ninon_s, guego_p, nguy_1, tran_y)" << std::endl;
-    std::cout << std::endl;
-}
-
 void BabelServer::startServer()
 {
     mServerSocket = dynamic_cast<IServerSocket*>(new TcpServer);
     mServerSocket->setOnSocketEventListener(this);
     mServerSocket->createServer(BabelServer::BABEL_DEFAULT_LISTEN_PORT, BabelServer::BABEL_DEFAULT_QUEUE_SIZE);
-    mServerSocket->run();
 }
 
 Client* BabelServer::findOnlineClient(const std::string& account) const
 {
-    auto it = std::find_if(mClients.begin(), mClients.end(), [&account](Client* client)
+    auto it = std::find_if(mClients.begin(), mClients.end(), [&account](const Client* client)
     { return client->getAccount() == account && client->isConnect(); });
     return (mClients.end() != it ? *it : NULL);
 }
@@ -148,25 +135,18 @@ Client* BabelServer::findOfflineClient(const std::string& account) const
 
 void BabelServer::sendStateCommand(Client* client, int errorOccured, ICommand::Instruction instruction) const
 {
-    std::vector<std::string> args;
-
-    args.push_back("");
-    args[0] += errorOccured;
-    args.push_back("");
-    args[1] += instruction;
+    std::vector<std::string> args = { std::string(1, errorOccured), std::string(1, instruction) };
     client->handleCmd->packCmd(ICommand::ERR, args);
 }
 
 void BabelServer::notifyMyFriendsOfModificationAboutMe(Client* client)
 {
     std::vector<std::string> args;
-
+    
     args.push_back(client->getAccount());
     args.push_back(client->getPseudo());
-    args.push_back("");
-    args[2] += client->getStatus();
-    args.push_back("");
-    args[3] += client->isConnect();
+    args.push_back(std::string(1, client->getStatus()));
+    args.push_back(std::string(1, client->isConnect()));
 
     std::for_each(client->getContact().begin(), client->getContact().end(), [&](const std::string &accountName) {
         Client* clientTarget = findOnlineClient(accountName);
@@ -187,6 +167,20 @@ void BabelServer::onNewConnection(IServerSocket *serverSocket)
 /*
 ** Client::OnClientEvent
 */
+
+// ** lost connexion
+void BabelServer::onCloseConnection(Client* client)
+{
+    std::list<Client*>::iterator it = mClients.begin();
+    std::list<Client*>::iterator it_end = mClients.end();
+    while (it != it_end)
+    {
+        if (*it == client)
+            it = mClients.erase(it);
+        else
+            ++it;
+    }
+}
 
 // ** Add
 // ** add #nom_de_compte
@@ -354,14 +348,12 @@ void BabelServer::onShow(Client* client, std::vector<std::string>& param, IComma
 			{
 			    sendStateCommand(client, ErrorCode::OK, instruction);
 
-			    std::vector<std::string> args;
+                std::vector<std::string> args;
 
-			    args.push_back(targetClient->getAccount());
-			    args.push_back(targetClient->getPseudo());
-			    args.push_back("");
-			    args[2] += targetClient->getStatus();
-			    args.push_back("");
-			    args[3] += targetClient->isConnect();
+                args.push_back(targetClient->getAccount());
+                args.push_back(targetClient->getPseudo());
+                args.push_back(std::string(1, client->getStatus()));
+                args.push_back(std::string(1, client->isConnect()));
 
 			    delete targetClient;
 
@@ -582,20 +574,22 @@ void BabelServer::onAcceptCall(Client* callerClient, std::vector<std::string>& p
 
 				        callerClient->setStatusCall(Client::StatusCall::ISCALLING);
 				        callerClient->saveData();
-				        args.push_back(callerClient->getAccount());
-				        args.push_back(callerClient->getSocket()->getRemoteIp());
-				        args.push_back("");
-				        args[2] += accept;
+
+                        args.push_back(callerClient->getAccount());
+                        args.push_back(callerClient->getSocket()->getRemoteIp());
+                        args.push_back(std::string(1, accept));
+
 				        targetClient->handleCmd->packCmd(instruction, args);
 
 				        args.clear();
 
 				        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
 				        targetClient->saveData();
-				        args.push_back(targetClient->getAccount());
-				        args.push_back(targetClient->getSocket()->getRemoteIp());
-				        args.push_back("");
-				        args[2] += accept;
+
+                        args.push_back(targetClient->getAccount());
+                        args.push_back(targetClient->getSocket()->getRemoteIp());
+                        args.push_back(std::string(1, accept));
+
 				        callerClient->handleCmd->packCmd(instruction, args);
 				    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);
 			    } else sendStateCommand(callerClient, ErrorCode::ACTIONS_TO_OFFLINE_ACCOUNT, instruction);

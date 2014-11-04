@@ -41,10 +41,6 @@ class TcpServer : public IServerSocket
         IClientSocket*  getNewClient();
         bool            hasClientInQueue() const;
 
-    // run
-    public:
-        void run();
-
     // accept
     public:
         void startAccept(void);

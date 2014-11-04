@@ -28,7 +28,16 @@ communicationClient(NULL)
 
 Client::~Client()
 {
-
+    if (this->isConnect())
+    {
+        this->setConnected(false);
+        this->setStatusCall(Client::StatusCall::NONE);
+        this->setStatus(Client::Status::DISCONNECTED);
+        this->setLastPingTime(std::time(nullptr));
+        this->saveData();
+    }
+    if (Listener)
+        Listener->onCloseConnection(this);
 }
 
 /*
@@ -51,20 +60,8 @@ void    Client::onBytesWritten(IClientSocket *, unsigned int)
 
 void	Client::onSocketClosed(IClientSocket*)
 {
-    std::cout << "[SOCKET CLIENT CLOSE]";
-    if (this->isConnect())
-    {
-    	std::cout << " account: '" << account << "'" << std::endl;
-        this->setConnected(false);
-        this->setStatusCall(Client::StatusCall::NONE);
-        this->setStatus(Client::Status::DISCONNECTED);
-        this->setLastPingTime(std::time(nullptr));
-    	this->saveData();
-    }
-    else
-    {
-    	std::cout << " not logged user" << std::endl;
-    }
+    std::cout << "[CLIENT] onSocketClose " << this->getAccount() << std::endl;
+    delete this;
 }
 
 /*

@@ -29,9 +29,5 @@ class IServerSocket {
 	public:
 		virtual IClientSocket	*getNewClient() = 0;
 		virtual bool			hasClientInQueue() const = 0;
-
-    // run
-    public:
-        virtual void run() = 0;
 		
 };

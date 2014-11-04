@@ -27,6 +27,8 @@ void TcpServer::createServer(int port, int)
     mAcceptor = new tcp::acceptor(mService, endpoint);
     std::cout << "[TCP] start listening on port " << port << std::endl;
     startAccept();
+    boost::system::error_code ec;
+    mService.run(ec);
 }
 
 void TcpServer::startAccept(void)
@@ -81,10 +83,4 @@ IClientSocket* TcpServer::getNewClient()
 bool TcpServer::hasClientInQueue() const
 {
     return true;
-}
-
-void TcpServer::run()
-{
-    boost::system::error_code ec;
-    mService.run(ec);
 }
