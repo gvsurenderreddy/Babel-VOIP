@@ -46,6 +46,9 @@ std::string ErrorCode::getName(int errorCode)
         return "NOT_IN_YOUR_CONTACT_LIST";
     case ErrorCode::BUSY_CONTACT_CANNOT_REPLY:
         return "BUSY_CONTACT_CANNOT_REPLY";
-    default: return "UNKNOWN";
+    case ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM:
+        return "NOT_IN_COMMUNICATION_WITH_HIM";
+    default:
+        return "UNKNOWN";
     }
 }
