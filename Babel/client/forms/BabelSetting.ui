@@ -46,57 +46,6 @@ color: rgb(255, 255, 255);
     <string>&lt;</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="minimize">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);
-</string>
-   </property>
-   <property name="text">
-    <string>-</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="close">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>10</y>
-     <width>41</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
-color: rgb(255, 255, 255);</string>
-   </property>
-   <property name="text">
-    <string>x</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="title">
    <property name="geometry">
     <rect>
@@ -312,8 +261,6 @@ border-style: outset;
   <tabstop>pwdEdit3</tabstop>
   <tabstop>ok</tabstop>
   <tabstop>back</tabstop>
-  <tabstop>minimize</tabstop>
-  <tabstop>close</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/BabelMainWindow.qrc"/>
@@ -327,38 +274,6 @@ border-style: outset;
    <hints>
     <hint type="sourcelabel">
      <x>30</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>434</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>minimize</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelSetting</receiver>
-   <slot>showMinimized()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>430</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>255</x>
-     <y>434</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>close</sender>
-   <signal>clicked()</signal>
-   <receiver>BabelSetting</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>480</x>
      <y>25</y>
     </hint>
     <hint type="destinationlabel">

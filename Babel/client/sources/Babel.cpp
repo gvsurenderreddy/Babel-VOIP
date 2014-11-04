@@ -64,18 +64,11 @@ void	Babel::receiveContactInfo(const Contact &contact) {
 
 		QList<Contact>::iterator it = mContacts.begin();
 		QList<Contact>::iterator end = mContacts.end();
+		QList<Contact>::iterator result = std::find_if(it, end, [&contact](const Contact& c) { return c.getAccountName() == contact.getAccountName(); });
 
-		// AMELIORER AVEC UN FIND!!!
-		while (it != end) {
-			if (it->getAccountName() == contact.getAccountName()) {
-				*it = contact;
-				mMainWindow.updateContactList(mContacts);
-				return ;
-			}
-			it++;
-		}
+		if (result == end)
+			mContacts.push_back(contact);
 
-		mContacts.push_back(contact);
 		mMainWindow.updateContactList(mContacts);
 	}
 }
@@ -83,13 +76,10 @@ void	Babel::receiveContactInfo(const Contact &contact) {
 void	Babel::receiveContactDeletion(const Contact &contact) {
 	QList<Contact>::iterator it = mContacts.begin();
 	QList<Contact>::iterator end = mContacts.end();
+	QList<Contact>::iterator result = std::find_if(it, end, [&contact](const Contact& c) { return c.getAccountName() == contact.getAccountName(); });
 
-	while (it != end) {
-		if (it->getAccountName() == contact.getAccountName())
-			it = mContacts.erase(it);
-		else
-			it++;
-	}
+	if (result != end)
+		mContacts.erase(result);
 
 	mMainWindow.updateContactList(mContacts);
 }
