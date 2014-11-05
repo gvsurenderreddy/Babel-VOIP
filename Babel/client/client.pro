@@ -70,6 +70,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/GUI/BabelSetting.hpp				\
 			includes/GUI/BabelMain.hpp				\
 			includes/GUI/BabelMainWindow.hpp			\
+			includes/GUI/BabelUpdate.hpp				\
 			includes/Contact.hpp					\
 			includes/Babel.hpp					\
 			includes/ErrorStatus.hpp
@@ -98,6 +99,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/GUI/BabelInscription.cpp			\
 			sources/GUI/BabelSetting.cpp				\
 			sources/GUI/BabelMain.cpp				\
+			sources/GUI/BabelUpdate.cpp				\
 			sources/ServerCommunication/ServerCommunication.cpp	\
 			sources/ServerCommunication/CommandPacketBuilder.cpp	\
 			sources/Commands/CommandAcceptAdd.cpp			\
@@ -125,7 +127,8 @@ FORMS		+=	forms/BabelDialog.ui					\
 			forms/BabelFlyer.ui					\
 			forms/BabelInscription.ui				\
 			forms/BabelSetting.ui					\
-			forms/BabelMain.ui
+			forms/BabelMain.ui					\
+			forms/BabelUpdate.ui
 
 RESOURCES	+=	resources/BabelMainWindow.qrc
 

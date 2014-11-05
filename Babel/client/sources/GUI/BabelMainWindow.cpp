@@ -7,7 +7,7 @@ using namespace std;
 
 BabelMainWindow::BabelMainWindow(void)
 	:	QMainWindow(), mCentralWidget(new QStackedWidget), mFlyer(new BabelFlyer),
-		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain)
+		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain), mUpdate(new BabelUpdate)
 {
 	// Load and set font
 	QFontDatabase	fontDb;
@@ -26,10 +26,12 @@ BabelMainWindow::BabelMainWindow(void)
 	mCentralWidget->addWidget(mSignup);
 	mCentralWidget->addWidget(mSetting);
 	mCentralWidget->addWidget(mMain);
+	mCentralWidget->addWidget(mUpdate);
 	mFlyer->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSignup->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSetting->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mMain->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	mUpdate->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 	// action when click on login/signin
 	QObject::connect(mFlyer->getUi().signup, SIGNAL(clicked()), this, SLOT(displaySignUp()));
@@ -66,17 +68,17 @@ BabelMainWindow::BabelMainWindow(void)
 	// when deconnection
 	QObject::connect(mMain->getUi().logout, SIGNAL(clicked()), this, SLOT(disconnectionToAccount()));
 
+	// update window
+	QObject::connect(mMain, SIGNAL(updateContactInfo()), this, SLOT(displayUpdate()));
+	QObject::connect(mUpdate, SIGNAL(exit()), this, SLOT(displayHome()));
+	QObject::connect(mUpdate, SIGNAL(updateContactInfo(Contact &)), this, SLOT(updateContactInfo(Contact &)));
+
 	// trigger return pressed
 	QObject::connect(mFlyer->getUi().emailEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
 	QObject::connect(mFlyer->getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
 
 	QObject::connect(mSetting->getUi().addrEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
 	QObject::connect(mSetting->getUi().portEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
-
-	QObject::connect(mSetting->getUi().pseudoEdit, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit1, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit2, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit3, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
 
 	QObject::connect(mSignup->getUi().emailEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
 	QObject::connect(mSignup->getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
@@ -388,4 +390,18 @@ void	BabelMainWindow::displayFlyer(void) {
 
 void	BabelMainWindow::deleteContact(void) {
 	emit askForDeletingContact(mMain->getCurrentContact());
+}
+
+void	BabelMainWindow::displayHome(void) {
+	updateContent(mMain);
+}
+
+void	BabelMainWindow::displayUpdate(void) {
+	updateContent(mUpdate);
+}
+
+void	BabelMainWindow::updateContactInfo(Contact &contact) {
+	contact.setAccountName(mContact.getAccountName());
+
+	emit askForUpdatingInfo(contact);
 }

@@ -15,6 +15,8 @@ BabelMain::BabelMain()
 	// Event on list contact
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
 	QObject::connect(mUi.send, SIGNAL(clicked()), this, SLOT(onClickSendMsg));
+
+	QObject::connect(mUi.options, SIGNAL(clicked()), this, SLOT(onOptionsButtonClicked()));
 }
 
 BabelMain::~BabelMain()
@@ -40,4 +42,8 @@ void		BabelMain::onClickContact(QModelIndex const &index)
 	mCurrentContact = mModel->getContactList()[index.row()];
 	mMessages->setMessageList(mCurrentContact.getMessages());
 	emit mMessages->layoutChanged();
+}
+
+void	BabelMain::onOptionsButtonClicked(void) {
+	emit updateContactInfo();
 }
