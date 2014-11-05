@@ -32,7 +32,6 @@ background-color: rgba(255, 255, 255, 0);
 padding: 8px;
 font: 16px &quot;Open Sans Light&quot;;
 color: rgb(255, 255, 255);
-qproperty-alignment: AlignCenter;
 </string>
    </property>
    <property name="text">
@@ -55,7 +54,6 @@ background-color: rgba(0, 0, 0, 160);
 padding: 8px;
 font: 16px &quot;Open Sans Light&quot;;
 color: rgb(255, 255, 255);
-qproperty-alignment: AlignCenter;
 </string>
    </property>
    <property name="text">
@@ -78,7 +76,6 @@ background-color: rgba(0, 0, 0, 160);
 padding: 8px;
 font: 16px &quot;Open Sans Light&quot;;
 color: rgb(255, 255, 255);
-qproperty-alignment: AlignCenter;
 </string>
    </property>
    <property name="text">

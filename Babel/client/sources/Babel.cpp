@@ -61,13 +61,14 @@ void	Babel::receiveContactInfo(const Contact &contact) {
 		mMainWindow.updateInfo(contact);
 	}
 	else {
-
 		QList<Contact>::iterator it = mContacts.begin();
 		QList<Contact>::iterator end = mContacts.end();
 		QList<Contact>::iterator result = std::find_if(it, end, [&contact](const Contact& c) { return c.getAccountName() == contact.getAccountName(); });
 
 		if (result == end)
 			mContacts.push_back(contact);
+		else
+			*result = contact;
 
 		mMainWindow.updateContactList(mContacts);
 	}

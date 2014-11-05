@@ -194,10 +194,11 @@ void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
 
 void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
-	{
-		mDialog.setMessage("Votre profile est introuvable - -'");
-		mDialog.show();
-	}
+		mDialog.setMessage("Le profil n'a pas pu être mis à jour.");
+	else
+		mDialog.setMessage("Le profil a été mis à jour");
+
+	mDialog.show();
 }
 
 void	BabelMainWindow::callContactSuccess(const ErrorStatus &es) {
