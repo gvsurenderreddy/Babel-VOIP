@@ -15,6 +15,9 @@ BabelMain::BabelMain()
 	// Event on list contact
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
 	QObject::connect(mUi.send, SIGNAL(clicked()), this, SLOT(onClickSendMsg));
+
+	// trigger
+	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), mUi.addContact, SIGNAL(clicked()));
 }
 
 BabelMain::~BabelMain()

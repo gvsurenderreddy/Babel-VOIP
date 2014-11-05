@@ -66,24 +66,12 @@ BabelMainWindow::BabelMainWindow(void)
 	// when deconnection
 	QObject::connect(mMain->getUi().logout, SIGNAL(clicked()), this, SLOT(disconnectionToAccount()));
 
+	// when you have a choice to do something
+	QObject::connect(mDialogButton.getUi().yes, SIGNAL(clicked()), this, SLOT(sayYes()));
+	QObject::connect(mDialogButton.getUi().no, SIGNAL(clicked()), this, SLOT(sayNo()));
+
 	// trigger return pressed
-	QObject::connect(mFlyer->getUi().emailEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
-	QObject::connect(mFlyer->getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
 
-	QObject::connect(mSetting->getUi().addrEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().portEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
-
-	QObject::connect(mSetting->getUi().pseudoEdit, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit1, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit2, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit3, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-
-	QObject::connect(mSignup->getUi().emailEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pwdEdit1, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pwdEdit2, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-
-	QObject::connect(mMain->getUi().newContact, SIGNAL(returnPressed()), mMain->getUi().addContact, SIGNAL(clicked()));
 }
 
 BabelMainWindow::~BabelMainWindow(void) {}
@@ -106,10 +94,15 @@ void	BabelMainWindow::updateContent(QWidget *widget) {
 
 void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 	mMain->getModel()->setContactList(list);
+	emit mMain->getModel()->layoutChanged();
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	emit askForAcceptingContact(contact, true);
+	mDialogButton.setMessage(contact.getAccountName() + " vous a ajouté");
+	mDialogButton.show();
+	if (mDialogButton.getIsUse())
+		emit askForAcceptingContact(contact, mDialogButton.getHasAccepted());
+	mDialogButton.setIsUse(false);
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
@@ -128,7 +121,11 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
-	emit askForAcceptingCall(contact, true);
+	mDialogButton.setMessage(contact.getAccountName() + " vous invite à appeler");
+	mDialogButton.show();
+	if (mDialogButton.getIsUse())
+		emit askForAcceptingCall(contact, mDialogButton.getHasAccepted());
+	mDialogButton.setIsUse(false);
 }
 
 void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
@@ -389,4 +386,16 @@ void	BabelMainWindow::displayFlyer(void) {
 
 void	BabelMainWindow::deleteContact(void) {
 	emit askForDeletingContact(mMain->getCurrentContact());
+}
+
+void	BabelMainWindow::sayYes(void)
+{
+	mDialogButton.setHasAccepted(true);
+	mDialogButton.setIsUse(true);
+}
+
+void	BabelMainWindow::sayNo(void)
+{
+	mDialogButton.setHasAccepted(false);
+	mDialogButton.setIsUse(true);
 }
