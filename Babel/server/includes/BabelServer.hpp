@@ -15,7 +15,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
     // default ctor-dtor
     public:
         BabelServer();
-        ~BabelServer();
+        virtual ~BabelServer();
 
     // private coplien form
     private:
@@ -29,6 +29,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
         void displayAsciiFooter() const;
 
         std::string getAbsolutePathAccountsUsersFolder(void) const;
+        void cleanWrongsUserFile(void) const;
         void importAccountsUsernamePasswordFromFile(const std::string& path);
         void exportAccountsUsernamePasswordFromFile(const std::string& path);
 

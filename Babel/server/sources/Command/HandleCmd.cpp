@@ -40,7 +40,7 @@ void						HandleCmd::packCmd(ICommand::Instruction instruction, const std::vecto
         }   
         else
         {
-            std::cerr << "  [WRONG USAGE - INSTR '" << instruction << "' SHOULD NOT BE EXEC OF A CMD SET PARAM]" << std::endl;
+            std::cerr << "[USAGE] InstructionCode '" << instruction << "' SHOULD NOT BE EXEC]" << std::endl;
         }
     }
     else

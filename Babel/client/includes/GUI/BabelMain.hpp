@@ -51,7 +51,13 @@ class BabelMain : public QWidget
 		void				setIsCall(bool isCall) { mIsCall = isCall; }
 		BabelDialog 		&getDialog() { return mDialog; }
 
-	// slots
-	public slots :
-		void		onClickContact(QModelIndex const &index);
+	// intern slots
+	private slots:
+		void	onClickContact(QModelIndex const &index);
+		void	onOptionsButtonClicked(void);
+
+	// signals
+	signals:
+		void	updateContactInfo(void);
+
 };

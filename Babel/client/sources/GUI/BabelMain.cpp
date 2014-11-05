@@ -18,6 +18,8 @@ BabelMain::BabelMain()
 
 	// trigger
 	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), mUi.addContact, SIGNAL(clicked()));
+
+	QObject::connect(mUi.options, SIGNAL(clicked()), this, SLOT(onOptionsButtonClicked()));
 }
 
 BabelMain::~BabelMain()
@@ -43,4 +45,8 @@ void		BabelMain::onClickContact(QModelIndex const &index)
 	mCurrentContact = mModel->getContactList()[index.row()];
 	mMessages->setMessageList(mCurrentContact.getMessages());
 	emit mMessages->layoutChanged();
+}
+
+void	BabelMain::onOptionsButtonClicked(void) {
+	emit updateContactInfo();
 }

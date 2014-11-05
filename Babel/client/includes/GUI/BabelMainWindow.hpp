@@ -13,6 +13,7 @@
 #include "BabelDialogButton.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
+#include "BabelUpdate.hpp"
 #include <QStackedWidget>
 
 class BabelMainWindow : public QMainWindow {
@@ -36,6 +37,7 @@ class BabelMainWindow : public QMainWindow {
 		BabelInscription	*mSignup;
 		BabelSetting		*mSetting;
 		BabelMain			*mMain;
+		BabelUpdate			*mUpdate;
 		BabelDialog			mDialog;
 		BabelDialogButton	mDialogButton;
 		Contact				mContact;
@@ -81,6 +83,9 @@ class BabelMainWindow : public QMainWindow {
 		void	displayOptions(void);
 		void	displaySignUp(void);
 		void	displayFlyer(void);
+		void	displayHome(void);
+		void	displayUpdate(void);
+		void	updateContactInfo(Contact &contact);
 
 	// signals
 	signals:

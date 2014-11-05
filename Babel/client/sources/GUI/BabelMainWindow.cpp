@@ -7,7 +7,7 @@ using namespace std;
 
 BabelMainWindow::BabelMainWindow(void)
 	:	QMainWindow(), mCentralWidget(new QStackedWidget), mFlyer(new BabelFlyer),
-		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain)
+		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain), mUpdate(new BabelUpdate)
 {
 	// Load and set font
 	QFontDatabase	fontDb;
@@ -26,10 +26,12 @@ BabelMainWindow::BabelMainWindow(void)
 	mCentralWidget->addWidget(mSignup);
 	mCentralWidget->addWidget(mSetting);
 	mCentralWidget->addWidget(mMain);
+	mCentralWidget->addWidget(mUpdate);
 	mFlyer->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSignup->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSetting->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mMain->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	mUpdate->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 	// action when click on login/signin
 	QObject::connect(mFlyer->getUi().signup, SIGNAL(clicked()), this, SLOT(displaySignUp()));
@@ -70,8 +72,10 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mDialogButton.getUi().yes, SIGNAL(clicked()), this, SLOT(sayYes()));
 	QObject::connect(mDialogButton.getUi().no, SIGNAL(clicked()), this, SLOT(sayNo()));
 
-	// trigger return pressed
-
+	// update window
+	QObject::connect(mMain, SIGNAL(updateContactInfo()), this, SLOT(displayUpdate()));
+	QObject::connect(mUpdate, SIGNAL(exit()), this, SLOT(displayHome()));
+	QObject::connect(mUpdate, SIGNAL(updateContactInfo(Contact &)), this, SLOT(updateContactInfo(Contact &)));
 }
 
 BabelMainWindow::~BabelMainWindow(void) {}
@@ -256,7 +260,6 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 		updateContent(mFlyer);
 		mMain->getDialog().hide();
 		mDialog.setMessage("Vous venez de vous déconnecter ;)");
-		emit askForTerminatingCall(mMain->getCurrentContact());
 	}
 	else
 		mDialog.setMessage("Erreur à la déconnexion :s");
@@ -398,4 +401,18 @@ void	BabelMainWindow::sayNo(void)
 {
 	mDialogButton.setHasAccepted(false);
 	mDialogButton.setIsUse(true);
+}
+
+void	BabelMainWindow::displayHome(void) {
+	updateContent(mMain);
+}
+
+void	BabelMainWindow::displayUpdate(void) {
+	updateContent(mUpdate);
+}
+
+void	BabelMainWindow::updateContactInfo(Contact &contact) {
+	contact.setAccountName(mContact.getAccountName());
+
+	emit askForUpdatingInfo(contact);
 }

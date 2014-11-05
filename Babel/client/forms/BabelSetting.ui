@@ -70,124 +70,11 @@ color: rgba(15, 87, 154, 192);
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLineEdit" name="pseudoEdit">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>360</y>
-     <width>391</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 128);
-color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-
-      </string>
-   </property>
-   <property name="placeholderText">
-    <string>Pseudo</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pwdEdit1">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>410</y>
-     <width>391</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
-   </property>
-   <property name="placeholderText">
-    <string>Mot de passe actuel</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pwdEdit2">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>460</y>
-     <width>391</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
-   </property>
-   <property name="placeholderText">
-    <string>Nouveau mot de passe</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="ok">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>560</y>
-     <width>391</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgb(22, 87, 127);
-color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
-   </property>
-   <property name="text">
-    <string>Valider</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="pwdEdit3">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>510</y>
-     <width>391</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
-   </property>
-   <property name="placeholderText">
-    <string>Confirmez le mot de passe</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="addrEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>170</y>
+     <y>220</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -210,7 +97,7 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>220</y>
+     <y>270</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -233,7 +120,7 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>270</y>
+     <y>320</y>
      <width>391</width>
      <height>51</height>
     </rect>
@@ -255,11 +142,6 @@ border-style: outset;
   <tabstop>addrEdit</tabstop>
   <tabstop>portEdit</tabstop>
   <tabstop>connexion</tabstop>
-  <tabstop>pseudoEdit</tabstop>
-  <tabstop>pwdEdit1</tabstop>
-  <tabstop>pwdEdit2</tabstop>
-  <tabstop>pwdEdit3</tabstop>
-  <tabstop>ok</tabstop>
   <tabstop>back</tabstop>
  </tabstops>
  <resources>
