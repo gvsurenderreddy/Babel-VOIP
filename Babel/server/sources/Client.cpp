@@ -42,10 +42,11 @@ Client::~Client()
 {
     if (this->isConnect())
     {
-        this->setConnected(false);
-        this->setStatusCall(Client::StatusCall::NONE);
-        this->setStatus(Client::Status::DISCONNECTED);
-        this->setLastPingTime(std::time(nullptr));
+        this->status = Client::Status::DISCONNECTED;
+        this->statusCall = Client::StatusCall::NONE;
+        this->isConnected = false;
+        this->lastPingTime = std::time(nullptr);
+        this->communicationClient = NULL;
         this->saveData();
     }
     if (Listener)
