@@ -10,7 +10,7 @@ UI_DIR          =       build/ui
 RCC_DIR         =       build/rcc
 
 win32:QMAKE_CXXFLAGS	+=	-Wall /MP
-unix:QMAKE_CXXFLAGS	+=	-Wall -std=c++11 -g
+unix:QMAKE_CXXFLAGS	+=	-Wall -std=c++11 -g -Wno-write-strings
 
 INCLUDEPATH     +=      .                                       		\
                         includes                                		\

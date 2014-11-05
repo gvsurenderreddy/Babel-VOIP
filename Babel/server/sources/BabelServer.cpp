@@ -63,7 +63,7 @@ void BabelServer::displayAccounts() const
         std::cout << "[DATABASE] empty" << std::endl;
         return;
     }
-    int padding = 20;
+
     std::cout << "[DATABASE] " << mAccounts.size() << " rows found:" << std::endl;
     std::for_each(mAccounts.begin(), mAccounts.end(),
         [this](const std::pair<std::string, std::string>& item) {
