@@ -70,6 +70,9 @@ class Client : public IClientSocket::OnSocketEvent{
         static boost::filesystem::path getAbsolutePathDatabaseUsersFolder(void);
 	    bool saveData(void);
         bool loadData(void);
+        void disconnect(void);
+        void connect(void);
+
 
     // status
     public:

@@ -26,29 +26,33 @@ communicationClient(NULL)
     usersFolderPath = getAbsolutePathDatabaseUsersFolder().string();
 }
 
-void Client::resetAttributes(void)
+void Client::disconnect(void)
 {
     this->status = Client::Status::DISCONNECTED;
     this->statusCall = Client::StatusCall::NONE;
-    this->pseudo = "";
-    this->clearContact();
-    this->account = "";
     this->isConnected = false;
     this->lastPingTime = std::time(nullptr);
     this->communicationClient = NULL;
 }
 
+void Client::connect(void)
+{
+    this->status = Client::Status::CONNECTED;
+    this->statusCall = Client::StatusCall::NONE;
+    this->isConnected = true;
+    this->lastPingTime = std::time(nullptr);
+    this->communicationClient = NULL;
+}
+
+void Client::resetAttributes(void)
+{
+    this->pseudo = "";
+    this->account = "";
+    this->clearContact();
+}
+
 Client::~Client()
 {
-    if (this->isConnect())
-    {
-        this->status = Client::Status::DISCONNECTED;
-        this->statusCall = Client::StatusCall::NONE;
-        this->isConnected = false;
-        this->lastPingTime = std::time(nullptr);
-        this->communicationClient = NULL;
-        this->saveData();
-    }
     if (Listener)
     {
         Listener->onCloseConnection(this);
