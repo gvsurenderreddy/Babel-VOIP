@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BabelUpdate</class>
+ <widget class="QWidget" name="BabelUpdate">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>512</width>
+    <height>870</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/background_setting.jpg);
+</string>
+  </property>
+  <widget class="QLabel" name="title">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>76</y>
+     <width>512</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgba(255, 255, 255, 192);
+font: 28pt &quot;Open Sans Light&quot;;
+color: rgba(15, 87, 154, 192);
+
+</string>
+   </property>
+   <property name="text">
+    <string>Editer son profil</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="pseudoEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>220</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+
+      </string>
+   </property>
+   <property name="placeholderText">
+    <string>Pseudo</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="passwordEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>320</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: #000;
+font: 10pt &quot;Verdana&quot;;
+lineedit-password-character: 9679;
+padding: 8px;
+      </string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="placeholderText">
+    <string>Nouveau mot de passe</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="submitButton">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>370</y>
+     <width>391</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+background-color: rgb(22, 87, 127);
+color: rgb(255, 255, 255);
+font: 12pt &quot;Verdana&quot;;
+border-style: outset;
+      </string>
+   </property>
+   <property name="text">
+    <string>Valider</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="back">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Small Fonts</family>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 32);
+color: rgb(255, 255, 255);
+</string>
+   </property>
+   <property name="text">
+    <string>&lt;</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="statutEdit">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>270</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: none;
+background-color: rgba(255, 255, 255, 128);
+color: rgb(0, 0, 0);
+font: 10pt &quot;Verdana&quot;;
+padding: 8px;
+</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Connecté</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Déconnecté</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Occupé</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Absent</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Kipour</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Grasse mat' 10h</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Ramadan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Sport</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Petit coin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>YOLO</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Parti bouder</string>
+    </property>
+   </item>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../resources/BabelMainWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>

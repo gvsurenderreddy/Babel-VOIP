@@ -11,8 +11,8 @@ public:
     #pragma pack(push, 1)
 	struct Body{
 		ICommand::Header	header;
-		int					instructionCode;
-		int					errorCode;
+		int32_t				instructionCode;
+		int32_t				errorCode;
 	};
     #pragma pack(pop)
 

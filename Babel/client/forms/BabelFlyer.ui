@@ -176,15 +176,19 @@ border-style: outset;
    </property>
    <property name="font">
     <font>
-     <family>Verdana</family>
-     <pointsize>16</pointsize>
+     <family>Open Sans Light</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-      border: none;
-      background-color: rgba(255, 255, 255, 32);
-      color: rgb(255, 255, 255);
+border: none;
+background-color: rgba(255, 255, 255, 32);
+color: rgb(255, 255, 255);
+font: 8pt &quot;Open Sans Light&quot;;
       </string>
    </property>
    <property name="text">

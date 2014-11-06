@@ -7,7 +7,7 @@ using namespace std;
 
 BabelMainWindow::BabelMainWindow(void)
 	:	QMainWindow(), mCentralWidget(new QStackedWidget), mFlyer(new BabelFlyer),
-		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain)
+		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain), mUpdate(new BabelUpdate)
 {
 	// Load and set font
 	QFontDatabase	fontDb;
@@ -26,10 +26,12 @@ BabelMainWindow::BabelMainWindow(void)
 	mCentralWidget->addWidget(mSignup);
 	mCentralWidget->addWidget(mSetting);
 	mCentralWidget->addWidget(mMain);
+	mCentralWidget->addWidget(mUpdate);
 	mFlyer->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSignup->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mSetting->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	mMain->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	mUpdate->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
 	// action when click on login/signin
 	QObject::connect(mFlyer->getUi().signup, SIGNAL(clicked()), this, SLOT(displaySignUp()));
@@ -66,24 +68,14 @@ BabelMainWindow::BabelMainWindow(void)
 	// when deconnection
 	QObject::connect(mMain->getUi().logout, SIGNAL(clicked()), this, SLOT(disconnectionToAccount()));
 
-	// trigger return pressed
-	QObject::connect(mFlyer->getUi().emailEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
-	QObject::connect(mFlyer->getUi().pwdEdit, SIGNAL(returnPressed()), mFlyer->getUi().login, SIGNAL(clicked()));
+	// when you have a choice to do something
+	QObject::connect(mDialogButton.getUi().yes, SIGNAL(clicked()), this, SLOT(sayYes()));
+	QObject::connect(mDialogButton.getUi().no, SIGNAL(clicked()), this, SLOT(sayNo()));
 
-	QObject::connect(mSetting->getUi().addrEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().portEdit, SIGNAL(returnPressed()), mSetting->getUi().connexion, SIGNAL(clicked()));
-
-	QObject::connect(mSetting->getUi().pseudoEdit, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit1, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit2, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSetting->getUi().pwdEdit3, SIGNAL(returnPressed()), mSetting->getUi().ok, SIGNAL(clicked()));
-
-	QObject::connect(mSignup->getUi().emailEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pseudoEdit, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pwdEdit1, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-	QObject::connect(mSignup->getUi().pwdEdit2, SIGNAL(returnPressed()), mSignup->getUi().ok, SIGNAL(clicked()));
-
-	QObject::connect(mMain->getUi().newContact, SIGNAL(returnPressed()), mMain->getUi().addContact, SIGNAL(clicked()));
+	// update window
+	QObject::connect(mMain, SIGNAL(updateContactInfo()), this, SLOT(displayUpdate()));
+	QObject::connect(mUpdate, SIGNAL(exit()), this, SLOT(displayHome()));
+	QObject::connect(mUpdate, SIGNAL(updateContactInfo(Contact &)), this, SLOT(updateContactInfo(Contact &)));
 }
 
 BabelMainWindow::~BabelMainWindow(void) {}
@@ -106,10 +98,15 @@ void	BabelMainWindow::updateContent(QWidget *widget) {
 
 void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 	mMain->getModel()->setContactList(list);
+	emit mMain->getModel()->layoutChanged();
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	emit askForAcceptingContact(contact, true);
+	mDialogButton.setMessage(contact.getAccountName() + " vous a ajouté");
+	mDialogButton.show();
+	if (mDialogButton.getIsUse())
+		emit askForAcceptingContact(contact, mDialogButton.getHasAccepted());
+	mDialogButton.setIsUse(false);
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
@@ -118,12 +115,21 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 		msg,
 		QDateTime::currentDateTime()
 	};
-	mMain->getMessages()->getMessageList() << message;
+
+	// set current contact's list message on model
+	mMain->getCurrentContact().getMessages() << message;
+	mMain->getMessages()->setMessageList(mMain->getCurrentContact().getMessages());
+
+	//mMain->getMessages()->getMessageList() << message;
 	emit mMain->getMessages()->layoutChanged();
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
-	emit askForAcceptingCall(contact, true);
+	mDialogButton.setMessage(contact.getAccountName() + " vous invite à appeler");
+	mDialogButton.show();
+	if (mDialogButton.getIsUse())
+		emit askForAcceptingCall(contact, mDialogButton.getHasAccepted());
+	mDialogButton.setIsUse(false);
 }
 
 void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
@@ -188,10 +194,11 @@ void	BabelMainWindow::sendInvitationSuccess(const ErrorStatus &es) {
 
 void	BabelMainWindow::updateInfoSuccess(const ErrorStatus &es) {
 	if (es.errorOccurred())
-	{
-		mDialog.setMessage("Votre profile est introuvable - -'");
-		mDialog.show();
-	}
+		mDialog.setMessage("Le profil n'a pas pu être mis à jour.");
+	else
+		mDialog.setMessage("Le profil a été mis à jour");
+
+	mDialog.show();
 }
 
 void	BabelMainWindow::callContactSuccess(const ErrorStatus &es) {
@@ -240,13 +247,12 @@ void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &es) {
 	if (!es.errorOccurred())
 	{
 		mDialog.setMessage("Le contact a bien été supprimé :p");
-		mDialog.show();
 	}
 	else
 	{
 		mDialog.setMessage("Le contact n'a pas pu être supprimé :/");
-		mDialog.show();
 	}
+	mDialog.show();
 }
 
 void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
@@ -255,7 +261,6 @@ void	BabelMainWindow::disconnectSuccess(const ErrorStatus &es) {
 		updateContent(mFlyer);
 		mMain->getDialog().hide();
 		mDialog.setMessage("Vous venez de vous déconnecter ;)");
-		emit askForTerminatingCall(mMain->getCurrentContact());
 	}
 	else
 		mDialog.setMessage("Erreur à la déconnexion :s");
@@ -273,9 +278,15 @@ void	BabelMainWindow::sendMessageSuccess(const ErrorStatus &es) {
 }
 
 void	BabelMainWindow::connectToServerSuccess(const ErrorStatus &es) {
-	QString	success = !es.errorOccurred() ? "Succès" : "Echec";
-
-	mDialog.setMessage(success + " à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+	if (!es.errorOccurred())
+	{
+		mDialog.setMessage("Succès à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+		updateContent(mFlyer);
+	}
+	else
+	{
+		mDialog.setMessage("Echec à la connection de l'addresse IP (" + mSetting->getHost() + ")");
+	}
 	mDialog.show();
 }
 
@@ -337,12 +348,18 @@ void		BabelMainWindow::sendMessage()
 			mMain->getUi().messageEdit->toPlainText(),
 			QDateTime::currentDateTime()
 		};
-		mMain->getMessages()->getMessageList() << msg;
+
+		// set your list message on model
+		mMain->getCurrentContact().getMessages() << msg;
+		mMain->getMessages()->setMessageList(mMain->getCurrentContact().getMessages());
+
+		//mMain->getMessages()->getMessageList() << msg;
 		emit mMain->getMessages()->layoutChanged();
 
 		emit askForSendingMessage(mMain->getCurrentContact(), msg.msg);
 		mMain->getUi().messageEdit->clear();
 	}
+	mMain->getUi().messageEdit->setFocus();
 }
 
 void		BabelMainWindow::callContact()
@@ -356,6 +373,7 @@ void		BabelMainWindow::callContact()
 void		BabelMainWindow::disconnectionToAccount()
 {
 	emit askForDisconnection();
+	updateContent(mFlyer);
 }
 
 void	BabelMainWindow::displayOptions(void) {
@@ -372,4 +390,30 @@ void	BabelMainWindow::displayFlyer(void) {
 
 void	BabelMainWindow::deleteContact(void) {
 	emit askForDeletingContact(mMain->getCurrentContact());
+}
+
+void	BabelMainWindow::sayYes(void)
+{
+	mDialogButton.setHasAccepted(true);
+	mDialogButton.setIsUse(true);
+}
+
+void	BabelMainWindow::sayNo(void)
+{
+	mDialogButton.setHasAccepted(false);
+	mDialogButton.setIsUse(true);
+}
+
+void	BabelMainWindow::displayHome(void) {
+	updateContent(mMain);
+}
+
+void	BabelMainWindow::displayUpdate(void) {
+	updateContent(mUpdate);
+}
+
+void	BabelMainWindow::updateContactInfo(Contact &contact) {
+	contact.setAccountName(mContact.getAccountName());
+
+	emit askForUpdatingInfo(contact);
 }

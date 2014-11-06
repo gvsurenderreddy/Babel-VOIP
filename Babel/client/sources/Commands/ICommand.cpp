@@ -14,7 +14,7 @@
 #include "CommandCloseCall.hpp"
 #include "CommandErr.hpp"
 
-const int			ICommand::MAGIC_CODE = 0x150407CA;
+const int32_t		ICommand::MAGIC_CODE = 0x150407CA;
 const unsigned int	ICommand::HEADER_SIZE = sizeof(ICommand::Header);
 
 ICommand	*ICommand::getCommand(ICommand::Instruction instructionCode) {

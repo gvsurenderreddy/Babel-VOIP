@@ -9,8 +9,8 @@ class CommandErr : public ICommand {
 	private:
         #pragma pack(push, 1)
 		struct PacketFromServer{
-			int	instructionCode;
-			int	errorCode;
+			int32_t	instructionCode;
+			int32_t	errorCode;
 		};
         #pragma pack(pop)
 

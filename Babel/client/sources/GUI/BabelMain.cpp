@@ -14,8 +14,11 @@ BabelMain::BabelMain()
 
 	// Event on list contact
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
-	QObject::connect(mUi.addContact, SIGNAL(clicked()), this, SLOT(onClickAddContact()));
-	QObject::connect(mUi.send, SIGNAL(clicked()), this, SLOT(onClickSendMsg));
+
+	// trigger
+	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), mUi.addContact, SIGNAL(clicked()));
+
+	QObject::connect(mUi.options, SIGNAL(clicked()), this, SLOT(onOptionsButtonClicked()));
 }
 
 BabelMain::~BabelMain()
@@ -39,20 +42,10 @@ void		BabelMain::onClickContact(QModelIndex const &index)
 {
 	mUi.name->setText(mModel->getContactList()[index.row()].getAccountName());
 	mCurrentContact = mModel->getContactList()[index.row()];
+	mMessages->setMessageList(mCurrentContact.getMessages());
+	emit mMessages->layoutChanged();
 }
 
-void		BabelMain::onClickAddContact()
-{
-
-}
-
-void		BabelMain::onClickSendMsg()
-{
-	MessageListModel::sMessage	msg = {
-		mCurrentContact.getAccountName(),
-		mUi.messageEdit->toPlainText(),
-		QDateTime::currentDateTime()
-	};
-	mMessages->getMessageList().push_back(msg);
-	mUi.listView->setModel(mMessages);
+void	BabelMain::onOptionsButtonClicked(void) {
+	emit updateContactInfo();
 }

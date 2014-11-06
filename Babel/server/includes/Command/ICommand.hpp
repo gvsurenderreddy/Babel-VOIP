@@ -29,13 +29,13 @@ public:
 	};
 
 	//header
-	static const unsigned int	MAGIC_CODE;
+	static const int32_t		MAGIC_CODE;
 	static const unsigned int	HEADER_SIZE;
 
     #pragma pack(push, 1)
 	struct Header{
-		int	magicCode;
-		int	instructionCode;
+		int32_t	magicCode;
+		int32_t	instructionCode;
 	};
     #pragma pack(pop)
 

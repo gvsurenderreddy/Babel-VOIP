@@ -15,6 +15,12 @@ BabelInscription::BabelInscription(void)
 
 	// Form validation
 	QObject::connect(mUi.ok, SIGNAL(clicked()), this, SLOT(formValidation()));
+
+	// trigger enter pressed to clicked
+	QObject::connect(mUi.emailEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pseudoEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit1, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit2, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
 }
 
 BabelInscription::~BabelInscription(void)

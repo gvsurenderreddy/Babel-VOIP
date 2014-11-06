@@ -14,6 +14,10 @@ BabelFlyer::BabelFlyer(void)
 	mUi.pwdEdit->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
 
 	QObject::connect(mUi.login, SIGNAL(clicked()), this, SLOT(authenticateValidation()));
+
+	// trigger enter pressed to clicked
+	QObject::connect(mUi.emailEdit, SIGNAL(returnPressed()), mUi.login, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit, SIGNAL(returnPressed()), mUi.login, SIGNAL(clicked()));
 }
 
 BabelFlyer::~BabelFlyer(void)

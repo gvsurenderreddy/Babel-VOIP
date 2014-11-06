@@ -24,7 +24,8 @@ namespace ErrorCode {
             ALREADY_CONNECTED                           = 0x16,
             ALREADY_IN_YOUR_CONTACT_LIST                = 0x17,
             NOT_IN_YOUR_CONTACT_LIST                    = 0x18,
-            BUSY_CONTACT_CANNOT_REPLY                   = 0x19
+            BUSY_CONTACT_CANNOT_REPLY                   = 0x19,
+            NOT_IN_COMMUNICATION_WITH_HIM               = 0x20
 	};
     std::string getName(int errorCode);
 }

@@ -9,6 +9,17 @@ BabelSetting::BabelSetting(void)
 	mOriginalSize = size();
 
 	QObject::connect(mUi.connexion, SIGNAL(clicked()), this, SLOT(getIpPort()));
+
+	// trigger enter pressed to clicked
+	QObject::connect(mUi.addrEdit, SIGNAL(returnPressed()), mUi.connexion, SIGNAL(clicked()));
+	QObject::connect(mUi.portEdit, SIGNAL(returnPressed()), mUi.connexion, SIGNAL(clicked()));
+
+	/*
+	QObject::connect(mUi.pseudoEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit1, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit2, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.pwdEdit3, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	*/
 }
 
 BabelSetting::~BabelSetting(void)
