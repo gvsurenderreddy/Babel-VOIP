@@ -102,7 +102,7 @@ void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	mDialogButton.setMessage(contact.getAccountName() + " vous a ajouté");
+	mDialogButton.setMessage(contact.getAccountName() + " souhaite vous ajouter");
 	mDialogButton.show();
 	if (mDialogButton.getIsUse())
 		emit askForAcceptingContact(contact, mDialogButton.getHasAccepted());
@@ -235,12 +235,7 @@ void	BabelMainWindow::terminateCallSuccess(const ErrorStatus &es) {
 	mMain->setIsCall(false);
 }
 
-void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &es) {
-	if (!es.errorOccurred())
-		mDialog.setMessage("Vous avez un nouveau contact ! :)");
-	else
-		mDialog.setMessage("Le contact n'existe pas... :(");
-	mDialog.show();
+void	BabelMainWindow::acceptContactSuccess(const ErrorStatus &) {
 }
 
 void	BabelMainWindow::deleteContactSuccess(const ErrorStatus &es) {
