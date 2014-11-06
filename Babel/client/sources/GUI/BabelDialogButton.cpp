@@ -1,7 +1,7 @@
 #include "BabelDialogButton.hpp"
 
 BabelDialogButton::BabelDialogButton()
-	: QDialog(), mHasAccepted(false), mIsUse(false)
+	: QDialog(), mHasAccepted(false)
 {
 	mUi.setupUi(this);
 }
@@ -18,9 +18,4 @@ void	BabelDialogButton::setMessage(QString const &msg)
 void	BabelDialogButton::setHasAccepted(bool hasAccepted)
 {
 	mHasAccepted = hasAccepted;
-}
-
-void	BabelDialogButton::setIsUse(bool isUse)
-{
-	mIsUse = isUse;
 }

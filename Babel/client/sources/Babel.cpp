@@ -106,6 +106,7 @@ void	Babel::receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus) 
 
 void	Babel::disconnectedFromServer(void) {
 	mContacts.clear();
+	mMainWindow.updateContactList(mContacts);
 }
 
 void	Babel::askForAuthentication(const Contact &contact) {

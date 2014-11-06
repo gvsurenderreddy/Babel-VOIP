@@ -1,6 +1,7 @@
 #include <QFontDatabase>
 #include <QTextCodec>
 #include <iostream>
+#include <QMessageBox>
 #include "BabelMainWindow.hpp"
 
 using namespace std;
@@ -102,11 +103,8 @@ void	BabelMainWindow::updateContactList(const QList<Contact> &list) {
 }
 
 void	BabelMainWindow::newContactInvitation(const Contact &contact) {
-	mDialogButton.setMessage(contact.getAccountName() + " souhaite vous ajouter");
-	mDialogButton.show();
-	if (mDialogButton.getIsUse())
-		emit askForAcceptingContact(contact, mDialogButton.getHasAccepted());
-	mDialogButton.setIsUse(false);
+	QMessageBox::StandardButton reply = QMessageBox::question(this, "Notification", contact.getAccountName() + " souhaite vous ajouter", QMessageBox::Yes | QMessageBox::No);
+	emit askForAcceptingContact(contact, reply == QMessageBox::Yes);
 }
 
 void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
@@ -125,11 +123,8 @@ void	BabelMainWindow::newMessage(const Contact &contact, const QString &msg) {
 }
 
 void	BabelMainWindow::newCallInvitation(const Contact &contact) {
-	mDialogButton.setMessage(contact.getAccountName() + " vous invite à appeler");
-	mDialogButton.show();
-	if (mDialogButton.getIsUse())
-		emit askForAcceptingCall(contact, mDialogButton.getHasAccepted());
-	mDialogButton.setIsUse(false);
+	QMessageBox::StandardButton reply = QMessageBox::question(this, "Notification", contact.getAccountName() + " vous invite à appeler", QMessageBox::Yes | QMessageBox::No);
+	emit askForAcceptingCall(contact, reply == QMessageBox::Yes);
 }
 
 void	BabelMainWindow::startingCommunication(const Contact &contact, bool hasAccepted) {
@@ -390,13 +385,11 @@ void	BabelMainWindow::deleteContact(void) {
 void	BabelMainWindow::sayYes(void)
 {
 	mDialogButton.setHasAccepted(true);
-	mDialogButton.setIsUse(true);
 }
 
 void	BabelMainWindow::sayNo(void)
 {
 	mDialogButton.setHasAccepted(false);
-	mDialogButton.setIsUse(true);
 }
 
 void	BabelMainWindow::displayHome(void) {

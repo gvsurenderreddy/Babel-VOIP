@@ -31,14 +31,11 @@ class BabelDialogButton : public QDialog
 	private:
 		Ui::BabelDialogButton	mUi;
 		bool					mHasAccepted;
-		bool					mIsUse;
 
 	// methods
 	public:
 		Ui::BabelDialogButton const	&getUi() const { return mUi; }
 		bool						getHasAccepted() const { return mHasAccepted; }
-		bool						getIsUse() const { return mIsUse; }
 		void						setMessage(QString const &msg);
 		void						setHasAccepted(bool hasAccepted);
-		void						setIsUse(bool isUse);
 };
