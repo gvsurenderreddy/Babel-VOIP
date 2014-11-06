@@ -11,6 +11,7 @@ BabelMainWindow::BabelMainWindow(void)
 		mSignup(new BabelInscription), mSetting(new BabelSetting), mMain(new BabelMain), mUpdate(new BabelUpdate)
 {
 	// Load and set font
+    this->setWindowTitle("Studio Babel :: VOIP-Epitech 2017");
 	QFontDatabase	fontDb;
 	QString	openSansLightPath = "fonts/OpenSans-Light.ttf";
 	if (fontDb.addApplicationFont(openSansLightPath) != -1)
