@@ -35,6 +35,7 @@ class Babel : public QObject {
 		void	receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus);
 		void	askForAuthentication(const Contact &contact);
 		void	criticalErrorHappenedInCallManager(const ErrorStatus &errorStatus);
+		void	disconnectedFromServer(void);
 
 	// attributes
 	private:
