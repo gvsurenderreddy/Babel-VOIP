@@ -6,5 +6,7 @@
     <file>telephone.jpg</file>
     <file>telephone.png</file>
     <file>unknown_profile.jpg</file>
+    <file>online_icon.png</file>
+    <file>offline_icon.png</file>
 </qresource>
 </RCC>

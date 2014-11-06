@@ -25,6 +25,8 @@ QVariant	ContactListModel::data(const QModelIndex &index, int role) const
 
 	if (role == Qt::DisplayRole)
 		return mContactList[index.row()].getPseudo();
+	else if (role == Qt::DecorationRole)
+		return QIcon(mContactList[index.row()].isConnected() ? ":online_icon.png" : ":offline_icon.png");
 
 	return QVariant();
 }
