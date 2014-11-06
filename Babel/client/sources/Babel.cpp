@@ -30,6 +30,7 @@ Babel::Babel(void) {
 	connect(&mServerCommunication, SIGNAL(receiveServerAnswerForTerminatingCall(const ErrorStatus &)),			&mMainWindow,	SLOT(terminateCallSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(receiveAnswerForConnectionToServer(const ErrorStatus &)),				&mMainWindow,	SLOT(connectToServerSuccess(const ErrorStatus &)));
 	connect(&mServerCommunication, SIGNAL(disconnectedFromServer()),											&mMainWindow,	SLOT(disconnectedFromServer()));
+	connect(&mServerCommunication, SIGNAL(disconnectedFromServer()),											this,			SLOT(disconnectedFromServer()));
 
 	connect(&mMainWindow, SIGNAL(askForRegistration(const Contact &)),						&mServerCommunication,	SLOT(createAccount(const Contact &)));
 	connect(&mMainWindow, SIGNAL(askForAuthentication(const Contact &)),					this,					SLOT(askForAuthentication(const Contact &)));
@@ -98,6 +99,13 @@ void	Babel::receiveCallClose(const Contact &contact) {
 void	Babel::receiveServerAnswerForDisconnecting(const ErrorStatus &errorStatus) {
 	if (errorStatus.errorOccurred() == false && mCallManager.isInCommunication())
 		mCallManager.stopCall();
+
+	if (errorStatus.errorOccurred() == false)
+		disconnectedFromServer();
+}
+
+void	Babel::disconnectedFromServer(void) {
+	mContacts.clear();
 }
 
 void	Babel::askForAuthentication(const Contact &contact) {
