@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <list>
+#include <utility>
+#include <algorithm>
 
 #include <boost/filesystem.hpp>
 #include <boost/serialization/list.hpp>
@@ -43,11 +45,12 @@ class Client : public IClientSocket::OnSocketEvent{
     public:
         Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient);
         virtual ~Client();
+        const Client & operator = (const Client &other);
 
     // private coplien form
     private:
         Client(const Client &) : Listener(NULL) { }
-        const Client & operator = (const Client &) { return *this; }
+        
 
     // handle commands
     private:

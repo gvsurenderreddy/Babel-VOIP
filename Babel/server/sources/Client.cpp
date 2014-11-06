@@ -26,6 +26,33 @@ communicationClient(NULL)
     usersFolderPath = getAbsolutePathDatabaseUsersFolder().string();
 }
 
+Client::~Client()
+{
+    if (Listener)
+        Listener->onCloseConnection(this);
+    delete this->handleCmd;
+}
+
+const Client & Client::operator = (const Client &other)
+{
+    if (&other != this)
+    {
+        this->status = other.status;
+        this->statusCall = other.statusCall;
+        this->pseudo = other.pseudo;
+        this->contact = other.contact;
+        this->account = other.account;
+        this->isConnected = other.isConnected;
+        this->Listener = other.Listener;
+        this->lastPingTime = other.lastPingTime;
+        this->communicationClient = other.communicationClient;
+        this->Socket = other.Socket;
+        this->handleCmd = other.handleCmd;
+        this->usersFolderPath = other.usersFolderPath;
+    }
+    return *this;
+}
+
 void Client::disconnect(void)
 {
     this->status = Client::Status::DISCONNECTED;
@@ -49,15 +76,6 @@ void Client::resetAttributes(void)
     this->pseudo = "";
     this->account = "";
     this->clearContact();
-}
-
-Client::~Client()
-{
-    if (Listener)
-    {
-        Listener->onCloseConnection(this);
-    }
-    delete this->handleCmd;
 }
 
 /*
@@ -102,7 +120,6 @@ boost::filesystem::path Client::getAbsolutePathDatabaseUsersFolder(void)
 bool Client::saveData(void)
 {
     const std::string& path = usersFolderPath + this->account + Database::DATABASE_EXTENSION;
-    //std::cout << "[DATABASE] update user file '" << path << "'" << std::endl;
     std::ofstream ofs(path, std::ofstream::out | std::ofstream::trunc);
     if (!ofs.good() || ofs.fail())
         return false;

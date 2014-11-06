@@ -25,7 +25,11 @@ namespace ErrorCode {
             ALREADY_IN_YOUR_CONTACT_LIST                = 0x17,
             NOT_IN_YOUR_CONTACT_LIST                    = 0x18,
             BUSY_CONTACT_CANNOT_REPLY                   = 0x19,
-            NOT_IN_COMMUNICATION_WITH_HIM               = 0x20
+            NOT_IN_COMMUNICATION_WITH_HIM               = 0x20,
+            CANNOT_LOAD_DATA                            = 0x21,
+            CANNOT_SAVE_DATA                            = 0x22,
+            YOU_CANNOT_UPDATE_OTHER_ACCOUNT             = 0x23,
+            INVALID_STATUS_ID                           = 0x24
 	};
     std::string getName(int errorCode);
 }
