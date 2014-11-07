@@ -2,9 +2,9 @@
 
 #include <QtWidgets/QWidget>
 #include <QAbstractListModel>
-#include <QDateTime>
 #include <QListView>
 #include <QList>
+#include "Contact.hpp"
 
 class MessageListModel : public QAbstractListModel
 {
@@ -18,18 +18,9 @@ class MessageListModel : public QAbstractListModel
 		MessageListModel(const MessageListModel &) : QAbstractListModel(nullptr) {}
 		const MessageListModel &operator=(const MessageListModel &) { return *this; }
 
-	// structure of message
-	public:
-		struct sMessage
-		{
-			QString		autor;
-			QString		msg;
-			QDateTime	datetime;
-		};
-
 	// attributs
 	private:
-		QList<MessageListModel::sMessage>	mMessageList;
+		QList<Contact::Message>	mMessageList;
 
 	// methods
 	public:
@@ -37,9 +28,9 @@ class MessageListModel : public QAbstractListModel
 		QVariant		data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 		QVariant		headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-		void			setMessageList(QList<MessageListModel::sMessage> const &messageList) { mMessageList = messageList; }
-		QList<MessageListModel::sMessage> 	&getMessageList() { return mMessageList; }
-		void			sort();
+		void						setMessageList(QList<Contact::Message> const &messageList) { beginResetModel(); mMessageList = messageList; endResetModel(); }
+		QList<Contact::Message> 	&getMessageList() { return mMessageList; }
+		void						sort();
 
-		static bool		compare(MessageListModel::sMessage const &v1, MessageListModel::sMessage const &v2);
+		static bool		compare(Contact::Message const &v1, Contact::Message const &v2);
 };

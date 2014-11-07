@@ -87,7 +87,7 @@ padding: 8px;
     <string>Entrer un nom de compte</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="pwdEdit1">
+  <widget class="QLineEdit" name="password">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -110,7 +110,7 @@ padding: 8px;
     <string>Entrer votre mot de passe</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="pwdEdit2">
+  <widget class="QLineEdit" name="passwordConfirmation">
    <property name="geometry">
     <rect>
      <x>60</x>
@@ -192,15 +192,15 @@ padding: 8px;
   <zorder>back</zorder>
   <zorder>ok</zorder>
   <zorder>emailEdit</zorder>
-  <zorder>pwdEdit1</zorder>
-  <zorder>pwdEdit2</zorder>
+  <zorder>password</zorder>
+  <zorder>passwordConfirmation</zorder>
   <zorder>title</zorder>
  </widget>
  <tabstops>
   <tabstop>emailEdit</tabstop>
   <tabstop>pseudoEdit</tabstop>
-  <tabstop>pwdEdit1</tabstop>
-  <tabstop>pwdEdit2</tabstop>
+  <tabstop>password</tabstop>
+  <tabstop>passwordConfirmation</tabstop>
   <tabstop>ok</tabstop>
   <tabstop>back</tabstop>
  </tabstops>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QPainter>
+#include "Contact.hpp"
 #include "ui_BabelInscription.h"
 
 class BabelInscription : public QWidget
@@ -25,23 +26,17 @@ class BabelInscription : public QWidget
 	// attributes
 	private:
 		Ui::BabelInscription	mUi;
-		QString					mEmail;
-		QString					mPseudo;
-		QString					mPwd;
-		bool					mIsRegister;
-		QSize			mOriginalSize;
-
-	// methods
-	public:
-		Ui::BabelInscription const	&getUi() const { return mUi; }
-		QString const				&getEmail() const { return mEmail; }
-		QString const				&getPseudo() const { return mPseudo; }
-		QString const				&getPwd() const { return mPwd; }
-		bool						getIsRegister() const { return mIsRegister; }
-
-		void						setIsRegister(bool isRegister) { mIsRegister = isRegister; }
+		QSize					mOriginalSize;
 
 	// slots
 	public slots:
-		void					formValidation();
+		void	onSubmit(void);
+		void	onBackButtonPressed(void);
+
+	// signals
+	signals:
+		void	askForRegistration(const Contact &contact);
+		void	exit(void);
+		void	displayInformation(const QString &message);
+
 };

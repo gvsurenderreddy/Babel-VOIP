@@ -165,7 +165,7 @@ border-style: outset;
     <string>Inscrivez-vous</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="p">
+  <widget class="QPushButton" name="settings">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -217,7 +217,7 @@ font: 8pt &quot;Open Sans Light&quot;;
    </hints>
   </connection>
   <connection>
-   <sender>p</sender>
+   <sender>settings</sender>
    <signal>clicked()</signal>
    <receiver>BabelFlyer</receiver>
    <slot>hide()</slot>

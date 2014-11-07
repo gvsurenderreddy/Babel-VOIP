@@ -28,36 +28,41 @@ class BabelMain : public QWidget
 	// attributes
 	private:
 		Ui::BabelMain		mUi;
-		QString				mNewContact;
 		ContactListModel	*mModel;
 		MessageListModel	*mMessages;
-		BabelDialog			mDialog;
 		Contact				mCurrentContact;
 		Contact				mContactInCall;
+		Contact				mUser;
 		bool				mIsCall;
 		QSize				mOriginalSize;
 
-	// methods
-	public:
-		Ui::BabelMain const	&getUi() const { return mUi; }
-		QString const		&getNewContact() const { return mNewContact; }
-		ContactListModel	*getModel() const { return mModel; }
-		MessageListModel	*getMessages() const { return mMessages; }
-		Contact				&getCurrentContact() { return mCurrentContact; }
-		Contact const		&getContactInCall() const { return mContactInCall; }
-		bool				getIsCall() const { return mIsCall; }
-		void				setCurrentContact(Contact const &contact) { mCurrentContact = contact; }
-		void				setContactInCall(Contact const &contact) { mContactInCall = contact; }
-		void				setIsCall(bool isCall) { mIsCall = isCall; }
-		BabelDialog 		&getDialog() { return mDialog; }
+	//public slots
+	public slots:
+		void	setContactList(const QList<Contact> &contacts);
+		void	receiveMessage(const Contact &contact, const QString &message);
+		void	startCommunication(const Contact &contact, bool hasAccepted);
+		void	terminateCommunication(const Contact &contact);
+		void	setUser(const Contact &contact);
 
 	// intern slots
 	private slots:
 		void	onClickContact(QModelIndex const &index);
 		void	onOptionsButtonClicked(void);
+		void	onAddContactButtonClicked(void);
+		void	onDeleteContactButtonClicked(void);
+		void	onSendButtonClicked(void);
+		void	onCallButtonClicked(void);
+		void	onLogoutButtonClicked(void);
 
 	// signals
 	signals:
 		void	updateContactInfo(void);
+		void	addContact(const Contact &contact);
+		void	deleteContact(const Contact &contact);
+		void	sendMessage(const Contact &contact, const QString &message);
+		void	callContact(const Contact &contact);
+		void	closeCall(const Contact &contact);
+		void	logout(void);
+		void	displayInformation(const QString &message);
 
 };

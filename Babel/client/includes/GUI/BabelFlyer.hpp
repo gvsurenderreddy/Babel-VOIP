@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include "ui_BabelFlyer.h"
+#include "Contact.hpp"
 
 class BabelFlyer : public QWidget
 {
@@ -25,21 +26,18 @@ class BabelFlyer : public QWidget
 	// attributes
 	private:
 		Ui::BabelFlyer	mUi;
-		QString			mEmail;
-		QString			mPwd;
-		bool			mIsAuthenticate;
 		QSize			mOriginalSize;
-
-	// methods
-	public:
-		Ui::BabelFlyer const	&getUi() const { return mUi; }
-		QString const			&getEmail() const { return mEmail; }
-		QString const			&getPwd() const { return mPwd; }
-		bool					getIsAuthenticate() const { return mIsAuthenticate; }
-
-		void					setIsAuthenticate(bool isAuthenticate) { mIsAuthenticate = isAuthenticate; }
 
 	// slots
 	public slots:
-		void			authenticateValidation();
+		void	onSubmit(void);
+		void	onOptionsButtonClicked(void);
+		void	onRegistrationButtonClicked(void);
+
+	// signals
+	signals:
+		void	askForAuthentication(const Contact &user);
+		void	displaySettings(void);
+		void	displayRegistration(void);
+
 };

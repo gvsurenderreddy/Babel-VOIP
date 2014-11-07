@@ -10,12 +10,12 @@ MessageListModel::~MessageListModel()
 {
 }
 
-int						MessageListModel::rowCount(const QModelIndex &/*parent*/) const
+int		MessageListModel::rowCount(const QModelIndex &/*parent*/) const
 {
 	return mMessageList.size();
 }
 
-QVariant				MessageListModel::data(const QModelIndex &index, int role) const
+QVariant	MessageListModel::data(const QModelIndex &index, int role) const
 {
 	if (!index.isValid())
 		return QVariant();
@@ -35,17 +35,17 @@ QVariant				MessageListModel::data(const QModelIndex &index, int role) const
 	return QVariant();
 }
 
-QVariant				MessageListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
+QVariant	MessageListModel::headerData(int /*section*/, Qt::Orientation /*orientation*/, int /*role*/) const
 {
 	return QVariant();
 }
 
-bool					MessageListModel::compare(MessageListModel::sMessage const &v1, MessageListModel::sMessage const &v2)
+bool	MessageListModel::compare(Contact::Message const &v1, Contact::Message const &v2)
 {
 	return (v1.datetime.toString() < v2.datetime.toString());
 }
 
-void					MessageListModel::sort()
+void	MessageListModel::sort()
 {
 	qSort(mMessageList.begin(), mMessageList.end(), compare);
 }

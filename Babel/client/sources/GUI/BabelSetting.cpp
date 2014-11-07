@@ -8,29 +8,17 @@ BabelSetting::BabelSetting(void)
 
 	mOriginalSize = size();
 
-	QObject::connect(mUi.connexion, SIGNAL(clicked()), this, SLOT(getIpPort()));
-
-	// trigger enter pressed to clicked
-	QObject::connect(mUi.addrEdit, SIGNAL(returnPressed()), mUi.connexion, SIGNAL(clicked()));
-	QObject::connect(mUi.portEdit, SIGNAL(returnPressed()), mUi.connexion, SIGNAL(clicked()));
-
-	/*
-	QObject::connect(mUi.pseudoEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pwdEdit1, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pwdEdit2, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pwdEdit3, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	*/
-}
-
-BabelSetting::~BabelSetting(void)
-{
+	QObject::connect(mUi.connexion, SIGNAL(clicked()),			this, SLOT(onSubmit()));
+	QObject::connect(mUi.addrEdit,	SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.portEdit,	SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.back,		SIGNAL(clicked()),			this, SLOT(onBackButtonPressed()));
 
 }
 
-void		BabelSetting::getIpPort()
-{
-	mHost = mUi.addrEdit->text();
-	mPort = mUi.portEdit->text().toInt();
+BabelSetting::~BabelSetting(void) {}
+
+void		BabelSetting::onSubmit(void) {
+	emit askForConnection(mUi.addrEdit->text(), mUi.portEdit->text().toInt());
 }
 
 void	BabelSetting::paintEvent(QPaintEvent *) {
@@ -42,4 +30,8 @@ void	BabelSetting::paintEvent(QPaintEvent *) {
 
 QSize	BabelSetting::minimumSizeHint() const {
 	return mOriginalSize;
+}
+
+void	BabelSetting::onBackButtonPressed(void) {
+	emit exit();
 }

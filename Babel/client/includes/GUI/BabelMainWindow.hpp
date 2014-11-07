@@ -67,16 +67,18 @@ class BabelMainWindow : public QMainWindow {
 
 	// actions - requests
 	private slots:
-		void	connectionToServer(void);
-		void	createAccount(void);
-		void	connexionToAccount(void);
-		void	addNewContact(void);
-		void	sendMessage(void);
-		void	callContact(void);
+		void	connectionToServer(const QString &host, int port);
+		void	createAccount(const Contact &contact);
+		void	connexionToAccount(const Contact &contact);
+		void	addNewContact(const Contact &contact);
+		void	sendMessage(const Contact &contact, const QString &message);
+		void	callContact(const Contact &contact);
+		void	closeCall(const Contact &contact);
 		void	disconnectionToAccount(void);
-		void	deleteContact(void);
+		void	deleteContact(const Contact &contact);
 		void	sayYes(void);
 		void	sayNo(void);
+		void	displayInformation(const QString &message);
 
 	// slots display
 	private slots:

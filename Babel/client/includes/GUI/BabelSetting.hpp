@@ -26,19 +26,16 @@ class BabelSetting : public QWidget
 	// attributes
 	private:
 		Ui::BabelSetting	mUi;
-		BabelDialog			mDialog;
-		QString				mHost;
-		int					mPort;
 		QSize				mOriginalSize;
-
-	// methods
-	public:
-		Ui::BabelSetting const	&getUi() const { return mUi; }
-		BabelDialog const		&getDialog() const { return mDialog; }
-		QString const			&getHost() const { return mHost; }
-		int						getPort() const { return mPort; }
 
 	// slots
 	public slots :
-		void	getIpPort();
+		void	onSubmit(void);
+		void	onBackButtonPressed(void);
+
+	// signals
+	signals:
+		void	askForConnection(const QString &host, int port);
+		void	exit(void);
+
 };

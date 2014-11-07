@@ -27,8 +27,7 @@ bool	Contact::isConnected(void) const {
 	return mIsConnected;
 }
 
-QList<MessageListModel::sMessage>	&Contact::getMessages()
-{
+QList<Contact::Message>	&Contact::getMessages(void) {
 	return mMessages;
 }
 
@@ -56,7 +55,6 @@ void	Contact::setIsConnected(bool isConnected) {
 	mIsConnected = isConnected;
 }
 
-void	Contact::setMessages(const QList<MessageListModel::sMessage> &msg)
-{
+void	Contact::setMessages(const QList<Contact::Message> &msg) {
 	mMessages = msg;
 }

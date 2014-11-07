@@ -11,10 +11,10 @@ BabelUpdate::BabelUpdate(void)
 	mUi.passwordEdit->setEchoMode(QLineEdit::Password);
 	mUi.passwordEdit->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
 
-	QObject::connect(mUi.pseudoEdit, SIGNAL(returnPressed()), this, SLOT(onSubmit()));
-	QObject::connect(mUi.passwordEdit, SIGNAL(returnPressed()), this, SLOT(onSubmit()));
-	QObject::connect(mUi.submitButton, SIGNAL(clicked()), this, SLOT(onSubmit()));
-	QObject::connect(mUi.back, SIGNAL(clicked()), this, SLOT(onBackButtonPressed()));
+	QObject::connect(mUi.pseudoEdit,	SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.passwordEdit,	SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.submitButton,	SIGNAL(clicked()),			this, SLOT(onSubmit()));
+	QObject::connect(mUi.back,			SIGNAL(clicked()),			this, SLOT(onBackButtonPressed()));
 }
 
 BabelUpdate::~BabelUpdate(void) {}

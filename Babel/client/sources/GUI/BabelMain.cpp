@@ -1,7 +1,7 @@
 #include "BabelMain.hpp"
 
 BabelMain::BabelMain()
-	: QWidget(), mNewContact(""), mIsCall(false)
+	: QWidget(), mIsCall(false)
 {
 	mUi.setupUi(this);
 
@@ -12,16 +12,17 @@ BabelMain::BabelMain()
 
 	mOriginalSize = size();
 
-	// Event on list contact
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
-
-	// trigger
-	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), mUi.addContact, SIGNAL(clicked()));
-
+	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), this, SLOT(onAddContactButtonClicked()));
+	QObject::connect(mUi.addContact, SIGNAL(clicked()), this, SLOT(onAddContactButtonClicked()));
 	QObject::connect(mUi.options, SIGNAL(clicked()), this, SLOT(onOptionsButtonClicked()));
+	QObject::connect(mUi.deleteContact, SIGNAL(clicked()), this, SLOT(onDeleteContactButtonClicked()));
+	QObject::connect(mUi.send, SIGNAL(clicked()), this, SLOT(onSendButtonClicked()));
+	QObject::connect(mUi.call, SIGNAL(clicked()), this, SLOT(onCallButtonClicked()));
+	QObject::connect(mUi.logout, SIGNAL(clicked()), this, SLOT(onLogoutButtonClicked()));
 }
 
-BabelMain::~BabelMain()
+BabelMain::~BabelMain(void)
 {
 	delete mModel;
 	delete mMessages;
@@ -38,14 +39,100 @@ QSize	BabelMain::minimumSizeHint() const {
 	return mOriginalSize;
 }
 
+void	BabelMain::setContactList(const QList<Contact> &contacts) {
+	mModel->setContactList(contacts);
+}
+
 void		BabelMain::onClickContact(QModelIndex const &index)
 {
-	mUi.name->setText(mModel->getContactList()[index.row()].getAccountName());
 	mCurrentContact = mModel->getContactList()[index.row()];
+
+	mUi.name->setText(mCurrentContact.getAccountName());
 	mMessages->setMessageList(mCurrentContact.getMessages());
-	emit mMessages->layoutChanged();
 }
 
 void	BabelMain::onOptionsButtonClicked(void) {
 	emit updateContactInfo();
+}
+
+void	BabelMain::onAddContactButtonClicked(void) {
+	Contact	contact;
+
+	contact.setAccountName(mUi.newContact->text());
+
+	emit addContact(contact);
+}
+
+void	BabelMain::onDeleteContactButtonClicked(void) {
+	emit deleteContact(mCurrentContact);
+}
+
+void	BabelMain::setUser(const Contact &contact) {
+	mUser = contact;
+}
+
+void	BabelMain::onSendButtonClicked(void) {
+	QString message = mUi.messageEdit->toPlainText();
+
+	if (message != "") {
+		Contact::Message msg = { mUser.getPseudo(), message, QDateTime::currentDateTime() };
+
+		QList<Contact> &contacts = mModel->getContactList();
+		for (int i = 0; i < contacts.count(); i++)
+			if (contacts[i].getAccountName() == mCurrentContact.getAccountName()) {
+				contacts[i].getMessages() << msg;
+				mCurrentContact = contacts[i];
+				mMessages->setMessageList(mCurrentContact.getMessages());
+
+				emit sendMessage(mCurrentContact, msg.msg);
+			}
+	}
+
+	mUi.messageEdit->setFocus();
+	mUi.messageEdit->clear();
+}
+
+void	BabelMain::onCallButtonClicked(void) {
+	if (mIsCall)
+		emit closeCall(mContactInCall);
+	else
+		emit callContact(mCurrentContact);
+}
+
+void	BabelMain::onLogoutButtonClicked(void) {
+	emit logout();
+}
+
+void	BabelMain::receiveMessage(const Contact &contact, const QString &msg) {
+	Contact::Message message = { contact.getAccountName(), msg, QDateTime::currentDateTime() };
+
+	QList<Contact> &contacts = mModel->getContactList();
+	for (int i = 0; i < contacts.count(); i++)
+		if (contacts[i].getAccountName() == contact.getAccountName()) {
+			contacts[i].getMessages() << message;
+
+			if (contact.getAccountName() == mCurrentContact.getAccountName()) {
+				mCurrentContact = contacts[i];
+				mMessages->setMessageList(mCurrentContact.getMessages());
+			}
+		}
+}
+
+void	BabelMain::startCommunication(const Contact &contact, bool hasAccepted) {
+	if (hasAccepted) {
+		mUi.call->setText("Raccrocher");
+		mContactInCall = contact;
+		mIsCall = true;
+
+		emit displayInformation(contact.getAccountName() + " a accepté votre appel.");
+	}
+	else
+		emit displayInformation(contact.getAccountName() + " a refusé votre appel.");
+}
+
+void	BabelMain::terminateCommunication(const Contact &) {
+	mUi.call->setText("Appeler");
+	mIsCall = false;
+
+	emit displayInformation("Appel terminé");
 }

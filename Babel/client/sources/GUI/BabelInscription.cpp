@@ -1,46 +1,39 @@
 #include "BabelInscription.hpp"
+#include "BabelDialog.hpp"
 
-BabelInscription::BabelInscription(void)
-	: mEmail(""), mPseudo(""), mPwd(""), mIsRegister(false)
-{
+BabelInscription::BabelInscription(void) {
 	mUi.setupUi(this);
 
 	mOriginalSize = size();
 
 	// Echo mode for input password
-	mUi.pwdEdit1->setEchoMode(QLineEdit::Password);
-	mUi.pwdEdit1->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
-	mUi.pwdEdit2->setEchoMode(QLineEdit::Password);
-	mUi.pwdEdit2->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
+	mUi.password->setEchoMode(QLineEdit::Password);
+	mUi.password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
+	mUi.passwordConfirmation->setEchoMode(QLineEdit::Password);
+	mUi.passwordConfirmation->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhNoPredictiveText | Qt::ImhNoAutoUppercase);
 
-	// Form validation
-	QObject::connect(mUi.ok, SIGNAL(clicked()), this, SLOT(formValidation()));
-
-	// trigger enter pressed to clicked
-	QObject::connect(mUi.emailEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pseudoEdit, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pwdEdit1, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
-	QObject::connect(mUi.pwdEdit2, SIGNAL(returnPressed()), mUi.ok, SIGNAL(clicked()));
+	QObject::connect(mUi.ok,					SIGNAL(clicked()),			this, SLOT(onSubmit()));
+	QObject::connect(mUi.emailEdit,				SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.pseudoEdit,			SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.password,				SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.passwordConfirmation,	SIGNAL(returnPressed()),	this, SLOT(onSubmit()));
+	QObject::connect(mUi.back, SIGNAL(clicked()), this, SLOT(onBackButtonPressed()));
 }
 
-BabelInscription::~BabelInscription(void)
-{
-}
+BabelInscription::~BabelInscription(void) {}
 
-void		BabelInscription::formValidation()
-{
-	if (mUi.pwdEdit1->text() == mUi.pwdEdit2->text())
-	{
-		mEmail = mUi.emailEdit->text();
-		mPseudo = mUi.pseudoEdit->text();
-		mPwd = mUi.pwdEdit1->text();
-		mIsRegister = true;
+void		BabelInscription::onSubmit(void) {
+	if (mUi.password->text() == mUi.passwordConfirmation->text()) {
+		Contact contact;
+
+		contact.setAccountName(mUi.emailEdit->text());
+		contact.setPseudo(mUi.pseudoEdit->text());
+		contact.setPassword(mUi.password->text());
+
+		emit askForRegistration(contact);
 	}
 	else
-	{
-		mPwd = "";
-		mIsRegister = false;
-	}
+		emit displayInformation("Le mot de passe et sa confirmation ne sont pas identiques.");
 }
 
 void	BabelInscription::paintEvent(QPaintEvent *) {
@@ -52,4 +45,8 @@ void	BabelInscription::paintEvent(QPaintEvent *) {
 
 QSize	BabelInscription::minimumSizeHint() const {
 	return mOriginalSize;
+}
+
+void	BabelInscription::onBackButtonPressed(void) {
+	emit exit();
 }
