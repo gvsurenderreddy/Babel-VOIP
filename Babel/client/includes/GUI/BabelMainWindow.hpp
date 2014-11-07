@@ -10,7 +10,6 @@
 #include "BabelSetting.hpp"
 #include "BabelMain.hpp"
 #include "BabelDialog.hpp"
-#include "BabelDialogButton.hpp"
 #include "qmainwindow.h"
 #include "ErrorStatus.hpp"
 #include "BabelUpdate.hpp"
@@ -39,7 +38,6 @@ class BabelMainWindow : public QMainWindow {
 		BabelMain			*mMain;
 		BabelUpdate			*mUpdate;
 		BabelDialog			mDialog;
-		BabelDialogButton	mDialogButton;
 		Contact				mContact;
 
 	// public slots
@@ -76,8 +74,6 @@ class BabelMainWindow : public QMainWindow {
 		void	closeCall(const Contact &contact);
 		void	disconnectionToAccount(void);
 		void	deleteContact(const Contact &contact);
-		void	sayYes(void);
-		void	sayNo(void);
 		void	displayInformation(const QString &message);
 
 	// slots display

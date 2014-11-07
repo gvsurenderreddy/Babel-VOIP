@@ -51,10 +51,6 @@ BabelMainWindow::BabelMainWindow(void)
 	QObject::connect(mMain,		SIGNAL(closeCall(const Contact &)),						this, SLOT(closeCall(const Contact &)));
 	QObject::connect(mMain,		SIGNAL(logout()),										this, SLOT(disconnectionToAccount()));
 	QObject::connect(mMain,		SIGNAL(updateContactInfo()),							this, SLOT(displayUpdate()));
-
-	// when you have a choice to do something
-	QObject::connect(mDialogButton.getUi().yes, SIGNAL(clicked()), this, SLOT(sayYes()));
-	QObject::connect(mDialogButton.getUi().no, SIGNAL(clicked()), this, SLOT(sayNo()));
 }
 
 BabelMainWindow::~BabelMainWindow(void) {}
@@ -239,16 +235,6 @@ void	BabelMainWindow::displayFlyer(void) {
 
 void	BabelMainWindow::deleteContact(const Contact &contact) {
 	emit askForDeletingContact(contact);
-}
-
-void	BabelMainWindow::sayYes(void)
-{
-	mDialogButton.setHasAccepted(true);
-}
-
-void	BabelMainWindow::sayNo(void)
-{
-	mDialogButton.setHasAccepted(false);
 }
 
 void	BabelMainWindow::displayHome(void) {
