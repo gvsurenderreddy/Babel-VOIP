@@ -35,7 +35,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>560</y>
+     <y>550</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -45,7 +45,7 @@
 border: none;
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
+font: 10pt &quot;Open Sans Light&quot;;
 padding: 8px;
 </string>
    </property>
@@ -57,7 +57,7 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>620</y>
+     <y>600</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -67,7 +67,7 @@ padding: 8px;
 border: none;
 background-color: rgba(255, 255, 255, 128);
 color: #000;
-font: 10pt &quot;Verdana&quot;;
+font: 10pt &quot;Open Sans Light&quot;;
 padding: 8px;
       </string>
    </property>
@@ -79,9 +79,9 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>680</y>
+     <y>650</y>
      <width>391</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -92,8 +92,8 @@ padding: 8px;
    </property>
    <property name="font">
     <font>
-     <family>Verdana</family>
-     <pointsize>12</pointsize>
+     <family>Open Sans Light</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -110,11 +110,10 @@ padding: 8px;
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(22, 87, 127);
+background-color: #4c7f90;
 color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
+font: 10pt &quot;Open Sans Light&quot;;
+border-style: outset;</string>
    </property>
    <property name="text">
     <string>Se connecter</string>
@@ -123,10 +122,10 @@ border-style: outset;
   <widget class="QPushButton" name="signup">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>750</y>
-     <width>391</width>
-     <height>51</height>
+     <x>160</x>
+     <y>740</y>
+     <width>181</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -137,8 +136,8 @@ border-style: outset;
    </property>
    <property name="font">
     <font>
-     <family>Verdana</family>
-     <pointsize>12</pointsize>
+     <family>Open Sans Light</family>
+     <pointsize>8</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -155,11 +154,12 @@ border-style: outset;
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(80, 80, 80);
+border: 1px solid rgba(255, 255, 255, 0.1);
+background-color: rgba(80, 80, 80, 0.6);
 color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
+font: 8pt &quot;Open Sans Light&quot;;
+      
+</string>
    </property>
    <property name="text">
     <string>Inscrivez-vous</string>
@@ -169,9 +169,9 @@ border-style: outset;
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>91</width>
-     <height>31</height>
+     <y>810</y>
+     <width>491</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -183,16 +183,42 @@ border-style: outset;
      <bold>false</bold>
     </font>
    </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
+border: 1px solid rgba(255, 255, 255, 0.1);
+background-color: rgba(187, 120, 128, 0.5);
 color: rgb(255, 255, 255);
 font: 8pt &quot;Open Sans Light&quot;;
       </string>
    </property>
    <property name="text">
     <string>Options</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>710</y>
+     <width>191</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+border: 0;
+color: rgb(255, 255, 255);
+font: 10pt &quot;Open Sans Light&quot;;
+      </string>
+   </property>
+   <property name="text">
+    <string>Pas encore de compte ?</string>
    </property>
   </widget>
  </widget>

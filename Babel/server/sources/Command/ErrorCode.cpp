@@ -48,6 +48,14 @@ std::string ErrorCode::getName(int errorCode)
         return "BUSY_CONTACT_CANNOT_REPLY";
     case ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM:
         return "NOT_IN_COMMUNICATION_WITH_HIM";
+    case ErrorCode::CANNOT_LOAD_DATA:
+        return "CANNOT_LOAD_DATA";
+    case ErrorCode::CANNOT_SAVE_DATA:
+        return "CANNOT_SAVE_DATA";
+    case ErrorCode::YOU_CANNOT_UPDATE_OTHER_ACCOUNT:
+        return "YOU_CANNOT_UPDATE_OTHER_ACCOUNT";
+    case ErrorCode::INVALID_STATUS_ID:
+        return "INVALID_STATUS_ID";
     default:
         return "UNKNOWN";
     }

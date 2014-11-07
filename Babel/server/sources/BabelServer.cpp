@@ -255,24 +255,38 @@ void BabelServer::onUpdate(Client* currentClient, std::vector<std::string>& para
 			const std::string& password = param[2];
 			Client::Status status = static_cast<Client::Status>(param[3][0]);
 
-            if (currentClient->getAccount() == account && mAccounts.count(account) && status >= Client::Status::CONNECTED && status <= Client::Status::CRYING)
+            if (currentClient->getAccount() == account)
 			{
-                sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                if (mAccounts.count(account))
+                {
+                    if (status >= Client::Status::CONNECTED && status <= Client::Status::CRYING)
+                    {
+                        Client* clientRollback = currentClient;
 
-                currentClient->setAccount(account);
-                currentClient->setPseudo(pseudo);
-                currentClient->setStatus(status);
-                currentClient->saveData();
+                        currentClient->setAccount(account);
+                        currentClient->setPseudo(pseudo);
+                        currentClient->setStatus(status);
 
-			    mAccounts[account] = password;
-
-                std::vector<std::string> args;
-
-                args.push_back(account);
-                onShow(currentClient, args, ICommand::SHOW);
-                notifyMyFriendsOfModificationAboutMe(currentClient);
+                        if (currentClient->saveData())
+                        {
+                            sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                            mAccounts[account] = password;
+                            notifyMyFriendsOfModificationAboutMe(currentClient);
+                            std::vector<std::string> args;
+                            args.push_back(account);
+                            onShow(currentClient, args, ICommand::SHOW);
+                        }
+                        else
+                        {
+                            currentClient = clientRollback;
+                            sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                        }
+                    }
+                    else sendStateCommand(currentClient, ErrorCode::INVALID_STATUS_ID, instruction);
+                }
+                else sendStateCommand(currentClient, ErrorCode::UNKNOWN_ACCOUNT, instruction);
 			}
-            else sendStateCommand(currentClient, ErrorCode::WRONG_PACKET_STRUCT, instruction);
+            else sendStateCommand(currentClient, ErrorCode::YOU_CANNOT_UPDATE_OTHER_ACCOUNT, instruction);
         } 
         else sendStateCommand(currentClient, ErrorCode::YOU_ARE_NOT_LOGGED, instruction);
     } 
@@ -293,19 +307,26 @@ void BabelServer::onReg(Client* client, std::vector<std::string>& param, IComman
 
 			if (mAccounts.count(account) == 0)
 			{
-			    sendStateCommand(client, ErrorCode::OK, instruction);
+                Client* clientRollback = client;
 
-			    mAccounts[account] = password;
+                client->setAccount(account);
+                client->setPseudo(pseudo);
+                client->setStatus(Client::DISCONNECTED);
+                client->setStatusCall(Client::StatusCall::NONE);
+                client->clearContact();
+                client->setConnected(false);
 
-			    client->setAccount(account);
-			    client->setPseudo(pseudo);
-			    client->setStatus(Client::DISCONNECTED);
-			    client->setStatusCall(Client::StatusCall::NONE);
-			    client->clearContact();
-			    client->setConnected(false);
-
-			    client->saveData();
-			} 
+                if (client->saveData())
+                {
+                    sendStateCommand(client, ErrorCode::OK, instruction);
+                    mAccounts[account] = password;
+                }
+                else
+                {
+                    client = clientRollback;
+                    sendStateCommand(client, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                }
+            } 
             else sendStateCommand(client, ErrorCode::REGISTER_ACC_ALREADY_USED, instruction);
 		} 
         else sendStateCommand(client, ErrorCode::ALREADY_CONNECTED, instruction);
@@ -337,16 +358,24 @@ void BabelServer::onLog(Client* client, std::vector<std::string>& param, IComman
 			            client->setAccount(account);
 			            if (client->loadData())
 					    {
-						    sendStateCommand(client, ErrorCode::OK, instruction);
+                            Client* clientRollback = client;
 
                             client->connect();
-						    client->saveData();
 
-						    std::vector<std::string> args;
-							onList(client, args, ICommand::LIST);
-						    notifyMyFriendsOfModificationAboutMe(client);
+                            if (client->saveData())
+                            {
+                                sendStateCommand(client, ErrorCode::OK, instruction);
+                                std::vector<std::string> args;
+                                onList(client, args, ICommand::LIST);
+                                notifyMyFriendsOfModificationAboutMe(client);
+                            }
+                            else
+                            {
+                                client = clientRollback;
+                                sendStateCommand(client, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                            }
 					    }
-					    else sendStateCommand(client, ErrorCode::THE_IMPOSSIBLE_HAPPENED, instruction);
+					    else sendStateCommand(client, ErrorCode::CANNOT_LOAD_DATA, instruction);
 			        } 
                     else sendStateCommand(client, ErrorCode::LOGIN_ON_ALREADY_LOGGED_ACCOUNT, instruction);
 			        delete targetClientOffline;
@@ -389,17 +418,17 @@ void BabelServer::onShow(Client* client, std::vector<std::string>& param, IComma
 		if (client->isConnect() == true)
 		{
 			const std::string& targetAccount = param[0];
-			Client* targetClient = findOfflineClient(targetAccount);
-			if (targetClient)
+            Client* targetClientOffline = findOfflineClient(targetAccount);
+            if (targetClientOffline)
 			{
 			    sendStateCommand(client, ErrorCode::OK, instruction);
                 std::vector<std::string> args;
 
-                args.push_back(targetClient->getAccount());
-                args.push_back(targetClient->getPseudo());
+                args.push_back(targetClientOffline->getAccount());
+                args.push_back(targetClientOffline->getPseudo());
                 args.push_back(std::string(1, client->getStatus()));
                 args.push_back(std::string(1, client->isConnect()));
-			    delete targetClient;
+                delete targetClientOffline;
 			    client->handleCmd->packCmd(instruction, args);            
 			} 
             else sendStateCommand(client, ErrorCode::UNKNOWN_ACCOUNT, instruction);
@@ -429,22 +458,28 @@ void BabelServer::onCall(Client* currentClient, std::vector<std::string>& param,
 				    	{
 				    		if (targetClient->getStatusCall() == Client::StatusCall::NONE)
 				    		{
-                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                                Client* clientCurrentRollback = currentClient;
+                                Client* clientTargetRollback = targetClient;
 
                                 std::vector<std::string> argsToTargetClient;
-
                                 argsToTargetClient.push_back(currentClient->getAccount());
 
                                 currentClient->setStatusCall(Client::StatusCall::ISWAITING);
-                                currentClient->saveData();
+                                targetClient->setStatusCall(Client::StatusCall::ISWAITING);
 
-								targetClient->setStatusCall(Client::StatusCall::ISWAITING);
-					            targetClient->saveData();
-
-                                currentClient->setCommunicationClient(targetClient);
-                                targetClient->setCommunicationClient(currentClient);
-
-                                targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                                if (currentClient->saveData() && targetClient->saveData())
+                                {
+                                    sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                                    currentClient->setCommunicationClient(targetClient);
+                                    targetClient->setCommunicationClient(currentClient);
+                                    targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                                }
+                                else
+                                {
+                                    targetClient = clientTargetRollback;
+                                    currentClient = clientCurrentRollback;
+                                    sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                                }
                             }
                             else sendStateCommand(currentClient, ErrorCode::BUSY_CONTACT_CANNOT_REPLY, instruction);
                         }
@@ -476,27 +511,34 @@ void BabelServer::onAcceptAdd(Client* currentClient, std::vector<std::string>& p
 			{
 				if (targetClient->isAlreadyFriends(currentClient->getAccount()) == false)
 				{
-				    sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                    std::vector<std::string> argsToCurrentClient;
+                    std::vector<std::string> argsToTargetClient;
 
-                    if (accept == false)
+                    argsToTargetClient.push_back(currentClient->getAccount());
+                    argsToCurrentClient.push_back(targetClient->getAccount());
+
+                    if (accept == true)
                     {
-                        return;
+                        Client* clientCurrentRollback = currentClient;
+                        Client* clientTargetRollback = targetClient;
+
+                        targetClient->addContact(currentClient->getAccount());
+                        currentClient->addContact(targetClient->getAccount());
+
+                        if (currentClient->saveData() && targetClient->saveData())
+                        {
+                            sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                            onShow(targetClient, argsToTargetClient, ICommand::SHOW);
+                            onShow(currentClient, argsToCurrentClient, ICommand::SHOW);
+                        }
+                        else
+                        {
+                            targetClient = clientTargetRollback;
+                            currentClient = clientCurrentRollback;
+                            sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                        }
                     }
-
-				    std::vector<std::string> argsToCurrentClient;
-				    std::vector<std::string> argsToTargetClient;
-
-				    argsToTargetClient.push_back(currentClient->getAccount());
-				    argsToCurrentClient.push_back(targetClient->getAccount());
-
-				    targetClient->addContact(currentClient->getAccount());
-				    currentClient->addContact(targetClient->getAccount());
-
-				    targetClient->saveData();
-				    currentClient->saveData();
-
-				    onShow(targetClient, argsToTargetClient, ICommand::SHOW);
-				    onShow(currentClient, argsToCurrentClient, ICommand::SHOW);
+                    else sendStateCommand(currentClient, ErrorCode::OK, instruction);
 				}
 				else sendStateCommand(currentClient, ErrorCode::ALREADY_IN_YOUR_CONTACT_LIST, instruction);		        					
 			} 
@@ -530,7 +572,7 @@ void BabelServer::onDel(Client* currentClient, std::vector<std::string>& param, 
 
 				if (isFriend)
 				{
-                    sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                    Client* clientCurrentRollback = currentClient;
 
                     std::vector<std::string> argsToCurrentClient;
                     std::vector<std::string> argsToTargetClient;
@@ -539,29 +581,47 @@ void BabelServer::onDel(Client* currentClient, std::vector<std::string>& param, 
                     argsToCurrentClient.push_back(targetAccount);
 
                     currentClient->delContact(targetAccount);
-                    currentClient->saveData();
 
-				    if (targetClientOnline)
-				    {
-                        Client* communicationClient = currentClient->getCommunicationClient();
-                        if (communicationClient && communicationClient->getAccount() == targetAccount)
+                    if (currentClient->saveData())
+                    {
+                        if (targetClientOnline)
                         {
-                            std::vector<std::string> args;
+                            Client* clientTargetRollback = targetClientOnline;
+                            targetClientOnline->delContact(currentClient->getAccount());
+                            if (targetClientOnline->saveData())
+                            {
+                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                                currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                                targetClientOnline->handleCmd->packCmd(instruction, argsToTargetClient);
+                                Client* communicationClient = currentClient->getCommunicationClient();
+                                if (communicationClient && communicationClient->getAccount() == targetAccount)
+                                {
+                                    std::vector<std::string> args;
 
-                            args.push_back(communicationClient->getAccount());
-                            onCloseCall(currentClient, args, ICommand::CLOSE_CALL);
+                                    args.push_back(communicationClient->getAccount());
+                                    onCloseCall(currentClient, args, ICommand::CLOSE_CALL);
+                                }
+                            }
+                            else
+                            {
+                                targetClientOnline = clientTargetRollback;
+                                sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                            }
                         }
-                        targetClientOnline->delContact(currentClient->getAccount());
-				        targetClientOnline->saveData();
-                        targetClientOnline->handleCmd->packCmd(instruction, argsToTargetClient);
-				    }
-				    else
-				    {
-                        targetClientOffline->delContact(currentClient->getAccount());
-				        targetClientOffline->saveData();
-				    }
-
-                    currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                        else
+                        {
+                            targetClientOffline->delContact(currentClient->getAccount());
+                            if (targetClientOffline->saveData())
+                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                            else
+                                sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                        }
+                    }
+                    else
+                    {
+                        currentClient = clientCurrentRollback;
+                        sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                    }
 			    } 
                 else sendStateCommand(currentClient, ErrorCode::NOT_IN_YOUR_CONTACT_LIST, instruction);
 			    if (targetClientOffline)
@@ -592,9 +652,6 @@ void BabelServer::onExit(Client* currentClient, std::vector<std::string>& param,
                 args.push_back(communicationClient->getAccount());
                 onCloseCall(currentClient, args, ICommand::CLOSE_CALL);
             }
-            std::cout << "avant la deco" << std::endl;
-            currentClient->display();
-
             currentClient->disconnect();
             notifyMyFriendsOfModificationAboutMe(currentClient);
             currentClient->saveData();
@@ -655,17 +712,11 @@ void BabelServer::onAcceptCall(Client* currentClient, std::vector<std::string>& 
 			    {
                     if (targetClient == currentClient->getCommunicationClient())
 					{
-                        sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                        Client* clientCurrentRollback = currentClient;
+                        Client* clientTargetRollback = targetClient;
 
                         std::vector<std::string> argsToCurrentClient;
                         std::vector<std::string> argsToTargetClient;
-
-                        if (!accept)
-                        {
-                            currentClient->setStatusCall(Client::StatusCall::ISCALLING);
-                            currentClient->saveData();
-                            return;
-                        }
 
                         argsToTargetClient.push_back(currentClient->getAccount());
                         argsToTargetClient.push_back(currentClient->getSocket()->getRemoteIp());
@@ -675,17 +726,45 @@ void BabelServer::onAcceptCall(Client* currentClient, std::vector<std::string>& 
                         argsToCurrentClient.push_back(targetClient->getSocket()->getRemoteIp());
                         argsToCurrentClient.push_back(std::string(1, accept));
 
-                        targetClient->setStatusCall(Client::StatusCall::ISCALLING);
-                        currentClient->setStatusCall(Client::StatusCall::ISCALLING);
+                        if (accept)
+                        {
+                            targetClient->setStatusCall(Client::StatusCall::ISCALLING);
+                            currentClient->setStatusCall(Client::StatusCall::ISCALLING);
+                            if (targetClient->saveData() && currentClient->saveData())
+                            {
+                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-                        targetClient->saveData();
-                        currentClient->saveData();
+                                currentClient->setCommunicationClient(targetClient);
+                                targetClient->setCommunicationClient(currentClient);
 
-                        currentClient->setCommunicationClient(targetClient);
-                        targetClient->setCommunicationClient(currentClient);
+                                targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                                currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                            }
+                            else
+                            {
+                                currentClient = clientCurrentRollback;
+                                targetClient = clientTargetRollback;
+                                sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                            }
+                        }
+                        else
+                        {
+                            currentClient->setStatusCall(Client::StatusCall::NONE);
+                            if (currentClient->saveData())
+                            {
+                                sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-                        targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
-                        currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                                currentClient->setCommunicationClient(NULL);
+                                targetClient->setCommunicationClient(NULL);
+
+                                targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                            }   
+                            else
+                            {
+                                currentClient = clientCurrentRollback;
+                                sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                            }
+                        }
                     } 
                     else sendStateCommand(currentClient, ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM, instruction);
                 } 
@@ -714,7 +793,8 @@ void BabelServer::onCloseCall(Client* currentClient, std::vector<std::string>& p
 			    {
                     if (targetClient == currentClient->getCommunicationClient())
 					{
-                        sendStateCommand(currentClient, ErrorCode::OK, instruction);
+                        Client* clientCurrentRollback = currentClient;
+                        Client* clientTargetRollback = targetClient;
 
                         std::vector<std::string> argsToCurrentClient;
                         std::vector<std::string> argsToTargetClient;
@@ -723,16 +803,24 @@ void BabelServer::onCloseCall(Client* currentClient, std::vector<std::string>& p
                         argsToCurrentClient.push_back(targetClient->getAccount());
 
                         currentClient->setStatusCall(Client::StatusCall::NONE);
-                        currentClient->saveData();
-
                         targetClient->setStatusCall(Client::StatusCall::NONE);
-                        targetClient->saveData();
 
-                        currentClient->setCommunicationClient(NULL);
-                        targetClient->setCommunicationClient(NULL);
+                        if (currentClient->saveData() && targetClient->saveData())
+                        {
+                            sendStateCommand(currentClient, ErrorCode::OK, instruction);
 
-                        targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
-                        currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                            currentClient->setCommunicationClient(NULL);
+                            targetClient->setCommunicationClient(NULL);
+
+                            targetClient->handleCmd->packCmd(instruction, argsToTargetClient);
+                            currentClient->handleCmd->packCmd(instruction, argsToCurrentClient);
+                        }
+                        else
+                        {
+                            currentClient = clientCurrentRollback;
+                            targetClient = clientTargetRollback;
+                            sendStateCommand(currentClient, ErrorCode::CANNOT_SAVE_DATA, instruction);
+                        }
                     } 
                     else sendStateCommand(currentClient, ErrorCode::NOT_IN_COMMUNICATION_WITH_HIM, instruction);
 			    } 
