@@ -18,7 +18,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
-class Client : public IClientSocket::OnSocketEvent{
+class Client : public IClientSocket::OnSocketEvent {
 
     // interface for client callback
     public:
@@ -49,8 +49,7 @@ class Client : public IClientSocket::OnSocketEvent{
 
     // private coplien form
     private:
-        Client(const Client &) : Listener(NULL) { }
-        
+        Client(const Client &) = delete;
 
     // handle commands
     private:

@@ -9,7 +9,7 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/serialization/map.hpp>
 
-class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
+class BabelServer : public IServerSocket::OnSocketEvent, public Client::OnClientEvent, private boost::noncopyable
 {
 
     // default ctor-dtor
@@ -19,8 +19,8 @@ class BabelServer : public IServerSocket::OnSocketEvent, Client::OnClientEvent
 
     // private coplien form
     private:
-        BabelServer(const BabelServer &) {}
-        const BabelServer & operator = (const BabelServer &) { return *this; }
+        BabelServer(const BabelServer &) = delete;
+        const BabelServer & operator = (const BabelServer &) = delete;
 
     // internal functions
     public:

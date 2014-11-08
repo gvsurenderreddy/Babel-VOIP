@@ -1,15 +1,5 @@
 #include "Command/CommandExit.hpp"
 
-CommandExit::CommandExit(){
-
-}
-CommandExit::~CommandExit(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandExit::getParam(IClientSocket *){
    return new std::vector<std::string>;
 }

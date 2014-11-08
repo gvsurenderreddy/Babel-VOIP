@@ -1,15 +1,5 @@
 #include "Command/CommandUpdate.hpp"
 
-CommandUpdate::CommandUpdate(){
-
-}
-CommandUpdate::~CommandUpdate(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandUpdate::getParam(IClientSocket *socket){
 
     CommandUpdate::Body			*body = new CommandUpdate::Body;

@@ -1,15 +1,5 @@
 #include "Command/CommandLog.hpp"
 
-CommandLog::CommandLog(){
-
-}
-CommandLog::~CommandLog(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandLog::getParam(IClientSocket *socket){
 
     CommandLog::Body            *body = new CommandLog::Body;

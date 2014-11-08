@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandList : public ICommand{
-public:
-	CommandList();
-	~CommandList();
+class CommandList : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandList() { }
+        virtual ~CommandList() { }
+
+    // private coplien form
+    private:
+        CommandList(const CommandList &) = delete;
+        const CommandList & operator = (const CommandList &) = delete;
 
 	//body
     #pragma pack(push, 1)

@@ -1,15 +1,5 @@
 #include "Command/CommandCall.hpp"
 
-CommandCall::CommandCall(){
-
-}
-CommandCall::~CommandCall(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandCall::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;

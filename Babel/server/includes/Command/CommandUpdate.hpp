@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandUpdate : public ICommand{
-public:
-	CommandUpdate();
-	~CommandUpdate();
+class CommandUpdate : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandUpdate() { }
+        virtual ~CommandUpdate() { }
+
+    // private coplien form
+    private:
+        CommandUpdate(const CommandUpdate &) = delete;
+        const CommandUpdate & operator = (const CommandUpdate &) = delete;
 
 	//body
     #pragma pack(push, 1)

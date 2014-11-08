@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandReg : public ICommand{
-public:
-	CommandReg();
-	~CommandReg();
+class CommandReg : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandReg() { }
+        virtual ~CommandReg() { }
+
+    // private coplien form
+    private:
+        CommandReg(const CommandReg &) = delete;
+        const CommandReg & operator = (const CommandReg &) = delete;
 
 	//body
     #pragma pack(push, 1)

@@ -15,7 +15,7 @@
 
 using namespace boost::asio::ip;
 
-class TcpServer : public IServerSocket
+class TcpServer : public IServerSocket, private boost::noncopyable
 {
     // default ctor-dtor
     public:
@@ -24,8 +24,8 @@ class TcpServer : public IServerSocket
 
     // private coplien form
     private:
-        TcpServer(const TcpServer &) : mSigset(mService, SIGTERM, SIGINT) {}
-        const TcpServer & operator = (const TcpServer &) { return *this; }
+        TcpServer(const TcpServer &) = delete;
+        const TcpServer & operator = (const TcpServer &) = delete;
 
     // init
     public:

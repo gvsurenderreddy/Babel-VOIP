@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandDel : public ICommand{
-public:
-	CommandDel();
-	~CommandDel();
+class CommandDel : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandDel() { }
+        virtual ~CommandDel() { }
+
+    // private coplien form
+    private:
+        CommandDel(const CommandDel &) = delete;
+        const CommandDel & operator = (const CommandDel &) = delete;
 
 	//body
     #pragma pack(push, 1)

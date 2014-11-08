@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandShow : public ICommand{
-public:
-	CommandShow();
-	~CommandShow();
+class CommandShow : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandShow() { }
+        virtual ~CommandShow() { }
+
+    // private coplien form
+    private:
+        CommandShow(const CommandShow &) = delete;
+        const CommandShow & operator = (const CommandShow &) = delete;
 
 	//body
     #pragma pack(push, 1)

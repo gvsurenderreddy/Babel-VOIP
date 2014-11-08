@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandAcceptAdd : public ICommand{
-public:
-	CommandAcceptAdd();
-	~CommandAcceptAdd();
+class CommandAcceptAdd : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandAcceptAdd() { }
+        virtual ~CommandAcceptAdd() { }
+
+    // private coplien form
+    private:
+        CommandAcceptAdd(const CommandAcceptAdd &) = delete;
+        const CommandAcceptAdd & operator = (const CommandAcceptAdd &) = delete;
 
 	//body
     #pragma pack(push, 1)

@@ -2,16 +2,6 @@
 #include "ErrorCode.hpp"
 #include "Command/CommandErr.hpp"
 
-CommandErr::CommandErr(){
-
-}
-CommandErr::~CommandErr(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandErr::getParam(IClientSocket *){
 	return NULL;
 }

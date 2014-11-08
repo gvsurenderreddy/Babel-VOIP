@@ -1,15 +1,5 @@
 #include "Command/CommandAcceptCall.hpp"
 
-CommandAcceptCall::CommandAcceptCall(){
-
-}
-CommandAcceptCall::~CommandAcceptCall(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandAcceptCall::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;

@@ -1,16 +1,6 @@
 #include "Command/CommandShow.hpp"
 #include <cstring>
 
-CommandShow::CommandShow(){
-
-}
-CommandShow::~CommandShow(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandShow::getParam(IClientSocket *socket){
 
     CommandShow::Body			*body = new CommandShow::Body;

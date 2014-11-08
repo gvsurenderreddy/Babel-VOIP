@@ -2,10 +2,18 @@
 
 #include "ICommand.hpp"
 
-class CommandCall : public ICommand{
-public:
-	CommandCall();
-	~CommandCall();
+class CommandCall : public ICommand, private boost::noncopyable {
+    
+    // default ctor-dtor
+    public:
+        CommandCall() { }
+        virtual ~CommandCall() { }
+
+    // private coplien form
+    private:
+        CommandCall(const CommandCall &) = delete;
+        const CommandCall & operator = (const CommandCall &) = delete;
+
 
 	//body
     #pragma pack(push, 1)

@@ -11,7 +11,7 @@
 
 using namespace boost::asio::ip;
 
-class TcpClient : public IClientSocket
+class TcpClient : public IClientSocket, private boost::noncopyable
 {
 
     // default ctor-dtor
@@ -21,8 +21,8 @@ class TcpClient : public IClientSocket
 
     // private coplien form
     private:
-        TcpClient(const TcpClient &) {}
-        const TcpClient & operator = (const TcpClient &) { return *this; }
+        TcpClient(const TcpClient &) = delete;
+        const TcpClient & operator = (const TcpClient &) = delete;
 
     // start - stop
     public:

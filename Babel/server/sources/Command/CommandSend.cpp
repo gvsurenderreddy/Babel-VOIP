@@ -1,15 +1,5 @@
 #include "Command/CommandSend.hpp"
 
-CommandSend::CommandSend(){
-
-}
-CommandSend::~CommandSend(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandSend::getParam(IClientSocket *socket){
 
     CommandSend::Body			*body = new CommandSend::Body;

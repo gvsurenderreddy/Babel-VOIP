@@ -1,15 +1,5 @@
 #include "Command/CommandDel.hpp"
 
-CommandDel::CommandDel(){
-
-}
-CommandDel::~CommandDel(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandDel::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;

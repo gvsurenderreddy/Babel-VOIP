@@ -1,15 +1,5 @@
 #include "Command/CommandList.hpp"
 
-CommandList::CommandList(){
-
-}
-CommandList::~CommandList(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandList::getParam(IClientSocket *){
     return new std::vector<std::string>;
 }

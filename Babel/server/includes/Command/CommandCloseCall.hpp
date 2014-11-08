@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandCloseCall : public ICommand{
-public:
-	CommandCloseCall();
-	~CommandCloseCall();
+class CommandCloseCall : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandCloseCall() { }
+        virtual ~CommandCloseCall() { }
+
+    // private coplien form
+    private:
+        CommandCloseCall(const CommandCloseCall &) = delete;
+        const CommandCloseCall & operator = (const CommandCloseCall &) = delete;
 
 	//body
     #pragma pack(push, 1)

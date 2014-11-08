@@ -1,15 +1,5 @@
 #include "Command/CommandCloseCall.hpp"
 
-CommandCloseCall::CommandCloseCall(){
-
-}
-CommandCloseCall::~CommandCloseCall(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandCloseCall::getParam(IClientSocket *socket){
 
 	std::vector<std::string>	*t = new std::vector<std::string>;

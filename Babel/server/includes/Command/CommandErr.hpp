@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandErr : public ICommand{
-public:
-	CommandErr();
-	~CommandErr();
+class CommandErr : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandErr() { }
+        virtual ~CommandErr() { }
+
+    // private coplien form
+    private:
+        CommandErr(const CommandErr &) = delete;
+        const CommandErr & operator = (const CommandErr &) = delete;
 
 	//body
     #pragma pack(push, 1)

@@ -1,15 +1,5 @@
 #include "Command/CommandReg.hpp"
 
-CommandReg::CommandReg(){
-
-}
-CommandReg::~CommandReg(){
-
-}
-
-/*
-** Heritage from ICommand
-*/
 std::vector<std::string>		*CommandReg::getParam(IClientSocket *socket){
 
     CommandReg::Body			*body = new CommandReg::Body;

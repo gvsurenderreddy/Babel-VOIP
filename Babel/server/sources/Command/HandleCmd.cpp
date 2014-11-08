@@ -1,12 +1,6 @@
 #include "HandleCmd.hpp"
 #include "Factory.hpp"
 
-HandleCmd::HandleCmd(IClientSocket *socket) : header(NULL), socket(socket) {
-}
-
-HandleCmd::~HandleCmd() {
-}
-
 std::vector<std::string>		*HandleCmd::unPackCmd(void){
 	IClientSocket::Message		data;
 	std::vector<std::string>	*param;

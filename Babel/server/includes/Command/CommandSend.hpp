@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandSend : public ICommand{
-public:
-	CommandSend();
-	~CommandSend();
+class CommandSend : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandSend() { }
+        virtual ~CommandSend() { }
+
+    // private coplien form
+    private:
+        CommandSend(const CommandSend &) = delete;
+        const CommandSend & operator = (const CommandSend &) = delete;
 
 	//body
     #pragma pack(push, 1)

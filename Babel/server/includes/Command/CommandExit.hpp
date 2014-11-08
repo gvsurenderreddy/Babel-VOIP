@@ -2,10 +2,17 @@
 
 #include "ICommand.hpp"
 
-class CommandExit : public ICommand{
-public:
-	CommandExit();
-	~CommandExit();
+class CommandExit : public ICommand, private boost::noncopyable {
+
+    // default ctor-dtor
+    public:
+        CommandExit() { }
+        virtual ~CommandExit() { }
+
+    // private coplien form
+    private:
+        CommandExit(const CommandExit &) = delete;
+        const CommandExit & operator = (const CommandExit &) = delete;
 
 	//body
     #pragma pack(push, 1)
