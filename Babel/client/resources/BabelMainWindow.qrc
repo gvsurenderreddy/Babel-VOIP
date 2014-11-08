@@ -1,12 +1,13 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>background_image.jpg</file>
-    <file>background_image.png</file>
-    <file>background_setting.jpg</file>
-    <file>telephone.jpg</file>
-    <file>telephone.png</file>
-    <file>unknown_profile.jpg</file>
-    <file>online_icon.png</file>
-    <file>offline_icon.png</file>
+	<file>BgBabelUpdate.png</file>
+	<file>BgBabelSetting.png</file>
+	<file>BgBabelInscription.png</file>
+	<file>BgBabelFlyer.png</file>
+	<file>BgBabelDialog.png</file>
+	<file>login.png</file>
+	<file>pseudo.png</file>
+	<file>password.png</file>
+	<file>options.png</file>
 </qresource>
 </RCC>

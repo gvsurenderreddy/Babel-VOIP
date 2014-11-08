@@ -130,7 +130,8 @@ FORMS		+=	forms/BabelDialog.ui					\
 			forms/BabelMain.ui					\
 			forms/BabelUpdate.ui
 
-RESOURCES	+=	resources/BabelMainWindow.qrc
+RESOURCES	+=	resources/BabelMainWindow.qrc	\
+				resources/BabelMain.qrc
 
 win32:LIBS      +=      -ldependencies/libs/portaudio_x86	\
 			-ldependencies/libs/celt 		\

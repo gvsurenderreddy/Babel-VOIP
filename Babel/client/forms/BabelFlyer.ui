@@ -26,7 +26,7 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_image.jpg);</string>
+   <string notr="true">background-image: url(:/BgBabelFlyer.png);</string>
   </property>
   <property name="windowFilePath">
    <string notr="true"/>
@@ -35,19 +35,22 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>550</y>
+     <y>580</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Open Sans Light&quot;;
-padding: 8px;
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
 </string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Entrer votre nom de compte</string>
@@ -57,19 +60,22 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>600</y>
+     <y>630</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: #000;
-font: 10pt &quot;Open Sans Light&quot;;
-padding: 8px;
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
       </string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Tapez votre mot de passe</string>
@@ -79,7 +85,7 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>650</y>
+     <y>680</y>
      <width>391</width>
      <height>41</height>
     </rect>
@@ -100,7 +106,7 @@ padding: 8px;
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -113,18 +119,18 @@ padding: 8px;
 background-color: #4c7f90;
 color: rgb(255, 255, 255);
 font: 10pt &quot;Open Sans Light&quot;;
-border-style: outset;</string>
+border: 1px solid rgba(255, 255, 255, 0.1);</string>
    </property>
    <property name="text">
-    <string>Se connecter</string>
+    <string>Valider</string>
    </property>
   </widget>
   <widget class="QPushButton" name="signup">
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>740</y>
-     <width>181</width>
+     <y>774</y>
+     <width>191</width>
      <height>41</height>
     </rect>
    </property>
@@ -137,14 +143,14 @@ border-style: outset;</string>
    <property name="font">
     <font>
      <family>Open Sans Light</family>
-     <pointsize>8</pointsize>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="cursor">
-    <cursorShape>ArrowCursor</cursorShape>
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
@@ -157,21 +163,20 @@ border-style: outset;</string>
 border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(80, 80, 80, 0.6);
 color: rgb(255, 255, 255);
-font: 8pt &quot;Open Sans Light&quot;;
-      
+font: 10pt &quot;Open Sans Light&quot;;
 </string>
    </property>
    <property name="text">
-    <string>Inscrivez-vous</string>
+    <string>Créer un compte</string>
    </property>
   </widget>
   <widget class="QPushButton" name="settings">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>810</y>
-     <width>491</width>
-     <height>51</height>
+     <x>348</x>
+     <y>10</y>
+     <width>157</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
@@ -183,6 +188,9 @@ font: 8pt &quot;Open Sans Light&quot;;
      <bold>false</bold>
     </font>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="layoutDirection">
     <enum>Qt::LeftToRight</enum>
    </property>
@@ -192,33 +200,102 @@ font: 8pt &quot;Open Sans Light&quot;;
    <property name="styleSheet">
     <string notr="true">background: none;
 border: 1px solid rgba(255, 255, 255, 0.1);
-background-color: rgba(187, 120, 128, 0.5);
+background-color: rgba(10, 10, 10, 0.3);
 color: rgb(255, 255, 255);
 font: 8pt &quot;Open Sans Light&quot;;
       </string>
    </property>
    <property name="text">
-    <string>Options</string>
+    <string>Changer de serveur</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/BabelMainWindow.qrc">
+     <normaloff>:/options.png</normaloff>:/options.png</iconset>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="usernameIcone">
    <property name="geometry">
     <rect>
-     <x>160</x>
-     <y>710</y>
-     <width>191</width>
-     <height>21</height>
+     <x>70</x>
+     <y>580</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/login.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="PasswordIcone">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>630</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/password.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="title">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>510</y>
+     <width>391</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: 0;
-color: rgb(255, 255, 255);
-font: 10pt &quot;Open Sans Light&quot;;
-      </string>
+color: #cde2f9;
+font: 16pt &quot;Open Sans Light&quot;;
+text-transform:uppercase;
+padding:6px 0;
+text-decoration:underline;</string>
+   </property>
+   <property name="text">
+    <string>Connexion à votre compte</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="labelRegister">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>740</y>
+     <width>511</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+color: #cde2f9;
+font: 9pt &quot;Open Sans Light&quot;;
+padding:6px 0;
+text-decoration:underline;</string>
    </property>
    <property name="text">
     <string>Pas encore de compte ?</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

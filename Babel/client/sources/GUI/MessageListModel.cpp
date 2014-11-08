@@ -25,10 +25,8 @@ QVariant	MessageListModel::data(const QModelIndex &index, int role) const
 
 	if (role == Qt::DisplayRole)
 	{
-		QString	data("");
+        QString	data("[" + mMessageList[index.row()].autor + "]: " + mMessageList[index.row()].msg);
 
-		data += mMessageList[index.row()].autor + ":\n";
-		data += mMessageList[index.row()].msg;
 		return data;
 	}
 

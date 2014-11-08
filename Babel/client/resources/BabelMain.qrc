@@ -1,0 +1,14 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+	<file>BgBabelMain.png</file>
+	<file>BgBabelDialog.png</file>
+    <file>online_icon.png</file>
+    <file>offline_icon.png</file>
+	<file>delete.png</file>
+	<file>options.png</file>
+	<file>logout.png</file>
+	<file>appeler.png</file>
+	<file>raccrocher.png</file>
+	<file>ajouter.png</file>
+</qresource>
+</RCC>

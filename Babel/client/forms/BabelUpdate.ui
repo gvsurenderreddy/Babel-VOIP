@@ -14,25 +14,25 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_setting.jpg);
+   <string notr="true">background-image: url(:/BgBabelUpdate.png);
 </string>
   </property>
   <widget class="QLabel" name="title">
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>76</y>
+     <y>120</y>
      <width>512</width>
      <height>71</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgba(255, 255, 255, 192);
-font: 28pt &quot;Open Sans Light&quot;;
-color: rgba(15, 87, 154, 192);
-
-</string>
+border: 0;
+color: #cde2f9;
+font: 16pt &quot;Open Sans Light&quot;;
+text-transform:uppercase;
+padding:6px 0;</string>
    </property>
    <property name="text">
     <string>Editer son profil</string>
@@ -45,20 +45,21 @@ color: rgba(15, 87, 154, 192);
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>220</y>
+     <y>210</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-
-      </string>
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px;</string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Pseudo</string>
@@ -68,23 +69,24 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>320</y>
+     <y>310</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
+color: rgb(0, 0, 0);
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px;</string>
    </property>
    <property name="text">
     <string/>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Nouveau mot de passe</string>
@@ -94,18 +96,20 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>370</y>
+     <y>360</y>
      <width>391</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(22, 87, 127);
+background-color: #4c7f90;
 color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
+font: 10pt &quot;Open Sans Light&quot;;
+border: 1px solid rgba(255, 255, 255, 0.1);</string>
    </property>
    <property name="text">
     <string>Valider</string>
@@ -116,44 +120,46 @@ border-style: outset;
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>41</width>
+     <width>71</width>
      <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
+     <family>Open Sans Light</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
+border: 1px solid rgba(255, 255, 255, 0.1);
+background-color: rgba(120, 158, 187, 0.5);
 color: rgb(255, 255, 255);
-</string>
+font: 8pt &quot;Open Sans Light&quot;;</string>
    </property>
    <property name="text">
-    <string>&lt;</string>
+    <string>Retour</string>
    </property>
   </widget>
   <widget class="QComboBox" name="statutEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>270</y>
+     <y>260</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-</string>
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px;</string>
    </property>
    <item>
     <property name="text">

@@ -14,51 +14,60 @@
    <string>Inscription</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/background_image.png);
+   <string notr="true">background-image: url(:/BgBabelInscription.png);
 </string>
   </property>
   <widget class="QPushButton" name="back">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>348</x>
      <y>10</y>
-     <width>41</width>
+     <width>157</width>
      <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Small Fonts</family>
-     <pointsize>16</pointsize>
+     <family>Open Sans Light</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
-background-color: rgba(255, 255, 255, 32);
+border: 1px solid rgba(255, 255, 255, 0.1);
+background-color: rgba(10, 10, 10, 0.3);
 color: rgb(255, 255, 255);
-</string>
+font: 8pt &quot;Open Sans Light&quot;;
+      </string>
    </property>
    <property name="text">
-    <string>&lt;</string>
+    <string>Retour en arrière</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ok">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>600</y>
+     <y>780</y>
      <width>391</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-background-color: rgb(22, 87, 127);
+background-color: #4c7f90;
 color: rgb(255, 255, 255);
-font: 12pt &quot;Verdana&quot;;
-border-style: outset;
-      </string>
+font: 10pt &quot;Open Sans Light&quot;;
+border: 1px solid rgba(255, 255, 255, 0.1);</string>
    </property>
    <property name="text">
     <string>Valider</string>
@@ -68,43 +77,47 @@ border-style: outset;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>320</y>
+     <y>580</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-
-      </string>
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
+</string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
-    <string>Entrer un nom de compte</string>
+    <string>Entrer votre nom de compte</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="password">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>460</y>
+     <y>680</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
+color: rgb(0, 0, 0);
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
+</string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Entrer votre mot de passe</string>
@@ -114,78 +127,150 @@ padding: 8px;
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>520</y>
+     <y>730</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
-color: #000;
-font: 10pt &quot;Verdana&quot;;
-lineedit-password-character: 9679;
-padding: 8px;
-      </string>
+color: rgb(0, 0, 0);
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
+</string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Confirmer votre mot de passe</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="title">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>77</y>
-     <width>511</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Open Sans Light</family>
-     <pointsize>28</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background: none;
-background-color: rgba(255, 255, 255, 192);
-color: rgba(15, 87, 154, 192);
-font: 28pt &quot;Open Sans Light&quot;;
-</string>
-   </property>
-   <property name="text">
-    <string>Inscription</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLineEdit" name="pseudoEdit">
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>390</y>
+     <y>630</y>
      <width>391</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">background: none;
-border: none;
+border: 1px solid rgba(255, 255, 255, 0.1);
 background-color: rgba(255, 255, 255, 128);
 color: rgb(0, 0, 0);
-font: 10pt &quot;Verdana&quot;;
-padding: 8px;
-
-      </string>
+font: 9pt &quot;Open Sans Light&quot;;
+padding: 8px 8px 8px 51px;
+</string>
+   </property>
+   <property name="maxLength">
+    <number>255</number>
    </property>
    <property name="placeholderText">
     <string>Entrer votre pseudo</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="title">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>510</y>
+     <width>391</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;
+color: #cde2f9;
+font: 16pt &quot;Open Sans Light&quot;;
+text-transform:uppercase;
+padding:6px 0;
+text-decoration:underline;</string>
+   </property>
+   <property name="text">
+    <string>Création d'un compte</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="usernameIcone">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>580</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/login.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="passwordIcone">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>680</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/password.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="passwordConfirmationIcone">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>730</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/password.png</pixmap>
+   </property>
+  </widget>
+  <widget class="QLabel" name="pseudoIcone">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>630</y>
+     <width>31</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: none;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../resources/BabelMainWindow.qrc">:/pseudo.png</pixmap>
    </property>
   </widget>
   <zorder>pseudoEdit</zorder>
@@ -195,6 +280,10 @@ padding: 8px;
   <zorder>password</zorder>
   <zorder>passwordConfirmation</zorder>
   <zorder>title</zorder>
+  <zorder>usernameIcone</zorder>
+  <zorder>passwordIcone</zorder>
+  <zorder>passwordConfirmationIcone</zorder>
+  <zorder>pseudoIcone</zorder>
  </widget>
  <tabstops>
   <tabstop>emailEdit</tabstop>

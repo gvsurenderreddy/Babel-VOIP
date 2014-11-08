@@ -1,3 +1,4 @@
+#include <QFontDatabase>
 #include "BabelMain.hpp"
 
 BabelMain::BabelMain()
@@ -11,6 +12,16 @@ BabelMain::BabelMain()
 	mUi.listView->setModel(mMessages);
 
 	mOriginalSize = size();
+
+    // Load and set font
+    this->setWindowTitle("Studio Babel :: Main");
+    QFontDatabase	fontDb;
+    QString	openSansLightPath = "fonts/OpenSans-Light.ttf";
+    if (fontDb.addApplicationFont(openSansLightPath) != -1)
+    {
+        QFont	openSansLightFont = fontDb.font("Open Sans Light", "Normal", -1);
+        this->setFont(openSansLightFont);
+    }
 
 	QObject::connect(mUi.listContactView, SIGNAL(clicked(QModelIndex const &)), this, SLOT(onClickContact(QModelIndex const &)));
 	QObject::connect(mUi.newContact, SIGNAL(returnPressed()), this, SLOT(onAddContactButtonClicked()));
@@ -47,8 +58,27 @@ void		BabelMain::onClickContact(QModelIndex const &index)
 {
 	mCurrentContact = mModel->getContactList()[index.row()];
 
-	mUi.name->setText(mCurrentContact.getAccountName());
-	mMessages->setMessageList(mCurrentContact.getMessages());
+    mUi.accountName->setText(mCurrentContact.getAccountName());
+    mUi.pseudo->setText(mCurrentContact.getPseudo());
+
+    const QString statusNames[] =
+    {
+        "Connecte"
+        "Déconnecte"
+        "Occupe"
+        "Absent"
+        "Kipour"
+        "Grasse mat 10h"
+        "Ramadan"
+        "Sport"
+        "Petit coin"
+        "YOLO"
+        "Parti bouder"
+    };
+    if (mCurrentContact.getStatus() >= 0 && mCurrentContact.getStatus() <= sizeof(statusNames) / sizeof(*statusNames))
+        mUi.status->setText(statusNames[mCurrentContact.getStatus()]);
+   
+    mMessages->setMessageList(mCurrentContact.getMessages());
 }
 
 void	BabelMain::onOptionsButtonClicked(void) {
@@ -60,7 +90,8 @@ void	BabelMain::onAddContactButtonClicked(void) {
 
 	contact.setAccountName(mUi.newContact->text());
 
-	emit addContact(contact);
+    if (mUi.newContact->text().length())
+	    emit addContact(contact);
 }
 
 void	BabelMain::onDeleteContactButtonClicked(void) {
@@ -69,6 +100,7 @@ void	BabelMain::onDeleteContactButtonClicked(void) {
 
 void	BabelMain::setUser(const Contact &contact) {
 	mUser = contact;
+    this->setWindowTitle("Studio Babel :: Main (account: '" + mUser.getPseudo() + "'");
 }
 
 void	BabelMain::onSendButtonClicked(void) {
