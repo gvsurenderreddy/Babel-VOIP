@@ -3,6 +3,7 @@
 #include "IServerSocket.hpp"
 #include "Client.hpp"
 
+#include <memory>
 #include <list>
 #include <boost/filesystem.hpp>
 #include <boost/archive/xml_iarchive.hpp>
@@ -49,7 +50,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, public Client::OnClient
 
     // attributes
     private:
-        IServerSocket*                     mServerSocket;
+        std::shared_ptr<IServerSocket>     mServerSocket;
         std::list<Client*>                 mClients;
         std::map<std::string, std::string> mAccounts;
         std::string                        mAccountsFilePath;

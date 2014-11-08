@@ -49,7 +49,7 @@ class TcpServer : public IServerSocket, private boost::noncopyable
     private:
         boost::asio::io_service                     mService;
         boost::asio::signal_set                     mSigset;
-        tcp::acceptor*                              mAcceptor;
+        boost::shared_ptr<tcp::acceptor>            mAcceptor;
         std::list<tcp::socket*>                     mSockets;
         IServerSocket::OnSocketEvent*               mListener;
         int                                         mPort;

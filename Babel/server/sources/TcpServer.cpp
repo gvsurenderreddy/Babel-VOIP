@@ -24,7 +24,7 @@ void TcpServer::createServer(int port, int)
 {
     tcp::endpoint endpoint(tcp::v4(), port);
     mPort = port;
-    mAcceptor = new tcp::acceptor(mService, endpoint);
+    mAcceptor = boost::shared_ptr<tcp::acceptor>(new tcp::acceptor(mService, endpoint));
     std::cout << "[TCP] start listening on port " << port << std::endl;
     startAccept();
     boost::system::error_code ec;

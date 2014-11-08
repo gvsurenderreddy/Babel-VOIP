@@ -15,7 +15,7 @@
 
 #include <utility>
 
-BabelServer::BabelServer() :mServerSocket(NULL)
+BabelServer::BabelServer() : mServerSocket(NULL)
 {
     displayAsciiHeader();
     mAccountsFilePath = getAbsolutePathAccountsUsersFolder();
@@ -26,8 +26,6 @@ BabelServer::BabelServer() :mServerSocket(NULL)
 BabelServer::~BabelServer()
 {
     displayAsciiFooter();
-    if (mServerSocket)
-        delete mServerSocket;
     exportAccountsUsernamePasswordFromFile(mAccountsFilePath);
     for (std::list<Client*>::iterator it = mClients.begin(); it != mClients.end(); ++it)
         delete *it;
@@ -119,7 +117,7 @@ void BabelServer::exportAccountsUsernamePasswordFromFile(const std::string& path
 
 void BabelServer::startServer()
 {
-    mServerSocket = dynamic_cast<IServerSocket*>(new TcpServer);
+    mServerSocket = std::shared_ptr<IServerSocket>(dynamic_cast<IServerSocket*>(new TcpServer));
     mServerSocket->setOnSocketEventListener(this);
     mServerSocket->createServer(BabelServer::BABEL_DEFAULT_LISTEN_PORT, BabelServer::BABEL_DEFAULT_QUEUE_SIZE);
 }
