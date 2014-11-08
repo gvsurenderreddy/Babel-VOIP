@@ -27,9 +27,13 @@ BabelServer::~BabelServer()
 {
     displayAsciiFooter();
     exportAccountsUsernamePasswordFromFile(mAccountsFilePath);
-    for (std::list<Client*>::iterator it = mClients.begin(); it != mClients.end(); ++it)
-        delete *it;
-    mClients.clear();
+
+    for (auto it = mClients.begin(), it_end = mClients.end(); it != it_end;)
+    {
+        auto ptr = *it;
+        mClients.erase(it++);
+        delete ptr;
+    }
 }
 
 void BabelServer::displayAsciiHeader() const
@@ -87,6 +91,16 @@ void BabelServer::cleanWrongsUserFile(void) const
         const std::string filename = path.filename().stem().string();
         if (mAccounts.count(filename) == 0)
             boost::filesystem::remove(path);
+        else
+        {
+            Client* clientOffline = findOfflineClient(filename);
+            if (clientOffline)
+            {
+                clientOffline->disconnect();
+                clientOffline->saveData();
+                delete clientOffline;
+            }
+        }
     }
 }
 
