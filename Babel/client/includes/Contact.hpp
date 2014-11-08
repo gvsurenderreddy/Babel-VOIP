@@ -18,7 +18,8 @@ class Contact {
 			SPORT			= 0x07,
 			TOILET			= 0x08,
 			YOLO			= 0x09,
-			CRYING			= 0x0A
+			CRYING			= 0x0A,
+			UNKNOWN
 		};
 
 	// message

@@ -61,22 +61,29 @@ void		BabelMain::onClickContact(QModelIndex const &index)
     mUi.accountName->setText(mCurrentContact.getAccountName());
     mUi.pseudo->setText(mCurrentContact.getPseudo());
 
-    const QString statusNames[] =
-    {
-        "Connecte"
-        "Déconnecte"
-        "Occupe"
-        "Absent"
-        "Kipour"
-        "Grasse mat 10h"
-        "Ramadan"
-        "Sport"
-        "Petit coin"
-        "YOLO"
-        "Parti bouder"
+    static const struct DisplayStatus {
+    	Contact::Status status;
+    	QString 		text;
+    } displayStatus[] = {
+    	{ Contact::CONNECTED, 		"ConnectÃ©" 			},
+    	{ Contact::DISCONNECTED, 	"DÃ©connectÃ©" 		},
+    	{ Contact::BUSY, 			"OccupÃ©" 			},
+    	{ Contact::AWAY, 			"Absent" 			},
+    	{ Contact::KIPOUR, 			"Kipour" 			},
+    	{ Contact::SLEEPING, 		"Grasse mat' 10h" 	},
+    	{ Contact::RAMADAN, 		"Ramadan" 			},
+    	{ Contact::SPORT, 			"Sport" 			},
+    	{ Contact::TOILET, 			"Petit coin" 		},
+    	{ Contact::YOLO, 			"Yolo" 				},
+    	{ Contact::CRYING, 			"Parti bouder" 		},
+    	{ Contact::UNKNOWN, 		"" 					}
     };
-    if (mCurrentContact.getStatus() >= 0 && mCurrentContact.getStatus() <= sizeof(statusNames) / sizeof(*statusNames))
-        mUi.status->setText(statusNames[mCurrentContact.getStatus()]);
+
+    for (int i = 0; displayStatus[i].status != Contact::UNKNOWN; i++)
+	    if (mCurrentContact.getStatus() == displayStatus[i].status) {
+    	    mUi.status->setText(displayStatus[i].text);
+    	    break;
+	    }
    
     mMessages->setMessageList(mCurrentContact.getMessages());
 }
@@ -156,15 +163,15 @@ void	BabelMain::startCommunication(const Contact &contact, bool hasAccepted) {
 		mContactInCall = contact;
 		mIsCall = true;
 
-		emit displayInformation(contact.getAccountName() + " a accepté votre appel.");
+		emit displayInformation(contact.getAccountName() + " a acceptÃ© votre appel.");
 	}
 	else
-		emit displayInformation(contact.getAccountName() + " a refusé votre appel.");
+		emit displayInformation(contact.getAccountName() + " a refusÃ© votre appel.");
 }
 
 void	BabelMain::terminateCommunication(const Contact &) {
 	mUi.call->setText("Appeler");
 	mIsCall = false;
 
-	emit displayInformation("Appel terminé");
+	emit displayInformation("Appel terminÃ©");
 }
