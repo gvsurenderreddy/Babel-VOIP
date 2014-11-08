@@ -16,6 +16,8 @@ std::vector<std::string>		*HandleCmd::unPackCmd(void){
 		this->header = reinterpret_cast<ICommand::Header *>(data.msg);
         this->instruction = static_cast<ICommand::Instruction>(header->instructionCode);
 		this->body = Factory::getCommand(this->getInstruction());
+        if (!(this->body = Factory::getCommand(this->getInstruction())))
+            this->header = NULL;
 	}
 
 	if (this->header != NULL && this->socket->nbBytesToRead() >= this->body->getSizeBody()){
