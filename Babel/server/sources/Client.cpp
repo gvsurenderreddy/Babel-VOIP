@@ -18,7 +18,8 @@ account(""),
 isConnected(false),
 Listener(listenerClient),
 lastPingTime(std::time(nullptr)),
-communicationClient(NULL)
+communicationClient(NULL),
+handshaked(false)
 {
     if (this->Socket)
         this->Socket->setOnSocketEventListener(this);
@@ -69,6 +70,7 @@ void Client::connect(void)
     this->isConnected = true;
     this->lastPingTime = std::time(nullptr);
     this->communicationClient = NULL;
+    this->handshaked = true;
 }
 
 void Client::resetAttributes(void)
@@ -147,6 +149,7 @@ bool Client::loadData(void)
 
 // ** Setter
 void Client::setConnected(bool state) { this->isConnected = state; }
+void Client::setHandshaked(bool state) { this->handshaked = state; }
 void Client::setStatus(Client::Status state) { this->status = state; }
 void Client::setStatusCall(Client::StatusCall state) { this->statusCall = state; }
 void Client::setPseudo(const std::string& pseudoName) { this->pseudo = pseudoName; }
@@ -176,6 +179,7 @@ const std::string&            Client::getAccount(void) const { return this->acco
 const std::list<std::string>& Client::getContact(void) const { return this->contact; }
 IClientSocket*                Client::getSocket(void) const { return this->Socket; }
 bool						  Client::isConnect(void) const { return this->isConnected; }
+bool                          Client::isHandshaked(void) const { return this->handshaked; }
 std::time_t	                  Client::getLastPingTime() const { return this->lastPingTime; }
 Client*                       Client::getCommunicationClient(void) const { return this->communicationClient; }
 Client::OnClientEvent*        Client::getListener(void) const { return this->Listener; }
@@ -187,6 +191,7 @@ bool                          Client::isAlreadyFriends(const std::string& accoun
 
 const Client::HandleCommand Client::handleCommandsTab[] =
 {
+    { ICommand::HANDSHAKE, &Client::OnClientEvent::onHandshake },
     { ICommand::ADD, &Client::OnClientEvent::onAdd },
     { ICommand::UPDATE, &Client::OnClientEvent::onUpdate },
     { ICommand::REG, &Client::OnClientEvent::onReg },
@@ -205,26 +210,38 @@ const Client::HandleCommand Client::handleCommandsTab[] =
 
 void	Client::treatCommand(ICommand::Instruction instruction, std::vector<std::string> &param)
 {
-    int i;
-    for (i = 0; handleCommandsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleCommandsTab[i].instruction != instruction; ++i);
+    if (this->Listener)
+    {
+        if (this->handshaked == false && instruction != ICommand::HANDSHAKE)
+        {
+            std::cout << "onClose" << std::endl;
+            ((this->Listener)->onCloseConnection)(this);
+        }   
+        else
+        {
+            int i;
+            for (i = 0; handleCommandsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleCommandsTab[i].instruction != instruction; ++i);
 
-    if (handleCommandsTab[i].instruction == instruction && this->Listener)
-        ((this->Listener)->*handleCommandsTab[i].handler)(this, param, instruction);
+            if (handleCommandsTab[i].instruction == instruction)
+                ((this->Listener)->*handleCommandsTab[i].handler)(this, param, instruction);
+        }
+    }
 }
 
 void Client::display() const
 {
     std::cout
-        << "        [#] account      : '" << this->getAccount() << "'" << std::endl
-        << "        [#] pseudo       : '" << this->getPseudo() << "'" << std::endl
-        << "        [#] status       : '" << this->getStatus() << "'" << std::endl
-        << "        [#] statusCall   : '" << this->getStatusCall() << "'" << std::endl
-        << "        [#] isConnected  : '" << std::boolalpha << this->isConnect() << "'" << std::endl
-        << "        [#] lastPingTime : '" << this->getLastPingTime() << "'" << std::endl
+        << "        [#] account      : '" << this->account << "'" << std::endl
+        << "        [#] pseudo       : '" << this->pseudo << "'" << std::endl
+        << "        [#] status       : '" << this->status << "'" << std::endl
+        << "        [#] statusCall   : '" << this->statusCall << "'" << std::endl
+        << "        [#] isConnected  : '" << std::boolalpha << this->isConnected << "'" << std::endl
+        << "        [#] lastPingTime : '" << this->lastPingTime << "'" << std::endl
+        << "        [#] handshaked   : '" << std::boolalpha << this->handshaked << "'" << std::endl
         << "        [#] contacts     : ";
     if (this->getContact().size())
     {
-        std::for_each(this->getContact().begin(), this->getContact().end(), [](const std::string &targetAccount) {
+        std::for_each(this->contact.begin(), this->contact.end(), [](const std::string &targetAccount) {
             std::cout << "'" << targetAccount << "' ";
         });
         std::cout << std::endl;

@@ -52,6 +52,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    		\
 			includes/Commands/CommandAcceptAdd.hpp			\
 			includes/Commands/CommandAcceptCall.hpp			\
 			includes/Commands/CommandAdd.hpp			\
+			includes/Commands/CommandHandshake.hpp			\
 			includes/Commands/CommandCall.hpp			\
 			includes/Commands/CommandCloseCall.hpp			\
 			includes/Commands/CommandDel.hpp			\
@@ -106,6 +107,7 @@ SOURCES         +=      sources/main.cpp                        		\
 			sources/Commands/CommandAcceptAdd.cpp			\
 			sources/Commands/CommandAcceptCall.cpp			\
 			sources/Commands/CommandAdd.cpp				\
+			sources/Commands/CommandHandshake.cpp			\
 			sources/Commands/CommandCall.cpp			\
 			sources/Commands/CommandCloseCall.cpp			\
 			sources/Commands/CommandDel.cpp				\

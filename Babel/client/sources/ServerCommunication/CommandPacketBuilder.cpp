@@ -14,8 +14,12 @@ CommandPacketBuilder::~CommandPacketBuilder(void) {
 	if (mClient)
 		delete mClient;
 
-	if (mCurrentCommand)
+    if (mCurrentCommand)
 		delete mCurrentCommand;
+}
+
+void    CommandPacketBuilder::close(void) {
+    mClient->closeClient();
 }
 
 void	CommandPacketBuilder::sendCommand(const ICommand *command) {

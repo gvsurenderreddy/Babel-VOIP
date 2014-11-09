@@ -70,6 +70,7 @@ class BabelServer : public IServerSocket::OnSocketEvent, public Client::OnClient
     // Client::OnClientEvent callbacks
 	public:
         void onCloseConnection(Client* client);
+        void onHandshake(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
         void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
         void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);
         void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction);

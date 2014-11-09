@@ -27,6 +27,7 @@ class ServerCommunication : public QObject {
 		void	handleAcceptCallCommand(const ICommand *command);
 		void	handleCloseCallCommand(const ICommand *command);
 		void	handleErrCommand(const ICommand *command);
+        void    handleHandshakeCommand(const ICommand *command);
 
 	// handle server errors
 	private:
@@ -77,6 +78,7 @@ class ServerCommunication : public QObject {
 		void	terminateCall(const Contact &contact);
 		void	connectToServer(const QString &addr, int port);
 		void	onDisconnection(void);
+        void	sendHandshake(void);
 
 	// ctor - dtor
 	public:
@@ -94,6 +96,7 @@ class ServerCommunication : public QObject {
 
 	// attributes
 	private:
+        bool                    mHasHandshaked;
 		CommandPacketBuilder	mCommandPacketBuilder;
 
 };

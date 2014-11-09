@@ -25,6 +25,7 @@ public:
         ACCEPT_CALL = 0x0C,
         CLOSE_CALL  = 0x0D,
         ERR         = 0x0E,
+        HANDSHAKE   = 0x0F,
         UNKNOWN_INSTRUCTION
 	};
 

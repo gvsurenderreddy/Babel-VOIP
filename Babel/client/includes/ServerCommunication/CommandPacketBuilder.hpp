@@ -30,6 +30,7 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 	public:
 		void	connectToServer(const QString &addr, int port);
 		void	sendCommand(const ICommand *command);
+        void    close(void);
 
 	// signals
 	signals:

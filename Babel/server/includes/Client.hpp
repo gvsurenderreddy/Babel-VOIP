@@ -26,6 +26,7 @@ class Client : public IClientSocket::OnSocketEvent {
 	    public:
 		    virtual ~OnClientEvent() {}
             virtual void onCloseConnection(Client* client) = 0;
+            virtual void onHandshake(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
             virtual void onAdd(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
             virtual void onUpdate(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
             virtual void onReg(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
@@ -41,14 +42,11 @@ class Client : public IClientSocket::OnSocketEvent {
             virtual void onCloseCall(Client* client, std::vector<std::string>& param, ICommand::Instruction instruction) = 0;
 	    };
 
-    // default ctor-dtor
+    // ctors dtors
     public:
         Client(IClientSocket* clientSocket, Client::OnClientEvent* listenerClient);
         virtual ~Client();
         const Client & operator = (const Client &other);
-
-    // private coplien form
-    private:
         Client(const Client &) = delete;
 
     // handle commands
@@ -105,6 +103,7 @@ class Client : public IClientSocket::OnSocketEvent {
 	// use client's data :: setter
     public:
         void setConnected(bool state);
+        void setHandshaked(bool state);
         void setStatus(Client::Status state);
         void setStatusCall(Client::StatusCall state);
         void setPseudo(const std::string& pseudoName);
@@ -128,6 +127,7 @@ class Client : public IClientSocket::OnSocketEvent {
         Client::OnClientEvent*        getListener(void) const;
         std::time_t                   getLastPingTime(void) const;
 	    bool						  isConnect(void) const;
+        bool                          isHandshaked(void) const;
         bool                          isAlreadyFriends(const std::string& accountName) const;
 
 
@@ -166,6 +166,7 @@ class Client : public IClientSocket::OnSocketEvent {
         Client::OnClientEvent*  Listener;
         time_t		            lastPingTime;
         Client*                 communicationClient;
+        bool                    handshaked;
 
     // display (have to be overload <<)
     public:

@@ -13,6 +13,7 @@
 #include "CommandAcceptAdd.hpp"
 #include "CommandUpdate.hpp"
 #include "CommandErr.hpp"
+#include "CommandHandshake.hpp"
 #include "SocketException.hpp"	
 
 const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[] = {
@@ -24,6 +25,7 @@ const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[
 	{ ICommand::ACCEPT_CALL,			&ServerCommunication::handleAcceptCallCommand	},
 	{ ICommand::CLOSE_CALL,				&ServerCommunication::handleCloseCallCommand	},
 	{ ICommand::ERR,					&ServerCommunication::handleErrCommand			},
+    { ICommand::HANDSHAKE,              &ServerCommunication::handleHandshakeCommand    },
 	{ ICommand::UNKNOWN_INSTRUCTION,	NULL											}
 };
 
@@ -42,7 +44,7 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 	{ ICommand::UNKNOWN_INSTRUCTION,	NULL																}
 };
 
-ServerCommunication::ServerCommunication(void) {
+ServerCommunication::ServerCommunication(void) : mHasHandshaked(false) {
 	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
 	connect(&mCommandPacketBuilder, SIGNAL(disconnectedFromHost()), this, SLOT(onDisconnection()));
 }
@@ -53,11 +55,20 @@ ServerCommunication::~ServerCommunication(void) {
 void	ServerCommunication::treatCommand(const ICommand *command) {
 	ICommand::Instruction instruction = command->getInstruction();
 
+    if (mHasHandshaked == false && instruction != ICommand::HANDSHAKE) {
+        mCommandPacketBuilder.close();
+        return;
+    }
+
 	int i;
 	for (i = 0; handleCommandsTab[i].instruction != ICommand::UNKNOWN_INSTRUCTION && handleCommandsTab[i].instruction != instruction; i++);
 
 	if (handleCommandsTab[i].instruction == instruction)
 		(this->*handleCommandsTab[i].handler)(command);
+}
+
+void    ServerCommunication::handleHandshakeCommand(const ICommand *) {
+    mHasHandshaked = true;
 }
 
 void	ServerCommunication::handleShowCommand(const ICommand *command) {
@@ -238,11 +249,17 @@ void	ServerCommunication::acceptCallInvitation(const Contact &contact, bool hasA
 }
 
 void	ServerCommunication::terminateCall(const Contact &contact) {
-	CommandCloseCall *commandCloseCall = new CommandCloseCall;
+    CommandCloseCall *commandCloseCall = new CommandCloseCall;
 
-	commandCloseCall->setAccountName(contact.getAccountName());
+    commandCloseCall->setAccountName(contact.getAccountName());
 
-	mCommandPacketBuilder.sendCommand(commandCloseCall);
+    mCommandPacketBuilder.sendCommand(commandCloseCall);
+}
+
+void	ServerCommunication::sendHandshake(void) {
+    CommandHandshake *commandHandshake = new CommandHandshake;
+   
+    mCommandPacketBuilder.sendCommand(commandHandshake);
 }
 
 void	ServerCommunication::connectToServer(const QString &addr, int port) {
@@ -250,6 +267,7 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 
 	try {
 		mCommandPacketBuilder.connectToServer(addr, port);
+        sendHandshake();
 		errorStatus.setErrorCode(ErrorStatus::OK);
 		errorStatus.setErrorOccurred(false);
 	}
@@ -262,5 +280,6 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 }
 
 void	ServerCommunication::onDisconnection(void) {
+    mHasHandshaked = false;
 	emit disconnectedFromServer();
 }

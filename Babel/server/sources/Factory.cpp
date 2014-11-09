@@ -12,6 +12,7 @@
 #include "Command/CommandSend.hpp"
 #include "Command/CommandAcceptCall.hpp"
 #include "Command/CommandCloseCall.hpp"
+#include "Command/CommandHandshake.hpp"
 #include "Command/CommandErr.hpp"
 
 #include <string>
@@ -46,6 +47,8 @@ std::string Factory::getName(int instruction)
         return "ACCEPT_CALL";
     case ICommand::CLOSE_CALL:
         return "CLOSE_CALL";
+    case ICommand::HANDSHAKE:
+        return "CommandHandshake";
     case ICommand::ERR:
         return "CommandErr";
     default:
@@ -83,6 +86,8 @@ ICommand	*Factory::getCommand(ICommand::Instruction instruction)
 		return new CommandAcceptCall;
     case ICommand::CLOSE_CALL:
 		return new CommandCloseCall;
+    case ICommand::HANDSHAKE:
+        return new CommandHandshake;
     case ICommand::ERR:
 		return new CommandErr;
 	default:

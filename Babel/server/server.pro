@@ -53,6 +53,7 @@ HEADERS         +=      ../shared/includes/IClientSocket.hpp    \
 						includes/BabelServer.hpp				\
 						includes/Command/ICommand.hpp			\
 						includes/Command/CommandUpdate.hpp		\
+						includes/Command/CommandHandshake.hpp	\
 						includes/Command/CommandAdd.hpp			\
 						includes/Command/CommandReg.hpp			\
 						includes/Command/CommandLog.hpp			\
@@ -78,6 +79,7 @@ SOURCES         +=      sources/main.cpp                        \
                         sources/BabelServer.cpp					\
 						sources/Command/ICommand.cpp			\
 						sources/Command/CommandUpdate.cpp		\
+						sources/Command/CommandHandshake.cpp	\
 						sources/Command/CommandAdd.cpp			\
 						sources/Command/CommandReg.cpp			\
 						sources/Command/CommandLog.cpp			\

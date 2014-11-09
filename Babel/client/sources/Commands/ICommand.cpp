@@ -10,6 +10,7 @@
 #include "CommandUpdate.hpp"
 #include "CommandSend.hpp"
 #include "CommandCall.hpp"
+#include "CommandHandshake.hpp"
 #include "CommandAcceptCall.hpp"
 #include "CommandCloseCall.hpp"
 #include "CommandErr.hpp"
@@ -45,6 +46,8 @@ ICommand	*ICommand::getCommand(ICommand::Instruction instructionCode) {
 		return new CommandAcceptCall;
 	case ICommand::CLOSE_CALL:
 		return new CommandCloseCall;
+	case ICommand::HANDSHAKE:
+		return new CommandHandshake;
 	case ICommand::ERR:
 		return new CommandErr;
 	default:
