@@ -14,13 +14,8 @@ ICommand::Instruction	CommandHandshake::getInstruction(void) const {
 
 IClientSocket::Message	CommandHandshake::getMessage(void) const {
 	IClientSocket::Message message;
-	CommandHandshake::PacketFromClient *packet = new CommandHandshake::PacketFromClient;
 
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::HANDSHAKE;
-
-	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof(CommandHandshake::PacketFromClient);
+	message.msgSize = 0;
 
 	return message;
 }

@@ -4,14 +4,6 @@
 
 class CommandExit : public ICommand {
 
-	// packet
-	private:
-        #pragma pack(push, 1)
-		struct PacketFromClient{
-			ICommand::Header	header;
-		};
-        #pragma pack(pop)
-
 	// ctor - dtor
 	public:
 		CommandExit(void);

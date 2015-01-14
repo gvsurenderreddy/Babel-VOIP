@@ -13,18 +13,16 @@ ICommand::Instruction	CommandUpdate::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandUpdate::getMessage(void) const {
+	CommandUpdate::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandUpdate::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+	std::memcpy(packet.password, mPassword.toStdString().c_str(), std::min(mPassword.length(), static_cast<int>(sizeof(packet.password) - 1)));
+	std::memcpy(packet.pseudo, mPseudo.toStdString().c_str(), std::min(mPseudo.length(), static_cast<int>(sizeof(packet.pseudo) - 1)));
+	packet.status = mStatus;
+
 	IClientSocket::Message message;
-	CommandUpdate::PacketFromClient *packet = new CommandUpdate::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandUpdate::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
-	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo) - 1));
-	packet->status = mStatus;
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::UPDATE;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandUpdate::PacketFromClient);
 
 	return message;

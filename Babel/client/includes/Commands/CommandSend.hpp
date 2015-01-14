@@ -7,18 +7,17 @@ class CommandSend : public ICommand {
 
 	// packet
 	private:
-        #pragma pack(push, 1)
-		struct PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
-			char				textMessage[4096];
-		};
-
-		struct PacketFromServer{
+		#pragma pack(push, 1)
+		struct PacketFromClient {
 			char	accountName[256];
 			char	textMessage[4096];
 		};
-        #pragma pack(pop)
+
+		struct PacketFromServer {
+			char	accountName[256];
+			char	textMessage[4096];
+		};
+		#pragma pack(pop)
 
 	// ctor - dtor
 	public:

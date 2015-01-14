@@ -13,16 +13,14 @@ ICommand::Instruction	CommandLog::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandLog::getMessage(void) const {
+	CommandLog::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandLog::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+	std::memcpy(packet.password, mPassword.toStdString().c_str(), std::min(mPassword.length(), static_cast<int>(sizeof(packet.password) - 1)));
+
 	IClientSocket::Message message;
-	CommandLog::PacketFromClient *packet = new CommandLog::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandLog::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LOG;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandLog::PacketFromClient);
 
 	return message;

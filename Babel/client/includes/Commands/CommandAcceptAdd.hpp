@@ -7,13 +7,12 @@ class CommandAcceptAdd : public ICommand {
 
 	// packet
 	private:
-        #pragma pack(push, 1)
+		#pragma pack(push, 1)
 		struct PacketFromClient {
-			ICommand::Header	header;
-			char				accountName[256];
-			char				hasAccepted;
+			char  accountName[256];
+			char  hasAccepted;
 		};
-        #pragma pack(pop)
+		#pragma pack(pop)
 
 	// ctor - dtor
 	public:
@@ -27,21 +26,21 @@ class CommandAcceptAdd : public ICommand {
 
 	// implementation
 	public:
-		ICommand::Instruction	getInstruction(void) const;
-		IClientSocket::Message	getMessage(void) const;
-		unsigned int			getSizeToRead(void) const;
-		void					initFromMessage(const IClientSocket::Message &message);
+		ICommand::Instruction getInstruction(void) const;
+		IClientSocket::Message  getMessage(void) const;
+		unsigned int      getSizeToRead(void) const;
+		void          initFromMessage(const IClientSocket::Message &message);
 
 	// getters - setters
 	public:
-		const QString	&getAccountName(void) const;
-		bool			hasAccepted(void) const;
-		void			setAccountName(const QString &accountName);
-		void			setHasAccepted(bool hasAccepted);
+		const QString &getAccountName(void) const;
+		bool      hasAccepted(void) const;
+		void      setAccountName(const QString &accountName);
+		void      setHasAccepted(bool hasAccepted);
 
 	// attributes
 	private:
-		QString	mAccountName;
-		bool	mHasAccepted;
+		QString mAccountName;
+		bool  mHasAccepted;
 
 };

@@ -7,16 +7,15 @@ class CommandCloseCall : public ICommand {
 
 	// packet
 	private:
-        #pragma pack(push, 1)
-		struct PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
+		#pragma pack(push, 1)
+		struct PacketFromClient {
+			char	accountName[256];
 		};
 
 		struct PacketFromServer{
 			char	accountName[256];
 		};
-        #pragma pack(pop)
+		#pragma pack(pop)
 
 
 	// ctor - dtor

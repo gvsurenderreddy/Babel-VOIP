@@ -13,16 +13,14 @@ ICommand::Instruction	CommandAcceptAdd::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandAcceptAdd::getMessage(void) const {
+	CommandAcceptAdd::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandAcceptAdd::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+	packet.hasAccepted = mHasAccepted;
+
 	IClientSocket::Message message;
-	CommandAcceptAdd::PacketFromClient *packet = new CommandAcceptAdd::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandAcceptAdd::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	packet->hasAccepted = mHasAccepted;
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::ACCEPT_ADD;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandAcceptAdd::PacketFromClient);
 
 	return message;

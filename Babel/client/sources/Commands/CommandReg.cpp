@@ -13,17 +13,15 @@ ICommand::Instruction	CommandReg::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandReg::getMessage(void) const {
+	CommandReg::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandReg::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+	std::memcpy(packet.password, mPassword.toStdString().c_str(), std::min(mPassword.length(), static_cast<int>(sizeof(packet.password) - 1)));
+	std::memcpy(packet.pseudo, mPseudo.toStdString().c_str(), std::min(mPseudo.length(), static_cast<int>(sizeof(packet.pseudo) - 1)));
+
 	IClientSocket::Message message;
-	CommandReg::PacketFromClient *packet = new CommandReg::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandReg::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	std::memcpy(packet->password, mPassword.toStdString().c_str(), MIN(mPassword.length(), sizeof(packet->password) - 1));
-	std::memcpy(packet->pseudo, mPseudo.toStdString().c_str(), MIN(mPseudo.length(), sizeof(packet->pseudo) - 1));
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::REG;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandReg::PacketFromClient);
 
 	return message;

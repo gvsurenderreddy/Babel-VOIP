@@ -13,15 +13,13 @@ ICommand::Instruction	CommandShow::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandShow::getMessage(void) const {
+	CommandShow::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandShow::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+
 	IClientSocket::Message message;
-	CommandShow::PacketFromClient *packet = new CommandShow::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandShow::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::SHOW;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandShow::PacketFromClient);
 
 	return message;
@@ -35,14 +33,14 @@ void	CommandShow::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandShow::PacketFromServer))
 		throw CommandException("Message has an invalid size");
 
-	CommandShow::PacketFromServer *packet = reinterpret_cast<CommandShow::PacketFromServer *>(message.msg);
+	CommandShow::PacketFromServer packet = *reinterpret_cast<const CommandShow::PacketFromServer *>(message.msg.data());
 
-	packet->accountName[sizeof(packet->accountName) - 1] = 0;
-	mAccountName = packet->accountName;
-	packet->pseudo[sizeof(packet->pseudo) - 1] = 0;
-	mPseudo = packet->pseudo;
-	mStatus = static_cast<Contact::Status>(packet->status);
-	mIsConnected = packet->isConnected;
+	packet.accountName[sizeof(packet.accountName) - 1] = 0;
+	mAccountName = packet.accountName;
+	packet.pseudo[sizeof(packet.pseudo) - 1] = 0;
+	mPseudo = packet.pseudo;
+	mStatus = static_cast<Contact::Status>(packet.status);
+	mIsConnected = packet.isConnected;
 }
 
 const QString	&CommandShow::getAccountName(void) const {

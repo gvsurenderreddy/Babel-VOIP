@@ -14,13 +14,8 @@ ICommand::Instruction	CommandList::getInstruction(void) const {
 
 IClientSocket::Message	CommandList::getMessage(void) const {
 	IClientSocket::Message message;
-	CommandList::PacketFromClient *packet = new CommandList::PacketFromClient;
 
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::LIST;
-
-	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof(CommandList::PacketFromClient);
+	message.msgSize = 0;
 
 	return message;
 }

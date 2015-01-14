@@ -24,7 +24,17 @@ void    CommandPacketBuilder::close(void) {
 
 void	CommandPacketBuilder::sendCommand(const ICommand *command) {
 	try {
-		mClient->send(command->getMessage());
+		ICommand::Header header;
+		header.instructionCode = static_cast<int>(command->getInstruction());
+		header.magicCode = ICommand::MAGIC_CODE;
+
+		IClientSocket::Message message;
+		IClientSocket::Message bodyMessage = command->getMessage();
+		message.msg.assign(reinterpret_cast<char *>(&header), reinterpret_cast<char *>(&header + 1));
+		message.msg.insert(message.msg.end(), bodyMessage.msg.begin(), bodyMessage.msg.end());
+		message.msgSize = sizeof(ICommand::Header) + bodyMessage.msgSize;
+
+		mClient->send(message);
 	}
 	catch (const SocketException &) {
 		emit disconnectedFromHost();
@@ -37,7 +47,7 @@ void	CommandPacketBuilder::connectToServer(const QString &addr, int port) {
 
 void	CommandPacketBuilder::fetchCommandHeader(void) {
 	IClientSocket::Message message = mClient->receive(ICommand::HEADER_SIZE);
-	ICommand::Header *header = reinterpret_cast<ICommand::Header *>(message.msg);
+	ICommand::Header *header = reinterpret_cast<ICommand::Header *>(message.msg.data());
 
 	mCurrentCommand = ICommand::getCommand(static_cast<ICommand::Instruction>(header->instructionCode));
 	mCurrentState = CommandPacketBuilder::CONTENT;

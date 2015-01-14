@@ -1,6 +1,7 @@
 #include "TcpClient.hpp"
 #include "SocketException.hpp"
 #include <qhostaddress.h>
+#include <memory>
 
 TcpClient::TcpClient(void)
 : mQTcpSocket(NULL), mListener(NULL)
@@ -46,7 +47,7 @@ void	TcpClient::close(bool callListener) {
 }
 
 void	TcpClient::send(const IClientSocket::Message &message) {
-	int ret = mQTcpSocket->write(message.msg, message.msgSize);
+	int ret = mQTcpSocket->write(message.msg.data(), message.msgSize);
 
 	if (ret == -1)
 		throw SocketException("fail QTcpSocket::write");
@@ -56,19 +57,20 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 	IClientSocket::Message message;
 
 	if (nbBytesToRead() == 0) {
-		message.msg = "";
 		message.msgSize = 0;
 
 		return message;
 	}
 
-	message.msg = new char[sizeToRead];
-	message.msgSize = mQTcpSocket->read(message.msg, sizeToRead);
-    message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
-	message.port = mQTcpSocket->peerPort();
+	std::shared_ptr<char> buffer(new char[sizeToRead]);
 
+	message.msgSize = mQTcpSocket->read(buffer.get(), sizeToRead);
 	if (message.msgSize == -1)
 		throw SocketException("fail QTcpSocket::read");
+
+	message.msg.insert(message.msg.end(), buffer.get(), buffer.get() + message.msgSize);
+	message.host = (mQTcpSocket->peerAddress()).toString().toStdString();
+	message.port = mQTcpSocket->peerPort();
 
 	return message;
 }

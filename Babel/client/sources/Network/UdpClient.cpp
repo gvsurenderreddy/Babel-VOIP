@@ -1,5 +1,6 @@
 #include "UdpClient.hpp"
 #include "SocketException.hpp"
+#include <memory>
 
 UdpClient::UdpClient(void)
 	: mQUdpSocket(NULL), mIsReadable(false), mListener(NULL)
@@ -42,7 +43,7 @@ void	UdpClient::close(void) {
 
 
 void	UdpClient::send(const IClientSocket::Message &message) {
-	mQUdpSocket->writeDatagram(message.msg, message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
+	mQUdpSocket->writeDatagram(message.msg.data(), message.msgSize, QHostAddress(QString(message.host.c_str())), message.port);
 }
 
 IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
@@ -51,20 +52,21 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 	quint16 port;
 
 	if (nbBytesToRead() == 0) {
-		message.msg = "";
 		message.msgSize = 0;
 
 		return message;
 	}
 
-	message.msg = new char[sizeToRead + 1];
-	message.msgSize = mQUdpSocket->readDatagram(message.msg, sizeToRead, &host, &port);
+	std::shared_ptr<char> buffer(new char[sizeToRead]);
+
+	message.msgSize = mQUdpSocket->readDatagram(buffer.get(), sizeToRead, &host, &port);
+	if (message.msgSize == -1)
+		throw SocketException("fail QUdpSocket::read");
+
+	message.msg.insert(message.msg.end(), buffer.get(), buffer.get() + message.msgSize);
 	message.host = host.toString().toStdString();
 	message.port = port;
 	mIsReadable = false;
-
-	if (message.msgSize == -1)
-		throw SocketException("fail QUdpSocket::read");
 
 	return message;
 }

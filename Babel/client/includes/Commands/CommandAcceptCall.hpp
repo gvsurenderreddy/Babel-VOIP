@@ -7,19 +7,18 @@ class CommandAcceptCall : public ICommand {
 
 	// packet
 	private:
-        #pragma pack(push, 1)
-		struct PacketFromClient{
-			ICommand::Header	header;
-			char				accountName[256];
-			char				hasAccepted;
+		#pragma pack(push, 1)
+		struct PacketFromClient {
+			char	accountName[256];
+			char	hasAccepted;
 		};
-        
+
 		struct PacketFromServer{
 			char	accountName[256];
 			char	host[15];
 			char	hasAccepted;
 		};
-        #pragma pack(pop)
+		#pragma pack(pop)
 
 	// ctor - dtor
 	public:

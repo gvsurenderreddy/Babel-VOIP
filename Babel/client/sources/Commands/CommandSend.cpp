@@ -13,16 +13,14 @@ ICommand::Instruction	CommandSend::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandSend::getMessage(void) const {
+	CommandSend::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandSend::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(mAccountName.length(), static_cast<int>(sizeof(packet.accountName) - 1)));
+	std::memcpy(packet.textMessage, mTextMessage.toStdString().c_str(), std::min(mTextMessage.length(), static_cast<int>(sizeof(packet.textMessage) - 1)));
+
 	IClientSocket::Message message;
-	CommandSend::PacketFromClient *packet = new CommandSend::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandSend::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(mAccountName.length(), sizeof(packet->accountName) - 1));
-	std::memcpy(packet->textMessage, mTextMessage.toStdString().c_str(), MIN(mTextMessage.length(), sizeof(packet->textMessage) - 1));
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::SEND;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandSend::PacketFromClient);
 
 	return message;
@@ -36,11 +34,12 @@ void	CommandSend::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandSend::PacketFromServer))
 		throw CommandException("Message has an invalid size");
 
-	CommandSend::PacketFromServer *packet = reinterpret_cast<CommandSend::PacketFromServer *>(message.msg);
-	packet->accountName[sizeof(packet->accountName) - 1] = 0;
-	mAccountName = packet->accountName;
-	packet->textMessage[sizeof(packet->textMessage) - 1] = 0;
-	mTextMessage = packet->textMessage;
+	CommandSend::PacketFromServer packet = *reinterpret_cast<const CommandSend::PacketFromServer *>(message.msg.data());
+
+	packet.accountName[sizeof(packet.accountName) - 1] = 0;
+	mAccountName = packet.accountName;
+	packet.textMessage[sizeof(packet.textMessage) - 1] = 0;
+	mTextMessage = packet.textMessage;
 }
 
 const QString	&CommandSend::getAccountName(void) const {

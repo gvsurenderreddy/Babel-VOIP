@@ -13,16 +13,14 @@ ICommand::Instruction	CommandAcceptCall::getInstruction(void) const {
 }
 
 IClientSocket::Message	CommandAcceptCall::getMessage(void) const {
+	CommandAcceptCall::PacketFromClient packet;
+
+	std::memset(&packet, 0, sizeof(CommandAcceptCall::PacketFromClient));
+	std::memcpy(packet.accountName, mAccountName.toStdString().c_str(), std::min(static_cast<int>(sizeof(packet.accountName) - 1), mAccountName.length()));
+	packet.hasAccepted = mHasAccepted;
+
 	IClientSocket::Message message;
-	CommandAcceptCall::PacketFromClient *packet = new CommandAcceptCall::PacketFromClient;
-
-	std::memset(packet, 0, sizeof(CommandAcceptCall::PacketFromClient));
-	std::memcpy(packet->accountName, mAccountName.toStdString().c_str(), MIN(sizeof(packet->accountName) - 1, mAccountName.length()));
-	packet->hasAccepted = mHasAccepted;
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::ACCEPT_CALL;
-
-	message.msg = reinterpret_cast<char *>(packet);
+	message.msg.assign(reinterpret_cast<char *>(&packet), reinterpret_cast<char *>(&packet + 1));
 	message.msgSize = sizeof(CommandAcceptCall::PacketFromClient);
 
 	return message;
@@ -36,11 +34,12 @@ void	CommandAcceptCall::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandAcceptCall::PacketFromServer))
 		throw CommandException("Message has an invalid size");
 
-	CommandAcceptCall::PacketFromServer *packet = reinterpret_cast<CommandAcceptCall::PacketFromServer *>(message.msg);
-	packet->accountName[sizeof(packet->accountName) - 1] = 0;
-	mAccountName = packet->accountName;
-	mHost = packet->host;
-	mHasAccepted = packet->hasAccepted;
+	CommandAcceptCall::PacketFromServer packet = *reinterpret_cast<const CommandAcceptCall::PacketFromServer *>(message.msg.data());
+
+	packet.accountName[sizeof(packet.accountName) - 1] = 0;
+	mAccountName = packet.accountName;
+	mHost = packet.host;
+	mHasAccepted = packet.hasAccepted;
 }
 
 const QString	&CommandAcceptCall::getAccountName(void) const {

@@ -22,10 +22,7 @@ void	SoundPacketBuilder::acceptPacketsFrom(const QString &addr) {
 }
 
 void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
-
-	IClientSocket::Message msg;
 	SoundPacketBuilder::SoundPacket soundPacket;
-	msg.msg = new char[sizeof(soundPacket)];
 
 	soundPacket.magic_code = 0x150407CA;
 	soundPacket.soundSize = sound.size;
@@ -33,7 +30,10 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	memcpy(soundPacket.sound, sound.buffer, sound.size);
 	soundPacket.timestamp = QDateTime::currentDateTime().toTime_t();
 
-	memcpy(msg.msg, &soundPacket, sizeof(soundPacket));
+
+	IClientSocket::Message msg;
+
+	msg.msg.assign(reinterpret_cast<char *>(&soundPacket), reinterpret_cast<char *>(&soundPacket + 1));
 	msg.msgSize = sizeof(soundPacket);
 	msg.host = mAcceptedHost.toStdString();
 	msg.port = mAcceptedPort;
@@ -42,7 +42,6 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 }
 
 void	SoundPacketBuilder::onBytesWritten(IClientSocket *, unsigned int) {
-
 }
 
 void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
@@ -53,7 +52,7 @@ void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
 	sound.buffer = new unsigned char[sizeof(soundPacket.sound)];
 	msg = mClient->receive(sizeof(soundPacket));
 	if (msg.host == mAcceptedHost.toStdString() && msg.port == mAcceptedPort) {
-		memcpy(&soundPacket, msg.msg, msg.msgSize);
+		memcpy(&soundPacket, msg.msg.data(), msg.msgSize);
 
 		if (soundPacket.magic_code == 0x150407CA && soundPacket.timestamp >= mTimestamp) {
 			memcpy(sound.buffer, soundPacket.sound, soundPacket.soundSize);

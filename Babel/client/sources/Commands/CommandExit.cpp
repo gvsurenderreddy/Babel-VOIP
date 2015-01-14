@@ -14,13 +14,8 @@ ICommand::Instruction	CommandExit::getInstruction(void) const {
 
 IClientSocket::Message	CommandExit::getMessage(void) const {
 	IClientSocket::Message message;
-	CommandExit::PacketFromClient *packet = new CommandExit::PacketFromClient;
 
-	packet->header.magicCode = ICommand::MAGIC_CODE;
-	packet->header.instructionCode = ICommand::EXIT;
-
-	message.msg = reinterpret_cast<char *>(packet);
-	message.msgSize = sizeof(CommandExit::PacketFromClient);
+	message.msgSize = 0;
 
 	return message;
 }

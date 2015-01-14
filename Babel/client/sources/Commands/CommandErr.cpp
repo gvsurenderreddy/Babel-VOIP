@@ -24,9 +24,10 @@ void	CommandErr::initFromMessage(const IClientSocket::Message &message) {
   if (message.msgSize != sizeof(CommandErr::PacketFromServer))
 		throw CommandException("Message has an invalid size");
 
-	CommandErr::PacketFromServer *packet = reinterpret_cast<CommandErr::PacketFromServer *>(message.msg);
-	mInstructionCode = static_cast<ICommand::Instruction>(packet->instructionCode);
-	mErrorCode = static_cast<ErrorStatus::ErrorCode>(packet->errorCode);
+	CommandErr::PacketFromServer packet = *reinterpret_cast<const CommandErr::PacketFromServer *>(message.msg.data());
+
+	mInstructionCode = static_cast<ICommand::Instruction>(packet.instructionCode);
+	mErrorCode = static_cast<ErrorStatus::ErrorCode>(packet.errorCode);
 }
 
 ICommand::Instruction	CommandErr::getInstructionCode(void) const {
