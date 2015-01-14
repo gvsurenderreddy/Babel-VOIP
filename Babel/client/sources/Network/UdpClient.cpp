@@ -57,7 +57,7 @@ IClientSocket::Message	UdpClient::receive(unsigned int sizeToRead) {
 		return message;
 	}
 
-	std::shared_ptr<char> buffer(new char[sizeToRead]);
+	std::unique_ptr<char[]> buffer(new char[sizeToRead]);
 
 	message.msgSize = mQUdpSocket->readDatagram(buffer.get(), sizeToRead, &host, &port);
 	if (message.msgSize == -1)

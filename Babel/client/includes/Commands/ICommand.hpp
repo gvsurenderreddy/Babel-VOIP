@@ -2,6 +2,7 @@
 
 #include "IClientSocket.hpp"
 #include <cstdint>
+#include <memory>
 
 class ICommand {
 
@@ -51,6 +52,6 @@ class ICommand {
 
 	// getCommand
 	public:
-		static ICommand	*getCommand(ICommand::Instruction instructionCode);
+		static std::shared_ptr<ICommand> getCommand(ICommand::Instruction instructionCode);
 
 };

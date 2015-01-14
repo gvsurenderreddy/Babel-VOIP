@@ -36,11 +36,11 @@ class SoundInputDevice : public ISoundDevice {
 
 	// attributes
 	private:
-		std::list<Sound::Decoded *>			mBuffers;
-		PaStreamParameters				mInputParameters;
-		PaStream					*mStream;
-		Mutex						mMutex;
-		bool						mIsRunning;
-		ISoundDevice::OnSoundDeviceEvent		*mListener;
+		std::list<Sound::Decoded>					mBuffers;
+		PaStreamParameters								mInputParameters;
+		PaStream													*mStream;
+		Mutex															mMutex;
+		bool															mIsRunning;
+		ISoundDevice::OnSoundDeviceEvent	*mListener;
 
 };

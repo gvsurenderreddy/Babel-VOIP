@@ -14,7 +14,7 @@
 #include "CommandUpdate.hpp"
 #include "CommandErr.hpp"
 #include "CommandHandshake.hpp"
-#include "SocketException.hpp"	
+#include "SocketException.hpp"
 
 const ServerCommunication::HandleCommand ServerCommunication::handleCommandsTab[] = {
 	{ ICommand::SHOW,					&ServerCommunication::handleShowCommand			},
@@ -45,14 +45,14 @@ const ServerCommunication::HandleError ServerCommunication::handleErrorsTab[] = 
 };
 
 ServerCommunication::ServerCommunication(void) : mHasHandshaked(false) {
-	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const ICommand *)), this, SLOT(treatCommand(const ICommand *)));
+	connect(&mCommandPacketBuilder, SIGNAL(receiveCommand(const std::shared_ptr<ICommand> &)), this, SLOT(treatCommand(const std::shared_ptr<ICommand> &)));
 	connect(&mCommandPacketBuilder, SIGNAL(disconnectedFromHost()), this, SLOT(onDisconnection()));
 }
 
 ServerCommunication::~ServerCommunication(void) {
 }
 
-void	ServerCommunication::treatCommand(const ICommand *command) {
+void	ServerCommunication::treatCommand(const std::shared_ptr<ICommand> &command) {
 	ICommand::Instruction instruction = command->getInstruction();
 
     if (mHasHandshaked == false && instruction != ICommand::HANDSHAKE) {
@@ -67,12 +67,12 @@ void	ServerCommunication::treatCommand(const ICommand *command) {
 		(this->*handleCommandsTab[i].handler)(command);
 }
 
-void    ServerCommunication::handleHandshakeCommand(const ICommand *) {
+void    ServerCommunication::handleHandshakeCommand(const std::shared_ptr<ICommand> &) {
     mHasHandshaked = true;
 }
 
-void	ServerCommunication::handleShowCommand(const ICommand *command) {
-	const CommandShow *commandShow = dynamic_cast<const CommandShow *>(command);
+void	ServerCommunication::handleShowCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandShow> commandShow = std::dynamic_pointer_cast<CommandShow>(command);
 
 	Contact contact;
 	contact.setAccountName(commandShow->getAccountName());
@@ -83,16 +83,16 @@ void	ServerCommunication::handleShowCommand(const ICommand *command) {
 	emit receiveContactInfo(contact);
 }
 
-void	ServerCommunication::handleAddCommand(const ICommand *command) {
-	const CommandAdd *commandAdd = dynamic_cast<const CommandAdd *>(command);
+void	ServerCommunication::handleAddCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandAdd> commandAdd = std::dynamic_pointer_cast<CommandAdd>(command);
 
 	Contact contact;
 	contact.setAccountName(commandAdd->getAccountName());
 	emit receiveContactInvitation(contact);
 }
 
-void	ServerCommunication::handleDelCommand(const ICommand *command) {
-	const CommandDel *commandDel = dynamic_cast<const CommandDel *>(command);
+void	ServerCommunication::handleDelCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandDel> commandDel = std::dynamic_pointer_cast<CommandDel>(command);
 
 	Contact contact;
 	contact.setAccountName(commandDel->getAccountName());
@@ -100,8 +100,8 @@ void	ServerCommunication::handleDelCommand(const ICommand *command) {
 	emit receiveContactDeletion(contact);
 }
 
-void	ServerCommunication::handleSendCommand(const ICommand *command) {
-	const CommandSend *commandSend = dynamic_cast<const CommandSend *>(command);
+void	ServerCommunication::handleSendCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandSend> commandSend = std::dynamic_pointer_cast<CommandSend>(command);
 
 	Contact contact;
 	contact.setAccountName(commandSend->getAccountName());
@@ -109,8 +109,8 @@ void	ServerCommunication::handleSendCommand(const ICommand *command) {
 	emit receiveMessage(contact, commandSend->getTextMessage());
 }
 
-void	ServerCommunication::handleCallCommand(const ICommand *command) {
-	const CommandCall *commandCall = dynamic_cast<const CommandCall *>(command);
+void	ServerCommunication::handleCallCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandCall> commandCall = std::dynamic_pointer_cast<CommandCall>(command);
 
 	Contact contact;
 	contact.setAccountName(commandCall->getAccountName());
@@ -118,8 +118,8 @@ void	ServerCommunication::handleCallCommand(const ICommand *command) {
 	emit receiveCallInvitation(contact);
 }
 
-void	ServerCommunication::handleAcceptCallCommand(const ICommand *command) {
-	const CommandAcceptCall *commandAcceptCall = dynamic_cast<const CommandAcceptCall *>(command);
+void	ServerCommunication::handleAcceptCallCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandAcceptCall> commandAcceptCall = std::dynamic_pointer_cast<CommandAcceptCall>(command);
 
 	Contact contact;
 	contact.setAccountName(commandAcceptCall->getAccountName());
@@ -128,8 +128,8 @@ void	ServerCommunication::handleAcceptCallCommand(const ICommand *command) {
 	emit receiveCallAnswer(contact, commandAcceptCall->hasAccepted());
 }
 
-void	ServerCommunication::handleCloseCallCommand(const ICommand *command) {
-	const CommandCloseCall *commandCloseCall = dynamic_cast<const CommandCloseCall *>(command);
+void	ServerCommunication::handleCloseCallCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandCloseCall> commandCloseCall = std::dynamic_pointer_cast<CommandCloseCall>(command);
 
 	Contact contact;
 	contact.setAccountName(commandCloseCall->getAccountName());
@@ -137,8 +137,8 @@ void	ServerCommunication::handleCloseCallCommand(const ICommand *command) {
 	emit receiveCallClose(contact);
 }
 
-void	ServerCommunication::handleErrCommand(const ICommand *command) {
-	const CommandErr *commandErr = dynamic_cast<const CommandErr *>(command);
+void	ServerCommunication::handleErrCommand(const std::shared_ptr<ICommand> &command) {
+	std::shared_ptr<CommandErr> commandErr = std::dynamic_pointer_cast<CommandErr>(command);
 	ICommand::Instruction instruction = commandErr->getInstructionCode();
 
 	ErrorStatus errorStatus;
@@ -152,114 +152,118 @@ void	ServerCommunication::handleErrCommand(const ICommand *command) {
 }
 
 void	ServerCommunication::createAccount(const Contact &contact) {
-	CommandReg *commandReg = new CommandReg;
+	CommandReg commandReg;
 
-	commandReg->setAccountName(contact.getAccountName());
-	commandReg->setPseudo(contact.getPseudo());
-	commandReg->setPassword(contact.getPassword());
+	commandReg.setAccountName(contact.getAccountName());
+	commandReg.setPseudo(contact.getPseudo());
+	commandReg.setPassword(contact.getPassword());
 
-	mCommandPacketBuilder.sendCommand(commandReg);
+	mCommandPacketBuilder.sendCommand(&commandReg);
 }
 
 void	ServerCommunication::authenticate(const Contact &contact) {
-	CommandLog *commandLog = new CommandLog;
+	CommandLog commandLog;
 
-	commandLog->setAccountName(contact.getAccountName());
-	commandLog->setPassword(contact.getPassword());
+	commandLog.setAccountName(contact.getAccountName());
+	commandLog.setPassword(contact.getPassword());
 
-	mCommandPacketBuilder.sendCommand(commandLog);
+	mCommandPacketBuilder.sendCommand(&commandLog);
 }
 
 void	ServerCommunication::getContactsInfo(void) {
-	mCommandPacketBuilder.sendCommand(new CommandList);
+	CommandList commandList;
+
+	mCommandPacketBuilder.sendCommand(&commandList);
 }
 
 void	ServerCommunication::getContactInfo(const Contact &contact) {
-	CommandShow *commandShow = new CommandShow;
+	CommandShow commandShow;
 
-	commandShow->setAccountName(contact.getAccountName());
+	commandShow.setAccountName(contact.getAccountName());
 
-	mCommandPacketBuilder.sendCommand(commandShow);
+	mCommandPacketBuilder.sendCommand(&commandShow);
 }
 
 void	ServerCommunication::addContact(const Contact &contact) {
-	CommandAdd *commandAdd = new CommandAdd;
+	CommandAdd commandAdd;
 
-	commandAdd->setAccountName(contact.getAccountName());
+	commandAdd.setAccountName(contact.getAccountName());
 
-	mCommandPacketBuilder.sendCommand(commandAdd);
+	mCommandPacketBuilder.sendCommand(&commandAdd);
 }
 
 void	ServerCommunication::acceptContactInvitation(const Contact &contact, bool hasAccepted) {
-	CommandAcceptAdd *commandAcceptAdd = new CommandAcceptAdd;
+	CommandAcceptAdd commandAcceptAdd;
 
-	commandAcceptAdd->setAccountName(contact.getAccountName());
-	commandAcceptAdd->setHasAccepted(hasAccepted);
+	commandAcceptAdd.setAccountName(contact.getAccountName());
+	commandAcceptAdd.setHasAccepted(hasAccepted);
 
-	mCommandPacketBuilder.sendCommand(commandAcceptAdd);
+	mCommandPacketBuilder.sendCommand(&commandAcceptAdd);
 }
 
 void	ServerCommunication::deleteContact(const Contact &contact) {
-	CommandDel *commandDel = new CommandDel;
+	CommandDel commandDel;
 
-	commandDel->setAccountName(contact.getAccountName());
+	commandDel.setAccountName(contact.getAccountName());
 
-	mCommandPacketBuilder.sendCommand(commandDel);
+	mCommandPacketBuilder.sendCommand(&commandDel);
 }
 
 void	ServerCommunication::sendMessage(const Contact &contact, const QString &message) {
-	CommandSend *commandSend = new CommandSend;
+	CommandSend commandSend;
 
-	commandSend->setAccountName(contact.getAccountName());
-	commandSend->setTextMessage(message);
+	commandSend.setAccountName(contact.getAccountName());
+	commandSend.setTextMessage(message);
 
-	mCommandPacketBuilder.sendCommand(commandSend);
+	mCommandPacketBuilder.sendCommand(&commandSend);
 }
 
 void	ServerCommunication::disconnect(void) {
-	mCommandPacketBuilder.sendCommand(new CommandExit);
+	CommandExit commandExit;
+
+	mCommandPacketBuilder.sendCommand(&commandExit);
 }
 
 void	ServerCommunication::updateInfo(const Contact &contact) {
-	CommandUpdate *commandUpdate = new CommandUpdate;
+	CommandUpdate commandUpdate;
 
-	commandUpdate->setAccountName(contact.getAccountName());
-	commandUpdate->setPseudo(contact.getPseudo());
-	commandUpdate->setPassword(contact.getPassword());
-	commandUpdate->setStatus(contact.getStatus());
+	commandUpdate.setAccountName(contact.getAccountName());
+	commandUpdate.setPseudo(contact.getPseudo());
+	commandUpdate.setPassword(contact.getPassword());
+	commandUpdate.setStatus(contact.getStatus());
 
-	mCommandPacketBuilder.sendCommand(commandUpdate);
+	mCommandPacketBuilder.sendCommand(&commandUpdate);
 }
 
 void	ServerCommunication::call(const Contact &contact) {
-	CommandCall *commandCall = new CommandCall;
+	CommandCall commandCall;
 
-	commandCall->setAccountName(contact.getAccountName());
+	commandCall.setAccountName(contact.getAccountName());
 
-	mCommandPacketBuilder.sendCommand(commandCall);
+	mCommandPacketBuilder.sendCommand(&commandCall);
 }
 
 void	ServerCommunication::acceptCallInvitation(const Contact &contact, bool hasAccepted) {
-	CommandAcceptCall *commandAcceptCall = new CommandAcceptCall;
+	CommandAcceptCall commandAcceptCall;
 
-	commandAcceptCall->setAccountName(contact.getAccountName());
-	commandAcceptCall->setHasAccepted(hasAccepted);
+	commandAcceptCall.setAccountName(contact.getAccountName());
+	commandAcceptCall.setHasAccepted(hasAccepted);
 
-	mCommandPacketBuilder.sendCommand(commandAcceptCall);
+	mCommandPacketBuilder.sendCommand(&commandAcceptCall);
 }
 
 void	ServerCommunication::terminateCall(const Contact &contact) {
-    CommandCloseCall *commandCloseCall = new CommandCloseCall;
+    CommandCloseCall commandCloseCall;
 
-    commandCloseCall->setAccountName(contact.getAccountName());
+    commandCloseCall.setAccountName(contact.getAccountName());
 
-    mCommandPacketBuilder.sendCommand(commandCloseCall);
+    mCommandPacketBuilder.sendCommand(&commandCloseCall);
 }
 
 void	ServerCommunication::sendHandshake(void) {
-    CommandHandshake *commandHandshake = new CommandHandshake;
-   
-    mCommandPacketBuilder.sendCommand(commandHandshake);
+    CommandHandshake commandHandshake;
+
+    mCommandPacketBuilder.sendCommand(&commandHandshake);
 }
 
 void	ServerCommunication::connectToServer(const QString &addr, int port) {
@@ -280,6 +284,6 @@ void	ServerCommunication::connectToServer(const QString &addr, int port) {
 }
 
 void	ServerCommunication::onDisconnection(void) {
-    mHasHandshaked = false;
+	mHasHandshaked = false;
 	emit disconnectedFromServer();
 }

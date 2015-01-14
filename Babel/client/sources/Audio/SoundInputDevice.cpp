@@ -35,7 +35,7 @@ void	SoundInputDevice::startStream(void) {
 
 		if (Pa_StartStream(mStream) != paNoError)
 			throw SoundException("fail Pa_StartStream");
-		
+
 		mIsRunning = true;
 	}
 }
@@ -49,16 +49,7 @@ void	SoundInputDevice::stopStream(void) {
 	}
 }
 
-ISoundDevice	&SoundInputDevice::operator<<(const Sound::Decoded &sound) {
-	ScopedLock	scopedLock(&mMutex);
-
-	if (sound.buffer) {
-		Sound::Decoded *soundCpy = new Sound::Decoded;
-		soundCpy->buffer = sound.buffer;
-		soundCpy->size = sound.size;
-		mBuffers.push_back(soundCpy);
-	}
-
+ISoundDevice	&SoundInputDevice::operator<<(const Sound::Decoded &) {
 	return *this;
 }
 
@@ -66,18 +57,15 @@ ISoundDevice	&SoundInputDevice::operator>>(Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
 	if (mBuffers.size()) {
-		Sound::Decoded *soundCpy = mBuffers.front();
+		Sound::Decoded soundCpy = mBuffers.front();
 
-		sound.buffer = soundCpy->buffer;
-		sound.size = soundCpy->size;
+		sound.buffer = soundCpy.buffer;
+		sound.size = soundCpy.size;
 
-		delete soundCpy;
 		mBuffers.pop_front();
 	}
-	else {
+	else
 		sound.size = 0;
-		sound.buffer = NULL;
-	}
 
 	return *this;
 }
@@ -88,14 +76,13 @@ int	SoundInputDevice::callback(const void *inputBuffer, void *, unsigned long fr
 	{
 		ScopedLock scopedLock(&obj->mMutex);
 
-		Sound::Decoded *sound = new Sound::Decoded;
-		sound->size = framesPerBuffer * Sound::NB_CHANNELS;
-		sound->buffer = new float[sound->size];
-		std::memcpy(sound->buffer, inputBuffer, framesPerBuffer * Sound::NB_CHANNELS * sizeof(float));
+		Sound::Decoded sound;
+		sound.size = framesPerBuffer * Sound::NB_CHANNELS;
+		sound.buffer.assign(reinterpret_cast<const float *>(inputBuffer), reinterpret_cast<const float *>(inputBuffer) + framesPerBuffer * Sound::NB_CHANNELS);
 
 		obj->mBuffers.push_back(sound);
 	}
-	
+
 	if (obj->mListener)
 	  obj->mListener->onSoundAvailable(obj);
 

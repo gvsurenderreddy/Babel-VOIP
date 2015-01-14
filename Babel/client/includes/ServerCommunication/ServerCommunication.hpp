@@ -14,20 +14,20 @@ class ServerCommunication : public QObject {
 	private:
 		struct HandleCommand {
 			ICommand::Instruction	instruction;
-			void					(ServerCommunication::*handler)(const ICommand *command);
+			void					(ServerCommunication::*handler)(const std::shared_ptr<ICommand> &command);
 		};
 
 		static const ServerCommunication::HandleCommand	handleCommandsTab[];
 
-		void	handleShowCommand(const ICommand *command);
-		void	handleAddCommand(const ICommand *command);
-		void	handleDelCommand(const ICommand *command);
-		void	handleSendCommand(const ICommand *command);
-		void	handleCallCommand(const ICommand *command);
-		void	handleAcceptCallCommand(const ICommand *command);
-		void	handleCloseCallCommand(const ICommand *command);
-		void	handleErrCommand(const ICommand *command);
-        void    handleHandshakeCommand(const ICommand *command);
+		void	handleShowCommand(const std::shared_ptr<ICommand> &command);
+		void	handleAddCommand(const std::shared_ptr<ICommand> &command);
+		void	handleDelCommand(const std::shared_ptr<ICommand> &command);
+		void	handleSendCommand(const std::shared_ptr<ICommand> &command);
+		void	handleCallCommand(const std::shared_ptr<ICommand> &command);
+		void	handleAcceptCallCommand(const std::shared_ptr<ICommand> &command);
+		void	handleCloseCallCommand(const std::shared_ptr<ICommand> &command);
+		void	handleErrCommand(const std::shared_ptr<ICommand> &command);
+    void  handleHandshakeCommand(const std::shared_ptr<ICommand> &command);
 
 	// handle server errors
 	private:
@@ -92,7 +92,7 @@ class ServerCommunication : public QObject {
 
 	// receive command
 	private slots :
-		void	treatCommand(const ICommand *command);
+		void	treatCommand(const std::shared_ptr<ICommand> &command);
 
 	// attributes
 	private:

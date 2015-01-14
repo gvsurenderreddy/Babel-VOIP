@@ -24,13 +24,11 @@ EncodeManager::~EncodeManager(void) {
 Sound::Encoded	EncodeManager::encode(const Sound::Decoded &sound) {
 	Sound::Encoded encoded;
 
-	encoded.buffer = new unsigned char[sound.size];
-	encoded.size = opus_encode_float(mEncoder, sound.buffer, Sound::FRAMES_PER_BUFFER, encoded.buffer, sound.size);
+	encoded.buffer.resize(sound.size);
+	encoded.size = opus_encode_float(mEncoder, sound.buffer.data(), Sound::FRAMES_PER_BUFFER, encoded.buffer.data(), sound.size);
 
 	if (encoded.size < 0)
 		throw SoundException("fail opus_encode_float");
-
-	delete[] sound.buffer;
 
 	return encoded;
 }
@@ -38,13 +36,11 @@ Sound::Encoded	EncodeManager::encode(const Sound::Decoded &sound) {
 Sound::Decoded	EncodeManager::decode(const Sound::Encoded &sound) {
 	Sound::Decoded decoded;
 
-	decoded.buffer = new float[Sound::FRAMES_PER_BUFFER * Sound::NB_CHANNELS];
-	decoded.size = opus_decode_float(mDecoder, sound.buffer, sound.size, decoded.buffer, Sound::FRAMES_PER_BUFFER, 0) * Sound::NB_CHANNELS;
+	decoded.buffer.resize(Sound::FRAMES_PER_BUFFER * Sound::NB_CHANNELS);
+	decoded.size = opus_decode_float(mDecoder, sound.buffer.data(), sound.size, decoded.buffer.data(), Sound::FRAMES_PER_BUFFER, 0) * Sound::NB_CHANNELS;
 
 	if (decoded.size < 0)
 		throw SoundException("fail opus_decode_float");
-
-	delete[] sound.buffer;
 
 	return decoded;
 }

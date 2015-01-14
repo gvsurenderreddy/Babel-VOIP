@@ -18,39 +18,39 @@
 const int32_t		ICommand::MAGIC_CODE = 0x150407CA;
 const unsigned int	ICommand::HEADER_SIZE = sizeof(ICommand::Header);
 
-ICommand	*ICommand::getCommand(ICommand::Instruction instructionCode) {
+std::shared_ptr<ICommand>	ICommand::getCommand(ICommand::Instruction instructionCode) {
 	switch (instructionCode) {
 	case ICommand::REG:
-		return new CommandReg;
+		return std::make_shared<CommandReg>();
 	case ICommand::LOG:
-		return new CommandLog;
+		return std::make_shared<CommandLog>();
 	case ICommand::LIST:
-		return new CommandList;
+		return std::make_shared<CommandList>();
 	case ICommand::SHOW:
-		return new CommandShow;
+		return std::make_shared<CommandShow>();
 	case ICommand::ADD:
-		return new CommandAdd;
+		return std::make_shared<CommandAdd>();
 	case ICommand::ACCEPT_ADD:
-		return new CommandAcceptAdd;
+		return std::make_shared<CommandAcceptAdd>();
 	case ICommand::DEL:
-		return new CommandDel;
+		return std::make_shared<CommandDel>();
 	case ICommand::EXIT:
-		return new CommandExit;
+		return std::make_shared<CommandExit>();
 	case ICommand::UPDATE:
-		return new CommandUpdate;
+		return std::make_shared<CommandUpdate>();
 	case ICommand::SEND:
-		return new CommandSend;
+		return std::make_shared<CommandSend>();
 	case ICommand::CALL:
-		return new CommandCall;
+		return std::make_shared<CommandCall>();
 	case ICommand::ACCEPT_CALL:
-		return new CommandAcceptCall;
+		return std::make_shared<CommandAcceptCall>();
 	case ICommand::CLOSE_CALL:
-		return new CommandCloseCall;
+		return std::make_shared<CommandCloseCall>();
 	case ICommand::HANDSHAKE:
-		return new CommandHandshake;
+		return std::make_shared<CommandHandshake>();
 	case ICommand::ERR:
-		return new CommandErr;
+		return std::make_shared<CommandErr>();
 	default:
-		return NULL;
+		return nullptr;
 	}
 }

@@ -49,34 +49,18 @@ void	SoundOutputDevice::stopStream(void) {
 ISoundDevice	&SoundOutputDevice::operator<<(const Sound::Decoded &sound) {
 	ScopedLock	scopedLock(&mMutex);
 
-	if (sound.buffer) {
-		Sound::Decoded *soundCpy = new Sound::Decoded;
+	if (sound.size) {
+		Sound::Decoded soundCpy;
 
-		soundCpy->buffer = sound.buffer;
-		soundCpy->size = sound.size;
+		soundCpy.buffer = sound.buffer;
+		soundCpy.size = sound.size;
 		mBuffers.push_back(soundCpy);
 	}
 
 	return *this;
 }
 
-ISoundDevice	&SoundOutputDevice::operator>>(Sound::Decoded &sound) {
-	ScopedLock	scopedLock(&mMutex);
-
-	if (mBuffers.size()) {
-		Sound::Decoded *soundCpy = mBuffers.front();
-
-		sound.buffer = soundCpy->buffer;
-		sound.size = soundCpy->size;
-
-		delete soundCpy;
-		mBuffers.pop_front();
-	}
-	else {
-		sound.size = 0;
-		sound.buffer = NULL;
-	}
-
+ISoundDevice	&SoundOutputDevice::operator>>(Sound::Decoded &) {
 	return *this;
 }
 
@@ -87,14 +71,12 @@ int	SoundOutputDevice::callback(const void *, void *outputBuffer, unsigned long,
 	if (obj->mBuffers.size() == 0)
 		return paContinue;
 
-	Sound::Decoded	*sound = obj->mBuffers.front();
-	float			*wptr = static_cast<float *>(outputBuffer);
+	Sound::Decoded sound = obj->mBuffers.front();
+	float *wptr = static_cast<float *>(outputBuffer);
 
-	for (int i = 0; i < sound->size; i++)
-		*wptr++ = sound->buffer[i];
+	for (int i = 0; i < sound.size; i++)
+		*wptr++ = sound.buffer[i];
 
-	delete[] sound->buffer;
-	delete sound;
 	obj->mBuffers.pop_front();
 
 	return paContinue;

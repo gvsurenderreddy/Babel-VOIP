@@ -4,18 +4,12 @@
 #include "SocketException.hpp"
 
 CommandPacketBuilder::CommandPacketBuilder(void)
-	: mClient(NULL), mCurrentCommand(NULL), mCurrentState(CommandPacketBuilder::HEADER)
+	: mClient(new TcpClient), mCurrentCommand(nullptr), mCurrentState(CommandPacketBuilder::HEADER)
 {
-	mClient = new TcpClient;
 	mClient->setOnSocketEventListener(this);
 }
 
 CommandPacketBuilder::~CommandPacketBuilder(void) {
-	if (mClient)
-		delete mClient;
-
-    if (mCurrentCommand)
-		delete mCurrentCommand;
 }
 
 void    CommandPacketBuilder::close(void) {
@@ -57,7 +51,7 @@ void	CommandPacketBuilder::fetchCommandHeader(void) {
 		return;
 	}
 
-	onSocketReadable(mClient, mClient->nbBytesToRead());
+	onSocketReadable(mClient.get(), mClient->nbBytesToRead());
 }
 
 void	CommandPacketBuilder::fetchCommandContent(void) {
@@ -74,7 +68,7 @@ void	CommandPacketBuilder::fetchCommandContent(void) {
 	emit receiveCommand(mCurrentCommand);
 
 	resetCurrentCommand();
-	onSocketReadable(mClient, mClient->nbBytesToRead());
+	onSocketReadable(mClient.get(), mClient->nbBytesToRead());
 }
 
 void	CommandPacketBuilder::onSocketReadable(IClientSocket *, unsigned int nbBytesToRead) {
@@ -90,9 +84,6 @@ void	CommandPacketBuilder::onSocketClosed(IClientSocket *) {
 }
 
 void	CommandPacketBuilder::resetCurrentCommand(void) {
-	if (mCurrentCommand)
-		delete mCurrentCommand;
-
-	mCurrentCommand = NULL;
+	mCurrentCommand = nullptr;
 	mCurrentState = CommandPacketBuilder::HEADER;
 }

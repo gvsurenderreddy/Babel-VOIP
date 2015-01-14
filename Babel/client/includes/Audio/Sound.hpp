@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QMetaType>
+#include <vector>
 #include "opus.h"
 
 namespace Sound {
@@ -10,13 +11,13 @@ namespace Sound {
 	const int	FRAMES_PER_BUFFER = 480;
 
 	struct Encoded {
-		unsigned char	*buffer;
-		int				size;
+		std::vector<unsigned char> buffer;
+		int	size;
 	};
 
 	struct Decoded {
-		float	*buffer;
-		int		size;
+		std::vector<float> buffer;
+		int	size;
 	};
 
 };

@@ -62,7 +62,7 @@ IClientSocket::Message	TcpClient::receive(unsigned int sizeToRead) {
 		return message;
 	}
 
-	std::shared_ptr<char> buffer(new char[sizeToRead]);
+	std::unique_ptr<char[]> buffer(new char[sizeToRead]);
 
 	message.msgSize = mQTcpSocket->read(buffer.get(), sizeToRead);
 	if (message.msgSize == -1)

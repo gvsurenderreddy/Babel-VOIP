@@ -27,7 +27,7 @@ void	SoundPacketBuilder::sendSound(const Sound::Encoded &sound) {
 	soundPacket.magic_code = 0x150407CA;
 	soundPacket.soundSize = sound.size;
 	std::memset(soundPacket.sound, 0, sizeof(soundPacket.sound));
-	memcpy(soundPacket.sound, sound.buffer, sound.size);
+	memcpy(soundPacket.sound, sound.buffer.data(), sound.size);
 	soundPacket.timestamp = QDateTime::currentDateTime().toTime_t();
 
 
@@ -49,13 +49,12 @@ void	SoundPacketBuilder::onSocketReadable(IClientSocket *, unsigned int) {
 	SoundPacketBuilder::SoundPacket soundPacket;
 	Sound::Encoded sound;
 
-	sound.buffer = new unsigned char[sizeof(soundPacket.sound)];
 	msg = mClient->receive(sizeof(soundPacket));
 	if (msg.host == mAcceptedHost.toStdString() && msg.port == mAcceptedPort) {
 		memcpy(&soundPacket, msg.msg.data(), msg.msgSize);
 
 		if (soundPacket.magic_code == 0x150407CA && soundPacket.timestamp >= mTimestamp) {
-			memcpy(sound.buffer, soundPacket.sound, soundPacket.soundSize);
+			sound.buffer.assign(soundPacket.sound, soundPacket.sound + sizeof(soundPacket.sound));
 			sound.size = soundPacket.soundSize;
 			mTimestamp = soundPacket.timestamp;
 

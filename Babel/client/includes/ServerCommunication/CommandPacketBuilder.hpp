@@ -4,6 +4,7 @@
 #include "IClientSocket.hpp"
 #include <qlist.h>
 #include <qobject.h>
+#include <memory>
 
 class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent {
 
@@ -34,7 +35,7 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 
 	// signals
 	signals:
-		void	receiveCommand(const ICommand *command);
+		void	receiveCommand(const std::shared_ptr<ICommand> &command);
 		void	disconnectedFromHost(void);
 
 	// build commands
@@ -54,8 +55,8 @@ class CommandPacketBuilder : public QObject, public IClientSocket::OnSocketEvent
 
 	// attributes
 	private:
-		IClientSocket				*mClient;
-		ICommand					*mCurrentCommand;
-		CommandPacketBuilder::State	mCurrentState;
+		std::unique_ptr<IClientSocket>	mClient;
+		std::shared_ptr<ICommand>				mCurrentCommand;
+		CommandPacketBuilder::State			mCurrentState;
 
 };

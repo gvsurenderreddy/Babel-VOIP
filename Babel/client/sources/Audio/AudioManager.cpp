@@ -31,7 +31,7 @@ void	AudioManager::onSoundAvailable(ISoundDevice *) {
 	Sound::Decoded sound;
 
 	*mInputDevice >> sound;
-	if (sound.buffer)
+	if (sound.size)
 		emit AudioManager::soundAvailable(mEncodeManager.encode(sound));
 }
 
